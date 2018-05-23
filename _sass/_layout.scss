@@ -1,0 +1,279 @@
+// Variables
+// ============================================================================
+$spacing:                     10px;
+$large-spacing:               2 * $spacing;
+$content-width:               50em;
+$sidebar-content-width:       15em;
+$site-header-spacing:         15px;
+
+// Implementation
+// ============================================================================
+$site-header-height: calc(2 * #{$site-header-spacing} + 1em);
+$site-nav-width: calc(#{$sidebar-content-width} + 2 * #{$large-spacing});
+
+// Body
+// ----
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+// Site Header
+// -----------
+.site-header {
+  position: fixed;
+  z-index: 2;
+  top: 0;
+  left: 0;
+  right: 0;
+  // Box
+  display: flex;
+  box-sizing: border-box;
+  align-self: stretch;
+  height: $site-header-height;
+  #menu-toggle:checked ~ & { transform: translate($site-nav-width); }
+  // On medium screens squeeze rather than shift the header
+  @include medium-screen {
+    left: $site-nav-width;
+    #menu-toggle:checked ~ & { left: 0; transform: none; }
+  }
+  background-color: $base-background-color;
+  // Other
+  flex-direction: row;
+  align-items: center;
+  // Children
+  .menu-button {
+    padding: $spacing;
+    cursor: pointer;
+    .menu-icon {
+      display: block;
+      svg path { fill: $primary-text-color; }
+    }
+  }
+}
+
+// Site Nav
+// --------
+.site-nav {
+  // Position
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  // Mobile has the sidebar hidden by default
+  // Tablets and above have it showing by default
+  // On larger screens the content stays in place and we move the sidebar in
+  right: 100%;
+  #menu-toggle:checked ~ & { right: unset; left: 0; }
+  @include medium-screen {
+    right: unset; left: 0;
+    #menu-toggle:checked ~ & { right: 100%; left: unset; }
+  }
+  // Box
+  display: flex;
+  box-sizing: border-box;
+  height: 100%;
+  width: $site-nav-width;
+  border-right: 1px solid $divider-color;
+  // Appearance
+  background-color: $base-background-color;
+  // Other
+  flex-direction: column;
+  overflow-y: scroll;
+  // Children
+  .site-search {
+    position: relative;
+    display: block;
+    height: $site-header-height;
+    border-bottom: 1px solid $divider-color;
+    flex: 0 0 auto;
+    .search-icon {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      right: $spacing;
+      display: block;
+      height: 1em;
+      width: 1em;
+      margin-top: auto;
+      margin-bottom: auto;
+      path { fill: $secondary-text-color; }
+    }
+    &.filled .search-icon { display: none; }
+    .clear-button {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      display: none;
+      height: 1em;
+      width: 1em;
+      padding: $spacing;
+      margin-top: auto;
+      margin-bottom: auto;
+      cursor: pointer;
+      .clear-icon {
+        display: block;
+        height: 1em;
+        width: 1em;
+        path { fill: $secondary-text-color; }
+      }
+      &:hover .clear-icon path { fill: $primary-text-color; }
+    }
+    &.filled .clear-button { display: unset; }
+    input {
+      position: absolute;
+      display: block;
+      box-sizing: border-box;
+      width: 100%;
+      height: 100%;
+      border: none;
+      outline: none;
+      font-size: 100%;
+      padding-left: $large-spacing;
+      // Make room for the search icon
+      padding-right: calc(#{$spacing} + 1em);
+    }
+    input:disabled ~ .search-icon { display: none; }
+  }
+
+  .description {
+    text-align: center;
+    padding: $spacing*2 $spacing;
+    display: block;
+    border-bottom: 1px solid $divider-color;
+
+    .description-logo {
+      width: 80%;
+      margin-bottom: $spacing;
+    }
+    .description-last-updated{
+      font-size: 80%;
+      color: $secondary-text-color;
+    }
+
+    a{
+      text-decoration: none;
+      cursor: pointer;
+      color: $primary-text-color;
+    }
+  }
+
+  .table-of-contents {
+    padding: $large-spacing;
+  }
+
+  .nav-branch {
+    position: relative;
+
+    & > .nav-branch {
+      display: none;
+      margin-left: $item-spacing;
+      font-size: 90%;
+    }
+    &.expanded {
+      & > .nav-branch { display: block; }
+
+    }
+  }
+
+  .nav-link {
+    display: block;
+    color: $primary-text-color;
+    padding-top: $spacing;
+    padding-bottom: $spacing;
+    padding-right: $spacing;
+    cursor: pointer;
+    text-decoration: none;
+
+    &:hover{
+      text-decoration: underline;
+    }
+
+    &.selected {
+      color: $primary-brand-color;
+      // background-color: darken($base-background-color, 5%);
+      border-right: 3px solid $primary-brand-color;
+    }
+
+    p {
+      margin: $item-spacing/2 0;
+      color: $primary-text-color;
+      font-size: 90%;
+    }
+  }
+
+}
+
+// Site Main
+//----------
+.site-main {
+  z-index: 0;
+  // On small screens fill the screen with content
+  // Shift everything right when menu is open
+  box-sizing: border-box;
+  width: 100%;
+  max-width: calc(#{$content-width} + 2 * #{$large-spacing});
+  margin-top: $site-header-height;
+  padding: $spacing;
+  #menu-toggle:checked ~ & { transform: translate($site-nav-width); }
+  // On medium screens fill the residual space
+  // Expand to fill when the menu is closed
+  @include medium-screen {
+    width: auto;
+    margin-left: $site-nav-width;
+    padding: $large-spacing;
+    #menu-toggle:checked ~ & {
+      transform: none;
+      margin-left: 0;
+    }
+  }
+  // On large screens stay centered
+  // Do nothing when menu is opened
+  @include large-screen {
+    margin-left: 0;
+  }
+  // Hack to get browser hash scrolling to work nicely with a fixed header
+  h1 { margin-top: calc(2.0 * #{$block-spacing} - #{$site-header-height}); }
+  h2 { margin-top: calc(1.8 * #{$block-spacing} - #{$site-header-height}); }
+  h3 { margin-top: calc(1.6 * #{$block-spacing} - #{$site-header-height}); }
+  h4 { margin-top: calc(1.4 * #{$block-spacing} - #{$site-header-height}); }
+  h5 { margin-top: calc(1.2 * #{$block-spacing} - #{$site-header-height}); }
+  h6 { margin-top: calc(1.0 * #{$block-spacing} - #{$site-header-height}); }
+  h1, h2, h3, h4, h5, h6 {
+    padding-top: $site-header-height;
+    &:first-child { margin-top: 0; padding-top: 0; }
+  }
+}
+
+//search-results
+.search-results{
+  margin: $spacing*2 $spacing;
+}
+
+//not-found search results{
+.not-found{
+  margin: $spacing*2 $spacing;
+}
+
+
+//custom-scrollbar
+/* width */
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #FFF;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #F1F1F1;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #ddd;
+}
