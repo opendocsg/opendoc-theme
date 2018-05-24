@@ -160,7 +160,9 @@ body {
   }
 
   .table-of-contents {
-    padding: $large-spacing;
+    padding-left: $large-spacing;
+    padding-top: $large-spacing;
+    padding-bottom: $large-spacing;
   }
 
   .nav-branch {
@@ -169,7 +171,6 @@ body {
     & > .nav-branch {
       display: none;
       margin-left: $item-spacing;
-      font-size: 90%;
     }
     &.expanded {
       & > .nav-branch { display: block; }
@@ -182,7 +183,7 @@ body {
     color: $primary-text-color;
     padding-top: $spacing;
     padding-bottom: $spacing;
-    padding-right: $spacing;
+    padding-right: $spacing*2;
     cursor: pointer;
     text-decoration: none;
 
