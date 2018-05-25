@@ -36,4 +36,20 @@ On GitHub repo page - Settings - Scroll down to GitHub Pages - Select the branch
 On GitHub repo page - Settings - WebHooks on the left nav bar - Add webhook
 
 
-# IV. Copy your markdown documents into your local repo, edit the _config.yml, then push it 
+# IV. Copy your markdown documents into your local repo
+
+# V. Modify the config file
+
+The config file is located in the base path of your directory ("_config.yml"). There are several customisation options availabe in the config file:
+
+- logo_path: Full path of logo file in assets folder (e.g. "logo.png")
+- primary_brand_color: Hex value of primary brand color (e.g. "#000000")
+
+# VI. Push your changes to production
+
+	```
+	git add .
+	git commit -m <commit message>
+	git push origin master
+	```
+
