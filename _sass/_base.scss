@@ -12,7 +12,9 @@ $selected-text-color:     #000;
 $divider-color:           #eaeaea;
 $base-background-color:   #FFF;
 $well-background-color:   darken($base-background-color, 9%);
-$primary-brand-color:     #bc6d75;
+
+$primary-brand-color:     "{{ site.styling_options.base_color }}";
+
 // Spacing
 $base-line-height:        1.5;
 $base-horizontal-padding: 1.0em;

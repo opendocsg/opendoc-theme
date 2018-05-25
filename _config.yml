@@ -12,3 +12,6 @@ kramdown:
 environment: DEV
 server_LOCAL: http://127.0.0.1:3000
 server_DEV: https://opendoc.sg
+styling_options:
+  base_color: #bc6d75
+  logo_path: /assets/logo.png
