@@ -286,18 +286,42 @@ renderSearchResultsFromServer = (searchResults) ->
     container.appendChild error
   else
     searchResults.hits.hits.forEach (result) ->
+      formatted = formatResult result
       element = document.createElement('a')
       element.classList.add 'nav-link'
-      element.setAttribute 'href', result._source.url
-      element.innerHTML = result._source.title
+      element.setAttribute 'href', formatted.url
+      element.innerHTML = formatted.title
       description = document.createElement('p')
-      if result.highlight && result.highlight.content
-        description.innerHTML = "..." + result.highlight.content.join "..."
-        description.innerHTML += "..."
+      if formatted.content
+        description.innerHTML = "..." + formatted.content + "..."
       element.appendChild description
       container.appendChild element
       return
     return
+
+formatResult = (result) ->
+  terms = []
+  content = null
+  if result.highlight && result.highlight.content
+    content = result.highlight.content.join '...'
+    reg = /\<strong\>(.+?)\<\/strong\>/g
+    match = reg.exec content 
+    if match
+      terms.push match[1]
+    while match != null
+      match = reg.exec content
+      if match
+        terms.push match[1]
+
+  url = result._source.url
+  if terms.length > 0
+    set = {}
+    set[term.toLowerCase()] = 0 for term in terms
+    terms = Object.keys set
+    urlparts = url.split '#'
+    urlparts.splice(1,0,'?terms=',encodeURI(terms.join(' ')), '#')
+    url = urlparts.join ''
+  return {url: url, content: content, title: result._source.title}
 
 debounce = (func, wait, immediate) ->
   timeout = null
