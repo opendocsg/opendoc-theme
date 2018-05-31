@@ -386,9 +386,14 @@ searchIndexPromise.then (searchIndex) ->
 
 setSelectedAnchor = (path) ->
   # Make the nav-link pointing to this path selected
+  selectedBranches = document.querySelectorAll("div.nav-branch.expanded")
+  for i in [0...selectedBranches.length]
+    selectedBranches[i].classList.remove('expanded')
+
   selectedAnchors = document.querySelectorAll("a.nav-link.selected")
   for i in [0...selectedAnchors.length]
     selectedAnchors[i].classList.remove('selected')
+
 
   if path.endsWith '/'
     selectedAnchors = document.querySelectorAll "a.nav-link[href$='" + path + "']"
@@ -398,8 +403,6 @@ setSelectedAnchor = (path) ->
     for i in [0...selectedAnchors.length]
       selectedAnchors[i].classList.add('selected')
     selectedAnchors[0].parentNode.classList.add('expanded')
-
-
 
 # Table of Contents
 # =============================================================================
