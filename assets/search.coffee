@@ -454,7 +454,7 @@ document.body.addEventListener("click", (event) ->
   anchor = event.target
   while (anchor? and anchor.tagName isnt "A")
     anchor = anchor.parentNode
-  if anchor? and anchor.host is window.location.host
+  if anchor? and anchor.host is window.location.host and !anchor.hasAttribute("download")
     event.preventDefault()
     event.stopPropagation()
     # Need to hide the menu on mobile
