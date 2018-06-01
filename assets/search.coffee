@@ -319,7 +319,7 @@ formatResult = (result) ->
     set[term.toLowerCase()] = 0 for term in terms
     terms = Object.keys set
     urlparts = url.split '#'
-    urlparts.splice(1,0,'?terms=',encodeURI(terms.join(' ')), '#')
+    urlparts.splice(1,0,'?terms=',encodeURI(terms.join('|')), '#')
     url = urlparts.join ''
   return {url: url, content: content, title: result._source.title}
 
