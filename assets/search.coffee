@@ -304,23 +304,44 @@ formatResult = (result) ->
   content = null
   if result.highlight && result.highlight.content
     content = result.highlight.content.join '...'
-    reg = /\<strong\>(.+?)\<\/strong\>/g
-    match = reg.exec content 
-    if match
-      terms.push match[1]
-    while match != null
-      match = reg.exec content
-      if match
-        terms.push match[1]
+
+    # We don't use regex here because we want to concatenate phrases for highlighting.
+    # For example, searching for 'make a will' can return fragments like
+    # 1) 'will not be able to <strong>make</strong>'
+    # 2) '<strong>a</strong> <strong>Will</strong>'
+    # We want to highlight 'make' or 'a Will', but not 'a' , or 'Will' by themselves
+    # This should return ['make', 'a will']
+    start = '<strong>'
+    end = '</strong>'
+    curr = content.trimLeft()
+    s = curr.indexOf(start)
+    e = curr.indexOf(end)
+    k = ''
+    while s > -1 and e > -1
+      if e > s
+        k = curr.substring(s+start.length, e).toLowerCase()
+        if(terms.length > 0 and s <2)
+          terms[terms.length - 1] = terms[terms.length - 1] + ' ' + k
+        else
+          terms.push(k)
+        curr = curr.substring(e+end.length).trimLeft()
+        s = curr.indexOf(start)
+        e = curr.indexOf(end)
+      
+    
+
+    #For display purpose, only return 3 fragments max
+    content = result.highlight.content.slice(0, Math.min(3, result.highlight.content.length))
 
   url = result._source.url
   if terms.length > 0
     set = {}
-    set[term.toLowerCase()] = 0 for term in terms
+    set[term] = 0 for term in terms
     terms = Object.keys set
     urlparts = url.split '#'
     urlparts.splice(1,0,'?terms=',encodeURI(terms.join('|')), '#')
     url = urlparts.join ''
+
   return {url: url, content: content, title: result._source.title}
 
 debounce = (func, wait, immediate) ->
@@ -347,7 +368,7 @@ createEsQuery = (queryStr) ->
   highlight = {}
   highlight.require_field_match = false
   highlight.fields = {}
-  highlight.fields['content'] = {"fragment_size" : 80, "number_of_fragments" : 3, "pre_tags" : ["<strong>"], "post_tags" : ["</strong>"] }
+  highlight.fields['content'] = {"fragment_size" : 80, "number_of_fragments" : 6, "pre_tags" : ["<strong>"], "post_tags" : ["</strong>"] }
 
   {"_source": source, "query" : bool_q, "highlight" : highlight}
 
@@ -464,12 +485,47 @@ document.body.addEventListener("click", (event) ->
     if anchor.hash.length > 0 then window.location = anchor.hash
     else window.location = "#"
 , true)
+
+
+# Highlighting
+# =============================================================================
+parseQuery = (query) ->
+    result = {}
+    if query.startsWith '?'
+        queryParts = query.substring(1).split('&')
+        queryParts.forEach (part) -> 
+            idx = part.indexOf '='
+            key = if idx > -1 then part.substring 0, idx else part
+            if !result[key]?
+                result[key] = []
+            result[key].push part.substring idx+1 
+            
+    return result 
+
+highlight = (node) ->
+    parsed = parseQuery ( window.location.search )
+    accuracy = 'accuracy'
+    allowedValues = {'0': 'partially','1': 'complementary','2': 'exactly'}
+    if parsed.terms?
+        instance = new Mark(node)
+        mark = if parsed.terms.length == 1 then parsed.terms[0].split encodeURI('|') else parsed.terms
+        mark = mark.map (x) -> 
+            decodeURI x
+        acc = if parsed.accuracy? and allowedValues[parsed.accuracy[0]]? then parsed.accuracy[0] else '1'
+        instance.mark(mark, {accuracy: allowedValues[acc], caseSensitive: false, separateWordSearch : false})
+
+
+# Event when path changes
+# =============================================================================
 # Map the popstate event
 window.addEventListener "popstate", (event) ->
   path = window.location.pathname
   setSelectedAnchor path
   page = pageIndex[path]
+
   # Only reflow the main content if necessary
   testBody = new DOMParser().parseFromString(page.content, "text/html").body;
   if main.innerHTML.trim() isnt testBody.innerHTML.trim()
     main.innerHTML = page.content
+
+  highlight(main)
