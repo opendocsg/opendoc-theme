@@ -51,7 +51,7 @@
     </header>
 
     <main class="site-main" aria-label="Content">
-      {{ content }}
+      {{ content | replace: "!!^", "<i style='margin-left:30px'></i>"}}
     </main>
 
     <script src="{{ '/assets/lunr.js' | relative_url }}"></script>
