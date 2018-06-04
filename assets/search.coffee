@@ -361,8 +361,8 @@ debounce = (func, wait, immediate) ->
 
 createEsQuery = (queryStr) ->
   source = ['title','url']
-  title_q = { "match_phrase_prefix": {"title":{"query": queryStr, "slop":3,"max_expansions":10, "boost":2}} }
-  content_q = { "match_phrase_prefix":{"content":{"query":queryStr, "slop":3,"max_expansions":10 }} }
+  title_q = { "match": {"title":{"query": queryStr,"max_expansions":10, "fuzziness": "AUTO", "boost":2}} }
+  content_q = { "match":{"content":{"query":queryStr,"max_expansions":10, "fuzziness": "AUTO"}} }
   bool_q = { "bool" : { "should" : [ title_q, content_q ] }}
 
   highlight = {}
@@ -511,7 +511,7 @@ highlight = (node) ->
         mark = if parsed.terms.length == 1 then parsed.terms[0].split encodeURI('|') else parsed.terms
         mark = mark.map (x) -> 
             decodeURI x
-        acc = if parsed.accuracy? and allowedValues[parsed.accuracy[0]]? then parsed.accuracy[0] else '1'
+        acc = if parsed.accuracy? and allowedValues[parsed.accuracy[0]]? then parsed.accuracy[0] else '2'
         instance.mark(mark, {accuracy: allowedValues[acc], caseSensitive: false, separateWordSearch : false})
 
 
