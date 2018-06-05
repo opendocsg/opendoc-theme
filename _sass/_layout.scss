@@ -48,7 +48,7 @@ body {
     cursor: pointer;
     .menu-icon {
       display: block;
-      svg path { fill: $primary-text-color; }
+        path {fill: $primary-text-color;}
     }
   }
 }
@@ -89,6 +89,8 @@ body {
     border-radius: 5px;
     margin: 0 $item-spacing;
     flex: 0 0 auto;
+    font-weight: normal;
+
     .search-icon {
       position: absolute;
       top: 0;
@@ -100,7 +102,7 @@ body {
       margin-top: auto;
       margin-bottom: auto;
       cursor: pointer;
-      path { fill: $primary-brand-color; }
+      path { fill: $primary-text-color; }
     }
     &.filled .search-icon { display: none; }
     .clear-button {
