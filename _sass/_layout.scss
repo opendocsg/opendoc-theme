@@ -3,7 +3,7 @@
 $spacing:                     10px;
 $large-spacing:               2 * $spacing;
 $content-width:               50em;
-$sidebar-content-width:       15em;
+$sidebar-content-width:       18em;
 $site-header-spacing:         15px;
 
 // Implementation
@@ -84,20 +84,23 @@ body {
   .site-search {
     position: relative;
     display: block;
-    height: $site-header-height;
-    border-bottom: 1px solid $divider-color;
+    height: 40px;
+    background-color: #e8e8e8;
+    border-radius: 5px;
+    margin: 0 $item-spacing;
     flex: 0 0 auto;
     .search-icon {
       position: absolute;
       top: 0;
       bottom: 0;
-      right: $spacing;
+      right: $spacing*2;
       display: block;
       height: 1em;
       width: 1em;
       margin-top: auto;
       margin-bottom: auto;
-      path { fill: $secondary-text-color; }
+      cursor: pointer;
+      path { fill: $primary-brand-color; }
     }
     &.filled .search-icon { display: none; }
     .clear-button {
@@ -141,7 +144,6 @@ body {
     text-align: center;
     padding: $spacing*2 $spacing;
     display: block;
-    border-bottom: 1px solid $divider-color;
 
     .description-logo {
       width: 80%;
@@ -161,7 +163,7 @@ body {
 
   .table-of-contents {
     padding-left: $large-spacing;
-    padding-top: $large-spacing;
+    padding-top: $spacing;
     padding-bottom: $large-spacing;
   }
 
@@ -249,7 +251,21 @@ body {
 
 //search-results
 .search-results{
-  margin: $spacing*2 $spacing;
+  margin-top: $spacing;
+  margin-left: $spacing*2;
+  margin-bottom: $spacing;
+
+  .nav-link{
+    border-bottom: 1px solid #eee;
+    margin-bottom: $spacing;
+    padding-right: $spacing*2;
+  }
+
+  h1{
+    font-size: 1.5rem;
+    margin-top: $spacing;
+    margin-bottom: $spacing;
+  }
 }
 
 //not-found search results{
