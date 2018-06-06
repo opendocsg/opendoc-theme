@@ -5,9 +5,9 @@
 # =============================================================================
 # Programmatically add the search box to the site
 # This allows the search box to be hidden if javascript is disabled
-siteNavElement = document.getElementsByClassName("site-nav")[0]
+siteNavElement = document.getElementsByClassName("site-search")[0]
 siteSearchElement = document.createElement("div")
-siteSearchElement.classList.add("site-search")
+siteSearchElement.classList.add("search-container")
 siteSearchElement.innerHTML = """
 <svg class="search-icon" viewBox="0 0 18 18" width="18" height="18">
   <path ill="#222222" d="M12.43 11.73C13.41 10.59 14 9.11 14 7.5 14 3.91 11.09 1 7.5 1S1 3.91 1 7.5 3.91 14 7.5 14c1.61 0 3.09-.59 4.23-1.57l.7-.7zM7.5 12C5.01 12 3 9.99 3 7.5S5.01 3 7.5 3 12 5.01 12 7.5 9.99 12 7.5 12z"/>
@@ -242,7 +242,7 @@ translateLunrResults = (lunrResults) ->
             position[0] + position[1],
             position[0] + position[1] + snippetSpace
           )
-          snippet = '...' + preMatch + '<strong>' + match + '</strong>' + postMatch + '...  '
+          snippet = '...' + preMatch + '<mark>' + match + '</mark>' + postMatch + '...  '
           snippets.push snippet
           if (snippets.length >= maxSnippets) then break
         if (snippets.length >= maxSnippets) then break
@@ -259,7 +259,7 @@ translateLunrResults = (lunrResults) ->
 # Takes an array of objects with "title" and "description" properties
 renderSearchResults = (searchResults) ->
   container = document.getElementsByClassName('search-results')[0]
-  container.innerHTML = ''
+  container.innerHTML = '<h1>Search Results</h1>'
   searchResults.forEach (result) ->
     element = document.createElement('a')
     element.classList.add 'nav-link'
@@ -327,8 +327,8 @@ formatResult = (result) ->
         curr = curr.substring(e+end.length).trimLeft()
         s = curr.indexOf(start)
         e = curr.indexOf(end)
-      
-    
+
+
 
     #For display purpose, only return 3 fragments max
     content = result.highlight.content.slice(0, Math.min(3, result.highlight.content.length))
@@ -493,14 +493,14 @@ parseQuery = (query) ->
     result = {}
     if query.startsWith '?'
         queryParts = query.substring(1).split('&')
-        queryParts.forEach (part) -> 
+        queryParts.forEach (part) ->
             idx = part.indexOf '='
             key = if idx > -1 then part.substring 0, idx else part
             if !result[key]?
                 result[key] = []
-            result[key].push part.substring idx+1 
-            
-    return result 
+            result[key].push part.substring idx+1
+
+    return result
 
 highlight = (node) ->
     parsed = parseQuery ( window.location.search )
@@ -509,7 +509,7 @@ highlight = (node) ->
     if parsed.terms?
         instance = new Mark(node)
         mark = if parsed.terms.length == 1 then parsed.terms[0].split encodeURI('|') else parsed.terms
-        mark = mark.map (x) -> 
+        mark = mark.map (x) ->
             decodeURI x
         acc = if parsed.accuracy? and allowedValues[parsed.accuracy[0]]? then parsed.accuracy[0] else '2'
         instance.mark(mark, {accuracy: allowedValues[acc], caseSensitive: false, separateWordSearch : false})
