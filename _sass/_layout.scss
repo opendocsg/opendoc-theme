@@ -85,11 +85,14 @@ body {
     position: relative;
     display: block;
     height: 40px;
-    background-color: #e8e8e8;
-    border-radius: 5px;
+    background-color: $base-background-color;
+    box-shadow: 0px 1px 8px 3px rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: 0px 1px 8px 3px rgba(0, 0, 0, 0.2);
+    -webkit-box-shadow: 0px 1px 8px 3px rgba(0, 0, 0, 0.2);
     margin: 0 $item-spacing;
     flex: 0 0 auto;
     font-weight: normal;
+
 
     .search-icon {
       position: absolute;
