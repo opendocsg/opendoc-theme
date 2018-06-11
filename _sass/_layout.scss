@@ -279,6 +279,16 @@ body {
 }
 
 
+.site-branding{
+  position: fixed;
+  bottom: $spacing;
+  right: $spacing;
+  padding: $spacing;
+  background: $divider-color;
+  border-radius: $spacing;
+}
+
+
 //custom-scrollbar
 /* width */
 ::-webkit-scrollbar {
