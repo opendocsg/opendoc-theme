@@ -189,7 +189,7 @@ startBuildingIndex = (sections) ->
 searchOnServer = false
 searchIndexPromise = new Promise (resolve, reject) ->
   req=new XMLHttpRequest()
-  req.timeout=1000
+  # req.timeout=1000
   req.addEventListener 'readystatechange', ->
     if req.readyState is 4 # ReadyState Complete
       successResultCodes=[200,304]
