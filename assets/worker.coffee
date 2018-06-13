@@ -3,7 +3,7 @@
 ---
 # Web worker used to building the search index outside the main thread
 
-self.importScripts("{{ '/assets/lunr.js' | relative_url }}")
+importScripts("{{ '/assets/lunr.js' | relative_url }}")
 console.log "Indexing worker initialized"
 
 @onmessage = (event) => 
