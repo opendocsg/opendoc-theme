@@ -288,6 +288,15 @@ body {
   border-radius: $spacing;
 }
 
+#convert-to-pdf{
+  position: fixed;
+  top: $spacing*10;
+  right: $spacing;
+  padding: $spacing;
+  background: $divider-color;
+  border-radius: $spacing;
+  border: 0;
+}
 
 //custom-scrollbar
 /* width */

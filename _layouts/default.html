@@ -51,10 +51,13 @@
       </label>
     </header>
 
-    <main class="site-main" aria-label="Content">
+    <main class="site-main" id="main-content" aria-label="Content" >
       {{ content | replace: "!!^", "<i style='margin-left:30px'></i>"}}
     </main>
-
+    <div>Print this Lorem Ipsum</div>
+    <button id="convert-to-pdf">
+      Save PDF
+    </button>
     <span class="site-branding">
       Powered by Opendoc
     </span>
@@ -62,7 +65,9 @@
     <script src="{{ '/assets/lunr.js' | relative_url }}"></script>
     <script src="{{ '/assets/search.js' | relative_url }}"></script>
     <script src="{{ '/assets/layout.js' | relative_url }}"></script>
-    <script src="{{ '/assets/jspdf.min.js' | relative_url }}"></script>
+    <script src="{{ '/assets/jspdf/jspdf.min.js' | relative_url }}"></script>
+    <script src="{{ '/assets/jspdf/html2pdf.js' | relative_url }}"></script>
+    <script src="{{ '/assets/pdf.js' | relative_url }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" charset="utf-8"></script>
 
 
