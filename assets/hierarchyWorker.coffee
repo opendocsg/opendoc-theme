@@ -2,7 +2,7 @@
 # Jekyll front matter needed to trigger coffee compilation
 ---
 # Web worker used to build hierarchy
-importScripts("{{ '/assets/jsdom.js' | relative_url }}")
+self.importScripts("{{ '/assets/jsdom.js' | relative_url }}")
 console.log "Hierarchy Worker initialized"
 
 DOM_API = new jsdom.JSDOM().window
