@@ -288,14 +288,53 @@ body {
   border-radius: $spacing;
 }
 
-#convert-to-pdf{
+#float-buttons{
   position: fixed;
-  top: $spacing*10;
-  right: $spacing;
-  padding: $spacing;
-  background: $divider-color;
-  border-radius: $spacing;
-  border: 0;
+  top: $spacing*5;
+  right: $spacing*3;
+
+
+    #convert-to-pdf{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 80px;
+    height: 80px;
+    padding: 10px;
+    background: #ddd;
+    border: none;
+    border-radius: 5px;
+    color: #888;
+
+    cursor: pointer;
+
+    -webkit-box-shadow: 0px 1px 2px 1px rgba(0,0,0,0.4);
+    -moz-box-shadow: 0px 1px 2px 1px rgba(0,0,0,0.4);
+    box-shadow: 0px 1px 2px 1px rgba(0,0,0,0.4);
+
+      svg{
+        margin-top: 5px;
+        margin-bottom: 5px;
+          g{
+            fill: #888;
+          }
+      }
+
+    &:hover,:active{
+      background: #eee;
+      color: #999;
+
+      -webkit-box-shadow: 0px 1px 2px 1px rgba(0,0,0,0.2);
+      -moz-box-shadow: 0px 1px 2px 1px rgba(0,0,0,0.2);
+      box-shadow: 0px 1px 2px 1px rgba(0,0,0,0.2);
+        svg{
+            g{
+              fill: #999;
+            }
+        }
+    }
+  }
 }
 
 //custom-scrollbar
