@@ -1,6 +1,3 @@
-// Get content from DOM
-var content = document.getElementById('main-content');
-
 var margins = {
     top: 20,
     left: 15,
@@ -10,6 +7,7 @@ var margins = {
 // Function to convertTextToPDF
 function convertTextToPDF() {
   var doc = new jsPDF('p','mm','a4');
+  var content = document.getElementById('main-content');
   doc.fromHTML(
     content,
     margins.top,
@@ -19,7 +17,6 @@ function convertTextToPDF() {
   	},
   );
   doc.save('a4.pdf');
-  console.log('yay')
 }
 
 // Add event listener to Save PDF button
