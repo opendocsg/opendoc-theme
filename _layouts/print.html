@@ -8,14 +8,19 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    {% seo %}
     <link rel="icon" href="{{ "/assets/favicon.ico" | relative_url }}">
     <link rel="stylesheet" href="{{ '/assets/normalize.css' | relative_url }}">
     <link rel="stylesheet" href="{{ '/assets/main.css' | relative_url }}">
   </head>
 
   <body>
-    <main class="site-main" id="main-content" aria-label="Content" >
+    <section class="description"><a href=".">
+      <img class="description-logo" src="{{ site.styling_options.logo_path | relative_url }}">
+      <div class="description-title">{{ site.title }}</div>
+      <div class="description-last-updated">Last built: {{ site.time }}</div></a>
+    </section>
+
+    <main class="site-main" aria-label="Content" >
         {{ content }}
     </main>
 
