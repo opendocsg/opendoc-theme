@@ -4,7 +4,7 @@
 
 // open export.html in new tab where print modal is triggered once loaded
 function redirect() {
-  window.open(window.location.href + "export.html", '_blank');
+  window.open("http://" + window.location.host + "/export.html", '_blank');
 }
 
 // Add event listener to Save PDF button
