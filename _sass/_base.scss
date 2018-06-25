@@ -80,7 +80,9 @@ h6 { font-size: 1.0rem; line-height: 1.6;  letter-spacing: 0; }
 blockquote,
 figure,
 p,
-pre { margin-bottom: $block-spacing; }
+pre {
+  margin-bottom: $block-spacing;
+}
 
 // Lists
 // -----
@@ -103,7 +105,7 @@ dd + dt { margin-top: $block-spacing; }
 ol:not([type]) {
   counter-reset: section;                // Creates a new instance of the
   list-style-type: none;                 // section counter with each ol
-}                                        // element 
+}                                        // element
 
 
 ol:not([type])>li::before {
@@ -111,36 +113,37 @@ ol:not([type])>li::before {
   content: counters(section, ".") ". ";   // of the section counter */
 }                                         // Combines the values of all instances
                                           // of the section counter, separated
-                                          // by a period 
+                                          // by a period
 
 ol[type='1A']{
-  counter-reset: subsection; 
+  counter-reset: subsection;
   list-style-type: none;
 }
 ol[type='1A']>li::before {
-  counter-increment: subsection;  
+  counter-increment: subsection;
   content: counter(section,decimal)''counter(subsection,upper-alpha) ". ";
 }
 
 
 // Code
 // ----
-code {
+pre{
   // Box
-  padding: $inline-spacing 0.5em;
-  margin: 0 $inline-spacing;
+  padding: $item-spacing;
+  margin: $item-spacing*2 0;
   // Layout
   font-size: 90%;
-  white-space: nowrap;
+  white-space: pre-wrap;
+  word-wrap: break-word;
   // Appearance
   background: $well-background-color;
   border-radius: $base-border-radius;
 }
+
 pre > code {
   display: block;
   padding: $base-vertical-padding $base-horizontal-padding;
   margin: 0;
-  white-space: pre;
 }
 
 // Tables
