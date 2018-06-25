@@ -11,9 +11,10 @@
     <link rel="icon" href="{{ "/assets/favicon.ico" | relative_url }}">
     <link rel="stylesheet" href="{{ '/assets/normalize.css' | relative_url }}">
     <link rel="stylesheet" href="{{ '/assets/main.css' | relative_url }}">
+    <script src="{{ '/assets/printjs/print.min.js' | relative_url }}"></script>
   </head>
 
-  <body>
+  <body id ="main-content">
     <section class="description"><a href=".">
       <img class="description-logo" src="{{ site.styling_options.logo_path | relative_url }}">
       <div class="description-title">{{ site.title }}</div>
@@ -26,8 +27,15 @@
 
 
     <script>
-      window.print();
-    </script>
+      printJS({
+         printable: 'main-content',
+         type: 'html',
+         css: 'assets/main.css',
+         scanStyles: false,
+         style: "body{ font-family: 'Source Sans Pro'}"
+     });
+
+      </script>
   </body>
 
 </html>
