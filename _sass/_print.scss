@@ -1,0 +1,10 @@
+@media print {
+    /* print styles go here */
+    .site-header{
+      display: none;
+    }
+
+    .site-branding{
+      display: none;
+    }
+}
