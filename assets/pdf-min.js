@@ -1,1 +1,0 @@
-function convertTextToPDF(){printJS({printable:"main-content",type:"html",css:"https://opengovsg.github.io/opendoc-theme/assets/main.css",scanStyles:!1})}var pdfButton=document.getElementById("convert-to-pdf");pdfButton.addEventListener("click",convertTextToPDF,!1);
