@@ -10,15 +10,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     {% seo %}
     <link rel="icon" href="{{ "/assets/favicon.ico" | relative_url }}">
+    <link rel="stylesheet" href="{{ '/assets/normalize.css' | relative_url }}">
     <link rel="stylesheet" href="{{ '/assets/main.css' | relative_url }}">
     <script src="{{ '/assets/printjs/print.min.js' | relative_url }}"></script>
   </head>
 
-  <body id="printable-body">
-    {{ content }}
+  <body>
+    <main class="site-main" id="main-content" aria-label="Content" >
+        {{ content }}
+    </main>
+
+
     <script>
     printJS({
-             printable: 'printable-body',
+             printable: 'main-content',
              type: 'html',
              css: 'https://opengovsg.github.io/opendoc-theme/assets/main.css',
              scanStyles: false,
