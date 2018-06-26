@@ -14,7 +14,7 @@
     <script src="{{ '/assets/printjs/print.min.js' | relative_url }}"></script>
   </head>
 
-  <body id ="main-content">
+  <body id ="print-content">
     <section class="description"><a href=".">
       <img class="description-logo" src="{{ site.styling_options.logo_path | relative_url }}">
       <div class="description-title">{{ site.title }}</div>
@@ -28,7 +28,7 @@
 
     <script>
       printJS({
-         printable: 'main-content',
+         printable: 'print-content',
          type: 'html',
          css: 'assets/main.css',
          scanStyles: false,
