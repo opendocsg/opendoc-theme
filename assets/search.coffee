@@ -395,7 +395,8 @@ esSearch = (query) ->
   req.send JSON.stringify esQuery
 
 lunrSearch = (searchIndex, query) ->
-  lunrResults = searchIndex.search(query + "~1")
+  # https://lunrjs.com/guides/searching.html
+  lunrResults = searchIndex.search("*" + query + "*", query + "~1")
   results = translateLunrResults(lunrResults)
   renderSearchResults results
 
@@ -422,7 +423,7 @@ enableSearchBox = (searchIndex) ->
           esSearch(query)
         else
           lunrSearch(searchIndex, query)
-    200, !searchOnServer)
+    100, !searchOnServer)
 
 searchIndexPromise.then (searchIndex) ->
   enableSearchBox(searchIndex)

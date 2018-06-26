@@ -6,12 +6,13 @@
 importScripts("{{ '/assets/lunr.js' | relative_url }}")
 console.log "Indexing worker initialized"
 
-@onmessage = (event) => 
+@onmessage = (event) =>
   console.log "Starting to build index"
   siteSections = event.data
   index = lunr ->
     @ref 'url'
-    @field 'title', boost: 10
+    # inline with Elastic search
+    @field 'title', boost: 2
     @field 'text'
     @metadataWhitelist = ['position']
     siteSections.forEach (section) =>
@@ -22,5 +23,3 @@ console.log "Indexing worker initialized"
           'text': section.text
   console.log "Done building index"
   @postMessage index.toJSON()
-
-
