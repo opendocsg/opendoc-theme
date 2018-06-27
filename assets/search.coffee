@@ -311,8 +311,8 @@ formatResult = (result) ->
     # 2) '<strong>a</strong> <strong>Will</strong>'
     # We want to highlight 'make' or 'a Will', but not 'a' , or 'Will' by themselves
     # This should return ['make', 'a will']
-    start = '<strong>'
-    end = '</strong>'
+    start = '<mark><strong>'
+    end = '</strong></mark>'
     curr = content.trimLeft()
     s = curr.indexOf(start)
     e = curr.indexOf(end)
@@ -368,7 +368,7 @@ createEsQuery = (queryStr) ->
   highlight = {}
   highlight.require_field_match = false
   highlight.fields = {}
-  highlight.fields['content'] = {"fragment_size" : 80, "number_of_fragments" : 6, "pre_tags" : ["<strong>"], "post_tags" : ["</strong>"] }
+  highlight.fields['content'] = {"fragment_size" : 80, "number_of_fragments" : 6, "pre_tags" : ["<mark><strong>"], "post_tags" : ["</strong></mark>"] }
 
   {"_source": source, "query" : bool_q, "highlight" : highlight}
 
