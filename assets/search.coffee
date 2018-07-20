@@ -313,8 +313,8 @@ formatResult = (result) ->
     # 2) '<strong>a</strong> <strong>Will</strong>'
     # We want to highlight 'make' or 'a Will', but not 'a' , or 'Will' by themselves
     # This should return ['make', 'a will']
-    start = '<strong>'
-    end = '</strong>'
+    start = '<mark><strong>'
+    end = '</strong></mark>'
     curr = content.trimLeft()
     s = curr.indexOf(start)
     e = curr.indexOf(end)
@@ -370,7 +370,7 @@ createEsQuery = (queryStr) ->
   highlight = {}
   highlight.require_field_match = false
   highlight.fields = {}
-  highlight.fields['content'] = {"fragment_size" : 80, "number_of_fragments" : 6, "pre_tags" : ["<strong>"], "post_tags" : ["</strong>"] }
+  highlight.fields['content'] = {"fragment_size" : 80, "number_of_fragments" : 6, "pre_tags" : ["<mark><strong>"], "post_tags" : ["</strong></mark>"] }
 
   {"_source": source, "query" : bool_q, "highlight" : highlight}
 
@@ -397,7 +397,8 @@ esSearch = (query) ->
   req.send JSON.stringify esQuery
 
 lunrSearch = (searchIndex, query) ->
-  lunrResults = searchIndex.search(query + "~1")
+  # https://lunrjs.com/guides/searching.html
+  lunrResults = searchIndex.search("*" + query + "*", query + "~1")
   results = translateLunrResults(lunrResults)
   renderSearchResults results
 
@@ -424,7 +425,7 @@ enableSearchBox = (searchIndex) ->
           esSearch(query)
         else
           lunrSearch(searchIndex, query)
-    200, !searchOnServer)
+    100, !searchOnServer)
 
 searchIndexPromise.then (searchIndex) ->
   enableSearchBox(searchIndex)
