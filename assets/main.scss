@@ -1,6 +1,7 @@
 ---
-# Jekyll front matter needed to trigger sass compilation
 ---
+$primary-brand-color: {{site.styling_options.primary_brand_color}};
+
 @import "base";
 @import "layout";
 @import "syntax-highlighting";
