@@ -1,0 +1,17 @@
+@media print {
+    /* print styles go here */
+    .site-header{
+      display: none;
+    }
+    #float-buttons{
+      display: none;
+    }
+    .site-branding{
+      display: none;
+    }
+
+    @page {
+      size: A4;
+      margin: 1.5cm;
+    }
+}

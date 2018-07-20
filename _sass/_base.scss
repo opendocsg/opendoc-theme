@@ -1,3 +1,7 @@
+
+@import url('https://fonts.googleapis.com/css?family=Fira+Sans|Source+Sans+Pro:400,600');
+
+
 // Variables
 // ============================================================================
 // Fonts
@@ -76,7 +80,9 @@ h6 { font-size: 1.0rem; line-height: 1.6;  letter-spacing: 0; }
 blockquote,
 figure,
 p,
-pre { margin-bottom: $block-spacing; }
+pre {
+  margin-bottom: $block-spacing;
+}
 
 // Lists
 // -----
@@ -121,22 +127,23 @@ ol[type='1A']>li::before {
 
 // Code
 // ----
-code {
+pre{
   // Box
-  padding: $inline-spacing 0.5em;
-  margin: 0 $inline-spacing;
+  padding: $item-spacing;
+  margin: $item-spacing*2 0;
   // Layout
   font-size: 90%;
-  white-space: nowrap;
+  white-space: pre-wrap;
+  word-wrap: break-word;
   // Appearance
   background: $well-background-color;
   border-radius: $base-border-radius;
 }
+
 pre > code {
   display: block;
   padding: $base-vertical-padding $base-horizontal-padding;
   margin: 0;
-  white-space: pre;
 }
 
 // Tables

@@ -10,8 +10,6 @@
     <link rel="stylesheet" href="{{ '/assets/normalize.css' | relative_url }}">
     <link rel="stylesheet" href="{{ '/assets/main.css' | relative_url }}">
     <link rel="alternate" type="application/rss+xml" title="{{ site.title | escape }}" href="{{ "/feed.xml" | relative_url }}">
-    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Fira+Mono" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.26.0/polyfill.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dom4/3.0.0/dom4.max.js" charset="utf-8"></script>
     {% if jekyll.environment == 'production' and site.google_analytics %}
@@ -52,9 +50,21 @@
       </label>
     </header>
 
-    <main class="site-main" aria-label="Content">
+    <main class="site-main" id="main-content" aria-label="Content" >
       {{ content | replace: "!!^", "<i style='margin-left:30px'></i>"}}
     </main>
+
+    <div id="float-buttons">
+      <button id="convert-to-pdf">
+        <svg width="30px" viewBox="0 0 476 439">
+          <g id="printing-tool" fill="#FFFFFF" fill-rule="nonzero">
+              <path d="M458.959,199.124 C448.2,188.366 435.305,182.99 420.269,182.99 L402.001,182.99 L402.001,109.901 C402.001,102.29 400.091,93.911 396.282,84.779 C392.476,75.643 387.911,68.411 382.583,63.081 L339.18,19.683 C333.852,14.358 326.62,9.788 317.488,5.979 C308.35,2.174 299.98,0.271 292.362,0.271 L100.5,0.271 C92.886,0.271 86.413,2.934 81.083,8.264 C75.756,13.591 73.089,20.063 73.089,27.678 L73.089,182.99 L54.818,182.99 C39.781,182.99 26.886,188.369 16.13,199.124 C5.376,209.876 0,222.772 0,237.81 L0,356.583 C0,359.061 0.905,361.192 2.712,363.009 C4.521,364.813 6.663,365.716 9.135,365.716 L73.089,365.716 L73.089,411.396 C73.089,419.013 75.753,425.485 81.083,430.813 C86.413,436.138 92.886,438.807 100.5,438.807 L374.583,438.807 C382.194,438.807 388.676,436.138 394.001,430.813 C399.329,425.481 401.995,419.013 401.995,411.396 L401.995,365.716 L465.948,365.716 C468.419,365.716 470.561,364.813 472.368,363.009 C474.175,361.193 475.078,359.061 475.078,356.583 L475.078,237.81 C475.082,222.772 469.708,209.876 458.959,199.124 Z M365.449,402.262 L109.636,402.262 L109.636,329.175 L365.449,329.175 L365.449,402.262 Z M365.449,219.537 L109.636,219.537 L109.636,36.816 L292.362,36.816 L292.362,82.495 C292.362,90.109 295.031,96.578 300.353,101.909 C305.681,107.239 312.152,109.902 319.77,109.902 L365.449,109.902 L365.449,219.537 Z M433.116,250.656 C429.502,254.27 425.218,256.084 420.269,256.084 C415.32,256.084 411.036,254.271 407.421,250.656 C403.808,247.046 402.001,242.758 402.001,237.809 C402.001,232.86 403.808,228.577 407.421,224.962 C411.035,221.345 415.319,219.536 420.269,219.536 C425.217,219.536 429.501,221.345 433.116,224.962 C436.729,228.576 438.543,232.86 438.543,237.809 C438.543,242.758 436.733,247.046 433.116,250.656 Z" id="Shape"></path>
+          </g>
+      </g>
+  </svg>
+    <span>PDF</span>
+      </button>
+    </div>
 
     <span class="site-branding">
       Powered by Opendoc
@@ -63,10 +73,8 @@
     <script src="{{ '/assets/lunr.js' | relative_url }}"></script>
     <script src="{{ '/assets/search.js' | relative_url }}"></script>
     <script src="{{ '/assets/layout.js' | relative_url }}"></script>
-    <script src="{{ '/assets/jspdf.min.js' | relative_url }}"></script>
+    <script src="{{ '/assets/redirect-new-tab.js' | relative_url }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" charset="utf-8"></script>
-
-
   </body>
 
 </html>
