@@ -4,7 +4,17 @@
 
 // open export.html in new tab where print modal is triggered once loaded
 function redirect() {
-  window.open("http://" + window.location.host + "/export.html", '_blank');
+  let pathArray = window.location.pathname.split('/');
+  let url;
+  if (pathArray.length >= 2) {
+    pathArray.pop(); //remove the last item
+    pathArray.push("export.html") //add in the last
+    let newPath = pathArray.join('/');
+    url = "http://" + window.location.host + newPath;
+  } else {
+    url = "http://" + window.location.host + "export.html";
+  }
+  window.open(url, '_blank');
 }
 
 // Add event listener to Save PDF button
