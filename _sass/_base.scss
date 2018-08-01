@@ -102,28 +102,11 @@ ol, ul, dl {
 li, dt, dd, { margin-bottom: $item-spacing; }
 dd + dt { margin-top: $block-spacing; }
 
-ol:not([type]) {
-  counter-reset: section;                // Creates a new instance of the
-  list-style-type: none;                 // section counter with each ol
-}                                        // element
-
-
-ol:not([type])>li::before {
-  counter-increment: section;             // Increments only this instance
-  content: counters(section, ".") ". ";   // of the section counter */
-}                                         // Combines the values of all instances
-                                          // of the section counter, separated
-                                          // by a period
-
-ol[type='1A']{
-  counter-reset: subsection;
+// indentations
+// this is a hack to allow users to create custom lists and indent text
+ul[type="*"] {
   list-style-type: none;
 }
-ol[type='1A']>li::before {
-  counter-increment: subsection;
-  content: counter(section,decimal)''counter(subsection,upper-alpha) ". ";
-}
-
 
 // Code
 // ----
