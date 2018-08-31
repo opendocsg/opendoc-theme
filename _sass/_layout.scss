@@ -3,8 +3,10 @@
 $spacing:                     10px;
 $large-spacing:               2 * $spacing;
 $content-width:               50em;
-$sidebar-content-width:       18em;
+$sidebar-content-width:       24em;
 $site-header-spacing:         15px;
+$nav-footer-height:           150px;
+$nav-header-height:           80px;
 
 // Implementation
 // ============================================================================
@@ -60,6 +62,11 @@ body {
   position: fixed;
   z-index: 1;
   top: 0;
+
+  // Sidebar content could be too long for the page
+  // The scrolling should be limited to the chapter selection area
+  overflow: hidden;
+
   // Mobile has the sidebar hidden by default
   // Tablets and above have it showing by default
   // On larger screens the content stays in place and we move the sidebar in
@@ -79,26 +86,25 @@ body {
   background-color: $base-background-color;
   // Other
   flex-direction: column;
-  overflow-y: scroll;
   // Children
   .site-search {
     position: relative;
     display: block;
     height: 40px;
-    background-color: $base-background-color;
-    box-shadow: 0px 1px 8px 3px rgba(0, 0, 0, 0.2);
-    -moz-box-shadow: 0px 1px 8px 3px rgba(0, 0, 0, 0.2);
-    -webkit-box-shadow: 0px 1px 8px 3px rgba(0, 0, 0, 0.2);
+    background-color: $primary-brand-color;
     margin: 0 $item-spacing;
     flex: 0 0 auto;
     font-weight: normal;
 
+    .search-container {
+      height: 40px;
+    }
 
     .search-icon {
       position: absolute;
       top: 0;
       bottom: 0;
-      right: $spacing*2;
+      left: $spacing*2;
       display: block;
       height: 1em;
       width: 1em;
@@ -130,17 +136,23 @@ body {
     }
     &.filled .clear-button { display: unset; }
     input {
-      position: absolute;
+      // position: absolute;
       display: block;
       box-sizing: border-box;
       width: 100%;
       height: 100%;
       border: none;
+      border-radius: 0px;
       outline: none;
-      font-size: 100%;
-      padding-left: $large-spacing;
+      font-size: 130%;
+      padding-right: $large-spacing;
       // Make room for the search icon
-      padding-right: calc(#{$spacing} + 1em);
+      padding-left: calc(#{$spacing * 4} + 1em);
+      padding-top: 0px;
+      padding-bottom: 0px;
+      margin-top: 20px;
+      background-color: $primary-brand-color;
+      color: white;
     }
     input:disabled ~ .search-icon { display: none; }
   }
@@ -208,6 +220,34 @@ body {
       margin: $item-spacing/2 0;
       color: $primary-text-color;
       font-size: 90%;
+    }
+  }
+
+  .nav-header {
+    height: $nav-header-height;
+    background-color: $primary-brand-color;
+  }
+
+  .nav-main {
+    height: calc(100% - #{$nav-footer-height} - #{$nav-header-height});
+    overflow: scroll;
+  }
+
+  .nav-footer {
+    height: $nav-footer-height;
+    min-height: $nav-footer-height;
+    max-height: $nav-footer-height;
+    display: flex;
+
+    .attribution {
+      margin: 25px;
+      span {
+        text-transform: uppercase;
+        font-size: 80%;
+      }
+      img {
+        max-height: 75px;
+      }
     }
   }
 

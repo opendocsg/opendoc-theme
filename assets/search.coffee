@@ -406,7 +406,7 @@ lunrSearch = (searchIndex, query) ->
 enableSearchBox = (searchIndex) ->
   searchBoxElement.removeAttribute "disabled"
   searchBoxElement.classList.remove('loading')
-  searchBoxElement.setAttribute "placeholder", "Search"
+  searchBoxElement.setAttribute "placeholder", "Search document"
   searchBoxElement.addEventListener 'input', (event) ->
     toc = document.getElementsByClassName('table-of-contents')[0]
     searchResults = document.getElementsByClassName('search-results')[0]

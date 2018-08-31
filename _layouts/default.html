@@ -28,16 +28,27 @@
     <input type="checkbox" id="menu-toggle" hidden>
 
     <nav class="site-nav">
-      <section class="description"><a href=".">
-        <img class="description-logo" src="{{ site.styling_options.logo_path | relative_url }}">
-        <div class="description-title">{{ site.title }}</div>
-        <div class="description-last-updated">Last built: {{ site.time }}</div></a>
-      </section>
-      <section class="site-search"></section>
-      <section class="table-of-contents">
-      </section>
-      <section class="search-results">
-      </section>
+      <div class="nav-header">
+        <section class="site-search"></section>
+      </div>
+      <div class="nav-main">
+        <section class="table-of-contents">
+        </section>
+        <section class="search-results">
+        </section>
+      </div>
+      <div class="nav-footer">
+        <!-- <section class="sidebar-footer"> -->
+          <div class="attribution">
+            <span>Content by</span>
+            <img class="description-logo" src="{{ site.styling_options.logo_path | relative_url }}">
+          </div>
+          <div class="attribution">
+            <span>Powered by</span>
+            <img class="description-logo" src="{{ site.styling_options.logo_path | relative_url }}">
+          </div>
+        <!-- </section> -->
+      </div>
     </nav>
 
     <header class="site-header">
