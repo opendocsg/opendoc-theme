@@ -10,7 +10,8 @@ $nav-header-height:           80px;
 
 // Implementation
 // ============================================================================
-$site-header-height: calc(2 * #{$site-header-spacing} + 1em);
+// $site-header-height: calc(2 * #{$site-header-spacing} + 1em);
+$site-header-height: 120px;
 $site-nav-width: calc(#{$sidebar-content-width} + 2 * #{$large-spacing});
 
 // Body
@@ -29,6 +30,7 @@ body {
   top: 0;
   left: 0;
   right: 0;
+
   // Box
   display: flex;
   box-sizing: border-box;
@@ -41,17 +43,39 @@ body {
     #menu-toggle:checked ~ & { left: 0; transform: none; }
   }
   background-color: $base-background-color;
+  border-bottom: 1px solid $primary-text-color;
   // Other
   flex-direction: row;
   align-items: center;
+  
   // Children
-  .menu-button {
+  .description-container {
     padding: $spacing;
-    cursor: pointer;
-    .menu-icon {
-      display: block;
-        path {fill: $primary-text-color;}
+  }
+  .button-group-container {
+    position: absolute;
+    right: 0px;
+
+    .menu-button {
+      padding: $spacing;
+      cursor: pointer;
+      .menu-icon {
+        display: block;
+          path {fill: $primary-text-color;}
+      }
     }
+  }
+
+
+
+  .btn-group button {
+    float: left; /* Float the buttons side by side */
+  }
+  .btn-group button:not(:last-child) {
+    border-right: none; /* Prevent double borders */
+    margin-left: 0px;
+    margin-right: 0px;
+    border-radius: 0.2rem 0px 0px 0px;
   }
 }
 
@@ -98,6 +122,10 @@ body {
 
     .search-container {
       height: 40px;
+
+      input::placeholder {
+        color: white;
+      }
     }
 
     .search-icon {
@@ -111,7 +139,7 @@ body {
       margin-top: auto;
       margin-bottom: auto;
       cursor: pointer;
-      path { fill: $primary-text-color; }
+      path { fill: white; }
     }
     &.filled .search-icon { display: none; }
     .clear-button {
@@ -241,12 +269,14 @@ body {
 
     .attribution {
       margin: 25px;
-      span {
+      width: 50%;
+      div {
         text-transform: uppercase;
         font-size: 80%;
+        padding-bottom: 10px;
       }
       img {
-        max-height: 75px;
+        max-width: 100px;
       }
     }
   }

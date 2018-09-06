@@ -40,46 +40,40 @@
       <div class="nav-footer">
         <!-- <section class="sidebar-footer"> -->
           <div class="attribution">
-            <span>Content by</span>
+            <div>Content by</div>
             <img class="description-logo" src="{{ site.styling_options.logo_path | relative_url }}">
           </div>
           <div class="attribution">
-            <span>Powered by</span>
-            <img class="description-logo" src="{{ site.styling_options.logo_path | relative_url }}">
+            <div>Powered by</div>
+            <img class="description-logo" src="{{ site.styling_options.opendoc_logo_path | relative_url }}">
           </div>
         <!-- </section> -->
       </div>
     </nav>
 
     <header class="site-header">
-      <label class="menu-button" for="menu-toggle">
-        <svg class="menu-icon" viewBox="0 0 18 15" width="18px" height="15px">
-          <path fill="#222222" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"></path>
-          <path fill="#222222" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"></path>
-          <path fill="#222222" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"></path>
-        </svg>
-      </label>
+      <div class=description-container>
+        <h1 class="description-title">{{ site.title }}</h1>
+        <div class="description-last-updated">Last built: {{ site.time }}</div>
+      </div>
+      <div class=button-group-container>
+        <div class="btn-group">
+          <button>      
+            <label class="menu-button" for="menu-toggle">
+              menu
+            </label>
+          </button>
+          <button id="convert-to-pdf">print</button>
+          <button>feedback</button>
+        </div>
+      </div>
+
     </header>
 
     <main class="site-main" id="main-content" aria-label="Content" >
       {{ content | replace: "!!^", "<i style='margin-left:30px'></i>"}}
     </main>
 
-    <div id="float-buttons">
-      <button id="convert-to-pdf">
-        <svg width="30px" viewBox="0 0 476 439">
-          <g id="printing-tool" fill="#FFFFFF" fill-rule="nonzero">
-              <path d="M458.959,199.124 C448.2,188.366 435.305,182.99 420.269,182.99 L402.001,182.99 L402.001,109.901 C402.001,102.29 400.091,93.911 396.282,84.779 C392.476,75.643 387.911,68.411 382.583,63.081 L339.18,19.683 C333.852,14.358 326.62,9.788 317.488,5.979 C308.35,2.174 299.98,0.271 292.362,0.271 L100.5,0.271 C92.886,0.271 86.413,2.934 81.083,8.264 C75.756,13.591 73.089,20.063 73.089,27.678 L73.089,182.99 L54.818,182.99 C39.781,182.99 26.886,188.369 16.13,199.124 C5.376,209.876 0,222.772 0,237.81 L0,356.583 C0,359.061 0.905,361.192 2.712,363.009 C4.521,364.813 6.663,365.716 9.135,365.716 L73.089,365.716 L73.089,411.396 C73.089,419.013 75.753,425.485 81.083,430.813 C86.413,436.138 92.886,438.807 100.5,438.807 L374.583,438.807 C382.194,438.807 388.676,436.138 394.001,430.813 C399.329,425.481 401.995,419.013 401.995,411.396 L401.995,365.716 L465.948,365.716 C468.419,365.716 470.561,364.813 472.368,363.009 C474.175,361.193 475.078,359.061 475.078,356.583 L475.078,237.81 C475.082,222.772 469.708,209.876 458.959,199.124 Z M365.449,402.262 L109.636,402.262 L109.636,329.175 L365.449,329.175 L365.449,402.262 Z M365.449,219.537 L109.636,219.537 L109.636,36.816 L292.362,36.816 L292.362,82.495 C292.362,90.109 295.031,96.578 300.353,101.909 C305.681,107.239 312.152,109.902 319.77,109.902 L365.449,109.902 L365.449,219.537 Z M433.116,250.656 C429.502,254.27 425.218,256.084 420.269,256.084 C415.32,256.084 411.036,254.271 407.421,250.656 C403.808,247.046 402.001,242.758 402.001,237.809 C402.001,232.86 403.808,228.577 407.421,224.962 C411.035,221.345 415.319,219.536 420.269,219.536 C425.217,219.536 429.501,221.345 433.116,224.962 C436.729,228.576 438.543,232.86 438.543,237.809 C438.543,242.758 436.733,247.046 433.116,250.656 Z" id="Shape"></path>
-          </g>
-      </g>
-  </svg>
-    <span>PDF</span>
-      </button>
-    </div>
-
-    <span class="site-branding">
-      Powered by Opendoc
-    </span>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.3.5/bluebird.min.js"></script>
     <script src="{{ '/assets/lunr.js' | relative_url }}"></script>
     <script src="{{ '/assets/search.js' | relative_url }}"></script>
