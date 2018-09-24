@@ -1,5 +1,5 @@
-
-# I. Make a fork of bare
+# Readme
+## I. Make a fork of bare
 
 ### Forking yours/repo into anothername/repo
 
@@ -27,25 +27,25 @@
 	
 	` git push origin master` 
 
-# II. Set up GitHub pages
+## II. Set up GitHub pages
 
 On GitHub repo page - Settings - Scroll down to GitHub Pages - Select the branch you want to publish from: master/docs
 
-# III. Set your push webhook
+## III. Set your push webhook
 
 On GitHub repo page - Settings - WebHooks on the left nav bar - Add webhook
 
 
-# IV. Copy your markdown documents into your local repo
+## IV. Copy your markdown documents into your local repo
 
-# V. Modify the config file
+## V. Modify the config file
 
 The config file is located in the base path of your directory ("_config.yml"). There are several customisation options availabe in the config file:
 
 - logo_path: Full path of logo file in assets folder (e.g. "logo.png")
 - primary_brand_color: Hex value of primary brand color (e.g. "#000000")
 
-# VI. Push your changes to production
+## VI. Push your changes to production
 
 	```
 	git add .
