@@ -1,11 +1,11 @@
 // Variables
 // ============================================================================
-$spacing:                     10px;
+$spacing:                     12px;
 $large-spacing:               2 * $spacing;
 $content-width:               50em;
 $sidebar-content-width:       24em;
 $site-header-spacing:         15px;
-$nav-footer-height:           150px;
+$nav-footer-height:           120px;
 $nav-header-height:           80px;
 
 // Implementation
@@ -20,63 +20,6 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-}
-
-// Site Header
-// -----------
-.site-header {
-  position: fixed;
-  z-index: 2;
-  top: 0;
-  left: 0;
-  right: 0;
-
-  // Box
-  display: flex;
-  box-sizing: border-box;
-  align-self: stretch;
-  height: $site-header-height;
-  #menu-toggle:checked ~ & { transform: translate($site-nav-width); }
-  // On medium screens squeeze rather than shift the header
-  @include medium-screen {
-    left: $site-nav-width;
-    #menu-toggle:checked ~ & { left: 0; transform: none; }
-  }
-  background-color: $base-background-color;
-  border-bottom: 1px solid $primary-text-color;
-  // Other
-  flex-direction: row;
-  align-items: center;
-  
-  // Children
-  .description-container {
-    padding: $spacing;
-  }
-  .button-group-container {
-    position: absolute;
-    right: 0px;
-
-    .menu-button {
-      padding: $spacing;
-      cursor: pointer;
-      .menu-icon {
-        display: block;
-          path {fill: $primary-text-color;}
-      }
-    }
-  }
-
-
-
-  .btn-group button {
-    float: left; /* Float the buttons side by side */
-  }
-  .btn-group button:not(:last-child) {
-    border-right: none; /* Prevent double borders */
-    margin-left: 0px;
-    margin-right: 0px;
-    border-radius: 0.2rem 0px 0px 0px;
-  }
 }
 
 // Site Nav
@@ -100,6 +43,7 @@ body {
     right: unset; left: 0;
     #menu-toggle:checked ~ & { right: 100%; left: unset; }
   }
+  
   // Box
   display: flex;
   box-sizing: border-box;
@@ -207,9 +151,9 @@ body {
   }
 
   .table-of-contents {
-    padding-left: $large-spacing;
-    padding-top: $spacing;
-    padding-bottom: $large-spacing;
+    padding-left: calc(#{$large-spacing} * 2);
+    padding-top: $large-spacing;
+    padding-bottom: calc(#{$large-spacing} * 2);
   }
 
   .nav-branch {
@@ -221,7 +165,6 @@ body {
     }
     &.expanded {
       & > .nav-branch { display: block; }
-
     }
   }
 
@@ -231,8 +174,10 @@ body {
     padding-top: $spacing;
     padding-bottom: $spacing;
     padding-right: $spacing*2;
+    padding-left: $spacing;
     cursor: pointer;
     text-decoration: none;
+    border-left: 3px solid $well-background-color;
 
     &:hover{
       text-decoration: underline;
@@ -240,8 +185,7 @@ body {
 
     &.selected {
       color: $primary-brand-color;
-      // background-color: darken($base-background-color, 5%);
-      border-right: 3px solid $primary-brand-color;
+      border-left: 3px solid $primary-brand-color;
     }
 
     p {
@@ -258,7 +202,9 @@ body {
 
   .nav-main {
     height: calc(100% - #{$nav-footer-height} - #{$nav-header-height});
-    overflow: scroll;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    background-color: $well-background-color;
   }
 
   .nav-footer {
@@ -268,7 +214,7 @@ body {
     display: flex;
 
     .attribution {
-      margin: 25px;
+      margin: 20px 35px 20px 35px;
       width: 50%;
       div {
         text-transform: uppercase;
@@ -276,51 +222,122 @@ body {
         padding-bottom: 10px;
       }
       img {
-        max-width: 100px;
+        max-height: 50px;
       }
     }
   }
+}
 
+// Site Header
+// -----------
+.site-header {
+  position: fixed;
+  z-index: 2;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: $large-spacing calc(2 * #{$large-spacing});
+
+  // Box
+  display: flex;
+  box-sizing: border-box;
+  align-self: stretch;
+  height: $site-header-height;
+  #menu-toggle:checked ~ & { transform: translate($site-nav-width); }
+  // On medium screens squeeze rather than shift the header
+  @include medium-screen {
+    left: $site-nav-width;
+    #menu-toggle:checked ~ & { left: 0; transform: none; }
+  }
+  background-color: $base-background-color;
+  border-bottom: 1px solid $divider-color;
+  // Other
+  flex-direction: row;
+  align-items: center;
+  
+  // Children
+  .description-container {
+    .description-title {
+      color: $primary-brand-color;
+      margin-bottom: 10px;
+    }
+    .description-last-updated {
+      font-size: 13px;
+      letter-spacing: 0.7px;
+      color: #9b9b9b;
+    }
+  }
+  .button-group-container {
+    position: absolute;
+    right: $large-spacing;
+
+    .btn-group .btn-item {
+      float: left; /* Float the buttons side by side */
+      padding: $spacing $large-spacing;
+      border: 1px solid $divider-color;
+      cursor: pointer;
+
+      .btn-icon {
+        height: 1rem;
+        pointer-events: none;
+        cursor: default;
+      }
+      &:not(:last-child) {
+        border-right: none; /* Prevent double borders */
+      }
+      &:first-child {
+        border-radius: 5px 0px 0px 5px;
+      }
+      &:last-child {
+        border-radius: 0px 5px 5px 0px;
+      }
+    }
+
+
+    .btn-group label {
+      height: 1rem;
+      // pointer-events: none;
+      cursor: default;
+    }
+  }
 }
 
 // Site Main
 //----------
 .site-main {
+  position: absolute;
   z-index: 0;
+  left: 0;
+  right: 0;
+  top: $site-header-height;
+
+  padding: $large-spacing calc(2 * #{$large-spacing});
+  height: calc(100% - #{$site-header-height});
+  overflow: auto;
+
+
   // On small screens fill the screen with content
   // Shift everything right when menu is open
   box-sizing: border-box;
-  width: 100%;
-  max-width: calc(#{$content-width} + 2 * #{$large-spacing});
-  margin-top: $site-header-height;
-  padding: $spacing;
-  #menu-toggle:checked ~ & { transform: translate($site-nav-width); }
+
+  #menu-toggle:checked ~ & { transform: translate(calc(#{$site-nav-width} + #{$large-spacing})) }
   // On medium screens fill the residual space
   // Expand to fill when the menu is closed
   @include medium-screen {
-    width: auto;
-    margin-left: $site-nav-width;
-    padding: $large-spacing;
-    #menu-toggle:checked ~ & {
-      transform: none;
-      margin-left: 0;
-    }
+    left: $site-nav-width;
+    #menu-toggle:checked ~ & { left: 0; transform: none; }
   }
-  // On large screens stay centered
-  // Do nothing when menu is opened
-  @include large-screen {
-    margin-left: 0;
-  }
+
   // Hack to get browser hash scrolling to work nicely with a fixed header
-  h1 { margin-top: calc(2.0 * #{$block-spacing} - #{$site-header-height}); }
-  h2 { margin-top: calc(1.8 * #{$block-spacing} - #{$site-header-height}); }
-  h3 { margin-top: calc(1.6 * #{$block-spacing} - #{$site-header-height}); }
-  h4 { margin-top: calc(1.4 * #{$block-spacing} - #{$site-header-height}); }
-  h5 { margin-top: calc(1.2 * #{$block-spacing} - #{$site-header-height}); }
-  h6 { margin-top: calc(1.0 * #{$block-spacing} - #{$site-header-height}); }
+  h1 { padding-top: calc(2.0 * #{$block-spacing}); border-top: 1px solid $divider-color;}
+  h2 { padding-top: calc(1.8 * #{$block-spacing}); border-top: 1px solid $divider-color;}
+  h3 { padding-top: calc(1.6 * #{$block-spacing}); border-top: 1px solid $divider-color;}
+  h4 { padding-top: calc(1.4 * #{$block-spacing}); border-top: 1px solid $divider-color;}
+  h5 { padding-top: calc(1.2 * #{$block-spacing}); border-top: 1px solid $divider-color;}
+  h6 { padding-top: calc(1.0 * #{$block-spacing}); border-top: 1px solid $divider-color;}
   h1, h2, h3, h4, h5, h6 {
-    padding-top: $site-header-height;
-    &:first-child { margin-top: 0; padding-top: 0; }
+    // padding-top: $site-header-height;
+    &:first-child { margin-top: 0; padding-top: 0; border-top: 0px; }
   }
 }
 
@@ -356,55 +373,6 @@ body {
   padding: $spacing;
   background: $divider-color;
   border-radius: $spacing;
-}
-
-#float-buttons{
-  position: fixed;
-  top: $spacing*5;
-  right: $spacing*3;
-
-
-    #convert-to-pdf{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 80px;
-    height: 80px;
-    padding: 10px;
-    background: #ddd;
-    border: none;
-    border-radius: 5px;
-    color: #888;
-
-    cursor: pointer;
-
-    -webkit-box-shadow: 0px 1px 2px 1px rgba(0,0,0,0.4);
-    -moz-box-shadow: 0px 1px 2px 1px rgba(0,0,0,0.4);
-    box-shadow: 0px 1px 2px 1px rgba(0,0,0,0.4);
-
-      svg{
-        margin-top: 5px;
-        margin-bottom: 5px;
-          g{
-            fill: #888;
-          }
-      }
-
-    &:hover,:active{
-      background: #eee;
-      color: #999;
-
-      -webkit-box-shadow: 0px 1px 2px 1px rgba(0,0,0,0.2);
-      -moz-box-shadow: 0px 1px 2px 1px rgba(0,0,0,0.2);
-      box-shadow: 0px 1px 2px 1px rgba(0,0,0,0.2);
-        svg{
-            g{
-              fill: #999;
-            }
-        }
-    }
-  }
 }
 
 //custom-scrollbar
