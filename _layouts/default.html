@@ -6,6 +6,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     {% seo %}
+    <link href="https://fonts.googleapis.com/css?family=Noto+Serif" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet">
+
     <link rel="icon" href="{{ "/assets/favicon.ico" | relative_url }}">
     <link rel="stylesheet" href="{{ '/assets/normalize.css' | relative_url }}">
     <link rel="stylesheet" href="{{ '/assets/main.css' | relative_url }}">
@@ -25,9 +28,8 @@
   </head>
 
   <body>
-    <input type="checkbox" id="menu-toggle" hidden>
-
     <nav class="site-nav">
+      <input type="checkbox" id="menu-toggle" hidden>
       <div class="nav-header">
         <section class="site-search"></section>
       </div>
@@ -53,21 +55,27 @@
 
     <header class="site-header">
       <div class=description-container>
-        <h1 class="description-title">{{ site.title }}</h1>
-        <div class="description-last-updated">Last built: {{ site.time }}</div>
+        <h2 class="description-title">{{ site.title }}</h2>
+        <div class="description-last-updated">LAST UPDATE: {{ site.time | date_to_long_string | upcase }}</div>
       </div>
       <div class=button-group-container>
         <div class="btn-group">
-          <button>      
-            <label class="menu-button" for="menu-toggle">
-              menu
+          <div class="btn-item" id="menu-toggle-btn">  
+            <input type="checkbox" id="menu-toggle" hidden>
+            <label for="menu-toggle">
+              <img class="btn-icon" src="{{ '/assets/images/sidebar.png' | relative_url }}">
             </label>
-          </button>
-          <button id="convert-to-pdf">print</button>
-          <button>feedback</button>
+          </div>
+          <div class="btn-item" id="convert-to-pdf">
+            <img class="btn-icon" src="{{ '/assets/images/print.png' | relative_url }}">
+          </div>
+          <a href="{{ site.styling_options.feedback_url }}">
+            <div class="btn-item">
+              <img class="btn-icon" src="{{ '/assets/images/feedback.png' | relative_url }}">
+            </div>
+          </a>
         </div>
       </div>
-
     </header>
 
     <main class="site-main" id="main-content" aria-label="Content" >
