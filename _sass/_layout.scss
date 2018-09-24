@@ -13,6 +13,7 @@ $nav-header-height:           80px;
 // $site-header-height: calc(2 * #{$site-header-spacing} + 1em);
 $site-header-height: 120px;
 $site-nav-width: calc(#{$sidebar-content-width} + 2 * #{$large-spacing});
+$site-mobile-nav-height: 3.5em;
 
 // Body
 // ----
@@ -228,6 +229,48 @@ body {
   }
 }
 
+.site-mobile-nav {
+  display: block;
+  position: absolute;
+  z-index: 99;
+  bottom: 0px;
+  width: 100%;
+
+  @include medium-screen {
+    display: none;
+  }
+
+  .button-group-container {
+    .btn-group {
+      display: flex;
+      flex-direction: row;
+      height: $site-mobile-nav-height;
+
+      .btn-item {
+        flex-grow: 1;
+        padding: $spacing $large-spacing;
+        border: 1px solid $divider-color;
+        cursor: pointer;
+        background: #454f5b;
+
+        .btn-icon {
+          max-height: 1.5rem;
+          pointer-events: none;
+          cursor: default;
+          display: block;
+          margin-left: auto;
+          margin-right: auto;
+        }
+      }
+    }
+
+    .btn-group label {
+      height: 1rem;
+      // pointer-events: none;
+      cursor: default;
+    }
+  }
+}
 // Site Header
 // -----------
 .site-header {
@@ -270,6 +313,11 @@ body {
   .button-group-container {
     position: absolute;
     right: $large-spacing;
+    display: none;
+
+    @include medium-screen {
+      display: block;
+    }
 
     .btn-group .btn-item {
       float: left; /* Float the buttons side by side */
@@ -292,7 +340,6 @@ body {
         border-radius: 0px 5px 5px 0px;
       }
     }
-
 
     .btn-group label {
       height: 1rem;
