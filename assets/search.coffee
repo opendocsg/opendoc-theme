@@ -8,12 +8,8 @@
 siteNavElement = document.getElementsByClassName("site-search")[0]
 siteSearchElement = document.createElement("div")
 siteSearchElement.classList.add("search-container")
-siteSearchElement.innerHTML = """
-<svg class="search-icon" viewBox="0 0 18 18" width="18" height="18">
-  <path ill="#222222" d="M12.43 11.73C13.41 10.59 14 9.11 14 7.5 14 3.91 11.09 1 7.5 1S1 3.91 1 7.5 3.91 14 7.5 14c1.61 0 3.09-.59 4.23-1.57l.7-.7zM7.5 12C5.01 12 3 9.99 3 7.5S5.01 3 7.5 3 12 5.01 12 7.5 9.99 12 7.5 12z"/>
-  <path fill="#222222" d="M12.41293 11l4.7982 4.79818-1.41423 1.41422L11 12.39863"/>
-</svg>
-"""
+siteSearchElement.innerHTML = """<image class="search-icon" src="/assets/images/search-icon.png" width="24" height="20" />"""
+
 clearButton = document.createElement("label");
 clearButton.classList.add("clear-button");
 clearButton.innerHTML = """

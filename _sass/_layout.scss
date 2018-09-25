@@ -68,68 +68,72 @@ body {
     .search-container {
       height: 40px;
 
+      .search-icon {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: $spacing*2;
+        display: block;
+        height: 1.5em;
+        width: auto;
+        margin-top: auto;
+        margin-bottom: auto;
+        opacity: 0.5;
+      }
+      &.filled .search-icon { 
+        opacity: 1; 
+      }
+      .clear-button {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        display: none;
+        height: 1em;
+        width: 1em;
+        padding: $spacing;
+        margin-top: auto;
+        margin-bottom: auto;
+        cursor: pointer;
+        .clear-icon {
+          display: block;
+          height: 1em;
+          width: 1em;
+          opacity: 0.5;
+          path { fill: white; }
+        }
+        &:hover .clear-icon {
+          opacity: 1;
+        }
+      }
+      &.filled .clear-button { display: unset; }
+      input {
+        // position: absolute;
+        display: block;
+        width: 100%;
+        border: none;
+        outline: none;
+        font-size: 1.2em;
+        padding-right: $large-spacing;
+        // Make room for the search icon
+        padding-left: calc(#{$spacing * 4} + 1em);
+        padding-top: 0px;
+        padding-bottom: 0px;
+        margin-top: 20px;
+        background-color: $primary-brand-color;
+        color: white;
+        opacity: 0.5;
+      }
       input::placeholder {
         color: white;
       }
-    }
-
-    .search-icon {
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      left: $spacing*2;
-      display: block;
-      height: 1em;
-      width: 1em;
-      margin-top: auto;
-      margin-bottom: auto;
-      cursor: pointer;
-      path { fill: white; }
-    }
-    &.filled .search-icon { display: none; }
-    .clear-button {
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      right: 0;
-      display: none;
-      height: 1em;
-      width: 1em;
-      padding: $spacing;
-      margin-top: auto;
-      margin-bottom: auto;
-      cursor: pointer;
-      .clear-icon {
-        display: block;
-        height: 1em;
-        width: 1em;
-        path { fill: $secondary-text-color; }
+      &.filled input {
+        opacity: 1;
       }
-      &:hover .clear-icon path { fill: $primary-text-color; }
+      input:disabled ~ .search-icon { display: none; }
     }
-    &.filled .clear-button { display: unset; }
-    input {
-      // position: absolute;
-      display: block;
-      box-sizing: border-box;
-      width: 100%;
-      height: 100%;
-      border: none;
-      border-radius: 0px;
-      outline: none;
-      font-size: 130%;
-      padding-right: $large-spacing;
-      // Make room for the search icon
-      padding-left: calc(#{$spacing * 4} + 1em);
-      padding-top: 0px;
-      padding-bottom: 0px;
-      margin-top: 20px;
-      background-color: $primary-brand-color;
-      color: white;
-    }
-    input:disabled ~ .search-icon { display: none; }
   }
-
+  
   .description {
     text-align: center;
     padding: $spacing*2 $spacing;
@@ -203,7 +207,7 @@ body {
 
   .nav-main {
     height: calc(100% - #{$nav-footer-height} - #{$nav-header-height});
-    overflow-y: scroll;
+    overflow-y: auto;
     overflow-x: hidden;
     background-color: $well-background-color;
   }
@@ -425,20 +429,27 @@ body {
 //custom-scrollbar
 /* width */
 ::-webkit-scrollbar {
-    width: 5px;
+    width: 14px;
 }
 
 /* Track */
 ::-webkit-scrollbar-track {
-    background: #FFF;
+    background: none;
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-    background: #F1F1F1;
+    background: #d8d8d8;
+    -webkit-border-radius: 12px;
+    border-radius: 12px;
+    border: 4px solid rgba(0, 0, 0, 0);
+    background-clip: padding-box;
 }
 
-/* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-    background: #ddd;
+  background: #c8c8c8;
+  -webkit-border-radius: 12px;
+  border-radius: 12px;
+  border: 4px solid rgba(0, 0, 0, 0);
+  background-clip: padding-box;
 }
