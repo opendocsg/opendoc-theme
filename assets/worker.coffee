@@ -15,6 +15,7 @@ console.log "Indexing worker initialized"
     @field 'title', boost: 2
     @field 'text'
     @metadataWhitelist = ['position']
+    this.pipeline.remove(lunr.stemmer)
     siteSections.forEach (section) =>
       if section.text.length > 0
         @add

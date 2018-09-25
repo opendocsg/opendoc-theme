@@ -212,43 +212,73 @@ searchIndexPromise = new Promise (resolve, reject) ->
 snippetSpace = 40
 maxSnippets = 4
 maxResults = 10
-translateLunrResults = (lunrResults) ->
-  lunrResults.slice(0, maxResults);
+translateLunrResults = (allLunrResults) ->
+  lunrResults = allLunrResults.slice(0, maxResults)
   return lunrResults.map (result) ->
     matchedDocument = sectionIndex[result.ref]
-    snippets = [];
+    snippets = []
+    snippetsRangesByFields = {}
     # Loop over matching terms
+    rangesByFields = {}
+    # Group ranges according to field type (text/title)
     for term of result.matchData.metadata
-      # Loop over the matching fields for each term
       fields = result.matchData.metadata[term]
       for field of fields
         positions = fields[field].position
-        positions = positions.slice(0, 3)
-        # Loop over the position within each field
-        for positionIndex of positions
-          position = positions[positionIndex]
-          # Add to the description the snippet for that match
-          preMatch = matchedDocument[field].substring(
-            position[0] - snippetSpace,
-            position[0]
-          )
-          match = matchedDocument[field].substring(
-            position[0],
-            position[0] + position[1]
-          )
-          postMatch = matchedDocument[field].substring(
-            position[0] + position[1],
-            position[0] + position[1] + snippetSpace
-          )
-          snippet = '...' + preMatch + '<mark>' + match + '</mark>' + postMatch + '...  '
-          snippets.push snippet
-          if (snippets.length >= maxSnippets) then break
-        if (snippets.length >= maxSnippets) then break
-      if (snippets.length >= maxSnippets) then break
+        rangesByFields[field] = if rangesByFields[field] then (rangesByFields[field].concat positions) else positions
+    snippetCount = 0
+    # Sort according to ascending snippet range
+    for field of rangesByFields
+      ranges = rangesByFields[field]
+        .map (a) ->
+          return [a[0] - snippetSpace, a[0] + a[1] + snippetSpace, a[0], a[0] + a[1]]
+        .sort (a,b) ->
+          return a[0] - b[0]
+      # Merge contiguous ranges
+      startIndex = ranges[0][0]
+      endIndex = ranges[0][1]
+      mergedRanges = []
+      highlightRanges = []
+      for rangeIndex, range of ranges
+        snippetCount++
+        if range[0] <= endIndex
+        then (
+          endIndex = Math.max range[1], endIndex
+          highlightRanges = highlightRanges.concat([range[2], range[3]])
+        )
+        else
+          mergedRanges.push [startIndex].concat highlightRanges .concat [endIndex]
+          startIndex = range[0]
+          endIndex = range[1]
+          highlightRanges = [range[2], range[3]]
+        if snippetCount >= maxSnippets
+          mergedRanges.push [startIndex].concat highlightRanges .concat [endIndex]
+          snippetsRangesByFields[field] = mergedRanges
+          break
+        if +rangeIndex == ranges.length - 1
+          if snippetCount + 1 < maxSnippets
+            snippetCount++ 
+          mergedRanges.push [startIndex].concat highlightRanges .concat [endIndex]
+          snippetsRangesByFields[field] = mergedRanges
+      if snippetCount >= maxSnippets
+        break
+    # Extract snippets and add highlights
+    for field, positions of snippetsRangesByFields
+      for position in positions
+        matchedText = matchedDocument[field]
+        snippet = ''
+        # If start of matched text dont use ellipsis
+        if position[0] > 0 then snippet += '...'
+        snippet += matchedText.substring position[0], position[1]
+        for i in [1..position.length - 2]
+          if i % 2 == 1 then snippet += '<mark>' else snippet += '</mark> '
+          snippet += matchedText.substring position[i],position[i+1]
+        snippet += '...' 
+        snippets.push(snippet)
     # Build a simple flat object per lunr result
     return {
       title: matchedDocument.title
-      description: snippets.join('');
+      description: snippets.join(' ');
       url: matchedDocument.url
     }
 
@@ -326,8 +356,6 @@ formatResult = (result) ->
         s = curr.indexOf(start)
         e = curr.indexOf(end)
 
-
-
     #For display purpose, only return 3 fragments max
     content = result.highlight.content.slice(0, Math.min(3, result.highlight.content.length))
 
@@ -394,7 +422,12 @@ esSearch = (query) ->
 
 lunrSearch = (searchIndex, query) ->
   # https://lunrjs.com/guides/searching.html
-  lunrResults = searchIndex.search("*" + query + "*", query + "~1")
+  queryTerm = query.trim()
+  if (queryTerm.length > 0)
+    queryTerm = '*' + queryTerm + '*'
+  else
+    clearButton.onclick()
+  lunrResults = searchIndex.search(queryTerm)
   results = translateLunrResults(lunrResults)
   renderSearchResults results
 
@@ -519,7 +552,7 @@ window.addEventListener "popstate", (event) ->
   page = pageIndex[path]
 
   # Only reflow the main content if necessary
-  testBody = new DOMParser().parseFromString(page.content, "text/html").body;
+  testBody = new DOMParser().parseFromString(page.content, "text/html").body
   if main.innerHTML.trim() isnt testBody.innerHTML.trim()
     main.innerHTML = page.content
 
