@@ -443,13 +443,9 @@ setSelectedAnchor = (path) ->
     selectedAnchors[i].classList.remove('selected')
 
 
-  if path.endsWith '/'
-    selectedAnchors = document.querySelectorAll "a.nav-link[href$='" + path + "']"
-  else
-    selectedAnchors = document.querySelectorAll "a.nav-link[href^='" + path + "']"
+  selectedAnchors = document.querySelectorAll "a.nav-link[href$='" + path + "']"
   if selectedAnchors.length > 0
-    for i in [0...selectedAnchors.length]
-      selectedAnchors[i].classList.add('selected')
+    selectedAnchors[0].classList.add('selected')
     selectedAnchors[0].parentNode.classList.add('expanded')
 
 # Table of Contents
