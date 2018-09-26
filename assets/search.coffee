@@ -507,6 +507,8 @@ renderToc siteHierarchy
 # Setup HTML 5 history for single page goodness
 main = document.getElementsByTagName("main")[0]
 menuToggle = document.getElementById("menu-toggle")
+menuToggle.addEventListener 'change', -> 
+    alert menuToggle.checked
 document.body.addEventListener("click", (event) ->
   # Check if its within an anchor tag any any point
   # Traverse up its click tree and see if it affects any of them

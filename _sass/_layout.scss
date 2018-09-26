@@ -290,6 +290,9 @@ body {
   box-sizing: border-box;
   align-self: stretch;
   height: $site-header-height;
+
+
+
   #menu-toggle:checked ~ & { transform: translate($site-nav-width); }
   // On medium screens squeeze rather than shift the header
   @include medium-screen {
@@ -328,11 +331,11 @@ body {
       padding: $spacing $large-spacing;
       border: 1px solid $divider-color;
       cursor: pointer;
-
+      
       .btn-icon {
         height: 1rem;
         pointer-events: none;
-        cursor: default;
+        user-select: none;
       }
       &:not(:last-child) {
         border-right: none; /* Prevent double borders */
@@ -345,11 +348,6 @@ body {
       }
     }
 
-    .btn-group label {
-      height: 1rem;
-      // pointer-events: none;
-      cursor: default;
-    }
   }
 }
 
