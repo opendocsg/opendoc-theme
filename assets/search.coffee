@@ -337,8 +337,6 @@ renderSearchResultsFromServer = (searchResults) ->
         description.innerHTML = "..." + formatted.content + "..."
       element.appendChild description
       container.appendChild element
-      return
-    return
 
 formatResult = (result) ->
   terms = []
@@ -380,6 +378,9 @@ formatResult = (result) ->
     urlparts = url.split '#'
     urlparts.splice( 1, 0, '?terms=', encodeURI(terms.join('|')), '#' )
     url = urlparts.join ''
+    # Highlight main body of page
+    wordsToHighlight = terms
+    highlightBody()
 
   return { url: url, content: content, title: result._source.title }
 
@@ -417,7 +418,7 @@ esSearch = (query) ->
   req=new XMLHttpRequest()
   req.addEventListener 'readystatechange', ->
     if req.readyState is 4 # ReadyState Complete
-      successResultCodes=[200,304]
+      successResultCodes = [200,304]
       if req.status in successResultCodes
         result = JSON.parse req.responseText
         if typeof result.error == 'undefined'
@@ -425,7 +426,7 @@ esSearch = (query) ->
         else
           renderSearchResultsFromServer result.error
       else
-        renderSearchResultsFromServer  'Error retrieving search results ...'
+        renderSearchResultsFromServer 'Error retrieving search results ...'
 
   esQuery = createEsQuery query
   req.open 'POST', search_endpoint, true
