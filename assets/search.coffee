@@ -8,12 +8,8 @@
 siteNavElement = document.getElementsByClassName("site-search")[0]
 siteSearchElement = document.createElement("div")
 siteSearchElement.classList.add("search-container")
-siteSearchElement.innerHTML = """
-<svg class="search-icon" viewBox="0 0 18 18" width="18" height="18">
-  <path ill="#222222" d="M12.43 11.73C13.41 10.59 14 9.11 14 7.5 14 3.91 11.09 1 7.5 1S1 3.91 1 7.5 3.91 14 7.5 14c1.61 0 3.09-.59 4.23-1.57l.7-.7zM7.5 12C5.01 12 3 9.99 3 7.5S5.01 3 7.5 3 12 5.01 12 7.5 9.99 12 7.5 12z"/>
-  <path fill="#222222" d="M12.41293 11l4.7982 4.79818-1.41423 1.41422L11 12.39863"/>
-</svg>
-"""
+siteSearchElement.innerHTML = """<image class="search-icon" src="/assets/images/search-icon.png" width="24" height="20" />"""
+
 clearButton = document.createElement("label");
 clearButton.classList.add("clear-button");
 clearButton.innerHTML = """
@@ -38,7 +34,7 @@ clearButton.onclick = ->
   }))
 
 searchBoxElement.oninput = (event) ->
-  if searchBoxElement.value.length > 0
+  if searchBoxElement.value && searchBoxElement.value.trim().length > 0
     siteSearchElement.classList.add "filled"
   else
     siteSearchElement.classList.remove "filled"
@@ -216,43 +212,74 @@ searchIndexPromise = new Promise (resolve, reject) ->
 snippetSpace = 40
 maxSnippets = 4
 maxResults = 10
-translateLunrResults = (lunrResults) ->
-  lunrResults.slice(0, maxResults);
+minQueryLength = 3
+translateLunrResults = (allLunrResults) ->
+  lunrResults = allLunrResults.slice(0, maxResults)
   return lunrResults.map (result) ->
     matchedDocument = sectionIndex[result.ref]
-    snippets = [];
+    snippets = []
+    snippetsRangesByFields = {}
     # Loop over matching terms
+    rangesByFields = {}
+    # Group ranges according to field type (text/title)
     for term of result.matchData.metadata
-      # Loop over the matching fields for each term
       fields = result.matchData.metadata[term]
       for field of fields
         positions = fields[field].position
-        positions = positions.slice(0, 3)
-        # Loop over the position within each field
-        for positionIndex of positions
-          position = positions[positionIndex]
-          # Add to the description the snippet for that match
-          preMatch = matchedDocument[field].substring(
-            position[0] - snippetSpace,
-            position[0]
-          )
-          match = matchedDocument[field].substring(
-            position[0],
-            position[0] + position[1]
-          )
-          postMatch = matchedDocument[field].substring(
-            position[0] + position[1],
-            position[0] + position[1] + snippetSpace
-          )
-          snippet = '...' + preMatch + '<mark>' + match + '</mark>' + postMatch + '...  '
-          snippets.push snippet
-          if (snippets.length >= maxSnippets) then break
-        if (snippets.length >= maxSnippets) then break
-      if (snippets.length >= maxSnippets) then break
+        rangesByFields[field] = if rangesByFields[field] then (rangesByFields[field].concat positions) else positions
+    snippetCount = 0
+    # Sort according to ascending snippet range
+    for field of rangesByFields
+      ranges = rangesByFields[field]
+        .map (a) ->
+          return [a[0] - snippetSpace, a[0] + a[1] + snippetSpace, a[0], a[0] + a[1]]
+        .sort (a,b) ->
+          return a[0] - b[0]
+      # Merge contiguous ranges
+      startIndex = ranges[0][0]
+      endIndex = ranges[0][1]
+      mergedRanges = []
+      highlightRanges = []
+      for rangeIndex, range of ranges
+        snippetCount++
+        if range[0] <= endIndex
+        then (
+          endIndex = Math.max range[1], endIndex
+          highlightRanges = highlightRanges.concat([range[2], range[3]])
+        )
+        else
+          mergedRanges.push [startIndex].concat highlightRanges .concat [endIndex]
+          startIndex = range[0]
+          endIndex = range[1]
+          highlightRanges = [range[2], range[3]]
+        if snippetCount >= maxSnippets
+          mergedRanges.push [startIndex].concat highlightRanges .concat [endIndex]
+          snippetsRangesByFields[field] = mergedRanges
+          break
+        if +rangeIndex == ranges.length - 1
+          if snippetCount + 1 < maxSnippets
+            snippetCount++ 
+          mergedRanges.push [startIndex].concat highlightRanges .concat [endIndex]
+          snippetsRangesByFields[field] = mergedRanges
+      if snippetCount >= maxSnippets
+        break
+    # Extract snippets and add highlights to search results
+    for field, positions of snippetsRangesByFields
+      for position in positions
+        matchedText = matchedDocument[field]
+        snippet = ''
+        # If start of matched text dont use ellipsis
+        if position[0] > 0 then snippet += '...'
+        snippet += matchedText.substring position[0], position[1]
+        for i in [1..position.length - 2]
+          if i % 2 == 1 then snippet += '<mark>' else snippet += '</mark> '
+          snippet += matchedText.substring position[i],position[i+1]
+        snippet += '...' 
+        snippets.push(snippet)
     # Build a simple flat object per lunr result
     return {
       title: matchedDocument.title
-      description: snippets.join('');
+      description: snippets.join(' ');
       url: matchedDocument.url
     }
 
@@ -330,8 +357,6 @@ formatResult = (result) ->
         s = curr.indexOf(start)
         e = curr.indexOf(end)
 
-
-
     #For display purpose, only return 3 fragments max
     content = result.highlight.content.slice(0, Math.min(3, result.highlight.content.length))
 
@@ -398,8 +423,10 @@ esSearch = (query) ->
 
 lunrSearch = (searchIndex, query) ->
   # https://lunrjs.com/guides/searching.html
-  lunrResults = searchIndex.search("*" + query + "*", query + "~1")
-  results = translateLunrResults(lunrResults)
+  queryTerm = '*' + query + '*'
+  console.log queryTerm
+  lunrResults = searchIndex.search queryTerm
+  results = translateLunrResults lunrResults 
   renderSearchResults results
 
 # Enable the searchbox once the index is built
@@ -410,22 +437,19 @@ enableSearchBox = (searchIndex) ->
   searchBoxElement.addEventListener 'input', (event) ->
     toc = document.getElementsByClassName('table-of-contents')[0]
     searchResults = document.getElementsByClassName('search-results')[0]
-    query = searchBoxElement.value
-    if query.length == 0
+    query = searchBoxElement.value.trim()
+    if query.length < minQueryLength
       searchResults.setAttribute 'hidden', true
       toc.removeAttribute 'hidden'
     else
       toc.setAttribute 'hidden', ''
       searchResults.removeAttribute 'hidden'
-  searchBoxElement.addEventListener 'input',
-    debounce( () ->
-      query = searchBoxElement.value
-      if query.length > 0
+      debounce( () ->
         if searchOnServer
           esSearch(query)
         else
           lunrSearch(searchIndex, query)
-    100, !searchOnServer)
+      100, !searchOnServer)()
 
 searchIndexPromise.then (searchIndex) ->
   enableSearchBox(searchIndex)
@@ -443,13 +467,9 @@ setSelectedAnchor = (path) ->
     selectedAnchors[i].classList.remove('selected')
 
 
-  if path.endsWith '/'
-    selectedAnchors = document.querySelectorAll "a.nav-link[href$='" + path + "']"
-  else
-    selectedAnchors = document.querySelectorAll "a.nav-link[href^='" + path + "']"
+  selectedAnchors = document.querySelectorAll "a.nav-link[href$='" + path + "']"
   if selectedAnchors.length > 0
-    for i in [0...selectedAnchors.length]
-      selectedAnchors[i].classList.add('selected')
+    selectedAnchors[0].classList.add('selected')
     selectedAnchors[0].parentNode.classList.add('expanded')
 
 # Table of Contents
@@ -527,7 +547,7 @@ window.addEventListener "popstate", (event) ->
   page = pageIndex[path]
 
   # Only reflow the main content if necessary
-  testBody = new DOMParser().parseFromString(page.content, "text/html").body;
+  testBody = new DOMParser().parseFromString(page.content, "text/html").body
   if main.innerHTML.trim() isnt testBody.innerHTML.trim()
     main.innerHTML = page.content
 
