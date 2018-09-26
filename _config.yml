@@ -5,13 +5,15 @@ plugins:
   - jekyll-seo-tag
   - jekyll-coffeescript
 elastic_search:
-  index: index
+  index: default_index
   doctype: bare
 kramdown:
   auto_id_stripping: true
 environment: DEV
-server_LOCAL: http://127.0.0.1:3000
-server_DEV: https://opendoc.sg
+server_LOCAL: https://search.opendoc.sg
+server_DEV: https://search.opendoc.sg
 styling_options:
-  primary_brand_color: '#444'
-  logo_path: /assets/logo.png
+  primary_brand_color: '#990921'
+  opendoc_logo_path: /assets/images/logo-full.png
+  logo_path: /assets/images/logo-full.png
+  feedback_url: https://form.gov.sg/forms/govtech/5b6a6673d7059a000ff7f7c7
