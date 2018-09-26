@@ -34,7 +34,7 @@ clearButton.onclick = ->
   }))
 
 searchBoxElement.oninput = (event) ->
-  if searchBoxElement.value.length > 0
+  if searchBoxElement.value && searchBoxElement.value.trim().length > 0
     siteSearchElement.classList.add "filled"
   else
     siteSearchElement.classList.remove "filled"
@@ -212,6 +212,7 @@ searchIndexPromise = new Promise (resolve, reject) ->
 snippetSpace = 40
 maxSnippets = 4
 maxResults = 10
+minQueryLength = 3
 translateLunrResults = (allLunrResults) ->
   lunrResults = allLunrResults.slice(0, maxResults)
   return lunrResults.map (result) ->
@@ -262,7 +263,7 @@ translateLunrResults = (allLunrResults) ->
           snippetsRangesByFields[field] = mergedRanges
       if snippetCount >= maxSnippets
         break
-    # Extract snippets and add highlights
+    # Extract snippets and add highlights to search results
     for field, positions of snippetsRangesByFields
       for position in positions
         matchedText = matchedDocument[field]
@@ -422,13 +423,10 @@ esSearch = (query) ->
 
 lunrSearch = (searchIndex, query) ->
   # https://lunrjs.com/guides/searching.html
-  queryTerm = query.trim()
-  if (queryTerm.length > 0)
-    queryTerm = '*' + queryTerm + '*'
-  else
-    clearButton.onclick()
-  lunrResults = searchIndex.search(queryTerm)
-  results = translateLunrResults(lunrResults)
+  queryTerm = '*' + query + '*'
+  console.log queryTerm
+  lunrResults = searchIndex.search queryTerm
+  results = translateLunrResults lunrResults 
   renderSearchResults results
 
 # Enable the searchbox once the index is built
@@ -439,22 +437,19 @@ enableSearchBox = (searchIndex) ->
   searchBoxElement.addEventListener 'input', (event) ->
     toc = document.getElementsByClassName('table-of-contents')[0]
     searchResults = document.getElementsByClassName('search-results')[0]
-    query = searchBoxElement.value
-    if query.length == 0
+    query = searchBoxElement.value.trim()
+    if query.length < minQueryLength
       searchResults.setAttribute 'hidden', true
       toc.removeAttribute 'hidden'
     else
       toc.setAttribute 'hidden', ''
       searchResults.removeAttribute 'hidden'
-  searchBoxElement.addEventListener 'input',
-    debounce( () ->
-      query = searchBoxElement.value
-      if query.length > 0
+      debounce( () ->
         if searchOnServer
           esSearch(query)
         else
           lunrSearch(searchIndex, query)
-    100, !searchOnServer)
+      100, !searchOnServer)()
 
 searchIndexPromise.then (searchIndex) ->
   enableSearchBox(searchIndex)
