@@ -8,10 +8,13 @@
 siteNavElement = document.getElementsByClassName("site-search")[0]
 siteSearchElement = document.createElement("div")
 siteSearchElement.classList.add("search-container")
-siteSearchElement.innerHTML = """<image class="search-icon" src="/assets/images/search-icon.png" width="24" height="20" />"""
+siteSearchElement.innerHTML =
+"""
+  <image class="search-icon" src="/assets/images/search-icon.png" width="24" height="20" />
+"""
 
-clearButton = document.createElement("label");
-clearButton.classList.add("clear-button");
+clearButton = document.createElement "label"
+clearButton.classList.add "clear-button"
 clearButton.innerHTML = """
 <svg class="clear-icon" viewBox="0 0 18 18" width="18" height="18">
   <path d="M2.42755 1L17.0331 15.60554l-1.41423 1.4142L1 2.38402"/>
@@ -103,6 +106,11 @@ else
 
 pages.forEach (page) -> pageIndex[page.url] = page
 
+# Global Variables
+# =============================================================================
+
+wordsToHighlight = []
+
 
 # Site Hierarchy
 # =============================================================================
@@ -153,7 +161,7 @@ startBuildingHierarchy = () ->
     statusElement.textContent = 'Building site hierarchy'
     statusElement.classList.add('loading')
     document.body.append(statusElement)
-    worker = new Worker("{{ '/assets/hierarchyWorker.js' | relative_url }}" )
+    worker = new Worker "{{ '/assets/hierarchyWorker.js' | relative_url }}"
     worker.onmessage = (event) ->
       worker.terminate()
       statusElement.remove()
@@ -161,7 +169,7 @@ startBuildingHierarchy = () ->
       sectionIndex = event.data.sectionIndex
        # Build a serializable array for sending to workers
       serializableSiteSections = Object.values(sectionIndex).map (section) ->
-        serializableSection = Object.assign({}, section)
+        serializableSection = Object.assign {}, section
         delete serializableSection.parent
         delete serializableSection.component
         delete serializableSection.subsections
@@ -186,11 +194,11 @@ startBuildingIndex = (sections) ->
 
 searchOnServer = false
 searchIndexPromise = new Promise (resolve, reject) ->
-  req=new XMLHttpRequest()
+  req = new XMLHttpRequest()
   # req.timeout=1000
   req.addEventListener 'readystatechange', ->
     if req.readyState is 4 # ReadyState Complete
-      successResultCodes=[200,304]
+      successResultCodes = [200, 304]
       if req.status not in successResultCodes
         hierarchyPromise = startBuildingHierarchy()
         hierarchyPromise.then (sections) ->
@@ -223,10 +231,15 @@ translateLunrResults = (allLunrResults) ->
     rangesByFields = {}
     # Group ranges according to field type (text/title)
     for term of result.matchData.metadata
+      # To highlight the main body later
+      wordsToHighlight.push term
       fields = result.matchData.metadata[term]
       for field of fields
         positions = fields[field].position
-        rangesByFields[field] = if rangesByFields[field] then (rangesByFields[field].concat positions) else positions
+        rangesByFields[field] =
+          if rangesByFields[field]
+          then (rangesByFields[field].concat positions)
+          else positions
     snippetCount = 0
     # Sort according to ascending snippet range
     for field of rangesByFields
@@ -245,7 +258,7 @@ translateLunrResults = (allLunrResults) ->
         if range[0] <= endIndex
         then (
           endIndex = Math.max range[1], endIndex
-          highlightRanges = highlightRanges.concat([range[2], range[3]])
+          highlightRanges = highlightRanges.concat [range[2], range[3]]
         )
         else
           mergedRanges.push [startIndex].concat highlightRanges .concat [endIndex]
@@ -258,7 +271,7 @@ translateLunrResults = (allLunrResults) ->
           break
         if +rangeIndex == ranges.length - 1
           if snippetCount + 1 < maxSnippets
-            snippetCount++ 
+            snippetCount++
           mergedRanges.push [startIndex].concat highlightRanges .concat [endIndex]
           snippetsRangesByFields[field] = mergedRanges
       if snippetCount >= maxSnippets
@@ -273,16 +286,15 @@ translateLunrResults = (allLunrResults) ->
         snippet += matchedText.substring position[0], position[1]
         for i in [1..position.length - 2]
           if i % 2 == 1 then snippet += '<mark>' else snippet += '</mark> '
-          snippet += matchedText.substring position[i],position[i+1]
-        snippet += '...' 
+          snippet += matchedText.substring position[i], position[i + 1]
+        snippet += '...'
         snippets.push(snippet)
     # Build a simple flat object per lunr result
     return {
       title: matchedDocument.title
-      description: snippets.join(' ');
+      description: snippets.join ' '
       url: matchedDocument.url
     }
-
 
 # Displays the search results in HTML
 # Takes an array of objects with "title" and "description" properties
@@ -348,12 +360,12 @@ formatResult = (result) ->
     k = ''
     while s > -1 and e > -1
       if e > s
-        k = curr.substring(s+start.length, e).toLowerCase()
-        if(terms.length > 0 and s <2)
+        k = curr.substring(s + start.length, e).toLowerCase()
+        if terms.length > 0 and s < 2
           terms[terms.length - 1] = terms[terms.length - 1] + ' ' + k
         else
           terms.push(k)
-        curr = curr.substring(e+end.length).trimLeft()
+        curr = curr.substring( e + end.length ).trimLeft()
         s = curr.indexOf(start)
         e = curr.indexOf(end)
 
@@ -366,10 +378,10 @@ formatResult = (result) ->
     set[term] = 0 for term in terms
     terms = Object.keys set
     urlparts = url.split '#'
-    urlparts.splice(1,0,'?terms=',encodeURI(terms.join('|')), '#')
+    urlparts.splice( 1, 0, '?terms=', encodeURI(terms.join('|')), '#' )
     url = urlparts.join ''
 
-  return {url: url, content: content, title: result._source.title}
+  return { url: url, content: content, title: result._source.title }
 
 debounce = (func, wait, immediate) ->
   timeout = null
@@ -387,10 +399,10 @@ debounce = (func, wait, immediate) ->
       func.apply(context, args)
 
 createEsQuery = (queryStr) ->
-  source = ['title','url']
-  title_q = { "match": {"title":{"query": queryStr,"max_expansions":10, "fuzziness": "AUTO", "boost":2}} }
-  content_q = { "match":{"content":{"query":queryStr,"max_expansions":10, "fuzziness": "AUTO"}} }
-  bool_q = { "bool" : { "should" : [ title_q, content_q ] }}
+  source = [ 'title', 'url' ]
+  title_q = { "match": { "title": { "query": queryStr,"max_expansions":10, "fuzziness": "AUTO", "boost":2 } } }
+  content_q = { "match": { "content":{ "query":queryStr, "max_expansions":10, "fuzziness": "AUTO" } } }
+  bool_q = {"bool": {"should": [ title_q, content_q ] }}
 
   highlight = {}
   highlight.require_field_match = false
@@ -423,10 +435,11 @@ esSearch = (query) ->
 
 lunrSearch = (searchIndex, query) ->
   # https://lunrjs.com/guides/searching.html
+  # Add wildcard before and after
   queryTerm = '*' + query + '*'
-  console.log queryTerm
   lunrResults = searchIndex.search queryTerm
-  results = translateLunrResults lunrResults 
+  results = translateLunrResults lunrResults
+  highlightBody()
   renderSearchResults results
 
 # Enable the searchbox once the index is built
@@ -438,9 +451,11 @@ enableSearchBox = (searchIndex) ->
     toc = document.getElementsByClassName('table-of-contents')[0]
     searchResults = document.getElementsByClassName('search-results')[0]
     query = searchBoxElement.value.trim()
+    wordsToHighlight = []
     if query.length < minQueryLength
       searchResults.setAttribute 'hidden', true
       toc.removeAttribute 'hidden'
+      highlightBody()
     else
       toc.setAttribute 'hidden', ''
       searchResults.removeAttribute 'hidden'
@@ -512,30 +527,14 @@ document.body.addEventListener("click", (event) ->
 
 # Highlighting
 # =============================================================================
-parseQuery = (query) ->
-    result = {}
-    if query.startsWith '?'
-        queryParts = query.substring(1).split('&')
-        queryParts.forEach (part) ->
-            idx = part.indexOf '='
-            key = if idx > -1 then part.substring 0, idx else part
-            if !result[key]?
-                result[key] = []
-            result[key].push part.substring idx+1
 
-    return result
-
-highlight = (node) ->
-    parsed = parseQuery ( window.location.search )
-    accuracy = 'accuracy'
-    allowedValues = {'0': 'partially','1': 'complementary','2': 'exactly'}
-    if parsed.terms?
-        instance = new Mark(node)
-        mark = if parsed.terms.length == 1 then parsed.terms[0].split encodeURI('|') else parsed.terms
-        mark = mark.map (x) ->
-            decodeURI x
-        acc = if parsed.accuracy? and allowedValues[parsed.accuracy[0]]? then parsed.accuracy[0] else '2'
-        instance.mark(mark, {accuracy: allowedValues[acc], caseSensitive: false, separateWordSearch : false})
+highlightBody = ->
+  instance = new Mark(main)
+  instance.unmark()
+  if wordsToHighlight.length > 0
+    instance.mark wordsToHighlight, {
+        exclude: [ "h1" ]
+    }
 
 
 # Event when path changes
@@ -547,8 +546,8 @@ window.addEventListener "popstate", (event) ->
   page = pageIndex[path]
 
   # Only reflow the main content if necessary
-  testBody = new DOMParser().parseFromString(page.content, "text/html").body
-  if main.innerHTML.trim() isnt testBody.innerHTML.trim()
+  originalBody = new DOMParser().parseFromString(page.content, "text/html").body
+  if main.innerHTML.trim() isnt originalBody.innerHTML.trim()
     main.innerHTML = page.content
 
-  highlight(main)
+  highlightBody()
