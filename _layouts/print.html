@@ -31,13 +31,7 @@
 
     <script>
         let print = function() {
-          return printJS({
-            printable: 'print-content',
-            type: 'html',
-            css: 'assets/main.css',
-            scanStyles: true,
-            font: 'Source Sans Pro'
-          });
+          window.print()
         }
         window.onload = function() {
           alert('Please wait, it will take a while to load this document into a PDF.');
