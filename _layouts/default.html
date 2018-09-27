@@ -33,6 +33,12 @@
         <section class="site-search"></section>
       </div>
       <div class="nav-main">
+        <section class="close-container">
+          <svg id="close-button" viewBox="0 0 22 22" width="22" height="22">
+            <path d="M2.42755 1L17.0331 15.60554l-1.41423 1.4142L1 2.38402"/>
+            <path d="M1 15.51932L15.51933 1l1.4142 1.4142L2.2978 17.0331"/>
+          </svg>
+        </section>
         <section class="table-of-contents">
         </section>
         <section class="search-results">
@@ -52,47 +58,27 @@
       </div>
     </nav>
 
-    <!-- <nav class="site-mobile-nav">
-      <div class=button-group-container>
-        <div class="btn-group">
-          <div class="btn-item" id="menu-toggle-btn">  
-            <input type="checkbox" id="menu-toggle-sidebar-mobile" hidden>
-            <label for="menu-toggle-sidebar-mobile">
-              <img class="btn-icon" src="{{ '/assets/images/sidebar-white.png' | relative_url }}">
-            </label>
-          </div>
-          <div class="btn-item" id="convert-to-pdf">
-            <img class="btn-icon" src="{{ '/assets/images/print-white.png' | relative_url }}">
-          </div>
-          <div class="btn-item">
-            <a href="{{ site.styling_options.feedback_url }}">
-              <img class="btn-icon" src="{{ '/assets/images/feedback-white.png' | relative_url }}">
-            </a>
-          </div>
+    <div class=button-group-container>
+      <div class="btn-group">
+        <label for="menu-toggle" class="btn-item" id="menu-toggle-btn">
+            <input type="checkbox" id="menu-toggle" hidden>
+            <img class="btn-icon" id="toc-img">
+        </label>
+        <div class="btn-item" id="convert-to-pdf">
+          <img class="btn-icon" id="pdf-img">
         </div>
-      </div>     
-    </nav> -->
+        <a class="btn-item" href="{{ site.styling_options.feedback_url }}">
+          <div>
+            <img class="btn-icon" id="form-img">
+          </div>
+        </a>
+      </div>
+    </div>
 
     <header class="site-header">
       <div class=description-container>
         <h2 class="description-title">{{ site.title }}</h2>
         <div class="description-last-updated">LAST UPDATE: {{ site.time | date_to_long_string | upcase }}</div>
-      </div>
-      <div class=button-group-container>
-        <div class="btn-group">
-          <label for="menu-toggle" class="btn-item" id="menu-toggle-btn">
-              <input type="checkbox" id="menu-toggle" hidden>
-              <img class="btn-icon" src="{{ '/assets/images/sidebar.png' | relative_url }}">
-          </label>
-          <div class="btn-item" id="convert-to-pdf">
-            <img class="btn-icon" src="{{ '/assets/images/print.png' | relative_url }}">
-          </div>
-          <a href="{{ site.styling_options.feedback_url }}">
-            <div class="btn-item">
-              <img class="btn-icon" src="{{ '/assets/images/feedback.png' | relative_url }}">
-            </div>
-          </a>
-        </div>
       </div>
     </header>
 
@@ -103,6 +89,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.3.5/bluebird.min.js"></script>
     <script src="{{ '/assets/lunr.js' | relative_url }}"></script>
     <script src="{{ '/assets/search.js' | relative_url }}"></script>
+    <script src="{{ '/assets/menu.js' | relative_url }}"></script>
     <script src="{{ '/assets/layout.js' | relative_url }}"></script>
     <script src="{{ '/assets/redirect-new-tab.js' | relative_url }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" charset="utf-8"></script>

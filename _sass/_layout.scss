@@ -1,19 +1,24 @@
 // Variables
 // ============================================================================
 $spacing:                     12px;
+$med-spacing:                 1.5 * $spacing;
 $large-spacing:               2 * $spacing;
 $content-width:               50em;
 $sidebar-content-width:       24em;
 $site-header-spacing:         15px;
 $nav-footer-height:           120px;
 $nav-header-height:           80px;
+$site-nav-collapse-duration:  0.2s;
+$site-nav-collapse-timing:    ease-out;
 
 // Implementation
 // ============================================================================
 // $site-header-height: calc(2 * #{$site-header-spacing} + 1em);
-$site-header-height: 120px;
-$site-nav-width: calc(#{$sidebar-content-width} + 2 * #{$large-spacing});
-$site-mobile-nav-height: 3.5em;
+$site-header-height:          120px;
+$site-nav-width:              calc(#{$sidebar-content-width} + 2 * #{$large-spacing});
+$negative-site-nav-width:     calc(0px - (#{$sidebar-content-width} + 2 * #{$large-spacing}));
+$site-nav-shadow:             inset -7px 0 13px 0 rgba(0, 0, 0, 0.15);
+$mobile-bottom-bar-height:    calc(1.3rem + #{$med-spacing} * 2);
 
 // Body
 // ----
@@ -28,33 +33,57 @@ body {
 .site-nav {
   // Position
   position: fixed;
-  z-index: 1;
   top: 0;
+  z-index: 20;
 
   // Sidebar content could be too long for the page
   // The scrolling should be limited to the chapter selection area
   overflow: hidden;
+  display: flex;
+  box-sizing: border-box;
+  height: 100%;
+  background-color: $base-background-color;
+  flex-direction: column;
 
   // Mobile has the sidebar hidden by default
   // Tablets and above have it showing by default
   // On larger screens the content stays in place and we move the sidebar in
-  right: 100%;
-  #menu-toggle:checked ~ & { right: unset; left: 0; }
-  @include medium-screen {
-    right: unset; left: 0;
-    #menu-toggle:checked ~ & { right: 100%; left: unset; }
+  transition: left $site-nav-collapse-duration $site-nav-collapse-timing;
+  left: -100vw;
+  width: 100vw;
+  &.menu-toggled { 
+    left: 0;
+    right: 0;
   }
-  
-  // Box
-  display: flex;
-  box-sizing: border-box;
-  height: 100%;
-  width: $site-nav-width;
-  border-right: 1px solid $divider-color;
-  // Appearance
-  background-color: $base-background-color;
-  // Other
-  flex-direction: column;
+  @include medium-screen {
+    z-index: 1;
+    width: $site-nav-width;
+    border-right: 1px solid $divider-color;
+    left: 0;
+    &.menu-toggled { 
+      left: $negative-site-nav-width;
+      right: unset;
+    }
+  }
+
+  // close icon for mobile view
+  .close-container {
+    display: block;
+    text-align: right;
+    padding-right: $large-spacing;
+    padding-top: $med-spacing;
+    #close-button {
+      cursor: pointer;
+      path {
+        fill: $secondary-text-color;
+      }
+    }
+
+    @include medium-screen {
+      display: none;
+    }
+  }
+
   // Children
   .site-search {
     position: relative;
@@ -157,8 +186,10 @@ body {
 
   .table-of-contents {
     padding-left: calc(#{$large-spacing} * 2);
-    padding-top: $large-spacing;
     padding-bottom: calc(#{$large-spacing} * 2);
+    @include medium-screen {
+      padding-top: $large-spacing;
+    }
   }
 
   .nav-branch {
@@ -203,6 +234,9 @@ body {
   .nav-header {
     height: $nav-header-height;
     background-color: $primary-brand-color;
+    @include medium-screen {
+      box-shadow: $site-nav-shadow;
+    }
   }
 
   .nav-main {
@@ -210,12 +244,18 @@ body {
     overflow-y: auto;
     overflow-x: hidden;
     background-color: $well-background-color;
+    @include medium-screen {
+      box-shadow: $site-nav-shadow;
+    }
   }
 
   .nav-footer {
     height: $nav-footer-height;
     min-height: $nav-footer-height;
     max-height: $nav-footer-height;
+    @include medium-screen {
+      box-shadow: $site-nav-shadow;
+    }
     display: flex;
 
     .attribution {
@@ -233,48 +273,6 @@ body {
   }
 }
 
-.site-mobile-nav {
-  display: block;
-  position: absolute;
-  z-index: 99;
-  bottom: 0px;
-  width: 100%;
-
-  @include medium-screen {
-    display: none;
-  }
-
-  .button-group-container {
-    .btn-group {
-      display: flex;
-      flex-direction: row;
-      height: $site-mobile-nav-height;
-
-      .btn-item {
-        flex-grow: 1;
-        padding: $spacing $large-spacing;
-        border: 1px solid $divider-color;
-        cursor: pointer;
-        background: #454f5b;
-
-        .btn-icon {
-          max-height: 1.5rem;
-          pointer-events: none;
-          cursor: default;
-          display: block;
-          margin-left: auto;
-          margin-right: auto;
-        }
-      }
-    }
-
-    .btn-group label {
-      height: 1rem;
-      // pointer-events: none;
-      cursor: default;
-    }
-  }
-}
 // Site Header
 // -----------
 .site-header {
@@ -284,20 +282,17 @@ body {
   left: 0;
   right: 0;
   padding: $large-spacing calc(2 * #{$large-spacing});
-
-  // Box
   display: flex;
   box-sizing: border-box;
   align-self: stretch;
   height: $site-header-height;
+  transition-duration: $site-nav-collapse-duration;
+  transition-timing-function: ease-out;
 
-
-
-  #menu-toggle:checked ~ & { transform: translate($site-nav-width); }
   // On medium screens squeeze rather than shift the header
   @include medium-screen {
     left: $site-nav-width;
-    #menu-toggle:checked ~ & { left: 0; transform: none; }
+    .site-nav.menu-toggled ~ & { left: 0; transform: none; }
   }
   background-color: $base-background-color;
   border-bottom: 1px solid $divider-color;
@@ -317,37 +312,87 @@ body {
       color: #9b9b9b;
     }
   }
-  .button-group-container {
-    position: absolute;
-    right: $large-spacing;
-    display: none;
+}
 
-    @include medium-screen {
-      display: block;
-    }
+// Button Group
+// ------------
+.button-group-container {
+  position: fixed;
+  z-index: 10;
+  bottom: 0;
+  width: 100%;
+  .btn-group {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 
-    .btn-group .btn-item {
-      float: left; /* Float the buttons side by side */
-      padding: $spacing $large-spacing;
-      border: 1px solid $divider-color;
+    .btn-item {
+      flex-grow: 1;
+      padding: $med-spacing $large-spacing;
+      background: #454f5b;
       cursor: pointer;
-      
+
       .btn-icon {
-        height: 1rem;
-        pointer-events: none;
+        height: 1.3rem;
         user-select: none;
-      }
-      &:not(:last-child) {
-        border-right: none; /* Prevent double borders */
-      }
-      &:first-child {
-        border-radius: 5px 0px 0px 5px;
-      }
-      &:last-child {
-        border-radius: 0px 5px 5px 0px;
+        pointer-events: none;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
       }
     }
+  }
+  #toc-img {
+    content: url('/assets/images/sidebar-white.svg');
+  }
+  #pdf-img {
+    content: url('/assets/images/printer-white.svg');
+  }
+  #form-img {
+    content: url('/assets/images/feedback-white.svg');
+  }
+  @include medium-screen {
+    display: block;
+    right: calc( 2 * #{$large-spacing});
+    top: $large-spacing;
+    bottom: unset;
+    width: auto;
 
+    .btn-group {
+      height: auto;
+
+      .btn-item {
+        float: left; /* Float the buttons side by side */
+        cursor: pointer;
+        background: transparent;
+        border: 1px solid $divider-color;
+        padding: $spacing $large-spacing;
+        
+        .btn-icon {
+          height: 1rem;
+          pointer-events: none;
+          user-select: none;
+        }
+        &:not(:last-child) {
+          border-right: none; /* Prevent double borders */
+        }
+        &:first-child {
+          border-radius: 5px 0px 0px 5px;
+        }
+        &:last-child {
+          border-radius: 0px 5px 5px 0px;
+        }
+      }
+    }
+    #toc-img {
+      content: url('/assets/images/sidebar.png');
+    }
+    #pdf-img {
+      content: url('/assets/images/print.png');
+    }
+    #form-img {
+      content: url('/assets/images/feedback.png');
+    }
   }
 }
 
@@ -359,22 +404,25 @@ body {
   left: 0;
   right: 0;
   top: $site-header-height;
-
   padding: $large-spacing calc(2 * #{$large-spacing});
-  height: calc(100% - #{$site-header-height});
+  height: calc(100% - #{$site-header-height} - #{$mobile-bottom-bar-height});
   overflow: auto;
-
 
   // On small screens fill the screen with content
   // Shift everything right when menu is open
   box-sizing: border-box;
+  transition-duration: $site-nav-collapse-duration;
+  transition-timing-function: ease-out;
 
-  #menu-toggle:checked ~ & { transform: translate(calc(#{$site-nav-width} + #{$large-spacing})) }
   // On medium screens fill the residual space
   // Expand to fill when the menu is closed
   @include medium-screen {
     left: $site-nav-width;
-    #menu-toggle:checked ~ & { left: 0; transform: none; }
+    .site-nav.menu-toggled ~ & { 
+      left: 0; 
+      transform: none; 
+    }
+    height: calc(100% - #{$site-header-height});
   }
 
   // Hack to get browser hash scrolling to work nicely with a fixed header
