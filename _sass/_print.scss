@@ -1,4 +1,4 @@
-@media print {
+#print-content {
     /* print styles go here */
     .site-header{
       display: none;
@@ -9,9 +9,21 @@
     .site-branding{
       display: none;
     }
-
-    @page {
-      size: A4;
-      margin: 1.5cm;
+    .site-main {
+      height: auto;
+      left: 0;
+      top: 0;
+      position: relative;
     }
+    .description {
+      padding-top: 10px;
+      text-align: center;
+    }
+}
+
+@media print {
+  @page {
+    size: A4;
+    margin: 1.5cm;
+  }
 }
