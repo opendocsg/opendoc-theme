@@ -47,9 +47,9 @@ The config file is located in the base path of your directory ("_config.yml"). T
 
 ## VI. Push your changes to production
 
-	```
-	git add .
-	git commit -m <commit message>
-	git push origin master
-	```
+```
+git add .
+git commit -m <commit message>
+git push origin master
+```
 

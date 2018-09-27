@@ -8,33 +8,36 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" href="{{ "/assets/favicon.ico" | relative_url }}">
+    <link rel="icon" href="{{ '/assets/favicon.ico' | relative_url }}">
     <link rel="stylesheet" href="{{ '/assets/normalize.css' | relative_url }}">
     <link rel="stylesheet" href="{{ '/assets/main.css' | relative_url }}">
     <script src="{{ '/assets/print.min.js' | relative_url }}"></script>
   </head>
 
-  <body id ="print-content">
-    <section class="description"><a href=".">
-      <img class="description-logo" src="{{ site.styling_options.logo_path | relative_url }}">
-      <div class="description-title">{{ site.title }}</div>
-      <div class="description-last-updated">Last built: {{ site.time }}</div></a>
+  <body id="print-content">
+    <section class="description">
+      <a href=".">
+        <img class="description-logo" src="{{ site.styling_options.logo_path | relative_url }}">
+        <div class="description-title">{{ site.title }}</div>
+        <div class="description-last-updated">Last built: {{ site.time }}
+        </div>
+      </a>
     </section>
 
-    <main class="site-main" aria-label="Content" >
-        {{ content }}
-    </main>
+    <div class="site-main" aria-label="Content" >
+      {{ content }}
+    </div>
 
 
     <script>
-       let print = function() {
-        return printJS({
-           printable: 'print-content',
-           type: 'html',
-           css: 'assets/main.css',
-           scanStyles: false,
-           font: 'Source Sans Pro'
-         });
+        let print = function() {
+          return printJS({
+            printable: 'print-content',
+            type: 'html',
+            css: 'assets/main.css',
+            scanStyles: true,
+            font: 'Source Sans Pro'
+          });
         }
         window.onload = function() {
           alert('Please wait, it will take a while to load this document into a PDF.');
