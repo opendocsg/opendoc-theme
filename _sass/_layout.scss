@@ -336,21 +336,23 @@ body {
         height: 1.3rem;
         user-select: none;
         pointer-events: none;
-        display: block;
+        display: none;
         margin-left: auto;
         margin-right: auto;
+
+        &.mobile {
+          display: block;
+        }
+        @include medium-screen {
+          display: block;
+          &.mobile {
+            display: none;
+          }
+        }
       }
     }
   }
-  #toc-img {
-    content: url('/assets/images/sidebar-white.svg');
-  }
-  #pdf-img {
-    content: url('/assets/images/printer-white.svg');
-  }
-  #form-img {
-    content: url('/assets/images/feedback-white.svg');
-  }
+ 
   @include medium-screen {
     display: block;
     right: calc( 2 * #{$large-spacing});
@@ -383,15 +385,6 @@ body {
           border-radius: 0px 5px 5px 0px;
         }
       }
-    }
-    #toc-img {
-      content: url('/assets/images/sidebar.png');
-    }
-    #pdf-img {
-      content: url('/assets/images/print.png');
-    }
-    #form-img {
-      content: url('/assets/images/feedback.png');
     }
   }
 }
