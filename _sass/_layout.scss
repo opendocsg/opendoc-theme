@@ -18,7 +18,8 @@ $site-nav-collapse-timing:    ease-out;
 $site-header-height:          120px;
 $site-nav-width:              calc(#{$sidebar-content-width} + 2 * #{$large-spacing});
 $negative-site-nav-width:     calc(0px - (#{$sidebar-content-width} + 2 * #{$large-spacing}));
-$site-nav-shadow:             inset -7px 0 13px -5px rgba(0, 0, 0, 0.15);
+$site-nav-shadow-inset:       inset -7px 0 13px -5px rgba(0, 0, 0, 0.15);
+$site-nav-shadow-outset:      7px 0 13px 5px rgba(0, 0, 0, 0.15);
 $mobile-bottom-bar-height:    calc(1.3rem + #{$med-spacing} * 2);
 
 @mixin mobile-screen() {
@@ -54,11 +55,11 @@ body {
   // Tablets and above have it showing by default
   // On larger screens the content stays in place and we move the sidebar in
   transition: left $site-nav-collapse-duration $site-nav-collapse-timing;
-  left: -100vw;
-  width: 100vw;
+  left: -75vw;
+  width: 75vw;
   &.menu-toggled { 
     left: 0;
-    right: 0;
+    box-shadow: $site-nav-shadow-outset;
   }
   @include medium-screen {
     z-index: 1;
@@ -68,24 +69,7 @@ body {
     &.menu-toggled { 
       left: $negative-site-nav-width;
       right: unset;
-    }
-  }
-
-  // close icon for mobile view
-  .close-container {
-    display: block;
-    text-align: right;
-    padding-right: $large-spacing;
-    padding-top: $med-spacing;
-    #close-button {
-      cursor: pointer;
-      path {
-        fill: $secondary-text-color;
-      }
-    }
-
-    @include medium-screen {
-      display: none;
+      box-shadow: none;
     }
   }
 
@@ -192,6 +176,7 @@ body {
   .table-of-contents {
     padding-left: calc(#{$spacing} * 2);
     padding-bottom: calc(#{$spacing} * 2);
+    padding-top: $spacing;
     @include medium-screen {
       padding-left: calc(#{$large-spacing} * 2);
       padding-bottom: calc(#{$large-spacing} * 2);
@@ -242,7 +227,7 @@ body {
     height: $nav-header-height;
     background-color: $primary-brand-color;
     @include medium-screen {
-      box-shadow: $site-nav-shadow;
+      box-shadow: $site-nav-shadow-inset;
     }
   }
 
@@ -265,7 +250,7 @@ body {
     background-color: $well-background-color;
     @include medium-screen {
       height: calc(100% - #{$nav-footer-height} - #{$nav-header-height});
-      box-shadow: $site-nav-shadow;
+      box-shadow: $site-nav-shadow-inset;
     }
   }
 
@@ -289,7 +274,7 @@ body {
 
     @include medium-screen {
       height: $nav-footer-height;
-      box-shadow: $site-nav-shadow;
+      box-shadow: $site-nav-shadow-inset;
 
       .attribution {
         div {
@@ -323,14 +308,12 @@ body {
   transition-duration: $site-nav-collapse-duration;
   transition-timing-function: ease-out;
 
-  @include mobile-screen {
-    &.headroom--pinned {
-      top: 0;
-    }
+  &.headroom--pinned {
+    top: 0;
+  }
 
-    &.headroom--unpinned {
-      top: -#{$site-header-height};
-    }
+  &.headroom--unpinned {
+    top: -#{$site-header-height};
   }
 
   // On medium screens squeeze rather than shift the header
@@ -442,7 +425,7 @@ body {
   left: 0;
   right: 0;
   padding: $spacing calc(2 * #{$spacing});
-  padding-top: calc(#{$site-header-height} + #{$spacing});
+  padding-top: calc(#{$site-header-height} + #{$large-spacing});
   height: calc(100% - #{$mobile-bottom-bar-height});
   overflow: auto;
 
