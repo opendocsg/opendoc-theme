@@ -20,6 +20,10 @@ $negative-site-nav-width:     calc(0px - (#{$sidebar-content-width} + 2 * #{$lar
 $site-nav-shadow:             inset -7px 0 13px 0 rgba(0, 0, 0, 0.15);
 $mobile-bottom-bar-height:    calc(1.3rem + #{$med-spacing} * 2);
 
+@mixin mobile-screen() {
+  @media (max-width: calc(#{$medium-screen-breakpoint}  - 0.1px)) { @content; }
+}
+
 // Body
 // ----
 body {
@@ -241,6 +245,18 @@ body {
     }
   }
 
+  // For mobile view keyboard
+  @include mobile-screen {
+    &.keyboard-expanded {
+      .nav-main {
+        height: calc(100% - #{$nav-header-height});
+      }
+      .nav-footer {
+        display: none;
+      }
+    }  
+  }
+
   .nav-main {
     height: calc(100% - #{$nav-footer-height} - #{$nav-header-height});
     overflow-y: auto;
@@ -255,10 +271,10 @@ body {
     height: $nav-footer-height;
     min-height: $nav-footer-height;
     max-height: $nav-footer-height;
+    display: flex;
     @include medium-screen {
       box-shadow: $site-nav-shadow;
     }
-    display: flex;
 
     .attribution {
       margin: 20px 35px 20px 35px;
@@ -292,12 +308,14 @@ body {
   transition-duration: $site-nav-collapse-duration;
   transition-timing-function: ease-out;
 
-  &.headroom--pinned {
-    top: 0;
-  }
+  @include mobile-screen {
+    &.headroom--pinned {
+      top: 0;
+    }
 
-  &.headroom--unpinned {
-    top: -#{$site-header-height};
+    &.headroom--unpinned {
+      top: -#{$site-header-height};
+    }
   }
 
   // On medium screens squeeze rather than shift the header

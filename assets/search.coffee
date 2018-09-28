@@ -42,17 +42,22 @@ searchBoxElement.oninput = (event) ->
   else
     siteSearchElement.classList.remove "filled"
 
-{% capture endpoint %}
-{% if site.environment == "DEV" %}
-{{ site.server_DEV | append: '/' |  append: site.elastic_search.index | jsonify }}
-{% elsif site.environment == "LOCAL" %}
-{{ site.server_LOCAL | append: '/' | append: site.elastic_search.index | jsonify }}
-{% else %}
-'INVALID-ENVIRONMENT'
-{% endif %}
-{% endcapture %}
-endpoint = {{endpoint}}
+siteNav = document.getElementsByClassName("site-nav")[0]
+searchBoxElement.onfocus = (event) ->
+  siteNav.classList.add 'keyboard-expanded'
+searchBoxElement.onblur = (event) ->
+  siteNav.classList.remove 'keyboard-expanded'
+
+# Assign search endpoint based on env config
+# ===========================================================================
+endpoint = 'INVALID-ENVIRONMENT'
+env = '{{ site.environment }}'
+if env == 'DEV'
+  endpoint = {{ site.server_DEV | append: '/' |  append: site.elastic_search.index | jsonify }}
+else if env == 'LOCAL'
+  endpoint = {{ site.server_LOCAL | append: '/' |  append: site.elastic_search.index | jsonify }} 
 search_endpoint = endpoint + '/search'
+
 # Data Blob
 # =============================================================================
 # The main "blob" of site data constructed by liquid
