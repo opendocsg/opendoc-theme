@@ -7,6 +7,7 @@ $content-width:               50em;
 $sidebar-content-width:       24em;
 $site-header-spacing:         15px;
 $nav-footer-height:           120px;
+$nav-mobile-footer-height:    80px;
 $nav-header-height:           80px;
 $site-nav-collapse-duration:  0.2s;
 $site-nav-collapse-timing:    ease-out;
@@ -17,7 +18,7 @@ $site-nav-collapse-timing:    ease-out;
 $site-header-height:          120px;
 $site-nav-width:              calc(#{$sidebar-content-width} + 2 * #{$large-spacing});
 $negative-site-nav-width:     calc(0px - (#{$sidebar-content-width} + 2 * #{$large-spacing}));
-$site-nav-shadow:             inset -7px 0 13px 0 rgba(0, 0, 0, 0.15);
+$site-nav-shadow:             inset -7px 0 13px -5px rgba(0, 0, 0, 0.15);
 $mobile-bottom-bar-height:    calc(1.3rem + #{$med-spacing} * 2);
 
 @mixin mobile-screen() {
@@ -258,34 +259,48 @@ body {
   }
 
   .nav-main {
-    height: calc(100% - #{$nav-footer-height} - #{$nav-header-height});
+    height: calc(100% - #{$nav-mobile-footer-height} - #{$nav-header-height});
     overflow-y: auto;
     overflow-x: hidden;
     background-color: $well-background-color;
     @include medium-screen {
+      height: calc(100% - #{$nav-footer-height} - #{$nav-header-height});
       box-shadow: $site-nav-shadow;
     }
   }
 
   .nav-footer {
-    height: $nav-footer-height;
-    min-height: $nav-footer-height;
-    max-height: $nav-footer-height;
+    height: $nav-mobile-footer-height;
     display: flex;
-    @include medium-screen {
-      box-shadow: $site-nav-shadow;
-    }
+    align-items: center;
+    justify-content: space-evenly;
 
     .attribution {
-      margin: 20px 35px 20px 35px;
-      width: 50%;
       div {
         text-transform: uppercase;
         font-size: 80%;
         padding-bottom: 10px;
       }
       img {
-        max-height: 50px;
+        max-height: 25px;
+        max-width: 100px;
+      }
+    }
+
+    @include medium-screen {
+      height: $nav-footer-height;
+      box-shadow: $site-nav-shadow;
+
+      .attribution {
+        div {
+          text-transform: uppercase;
+          font-size: 80%;
+          padding-bottom: 10px;
+        }
+        img {
+          max-height: 50px;
+          max-width: 120px;
+        }
       }
     }
   }
