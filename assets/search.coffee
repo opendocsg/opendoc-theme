@@ -5,9 +5,9 @@
 # =============================================================================
 # Programmatically add the search box to the site
 # This allows the search box to be hidden if javascript is disabled
-siteNavElement = document.getElementsByClassName("site-search")[0]
-siteSearchElement = document.createElement("div")
-siteSearchElement.classList.add("search-container")
+siteNavElement = document.getElementsByClassName('site-search')[0]
+siteSearchElement = document.createElement('div')
+siteSearchElement.classList.add('search-container')
 siteSearchElement.innerHTML =
 """
   <image class="search-icon" src="/assets/images/search-icon.png" width="24" height="20" />
@@ -21,16 +21,16 @@ clearButton.innerHTML = """
   <path d="M1 15.51932L15.51933 1l1.4142 1.4142L2.2978 17.0331"/>
 </svg>
 """
-searchBoxElement = document.createElement("input")
-searchBoxElement.id = "search-box"
-searchBoxElement.setAttribute("type", "text")
-searchBoxElement.setAttribute("placeholder", "Building site hierarchy...")
-searchBoxElement.setAttribute("disabled", "")
+searchBoxElement = document.createElement('input')
+searchBoxElement.id = 'search-box'
+searchBoxElement.setAttribute('type', 'text')
+searchBoxElement.setAttribute('placeholder', 'Building site hierarchy...')
+searchBoxElement.setAttribute('disabled', '')
 siteSearchElement.prepend(clearButton)
 siteSearchElement.prepend(searchBoxElement)
 siteNavElement.prepend(siteSearchElement)
 clearButton.onclick = ->
-  searchBoxElement.value = ""
+  searchBoxElement.value = ''
   searchBoxElement.dispatchEvent(new Event('input', {
     'bubbles': true
     'cancelable': true
@@ -38,21 +38,26 @@ clearButton.onclick = ->
 
 searchBoxElement.oninput = (event) ->
   if searchBoxElement.value && searchBoxElement.value.trim().length > 0
-    siteSearchElement.classList.add "filled"
+    siteSearchElement.classList.add 'filled'
   else
-    siteSearchElement.classList.remove "filled"
+    siteSearchElement.classList.remove 'filled'
 
-{% capture endpoint %}
-{% if site.environment == "DEV" %}
-{{ site.server_DEV | append: '/' |  append: site.elastic_search.index | jsonify }}
-{% elsif site.environment == "LOCAL" %}
-{{ site.server_LOCAL | append: '/' | append: site.elastic_search.index | jsonify }}
-{% else %}
-'INVALID-ENVIRONMENT'
-{% endif %}
-{% endcapture %}
-endpoint = {{endpoint}}
+siteNav = document.getElementsByClassName('site-nav')[0]
+searchBoxElement.onfocus = (event) ->
+  siteNav.classList.add 'keyboard-expanded'
+searchBoxElement.onblur = (event) ->
+  siteNav.classList.remove 'keyboard-expanded'
+
+# Assign search endpoint based on env config
+# ===========================================================================
+endpoint = 'INVALID-ENVIRONMENT'
+env = '{{ site.environment }}'
+if env == 'DEV'
+  endpoint = {{ site.server_DEV | append: '/' |  append: site.elastic_search.index | jsonify }}
+else if env == 'LOCAL'
+  endpoint = {{ site.server_LOCAL | append: '/' |  append: site.elastic_search.index | jsonify }} 
 search_endpoint = endpoint + '/search'
+
 # Data Blob
 # =============================================================================
 # The main "blob" of site data constructed by liquid
@@ -73,15 +78,15 @@ pages = [
       {% capture title %}{{ site_page.title }}{% endcapture %}
       {% endif %}
       {
-        "name": {{name | jsonify}},
-        "title": {{title | jsonify}},
+        'name': {{name | jsonify}},
+        'title': {{title | jsonify}},
         # For consistency all page markdown is converted to HTML
         {% if site_page.url == page.url %}
-        "content": {{ site_page.content | jsonify }},
+        'content': {{ site_page.content | jsonify }},
         {% else %}
-        "content": {{ site_page.content | markdownify | jsonify }},
+        'content': {{ site_page.content | markdownify | jsonify }},
         {% endif %}
-        "url": {{ site_page.url | relative_url | jsonify }}
+        'url': {{ site_page.url | relative_url | jsonify }}
       }
     {% endunless %}
   {% endfor %}
@@ -181,7 +186,7 @@ startBuildingHierarchy = () ->
   return promise
 
 startBuildingIndex = (sections) ->
-  searchBoxElement.setAttribute("placeholder", "Building search index...")
+  searchBoxElement.setAttribute('placeholder', 'Building search index...')
   promise = new Promise (resolve, reject) ->
     worker = new Worker("{{ '/assets/worker.js' | relative_url }}")
     worker.onmessage = (event) ->
@@ -334,7 +339,7 @@ renderSearchResultsFromServer = (searchResults) ->
       element.innerHTML = formatted.title
       description = document.createElement('p')
       if formatted.content
-        description.innerHTML = "..." + formatted.content + "..."
+        description.innerHTML = '...' + formatted.content + '...'
       element.appendChild description
       container.appendChild element
 
@@ -401,16 +406,16 @@ debounce = (func, wait, immediate) ->
 
 createEsQuery = (queryStr) ->
   source = [ 'title', 'url' ]
-  title_q = { "match": { "title": { "query": queryStr,"max_expansions":10, "fuzziness": "AUTO", "boost":2 } } }
-  content_q = { "match": { "content":{ "query":queryStr, "max_expansions":10, "fuzziness": "AUTO" } } }
-  bool_q = {"bool": {"should": [ title_q, content_q ] }}
+  title_q = { 'match': { 'title': { 'query': queryStr,'max_expansions':10, 'fuzziness': 'AUTO', 'boost':2 } } }
+  content_q = { 'match': { 'content':{ 'query':queryStr, 'max_expansions':10, 'fuzziness': 'AUTO' } } }
+  bool_q = {'bool': {'should': [ title_q, content_q ] }}
 
   highlight = {}
   highlight.require_field_match = false
   highlight.fields = {}
-  highlight.fields['content'] = {"fragment_size" : 80, "number_of_fragments" : 6, "pre_tags" : ["<mark><strong>"], "post_tags" : ["</strong></mark>"] }
+  highlight.fields['content'] = {'fragment_size' : 80, 'number_of_fragments' : 6, 'pre_tags' : ['<mark><strong>'], 'post_tags' : ['</strong></mark>'] }
 
-  {"_source": source, "query" : bool_q, "highlight" : highlight}
+  {'_source': source, 'query' : bool_q, 'highlight' : highlight}
 
 # Call the API
 esSearch = (query) ->
@@ -445,9 +450,9 @@ lunrSearch = (searchIndex, query) ->
 
 # Enable the searchbox once the index is built
 enableSearchBox = (searchIndex) ->
-  searchBoxElement.removeAttribute "disabled"
+  searchBoxElement.removeAttribute 'disabled'
   searchBoxElement.classList.remove('loading')
-  searchBoxElement.setAttribute "placeholder", "Search document"
+  searchBoxElement.setAttribute 'placeholder', 'Search document'
   searchBoxElement.addEventListener 'input', (event) ->
     toc = document.getElementsByClassName('table-of-contents')[0]
     searchResults = document.getElementsByClassName('search-results')[0]
@@ -474,16 +479,16 @@ searchIndexPromise.then (searchIndex) ->
 
 setSelectedAnchor = (path) ->
   # Make the nav-link pointing to this path selected
-  selectedBranches = document.querySelectorAll("div.nav-branch.expanded")
+  selectedBranches = document.querySelectorAll('div.nav-branch.expanded')
   for i in [0...selectedBranches.length]
     selectedBranches[i].classList.remove('expanded')
 
-  selectedAnchors = document.querySelectorAll("a.nav-link.selected")
+  selectedAnchors = document.querySelectorAll('a.nav-link.selected')
   for i in [0...selectedAnchors.length]
     selectedAnchors[i].classList.remove('selected')
 
 
-  selectedAnchors = document.querySelectorAll "a.nav-link[href$='" + path + "']"
+  selectedAnchors = document.querySelectorAll 'a.nav-link[href$="' + path + '"]'
   if selectedAnchors.length > 0
     selectedAnchors[0].classList.add('selected')
     selectedAnchors[0].parentNode.classList.add('expanded')
@@ -492,8 +497,8 @@ setSelectedAnchor = (path) ->
 # =============================================================================
 # Table of contents rendering
 renderToc = (siteHierarchy) ->
-  tocElement = document.getElementsByClassName("table-of-contents")[0]
-  tocElement.innerHTML = ""
+  tocElement = document.getElementsByClassName('table-of-contents')[0]
+  tocElement.innerHTML = ''
 
   siteHierarchy.subsections.forEach (section) ->
     tocElement.appendChild(buildNav(section))
@@ -505,24 +510,20 @@ renderToc siteHierarchy
 # HTML5 History
 # =============================================================================
 # Setup HTML 5 history for single page goodness
-main = document.getElementsByTagName("main")[0]
-menuToggle = document.getElementById("menu-toggle")
-document.body.addEventListener("click", (event) ->
+main = document.getElementsByTagName('main')[0]
+document.body.addEventListener('click', (event) ->
   # Check if its within an anchor tag any any point
   # Traverse up its click tree and see if it affects any of them
   # If it does not find anything it just terminates as a null
   anchor = event.target
-  while (anchor? and anchor.tagName isnt "A")
+  while (anchor? and anchor.tagName isnt 'A')
     anchor = anchor.parentNode
-  if anchor? and anchor.host is window.location.host and !anchor.hasAttribute("download")
+  if anchor? and anchor.host is window.location.host and !anchor.hasAttribute('download')
     event.preventDefault()
     event.stopPropagation()
-    # Need to hide the menu on mobile
-    # On desktop this conveniently leaves it open which is intended behavior
-    menuToggle.checked = false
     history.pushState(null, null, anchor.href)
     if anchor.hash.length > 0 then window.location = anchor.hash
-    else window.location = "#"
+    else window.location = '#'
 , true)
 
 
@@ -534,20 +535,20 @@ highlightBody = ->
   instance.unmark()
   if wordsToHighlight.length > 0
     instance.mark wordsToHighlight, {
-        exclude: [ "h1" ]
+        exclude: [ 'h1' ]
     }
 
 
 # Event when path changes
 # =============================================================================
 # Map the popstate event
-window.addEventListener "popstate", (event) ->
+window.addEventListener 'popstate', (event) ->
   path = window.location.pathname
   setSelectedAnchor path
   page = pageIndex[path]
 
   # Only reflow the main content if necessary
-  originalBody = new DOMParser().parseFromString(page.content, "text/html").body
+  originalBody = new DOMParser().parseFromString(page.content, 'text/html').body
   if main.innerHTML.trim() isnt originalBody.innerHTML.trim()
     main.innerHTML = page.content
 
