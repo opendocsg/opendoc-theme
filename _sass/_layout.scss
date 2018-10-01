@@ -308,12 +308,14 @@ body {
   transition-duration: $site-nav-collapse-duration;
   transition-timing-function: ease-out;
 
-  &.headroom--pinned {
-    top: 0;
-  }
+  @include mobile-screen {
+    &.headroom--pinned {
+      top: 0;
+    }
 
-  &.headroom--unpinned {
-    top: -#{$site-header-height};
+    &.headroom--unpinned {
+      top: -#{$site-header-height};
+    }
   }
 
   // On medium screens squeeze rather than shift the header
