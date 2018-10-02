@@ -10,7 +10,7 @@ siteSearchElement = document.createElement('div')
 siteSearchElement.classList.add('search-container')
 siteSearchElement.innerHTML =
 """
-  <image class="search-icon" src="/assets/images/search-icon.png" width="24" height="20" />
+  <image class="search-icon" src="{{ '/assets/images/search-icon.png' | relative_url }}" width="24" height="20" />
 """
 
 clearButton = document.createElement "label"
