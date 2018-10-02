@@ -492,8 +492,6 @@ window.addEventListener 'popstate', (event) ->
   path = window.location.pathname
   setSelectedAnchor path
   page = pageIndex[path]
-  console.log page
-  console.log page.content
   # Only reflow the main content if necessary
   originalBody = new DOMParser().parseFromString(page.content, 'text/html').body
   if main.innerHTML.trim() isnt originalBody.innerHTML.trim()
