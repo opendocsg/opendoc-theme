@@ -21,7 +21,7 @@ $site-nav-width:              calc(#{$sidebar-content-width} + 2 * #{$med-spacin
 $negative-site-nav-width:     calc(0px - (#{$sidebar-content-width} + 2 * #{$large-spacing}));
 $site-nav-shadow-inset:       inset -7px 0 13px -5px rgba(0, 0, 0, 0.15);
 $site-nav-shadow-outset:      7px 0 13px 5px rgba(0, 0, 0, 0.15);
-$mobile-bottom-bar-height:    calc(1.3rem + #{$med-spacing} * 2);
+$mobile-bottom-bar-height:    65px;
 
 @mixin mobile-screen() {
   @media (max-width: calc(#{$medium-screen-breakpoint}  - 0.1px)) { @content; }
@@ -41,7 +41,7 @@ body {
   // Position
   position: fixed;
   top: 0;
-  z-index: 20;
+  z-index: 5;
 
   // Sidebar content could be too long for the page
   // The scrolling should be limited to the chapter selection area
@@ -56,8 +56,8 @@ body {
   // Tablets and above have it showing by default
   // On larger screens the content stays in place and we move the sidebar in
   transition: left $site-nav-collapse-duration $site-nav-collapse-timing;
-  left: -75vw;
-  width: 75vw;
+  left: -100vw;
+  width: 100vw;
   &.menu-toggled { 
     left: 0;
     box-shadow: $site-nav-shadow-outset;
@@ -177,6 +177,9 @@ body {
     padding-left: calc(#{$spacing} * 2);
     padding-bottom: calc(#{$spacing} * 2);
     padding-top: $spacing;
+    box-sizing: border-box;
+    min-height: calc(100% - #{$nav-mobile-footer-height});
+
     @include medium-screen {
       padding-left: $large-spacing;
       padding-bottom: calc(#{$large-spacing} * 2);
@@ -238,23 +241,18 @@ body {
     }
   }
 
-  // For mobile view keyboard
   @include mobile-screen {
-    &.keyboard-expanded {
-      .nav-main {
-        height: calc(100% - #{$nav-header-height});
-      }
-      .nav-footer {
-        display: none;
-      }
-    }  
+    &.keyboard-expanded .nav-main {
+      height: calc(100% - #{$nav-header-height});
+    }
   }
 
   .nav-main {
-    height: calc(100% - #{$nav-mobile-footer-height} - #{$nav-header-height});
+    height: calc(100% - #{$mobile-bottom-bar-height} - #{$nav-header-height});
     overflow-y: auto;
     overflow-x: hidden;
     background-color: $well-background-color;
+
     @include medium-screen {
       height: calc(100% - #{$nav-footer-height} - #{$nav-header-height});
       border-right: 1px solid $divider-color;
@@ -264,9 +262,14 @@ body {
 
   .nav-footer {
     height: $nav-mobile-footer-height;
-    display: flex;
+    display: none;
     align-items: center;
-    justify-content: space-evenly;
+    justify-content: space-around;
+    background: white;
+
+    &.mobile {
+      display: flex;
+    }
 
     .attribution {
       div {
@@ -286,6 +289,10 @@ body {
       box-shadow: $site-nav-shadow-inset;
       border-right: 1px solid $divider-color;
       border-top: 1px solid $divider-color;
+      display: flex;
+      &.mobile {
+        display: none;
+      }
       .attribution {
         div {
           text-transform: uppercase;
@@ -373,19 +380,67 @@ body {
   z-index: 10;
   bottom: 0;
   width: 100%;
+  border-top: 1px solid $divider-color;
+  background:white;
+  
+  @include mobile-screen {
+    .site-nav.keyboard-expanded ~ & {
+      display: none;
+    }
+  }
+
   .btn-group {
     display: flex;
-    flex-direction: row;
-    align-items: center;
-
+    flex-direction: row-reverse;
+    justify-content: flex-start;
+    margin-right: 20px;
+    
     .btn-item {
-      flex-grow: 1;
-      padding: $med-spacing $large-spacing;
-      background: #454f5b;
+      padding: $med-spacing $spacing;
       cursor: pointer;
+      color: #484848;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-decoration: none;
+      user-select: none;
+      
+      @include mobile-screen {
+        &#menu-toggle-btn {
+          position: absolute;
+          width: 60px;
+          left: 0;
+          top: 0;
+          bottom: 0;
+          text-align: center;
+
+          .btn-icon.mobile {
+            margin-right: auto;
+            display: block;
+          }
+          .btn-icon.mobile.close {
+            margin-right: auto;
+            display: none;
+          }
+        }
+
+        .site-nav.menu-toggled ~ &#menu-toggle-btn{ 
+          background: $header-text-color;
+          .btn-icon.mobile {
+            display: none;
+          }
+          .btn-icon.mobile.close {
+            display: block;
+          }
+        }
+      }
+
+      .btn-text {
+        display: block;
+      }
 
       .btn-icon {
-        height: 1.3rem;
+        height: 1.6rem;
         user-select: none;
         pointer-events: none;
         display: none;
@@ -397,6 +452,7 @@ body {
         }
         &.mobile {
           display: block;
+          margin-right: 10px;
         }
         @include medium-screen {
           display: block;
@@ -415,21 +471,29 @@ body {
     bottom: unset;
     width: auto;
     transition: top $site-nav-collapse-duration;
+    border-top: none;
 
     .site-nav.menu-toggled ~ & { 
       top: 20px;
     }
 
     .btn-group {
+      flex-direction: row;
       height: auto;
+      margin-right: 0;
 
       .btn-item {
+        flex-grow: 1;
         float: left; /* Float the buttons side by side */
         cursor: pointer;
         background: transparent;
         border: 1px solid $divider-color;
         padding: 10px 18px;
         
+        .btn-text {
+          display: none;
+        }
+
         .btn-icon {
           height: 1rem;
           pointer-events: none;
@@ -491,6 +555,7 @@ body {
       left: 0;
       top: $site-header-small-height;
       transform: none;
+      height: calc(100% - #{$site-header-small-height});
     }
   }
 
@@ -524,10 +589,11 @@ h1 + p {
 
 //search-results
 .search-results{
-  margin-top: $spacing;
-  margin-left: $spacing*2;
-  margin-bottom: $spacing;
-
+  padding-top: $spacing;
+  padding-left: $spacing*2;
+  padding-bottom: $spacing;
+  box-sizing: border-box;
+  min-height: calc(100% - #{$nav-mobile-footer-height});
   .nav-link{
     border-bottom: 1px solid #eee;
     margin-bottom: $spacing;

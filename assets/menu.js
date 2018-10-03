@@ -20,37 +20,17 @@
         }
     })
 
-    let mainContent = document.getElementById('main-content')
-    mainContent.onclick = () => {
-        if (siteNav.offsetLeft === 0) {
-            hideMenu()
-        }
-    }
-
     let isMobileView = () => window.innerWidth < 768
 
-    // Swipe gestures
-    delete Hammer.defaults.cssProps.userSelect;
-    let mainContentHammer = new Hammer(mainContent, {
-        //  Only for touch input and no click and drag input
-        inputClass: Hammer.TouchInput
-    })
-    let siteNavHammer = new Hammer(siteNav, {
-        inputClass: Hammer.TouchInput
-    })
-    mainContentHammer.on('swiperight', () => {
-        if (isMobileView()) {
-            showMenu()
-        }
-    })
-    mainContentHammer.on('swipeleft', () => {
+    window.addEventListener('link-click', (event) => {
+        console.log( event)
         if (isMobileView()) {
             hideMenu()
-        }
-    })
-    siteNavHammer.on('swipeleft', () => {
-        if (isMobileView()) {
-            hideMenu()
+            // Hacky way to prevent the header from appearing when clicking on nav links
+            setTimeout(() => {
+                document.querySelector('header').classList.remove('headroom--pinned')
+                document.querySelector('header').classList.add('headroom--unpinned')
+            }, 200)
         }
     })
 })()

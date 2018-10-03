@@ -47,42 +47,33 @@
         <section class="table-of-contents">
 {% include toc.html h_min=1 h_max=2 item_class="nav-branch" anchor_class="nav-link" %}
         </section>
-        <section class="search-results">
+        <section class="search-results" hidden>
         </section>
+{% include attribution.html mobile=true%}
       </div>
-      <div class="nav-footer">
-        <!-- <section class="sidebar-footer"> -->
-          <div class="attribution">
-            <div>Content by</div>
-            <img class="description-logo" src="{{ site.styling_options.logo_path | relative_url }}">
-          </div>
-          <div class="attribution">
-            <div>Powered by</div>
-            <img class="description-logo" src="{{ site.styling_options.opendoc_logo_path | relative_url }}">
-          </div>
-        <!-- </section> -->
-      </div>
+{% include attribution.html %}
     </nav>
 
     <div class=button-group-container>
       <div class="btn-group">
         <label for="menu-toggle" class="btn-item" id="menu-toggle-btn">
             <input type="checkbox" id="menu-toggle" hidden>
-            <img class="btn-icon mobile" src="{{ '/assets/images/sidebar-white.svg' | relative_url }}">
+            <img class="btn-icon mobile" src="{{ '/assets/images/sidebar-mobile.svg' | relative_url }}">
+            <img class="btn-icon mobile close" src="{{ '/assets/images/x-mobile.svg' | relative_url }}">
             <img class="btn-icon" src="{{ '/assets/images/sidebar.svg' | relative_url }}">
             <img class="btn-icon hover" src="{{ '/assets/images/sidebar-hover.svg' | relative_url }}">
         </label>
         <div class="btn-item" id="convert-to-pdf">
-          <img class="btn-icon mobile" src="{{ '/assets/images/printer-white.svg' | relative_url }}">
+          <img class="btn-icon mobile" src="{{ '/assets/images/book-mobile.svg' | relative_url }}">
+          <span class="btn-text mobile">PDF</span>
           <img class="btn-icon" src="{{ '/assets/images/printer.svg' | relative_url }}">
           <img class="btn-icon hover" src="{{ '/assets/images/printer-hover.svg' | relative_url }}">
         </div>
         <a class="btn-item" href="{{ site.styling_options.feedback_url }}" target="_blank">
-          <div>
-            <img class="btn-icon mobile" src="{{ '/assets/images/feedback-white.svg' | relative_url }}">
-            <img class="btn-icon" src="{{ '/assets/images/feedback.svg' | relative_url }}">
-            <img class="btn-icon hover" src="{{ '/assets/images/feedback-hover.svg' | relative_url }}">
-          </div>
+          <img class="btn-icon mobile" src="{{ '/assets/images/feedback-mobile.svg' | relative_url }}">
+          <span class="btn-text mobile">Feedback</span>
+          <img class="btn-icon" src="{{ '/assets/images/feedback.svg' | relative_url }}">
+          <img class="btn-icon hover" src="{{ '/assets/images/feedback-hover.svg' | relative_url }}">
         </a>
       </div>
     </div>
@@ -100,7 +91,6 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.3.5/bluebird.min.js"></script>
     <script src="https://npmcdn.com/headroom.js@0.9.4/dist/headroom.min.js" charset="utf-8"></script>
-    <script src="https://hammerjs.github.io/dist/hammer.min.js" charset="utf-8"></script>
     <script src="{{ '/assets/lunr.js' | relative_url }}"></script>
     <script src="{{ '/assets/search.js' | relative_url }}"></script>
     <script src="{{ '/assets/menu.js' | relative_url }}"></script>
