@@ -4,6 +4,7 @@
 # Search Box Element
 # =============================================================================
 # This allows the search box to be hidden if javascript is disabled
+toc = document.getElementsByClassName('table-of-contents')[0]
 siteSearchElement = document.getElementsByClassName('search-container')[0]
 searchBoxElement = document.getElementById('search-box')
 clearButton = document.getElementsByClassName('clear-button')[0]
@@ -390,7 +391,6 @@ enableSearchBox = (searchIndex) ->
   searchBoxElement.classList.remove('loading')
   searchBoxElement.setAttribute 'placeholder', 'Search document'
   searchBoxElement.addEventListener 'input', (event) ->
-    toc = document.getElementsByClassName('table-of-contents')[0]
     searchResults = document.getElementsByClassName('search-results')[0]
     query = searchBoxElement.value.trim()
     wordsToHighlight = []
@@ -466,7 +466,8 @@ highlightBody = ->
 # =============================================================================
 # Map the popstate event
 window.addEventListener 'popstate', (event) ->
-  if window.location.hash.length > 0 
+  # Hide menu if sub link clicked or clicking on search results
+  if window.location.hash.length > 0 || toc.hidden
     window.dispatchEvent(new Event('link-click'))
 
   path = window.location.pathname

@@ -21,16 +21,18 @@
     })
 
     let isMobileView = () => window.innerWidth < 768
+    let mainContent = document.getElementById('main-content')
 
     window.addEventListener('link-click', (event) => {
-        console.log( event)
         if (isMobileView()) {
             hideMenu()
-            // Hacky way to prevent the header from appearing when clicking on nav links
-            setTimeout(() => {
-                document.querySelector('header').classList.remove('headroom--pinned')
-                document.querySelector('header').classList.add('headroom--unpinned')
-            }, 200)
+            // Prevent the header from appearing when scrolling to anchors
+            if ( mainContent.scrollTop > 0) {
+                setTimeout(() => {
+                    document.querySelector('header').classList.remove('headroom--pinned')
+                    document.querySelector('header').classList.add('headroom--unpinned')
+                }, 200)
+            }
         }
     })
 })()

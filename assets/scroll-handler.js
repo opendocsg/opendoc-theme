@@ -4,7 +4,7 @@
     let mainContent = document.getElementById('main-content')
     let headroom = new Headroom(header, {
         scroller: mainContent,
-        tolerance: 5
+        tolerance: 2
     })
     headroom.init()
 })()
