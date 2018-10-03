@@ -3,33 +3,10 @@
 ---
 # Search Box Element
 # =============================================================================
-# Programmatically add the search box to the site
 # This allows the search box to be hidden if javascript is disabled
-siteNavElement = document.getElementsByClassName('site-search')[0]
-siteSearchElement = document.createElement('div')
-siteSearchElement.classList.add('search-container')
-siteSearchElement.innerHTML =
-"""
-  <image class="search-icon" src="/assets/images/search-icon.png" width="24" height="20" />
-"""
-
-clearButton = document.createElement "label"
-clearButton.classList.add "clear-button"
-clearButton.innerHTML = 
-"""
-<svg class="clear-icon" viewBox="0 0 18 18" width="18" height="18">
-  <path d="M2.42755 1L17.0331 15.60554l-1.41423 1.4142L1 2.38402"/>
-  <path d="M1 15.51932L15.51933 1l1.4142 1.4142L2.2978 17.0331"/>
-</svg>
-"""
-searchBoxElement = document.createElement('input')
-searchBoxElement.id = 'search-box'
-searchBoxElement.setAttribute('type', 'text')
-searchBoxElement.setAttribute('placeholder', 'Building site hierarchy...')
-searchBoxElement.setAttribute('disabled', '')
-siteSearchElement.prepend(clearButton)
-siteSearchElement.prepend(searchBoxElement)
-siteNavElement.prepend(siteSearchElement)
+siteSearchElement = document.getElementsByClassName('search-container')[0]
+searchBoxElement = document.getElementById('search-box')
+clearButton = document.getElementsByClassName('clear-button')[0]
 clearButton.onclick = ->
   searchBoxElement.value = ''
   searchBoxElement.dispatchEvent(new Event('input', {

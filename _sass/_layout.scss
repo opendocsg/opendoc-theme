@@ -6,7 +6,7 @@ $large-spacing:               2 * $spacing;
 $content-width:               50em;
 $sidebar-content-width:       24em;
 $site-header-spacing:         15px;
-$nav-footer-height:           120px;
+$nav-footer-height:           130px;
 $nav-mobile-footer-height:    80px;
 $nav-header-height:           80px;
 $site-nav-collapse-duration:  0.2s;
@@ -15,8 +15,9 @@ $site-nav-collapse-timing:    ease-out;
 // Implementation
 // ============================================================================
 // $site-header-height: calc(2 * #{$site-header-spacing} + 1em);
-$site-header-height:          120px;
-$site-nav-width:              calc(#{$sidebar-content-width} + 2 * #{$large-spacing});
+$site-header-height:          130px;
+$site-header-small-height:    80px;
+$site-nav-width:              calc(#{$sidebar-content-width} + 2 * #{$med-spacing});
 $negative-site-nav-width:     calc(0px - (#{$sidebar-content-width} + 2 * #{$large-spacing}));
 $site-nav-shadow-inset:       inset -7px 0 13px -5px rgba(0, 0, 0, 0.15);
 $site-nav-shadow-outset:      7px 0 13px 5px rgba(0, 0, 0, 0.15);
@@ -64,7 +65,6 @@ body {
   @include medium-screen {
     z-index: 1;
     width: $site-nav-width;
-    border-right: 1px solid $divider-color;
     left: 0;
     &.menu-toggled { 
       left: $negative-site-nav-width;
@@ -126,24 +126,24 @@ body {
       }
       &.filled .clear-button { display: unset; }
       input {
-        // position: absolute;
         display: block;
         width: 100%;
         border: none;
         outline: none;
         font-size: 1.2em;
-        padding-right: $large-spacing;
+        padding-right: calc(#{$med-spacing} * 2);
         // Make room for the search icon
         padding-left: calc(#{$spacing * 4} + 1em);
         padding-top: 0px;
         padding-bottom: 0px;
         margin-top: 20px;
-        background-color: $primary-brand-color;
         color: white;
         opacity: 0.5;
+        -webkit-font-smoothing: antialiased;
       }
       input::placeholder {
         color: white;
+        font-weight: 100;
       }
       &.filled input {
         opacity: 1;
@@ -234,6 +234,7 @@ body {
     background-color: $primary-brand-color;
     @include medium-screen {
       box-shadow: $site-nav-shadow-inset;
+      border-right: 1px solid $primary-brand-color;
     }
   }
 
@@ -256,6 +257,7 @@ body {
     background-color: $well-background-color;
     @include medium-screen {
       height: calc(100% - #{$nav-footer-height} - #{$nav-header-height});
+      border-right: 1px solid $divider-color;
       box-shadow: $site-nav-shadow-inset;
     }
   }
@@ -271,6 +273,7 @@ body {
         text-transform: uppercase;
         font-size: 80%;
         padding-bottom: 10px;
+        letter-spacing: 0.7px;
       }
       img {
         max-height: 25px;
@@ -281,7 +284,8 @@ body {
     @include medium-screen {
       height: $nav-footer-height;
       box-shadow: $site-nav-shadow-inset;
-
+      border-right: 1px solid $divider-color;
+      border-top: 1px solid $divider-color;
       .attribution {
         div {
           text-transform: uppercase;
@@ -328,7 +332,19 @@ body {
   @include medium-screen {
     padding: $large-spacing calc(2 * #{$large-spacing});
     left: $site-nav-width;
-    .site-nav.menu-toggled ~ & { left: 0; transform: none; }
+    .site-nav.menu-toggled ~ & { 
+      left: 0;
+      transform: none;
+      height: $site-header-small-height;
+
+      .description-container { 
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex: 1;
+        margin-right: 180px;
+      }
+    }
   }
   background-color: $base-background-color;
   border-bottom: 1px solid $divider-color;
@@ -376,6 +392,9 @@ body {
         margin-left: auto;
         margin-right: auto;
 
+        &.hover {
+          display: none;
+        }
         &.mobile {
           display: block;
         }
@@ -392,9 +411,14 @@ body {
   @include medium-screen {
     display: block;
     right: calc( 2 * #{$large-spacing});
-    top: $large-spacing;
+    top: calc( 2 * #{$large-spacing});
     bottom: unset;
     width: auto;
+    transition: top $site-nav-collapse-duration;
+
+    .site-nav.menu-toggled ~ & { 
+      top: 20px;
+    }
 
     .btn-group {
       height: auto;
@@ -404,21 +428,32 @@ body {
         cursor: pointer;
         background: transparent;
         border: 1px solid $divider-color;
-        padding: $spacing $large-spacing;
+        padding: 10px 18px;
         
         .btn-icon {
           height: 1rem;
           pointer-events: none;
           user-select: none;
         }
+
+        &:hover {
+          background: #eeeeee;
+          .btn-icon.hover {
+            display: block;
+          }
+          .btn-icon:not(.hover) {
+            display: none;
+          }
+        }
+
         &:not(:last-child) {
           border-right: none; /* Prevent double borders */
         }
         &:first-child {
-          border-radius: 5px 0px 0px 5px;
+          border-radius: 4px 0px 0px 4px;
         }
         &:last-child {
-          border-radius: 0px 5px 5px 0px;
+          border-radius: 0px 4px 4px 0px;
         }
       }
     }
@@ -447,13 +482,16 @@ body {
   // Expand to fill when the menu is closed
   @include medium-screen {
     top: $site-header-height;
+    
     padding: $large-spacing calc(2 * #{$large-spacing});
     left: $site-nav-width;
-    .site-nav.menu-toggled ~ & { 
-      left: 0; 
-      transform: none; 
-    }
     height: calc(100% - #{$site-header-height});
+
+    .site-nav.menu-toggled ~ & { 
+      left: 0;
+      top: $site-header-small-height;
+      transform: none;
+    }
   }
 
   h1 { padding-top: calc(1.6 * #{$block-spacing}); border-top: 1px solid $divider-color;}
@@ -475,8 +513,14 @@ body {
     h5 { padding-top: calc(1.2 * #{$block-spacing}); border-top: 1px solid $divider-color;}
     h6 { padding-top: calc(1.0 * #{$block-spacing}); border-top: 1px solid $divider-color;}
   }
-
 }
+
+// For text directly under a h1 heading
+h1 + p {
+  font-size: 20px;
+}
+
+
 
 //search-results
 .search-results{
