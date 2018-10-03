@@ -466,6 +466,9 @@ highlightBody = ->
 # =============================================================================
 # Map the popstate event
 window.addEventListener 'popstate', (event) ->
+  if window.location.hash.length > 0 
+    window.dispatchEvent(new Event('link-click'))
+
   path = window.location.pathname
   setSelectedAnchor path
   page = pageIndex[path]
