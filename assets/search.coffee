@@ -471,9 +471,9 @@ highlightBody = ->
 # Event when path changes
 # =============================================================================
 # Map the popstate event
-window.addEventListener 'popstate', (event) ->
+onPopState = (event) ->
   # Hide menu if sub link clicked or clicking on search results
-  if window.location.hash.length > 0 || toc.hidden
+  if window.location.hash.replace('#', '').length > 0 || toc.hidden
     window.dispatchEvent(new Event('link-click'))
 
   path = window.location.pathname
@@ -485,3 +485,6 @@ window.addEventListener 'popstate', (event) ->
     main.innerHTML = page.content
 
   highlightBody()
+
+window.addEventListener 'popstate', onPopState
+window.addEventListener 'hashchange', onPopState

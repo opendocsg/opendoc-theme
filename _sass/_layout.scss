@@ -128,7 +128,7 @@ body {
           opacity: 1;
         }
       }
-      &.filled .clear-button { display: unset; }
+      &.filled .clear-button { display: block; }
       input {
         display: block;
         width: 100%;
@@ -143,6 +143,10 @@ body {
         color: white;
         opacity: 0.5;
         -webkit-font-smoothing: antialiased;
+      }
+      // Do not show the in-built X in IE
+      input::-ms-clear {
+        display: none;
       }
       input::placeholder {
         color: white;
@@ -403,6 +407,7 @@ body {
   position: fixed;
   z-index: 10;
   bottom: 0;
+  right: 0;
   width: 100%;
   border-top: 1px solid $divider-color;
   background:white;
@@ -424,7 +429,6 @@ body {
       cursor: pointer;
       color: #484848;
       display: flex;
-      justify-content: center;
       align-items: center;
       text-decoration: none;
       user-select: none;
@@ -466,6 +470,7 @@ body {
 
       .btn-icon {
         height: 1.6rem;
+        width: 1.6rem;
         user-select: none;
         pointer-events: none;
         display: none;
@@ -493,7 +498,7 @@ body {
     display: block;
     right: calc( 3.25 * #{$large-spacing});
     top: calc( 2 * #{$large-spacing});
-    bottom: unset;
+    bottom: auto;
     width: auto;
     transition: top $site-nav-collapse-duration;
     border-top: none;
@@ -521,6 +526,7 @@ body {
 
         .btn-icon {
           height: 1rem;
+          width: 1rem;
           pointer-events: none;
           user-select: none;
         }
