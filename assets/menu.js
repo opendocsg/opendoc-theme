@@ -20,37 +20,19 @@
         }
     })
 
-    let mainContent = document.getElementById('main-content')
-    mainContent.onclick = () => {
-        if (siteNav.offsetLeft === 0) {
-            hideMenu()
-        }
-    }
-
     let isMobileView = () => window.innerWidth < 768
+    let mainContent = document.getElementById('main-content')
 
-    // Swipe gestures
-    delete Hammer.defaults.cssProps.userSelect;
-    let mainContentHammer = new Hammer(mainContent, {
-        //  Only for touch input and no click and drag input
-        inputClass: Hammer.TouchInput
-    })
-    let siteNavHammer = new Hammer(siteNav, {
-        inputClass: Hammer.TouchInput
-    })
-    mainContentHammer.on('swiperight', () => {
-        if (isMobileView()) {
-            showMenu()
-        }
-    })
-    mainContentHammer.on('swipeleft', () => {
+    window.addEventListener('link-click', (event) => {
         if (isMobileView()) {
             hideMenu()
-        }
-    })
-    siteNavHammer.on('swipeleft', () => {
-        if (isMobileView()) {
-            hideMenu()
+            // Prevent the header from appearing when scrolling to anchors
+            if ( mainContent.scrollTop > 0) {
+                setTimeout(() => {
+                    document.querySelector('header').classList.remove('headroom--pinned')
+                    document.querySelector('header').classList.add('headroom--unpinned')
+                }, 200)
+            }
         }
     })
 })()

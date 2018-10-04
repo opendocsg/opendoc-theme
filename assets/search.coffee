@@ -3,32 +3,11 @@
 ---
 # Search Box Element
 # =============================================================================
-# Programmatically add the search box to the site
 # This allows the search box to be hidden if javascript is disabled
-siteNavElement = document.getElementsByClassName('site-search')[0]
-siteSearchElement = document.createElement('div')
-siteSearchElement.classList.add('search-container')
-siteSearchElement.innerHTML =
-"""
-  <image class="search-icon" src="{{ '/assets/images/search-icon.png' | relative_url }}" width="24" height="20" />
-"""
-
-clearButton = document.createElement "label"
-clearButton.classList.add "clear-button"
-clearButton.innerHTML = """
-<svg class="clear-icon" viewBox="0 0 18 18" width="18" height="18">
-  <path d="M2.42755 1L17.0331 15.60554l-1.41423 1.4142L1 2.38402"/>
-  <path d="M1 15.51932L15.51933 1l1.4142 1.4142L2.2978 17.0331"/>
-</svg>
-"""
-searchBoxElement = document.createElement('input')
-searchBoxElement.id = 'search-box'
-searchBoxElement.setAttribute('type', 'text')
-searchBoxElement.setAttribute('placeholder', 'Building site hierarchy...')
-searchBoxElement.setAttribute('disabled', '')
-siteSearchElement.prepend(clearButton)
-siteSearchElement.prepend(searchBoxElement)
-siteNavElement.prepend(siteSearchElement)
+toc = document.getElementsByClassName('table-of-contents')[0]
+siteSearchElement = document.getElementsByClassName('search-container')[0]
+searchBoxElement = document.getElementById('search-box')
+clearButton = document.getElementsByClassName('clear-button')[0]
 clearButton.onclick = ->
   searchBoxElement.value = ''
   searchBoxElement.dispatchEvent(new Event('input', {
@@ -107,59 +86,19 @@ else
     {% endfor %}
   ]
   pages.sort (a, b) -> return if pageOrder.indexOf(a.name) < pageOrder.indexOf(b.name) then -1 else 1
-
-
 pages.forEach (page) -> pageIndex[page.url] = page
 
 # Global Variables
 # =============================================================================
 
 wordsToHighlight = []
-
+sectionIndex = {}
 
 # Site Hierarchy
 # =============================================================================
 
-# Build a site hierarchy tree of nested sections
-# Each section has a representative component
-# An array of its own text
-# and an array of subsections
-siteHierarchy = {
-  component: site
-  title: site.title
-  url: site.url
-  text: []
-}
-sectionIndex = {}
-initSubsections = (pages) ->
-    sections = pages.map (page) ->
-        root =
-            parent: siteHierarchy
-            component: page
-            title: page.title
-            url: page.url
-            text: [] # Will be converted into a single string later
-            subsections: []
-        return root
-    return sections
-
-# Parse page html and build a section hierarchy per page
-siteHierarchy.subsections = initSubsections(pages)
-
-buildNav = (section) ->
-  navBranch = document.createElement('div')
-  navBranch.classList.add('nav-branch')
-  navLinkElement = document.createElement('a')
-  navLinkElement.classList.add('nav-link')
-  navLinkElement.setAttribute('href', section.url)
-  navLinkElement.innerHTML = section.title
-  navBranch.appendChild(navLinkElement)
-  section.subsections.forEach (section) ->
-    navBranch.appendChild(buildNav(section))
-  return navBranch
 
 startBuildingHierarchy = () ->
-
   promise = new Promise (resolve, reject) ->
     statusElement = document.createElement('div')
     statusElement.id = 'hierarchyWorkerStatus'
@@ -170,7 +109,6 @@ startBuildingHierarchy = () ->
     worker.onmessage = (event) ->
       worker.terminate()
       statusElement.remove()
-      renderToc(event.data.hierarchy)
       sectionIndex = event.data.sectionIndex
        # Build a serializable array for sending to workers
       serializableSiteSections = Object.values(sectionIndex).map (section) ->
@@ -419,8 +357,7 @@ createEsQuery = (queryStr) ->
 
 # Call the API
 esSearch = (query) ->
-  #console.log 'Executing debounced query: ' , query
-  req=new XMLHttpRequest()
+  req = new XMLHttpRequest()
   req.addEventListener 'readystatechange', ->
     if req.readyState is 4 # ReadyState Complete
       successResultCodes = [200,304]
@@ -454,7 +391,6 @@ enableSearchBox = (searchIndex) ->
   searchBoxElement.classList.remove('loading')
   searchBoxElement.setAttribute 'placeholder', 'Search document'
   searchBoxElement.addEventListener 'input', (event) ->
-    toc = document.getElementsByClassName('table-of-contents')[0]
     searchResults = document.getElementsByClassName('search-results')[0]
     query = searchBoxElement.value.trim()
     wordsToHighlight = []
@@ -474,12 +410,10 @@ enableSearchBox = (searchIndex) ->
 
 searchIndexPromise.then (searchIndex) ->
   enableSearchBox(searchIndex)
-  if searchOnServer
-    startBuildingHierarchy()
 
 setSelectedAnchor = (path) ->
   # Make the nav-link pointing to this path selected
-  selectedBranches = document.querySelectorAll('div.nav-branch.expanded')
+  selectedBranches = document.querySelectorAll('li.nav-branch.expanded')
   for i in [0...selectedBranches.length]
     selectedBranches[i].classList.remove('expanded')
 
@@ -492,24 +426,13 @@ setSelectedAnchor = (path) ->
   if selectedAnchors.length > 0
     selectedAnchors[0].classList.add('selected')
     selectedAnchors[0].parentNode.classList.add('expanded')
-
-# Table of Contents
-# =============================================================================
-# Table of contents rendering
-renderToc = (siteHierarchy) ->
-  tocElement = document.getElementsByClassName('table-of-contents')[0]
-  tocElement.innerHTML = ''
-
-  siteHierarchy.subsections.forEach (section) ->
-    tocElement.appendChild(buildNav(section))
-
-  setSelectedAnchor window.location.pathname
-
-renderToc siteHierarchy
+  
+setSelectedAnchor window.location.pathname
 
 # HTML5 History
 # =============================================================================
 # Setup HTML 5 history for single page goodness
+# TODO: not exactly working right
 main = document.getElementsByTagName('main')[0]
 document.body.addEventListener('click', (event) ->
   # Check if its within an anchor tag any any point
@@ -543,10 +466,13 @@ highlightBody = ->
 # =============================================================================
 # Map the popstate event
 window.addEventListener 'popstate', (event) ->
+  # Hide menu if sub link clicked or clicking on search results
+  if window.location.hash.length > 0 || toc.hidden
+    window.dispatchEvent(new Event('link-click'))
+
   path = window.location.pathname
   setSelectedAnchor path
   page = pageIndex[path]
-
   # Only reflow the main content if necessary
   originalBody = new DOMParser().parseFromString(page.content, 'text/html').body
   if main.innerHTML.trim() isnt originalBody.innerHTML.trim()

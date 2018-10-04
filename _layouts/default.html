@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     {% seo %}
-    <link href="https://fonts.googleapis.com/css?family=Noto+Serif" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Noto+Serif:400,700" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet">
 
     <link rel="icon" href="{{ '/assets/images/favicon.ico' | relative_url }}">
@@ -30,44 +30,50 @@
   <body>
     <nav class="site-nav">
       <div class="nav-header">
-        <section class="site-search"></section>
+        <section class="site-search">
+          <div class="search-container">
+              <img class="search-icon" src="{{ '/assets/images/search-icon.png' | relative_url }}" width="24" height="20" />
+              <input id="search-box" placeholder="Search document" type="text" />
+              <label class="clear-button">
+                <svg class="clear-icon" viewBox="0 0 18 18" width="18" height="18">
+                  <path d="M2.42755 1L17.0331 15.60554l-1.41423 1.4142L1 2.38402"/>
+                  <path d="M1 15.51932L15.51933 1l1.4142 1.4142L2.2978 17.0331"/>
+                </svg>
+              </label>
+          </div>
+        </section>
       </div>
       <div class="nav-main">
         <section class="table-of-contents">
+{% include toc.html h_min=1 h_max=2 item_class="nav-branch" anchor_class="nav-link" %}
         </section>
-        <section class="search-results">
+        <section class="search-results" hidden>
         </section>
+{% include attribution.html mobile=true%}
       </div>
-      <div class="nav-footer">
-        <!-- <section class="sidebar-footer"> -->
-          <div class="attribution">
-            <div>Content by</div>
-            <img class="description-logo" src="{{ site.styling_options.logo_path | relative_url }}">
-          </div>
-          <div class="attribution">
-            <div>Powered by</div>
-            <img class="description-logo" src="{{ site.styling_options.opendoc_logo_path | relative_url }}">
-          </div>
-        <!-- </section> -->
-      </div>
+{% include attribution.html %}
     </nav>
 
     <div class=button-group-container>
       <div class="btn-group">
         <label for="menu-toggle" class="btn-item" id="menu-toggle-btn">
             <input type="checkbox" id="menu-toggle" hidden>
-            <img class="btn-icon mobile" src="{{ '/assets/images/sidebar-white.svg' | relative_url }}">
-            <img class="btn-icon" src="{{ '/assets/images/sidebar.png' | relative_url }}">
+            <img class="btn-icon mobile" src="{{ '/assets/images/sidebar-mobile.svg' | relative_url }}">
+            <img class="btn-icon mobile close" src="{{ '/assets/images/x-mobile.svg' | relative_url }}">
+            <img class="btn-icon" src="{{ '/assets/images/sidebar.svg' | relative_url }}">
+            <img class="btn-icon hover" src="{{ '/assets/images/sidebar-hover.svg' | relative_url }}">
         </label>
         <div class="btn-item" id="convert-to-pdf">
-          <img class="btn-icon mobile" src="{{ '/assets/images/printer-white.svg' | relative_url }}">
-          <img class="btn-icon" src="{{ '/assets/images/print.png' | relative_url }}">
+          <img class="btn-icon mobile" src="{{ '/assets/images/book-mobile.svg' | relative_url }}">
+          <span class="btn-text mobile">PDF</span>
+          <img class="btn-icon" src="{{ '/assets/images/printer.svg' | relative_url }}">
+          <img class="btn-icon hover" src="{{ '/assets/images/printer-hover.svg' | relative_url }}">
         </div>
         <a class="btn-item" href="{{ site.styling_options.feedback_url }}" target="_blank">
-          <div>
-            <img class="btn-icon mobile" src="{{ '/assets/images/feedback-white.svg' | relative_url }}">
-            <img class="btn-icon" src="{{ '/assets/images/feedback.png' | relative_url }}">
-          </div>
+          <img class="btn-icon mobile" src="{{ '/assets/images/feedback-mobile.svg' | relative_url }}">
+          <span class="btn-text mobile">Feedback</span>
+          <img class="btn-icon" src="{{ '/assets/images/feedback.svg' | relative_url }}">
+          <img class="btn-icon hover" src="{{ '/assets/images/feedback-hover.svg' | relative_url }}">
         </a>
       </div>
     </div>
@@ -85,7 +91,6 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.3.5/bluebird.min.js"></script>
     <script src="https://npmcdn.com/headroom.js@0.9.4/dist/headroom.min.js" charset="utf-8"></script>
-    <script src="https://hammerjs.github.io/dist/hammer.min.js" charset="utf-8"></script>
     <script src="{{ '/assets/lunr.js' | relative_url }}"></script>
     <script src="{{ '/assets/search.js' | relative_url }}"></script>
     <script src="{{ '/assets/menu.js' | relative_url }}"></script>
