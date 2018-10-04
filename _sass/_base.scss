@@ -7,7 +7,8 @@
 // Fonts
 $base-font-family:        'Noto Sans', sans-serif;
 $header-font-family:      'Noto Serif', serif;
-$base-font-size:          16px;
+$base-font-size:          18px;
+$nav-link-font-size:      16px;
 $base-font-weight:        400;
 $mono-font-family:        'Fira Mono', monospace;
 // Colors
@@ -29,16 +30,20 @@ $item-spacing:            1.0rem;
 $inline-spacing:          0.2em;
 $base-border-radius:      0.2rem;
 // Breakpoints
-$medium-screen-breakpoint:    768px;
-$large-screen-breakpoint:     1366px;
+$desktop-screen-breakpoint:    992px;
+$large-screen-breakpoint:     1400px;
 
 // Implementation
 // ============================================================================
-@mixin medium-screen() {
-  @media (min-width: $medium-screen-breakpoint) { @content; }
+@mixin desktop-screen() {
+  @media (min-width: $desktop-screen-breakpoint) { @content; }
 }
 @mixin large-screen() {
   @media (min-width: $large-screen-breakpoint) { @content; }
+}
+
+@mixin mobile-screen() {
+  @media (max-width: calc(#{$desktop-screen-breakpoint}  - 0.1px)) { @content; }
 }
 
 // Typography Defaults
@@ -63,27 +68,32 @@ h1, h2, h3, h4, h5, h6 {
   color: $header-text-color;
 }
 
-h1 { font-size: 40px; line-height: 1.25; letter-spacing: -0.5px; }
-h2 { font-size: 27px; line-height: 1.22; letter-spacing: 0; }
+h1 { font-size: 36px; line-height: 1.25; letter-spacing: -0.5px; }
+h2 { font-size: 24px; line-height: 1.22; letter-spacing: 0; }
 h3 { font-size: 22px; line-height: 1.5; letter-spacing: 0; }
 h4 { font-size: 20px; line-height: 1.5; letter-spacing: 0; }
 h5 { font-size: 20px; line-height: 1.5; letter-spacing: 0; }
 h6 { font-size: 20px; line-height: 1.5; letter-spacing: 0; }
 
-// h1 { font-size: 1.8rem; line-height: 1.2;  letter-spacing: -.1rem;}
-// h2 { font-size: 1.5rem; line-height: 1.25; letter-spacing: -.08rem; }
-// h3 { font-size: 1.4rem; line-height: 1.3;  letter-spacing: -.08rem; }
-// h4 { font-size: 1.3rem; line-height: 1.35; letter-spacing: -.08rem; }
-// h5 { font-size: 1.2rem; line-height: 1.5;  letter-spacing: -.05rem; }
-// h6 { font-size: 1.0rem; line-height: 1.6;  letter-spacing: 0; }
+
+// For text directly under a h1 heading
+h1 + p {
+  font-size: 20px;
+}
 
 // @include large-screen {
-//   h1 { font-size: 3.0rem; line-height: 1.2;  letter-spacing: -.1rem;}
-//   h2 { font-size: 2.2rem; line-height: 1.25; letter-spacing: -.08rem; }
-//   h3 { font-size: 1.6rem; line-height: 1.3;  letter-spacing: -.08rem; }
-//   h4 { font-size: 1.4rem; line-height: 1.35; letter-spacing: -.08rem; }
-//   h5 { font-size: 1.2rem; line-height: 1.5;  letter-spacing: -.05rem; }
-//   h6 { font-size: 1.0rem; line-height: 1.6;  letter-spacing: 0; }
+//   h1 { font-size: 2.5vw; line-height: 1.2;  letter-spacing: -.1rem;}
+//   h2 { font-size: 1.8vw; line-height: 1.25; letter-spacing: -.08rem; }
+//   h3 { font-size: 1.5vw; line-height: 1.3;  letter-spacing: -.08rem; }
+//   h4 { font-size: 1.3vw; line-height: 1.35; letter-spacing: -.08rem; }
+//   h5 { font-size: 1.2vw; line-height: 1.5;  letter-spacing: -.05rem; }
+//   h6 { font-size: 1.2vw; line-height: 1.6;  letter-spacing: 0; }
+//   body {
+//     font-size: 1.25vw;
+//   }
+//   h1 + p {
+//     font-size: 1.4vw;
+//   }
 // }
 
 // Blocks
@@ -291,6 +301,11 @@ img { max-width: 100%; }
 #hierarchyWorkerStatus { position: fixed; left: 0px; bottom: 0px; font-size: 10px; color: $secondary-text-color; z-index: 2}
 
 // Links
-a{
+a {
   color: $primary-brand-color;
+  font-size: $nav-link-font-size;
+}
+// Use base font size for inline links
+p a {
+  font-size: $base-font-size;
 }

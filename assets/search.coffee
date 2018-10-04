@@ -411,7 +411,9 @@ enableSearchBox = (searchIndex) ->
 searchIndexPromise.then (searchIndex) ->
   enableSearchBox(searchIndex)
 
-setSelectedAnchor = (path) ->
+setSelectedAnchor = ->
+  path = window.location.pathname
+  hash = window.location.hash
   # Make the nav-link pointing to this path selected
   selectedBranches = document.querySelectorAll('li.nav-branch.expanded')
   for i in [0...selectedBranches.length]
@@ -424,10 +426,14 @@ setSelectedAnchor = (path) ->
 
   selectedAnchors = document.querySelectorAll 'a.nav-link[href$="' + path + '"]'
   if selectedAnchors.length > 0
-    selectedAnchors[0].classList.add('selected')
     selectedAnchors[0].parentNode.classList.add('expanded')
+
+  if hash.length > 0
+    selectedAnchors = document.querySelectorAll 'a.nav-link[href$="' + path + hash + '"]'
+    if selectedAnchors.length > 0
+      selectedAnchors[0].classList.add('selected')
   
-setSelectedAnchor window.location.pathname
+setSelectedAnchor()
 
 # HTML5 History
 # =============================================================================
@@ -471,7 +477,7 @@ window.addEventListener 'popstate', (event) ->
     window.dispatchEvent(new Event('link-click'))
 
   path = window.location.pathname
-  setSelectedAnchor path
+  setSelectedAnchor()
   page = pageIndex[path]
   # Only reflow the main content if necessary
   originalBody = new DOMParser().parseFromString(page.content, 'text/html').body
