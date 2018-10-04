@@ -19,7 +19,7 @@ $site-nav-width:              30vw;
 $max-site-nav-width:          420px;
 $site-nav-shadow-inset:       inset -7px 0 13px -5px rgba(0, 0, 0, 0.15);
 $site-nav-shadow-outset:      7px 0 13px 5px rgba(0, 0, 0, 0.15);
-$mobile-bottom-bar-height:    65px;
+$mobile-bottom-bar-height:    67px;
 
 // Body
 // ----
@@ -291,9 +291,10 @@ body {
     .attribution {
       div {
         text-transform: uppercase;
-        font-size: 80%;
+        font-size: 10px;
         padding-bottom: 10px;
         letter-spacing: 0.7px;
+        color: $header-text-color;
       }
       img {
         max-height: 25px;
@@ -313,7 +314,7 @@ body {
       .attribution {
         div {
           text-transform: uppercase;
-          font-size: 80%;
+          font-size: 10px;
           padding-bottom: 10px;
         }
         img {
@@ -413,7 +414,7 @@ body {
     display: flex;
     flex-direction: row-reverse;
     justify-content: flex-start;
-    margin-right: 20px;
+    margin-right: $spacing;
     
     .btn-item {
       padding: $med-spacing $spacing;
@@ -428,11 +429,12 @@ body {
       @include mobile-screen {
         &#menu-toggle-btn {
           position: absolute;
-          width: 60px;
+          width: $mobile-bottom-bar-height;
           left: 0;
           top: 0;
           bottom: 0;
           text-align: center;
+          padding: 0;
 
           .btn-icon.mobile {
             margin-right: auto;
