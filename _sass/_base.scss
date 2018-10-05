@@ -43,7 +43,7 @@ $large-screen-breakpoint:     1400px;
 }
 
 @mixin mobile-screen() {
-  @media (max-width: calc(#{$desktop-screen-breakpoint}  - 0.1px)) { @content; }
+  @media (max-width: 991.999px) { @content; }
 }
 
 // Typography Defaults

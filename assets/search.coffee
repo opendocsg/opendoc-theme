@@ -247,7 +247,7 @@ renderSearchResults = (searchResults) ->
   searchResults.forEach (result) ->
     element = document.createElement('a')
     element.classList.add 'nav-link'
-    element.setAttribute 'href', result.url
+    element.href = result.url
     element.innerHTML = result.title
     description = document.createElement('p')
     description.innerHTML = result.description
@@ -438,7 +438,6 @@ setSelectedAnchor()
 # HTML5 History
 # =============================================================================
 # Setup HTML 5 history for single page goodness
-# TODO: not exactly working right
 main = document.getElementsByTagName('main')[0]
 document.body.addEventListener('click', (event) ->
   # Check if its within an anchor tag any any point
@@ -447,12 +446,14 @@ document.body.addEventListener('click', (event) ->
   anchor = event.target
   while (anchor? and anchor.tagName isnt 'A')
     anchor = anchor.parentNode
-  if anchor? and anchor.host is window.location.host and !anchor.hasAttribute('download')
+  if anchor? and ( anchor.host == '' or anchor.host is window.location.host ) and !anchor.hasAttribute('download')
     event.preventDefault()
     event.stopPropagation()
-    history.pushState(null, null, anchor.href)
     if anchor.hash.length > 0 then window.location = anchor.hash
-    else window.location = '#'
+    else 
+      window.location = '#'
+    # This does not trigger hashchange for IE but is needed to replace the url
+    history.pushState(null, null, anchor.href)
 , true)
 
 
@@ -470,10 +471,9 @@ highlightBody = ->
 
 # Event when path changes
 # =============================================================================
-# Map the popstate event
-window.addEventListener 'popstate', (event) ->
+onHashChange = (event) ->
   # Hide menu if sub link clicked or clicking on search results
-  if window.location.hash.length > 0 || toc.hidden
+  if window.location.hash.replace('#', '').length > 0 || toc.hidden
     window.dispatchEvent(new Event('link-click'))
 
   path = window.location.pathname
@@ -485,3 +485,6 @@ window.addEventListener 'popstate', (event) ->
     main.innerHTML = page.content
 
   highlightBody()
+
+# Dont use onpopstate as it is not supported in IE 
+window.addEventListener 'hashchange', onHashChange
