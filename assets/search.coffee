@@ -406,7 +406,7 @@ enableSearchBox = (searchIndex) ->
           esSearch(query)
         else
           lunrSearch(searchIndex, query)
-      100, !searchOnServer)()
+      500, false)()
 
 searchIndexPromise.then (searchIndex) ->
   enableSearchBox(searchIndex)
@@ -431,7 +431,8 @@ setSelectedAnchor = ->
   if hash.length > 0
     selectedAnchors = document.querySelectorAll 'a.nav-link[href$="' + path + hash + '"]'
     if selectedAnchors.length > 0
-      selectedAnchors[0].classList.add('selected')
+      selectedAnchors.forEach (anchor) ->
+        anchor.classList.add('selected')
   
 setSelectedAnchor()
 
