@@ -538,6 +538,19 @@ body {
           }
         }
 
+        // Needed to prevent doule tap bug for ios devices
+        @media (hover: none) {
+          &:hover {
+            background: transparent;
+            .btn-icon.hover {
+              display: none;
+            }
+            .btn-icon:not(.hover):not(.mobile) {
+              display: block;
+            }
+          }
+        }
+
         &:not(:last-child) {
           border-right: none; /* Prevent double borders */
         }

@@ -19,9 +19,11 @@
         }
     })
 
+    // Hard coded max-width for mobile view
     var isMobileView = function isMobileView() {
-        return window.innerWidth < 768
+        return window.innerWidth < 992
     }
+
     var mainContent = document.getElementById('main-content')
 
     window.addEventListener('link-click', function (event) {
