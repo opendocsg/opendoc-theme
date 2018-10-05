@@ -97,32 +97,6 @@ sectionIndex = {}
 # Site Hierarchy
 # =============================================================================
 
-
-startBuildingHierarchy = () ->
-  promise = new Promise (resolve, reject) ->
-    statusElement = document.createElement('div')
-    statusElement.id = 'hierarchyWorkerStatus'
-    statusElement.textContent = 'Building site hierarchy'
-    statusElement.classList.add('loading')
-    document.body.append(statusElement)
-    worker = new Worker "{{ '/assets/hierarchyWorker.js' | relative_url }}"
-    worker.onmessage = (event) ->
-      worker.terminate()
-      statusElement.remove()
-      sectionIndex = event.data.sectionIndex
-       # Build a serializable array for sending to workers
-      serializableSiteSections = Object.values(sectionIndex).map (section) ->
-        serializableSection = Object.assign {}, section
-        delete serializableSection.parent
-        delete serializableSection.component
-        delete serializableSection.subsections
-        return serializableSection
-      resolve serializableSiteSections
-    worker.onerror = (error) ->
-      Promise.reject(error)
-    worker.postMessage pages
-  return promise
-
 startBuildingIndex = (sections) ->
   searchBoxElement.setAttribute('placeholder', 'Building search index...')
   promise = new Promise (resolve, reject) ->
@@ -143,11 +117,9 @@ searchIndexPromise = new Promise (resolve, reject) ->
     if req.readyState is 4 # ReadyState Complete
       successResultCodes = [200, 304]
       if req.status not in successResultCodes
-        hierarchyPromise = startBuildingHierarchy()
-        hierarchyPromise.then (sections) ->
-          indexPromise = startBuildingIndex sections
-          indexPromise.then (searchIndex) ->
-            resolve(searchIndex)
+        indexPromise = startLunrIndexing.then (results) ->
+          sectionIndex = results.sectionIndex
+          resolve lunr.Index.load results.index
       else
         searchOnServer = true
         resolve 'Connected to server'
@@ -474,8 +446,7 @@ highlightBody = ->
 # =============================================================================
 onHashChange = (event) ->
   # Hide menu if sub link clicked or clicking on search results
-  if window.location.hash.replace('#', '').length > 0 || toc.hidden
-    window.dispatchEvent(new Event('link-click'))
+  id = window.location.hash.replace('#', '')
 
   path = window.location.pathname
   setSelectedAnchor()
@@ -484,6 +455,14 @@ onHashChange = (event) ->
   originalBody = new DOMParser().parseFromString(page.content, 'text/html').body
   if main.innerHTML.trim() isnt originalBody.innerHTML.trim()
     main.innerHTML = page.content
+
+  # Make sure it is scrolled to the anchor
+  top = 0
+  if id.length > 0 then  top = document.getElementById(id).offsetTop
+  main.scrollTop = top
+  # Make sure the header is hidden when navigating
+  if id.length > 0 || toc.hidden
+    window.dispatchEvent(new Event('link-click'))
 
   highlightBody()
 
