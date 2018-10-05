@@ -245,7 +245,6 @@ body {
 
     p {
       margin: $item-spacing/2 0;
-      color: $primary-text-color;
       font-size: 90%;
     }
   }
@@ -633,9 +632,12 @@ body {
   box-sizing: border-box;
   min-height: calc(100% - #{$nav-mobile-footer-height});
   .nav-link{
-    border-bottom: 1px solid #eee;
-    margin-bottom: $spacing;
-    padding-right: $spacing*2;
+    border-bottom: solid 1px $divider-color;
+    color: $secondary-text-color;
+  }
+
+  .nav-link.selected, .nav-link:hover{
+    color: $primary-text-color;
   }
 
   h1{
