@@ -378,7 +378,6 @@ onSearchChange = debounce((e) ->
     if searchOnServer
       esSearch query 
     else
-      console.log query
       lunrSearch query
 , 500, false)
 
