@@ -93,6 +93,7 @@ pages.forEach (page) -> pageIndex[page.url] = page
 
 wordsToHighlight = []
 sectionIndex = {}
+lunrIndex = null
 
 # Site Hierarchy
 # =============================================================================
@@ -119,7 +120,8 @@ searchIndexPromise = new Promise (resolve, reject) ->
       if req.status not in successResultCodes
         indexPromise = startLunrIndexing.then (results) ->
           sectionIndex = results.sectionIndex
-          resolve lunr.Index.load results.index
+          lunrIndex = lunr.Index.load results.index
+          resolve()
       else
         searchOnServer = true
         resolve 'Connected to server'
@@ -299,20 +301,18 @@ formatResult = (result) ->
 
   return { url: url, content: content, title: result._source.title }
 
-debounce = (func, wait, immediate) ->
+debounce = (func, threshold, execAsap) ->
   timeout = null
   (args...) ->
-    context = this
-    later = () ->
+    obj = this
+    delayed = ->
+      func.apply(obj, args) unless execAsap
       timeout = null
-      if not immediate
-        func.apply(context, args)
-
-    callImmediately = immediate && not timeout
-    clearTimeout timeout
-    timeout = setTimeout later, wait
-    if callImmediately
-      func.apply(context, args)
+    if timeout
+      clearTimeout(timeout)
+    else if (execAsap)
+      func.apply(obj, args)
+    timeout = setTimeout delayed, threshold || 100
 
 createEsQuery = (queryStr) ->
   source = [ 'title', 'url' ]
@@ -348,40 +348,42 @@ esSearch = (query) ->
   req.setRequestHeader 'X-Requested-With', 'XMLHttpRequest'
   req.send JSON.stringify esQuery
 
-lunrSearch = (searchIndex, query) ->
+lunrSearch = (query) ->
   # https://lunrjs.com/guides/searching.html
   # Add wildcard before and after
   queryTerm = '*' + query + '*'
-  lunrResults = searchIndex.search queryTerm
+  lunrResults = lunrIndex.search queryTerm
   results = translateLunrResults lunrResults
   highlightBody()
   renderSearchResults results
 
 # Enable the searchbox once the index is built
-enableSearchBox = (searchIndex) ->
+enableSearchBox = ->
   searchBoxElement.removeAttribute 'disabled'
   searchBoxElement.classList.remove('loading')
   searchBoxElement.setAttribute 'placeholder', 'Search document'
-  searchBoxElement.addEventListener 'input', (event) ->
-    searchResults = document.getElementsByClassName('search-results')[0]
-    query = searchBoxElement.value.trim()
-    wordsToHighlight = []
-    if query.length < minQueryLength
-      searchResults.setAttribute 'hidden', true
-      toc.removeAttribute 'hidden'
-      highlightBody()
-    else
-      toc.setAttribute 'hidden', ''
-      searchResults.removeAttribute 'hidden'
-      debounce( () ->
-        if searchOnServer
-          esSearch(query)
-        else
-          lunrSearch(searchIndex, query)
-      500, false)()
+  searchBoxElement.addEventListener 'input', onSearchChange 
 
-searchIndexPromise.then (searchIndex) ->
-  enableSearchBox(searchIndex)
+onSearchChange = debounce((e) -> 
+  searchResults = document.getElementsByClassName('search-results')[0]
+  query = searchBoxElement.value.trim()
+  wordsToHighlight = []
+  if query.length < minQueryLength
+    searchResults.setAttribute 'hidden', true
+    toc.removeAttribute 'hidden'
+    highlightBody()
+  else
+    toc.setAttribute 'hidden', ''
+    searchResults.removeAttribute 'hidden'
+    if searchOnServer
+      esSearch query 
+    else
+      console.log query
+      lunrSearch query
+, 500, false)
+
+searchIndexPromise.then ->
+  enableSearchBox()
 
 setSelectedAnchor = ->
   path = window.location.pathname
@@ -434,12 +436,14 @@ document.body.addEventListener('click', (event) ->
 # =============================================================================
 
 highlightBody = ->
-  instance = new Mark(main)
-  instance.unmark()
-  if wordsToHighlight.length > 0
-    instance.mark wordsToHighlight, {
-        exclude: [ 'h1' ]
-    }
+  # Check if Mark.js script is already imported
+  if Mark
+    instance = new Mark(main)
+    instance.unmark()
+    if wordsToHighlight.length > 0
+      instance.mark wordsToHighlight, {
+          exclude: [ 'h1' ]
+      }
 
 
 # Event when path changes
