@@ -3,9 +3,8 @@
 $spacing:                     12px;
 $med-spacing:                 1.5 * $spacing;
 $large-spacing:               2 * $spacing;
-$content-width:               50em;
-$sidebar-content-width:       24em;
-$site-header-spacing:         15px;
+$max-content-width:           864px;
+$body-padding:                calc( (100vw - 420px - 864px) / 2 );
 $nav-footer-height:           130px;
 $nav-mobile-footer-height:    80px;
 $nav-header-height:           80px;
@@ -14,25 +13,18 @@ $site-nav-collapse-timing:    ease-out;
 
 // Implementation
 // ============================================================================
-// $site-header-height: calc(2 * #{$site-header-spacing} + 1em);
 $site-header-height:          130px;
 $site-header-small-height:    80px;
-$site-nav-width:              calc(#{$sidebar-content-width} + 2 * #{$med-spacing});
-$negative-site-nav-width:     calc(0px - (#{$sidebar-content-width} + 2 * #{$large-spacing}));
+$site-nav-width:              30vw;
+$max-site-nav-width:          420px;
 $site-nav-shadow-inset:       inset -7px 0 13px -5px rgba(0, 0, 0, 0.15);
 $site-nav-shadow-outset:      7px 0 13px 5px rgba(0, 0, 0, 0.15);
-$mobile-bottom-bar-height:    65px;
-
-@mixin mobile-screen() {
-  @media (max-width: calc(#{$medium-screen-breakpoint}  - 0.1px)) { @content; }
-}
+$mobile-bottom-bar-height:    67px;
 
 // Body
 // ----
 body {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  -webkit-overflow-scrolling: touch;
 }
 
 // Site Nav
@@ -62,12 +54,21 @@ body {
     left: 0;
     box-shadow: $site-nav-shadow-outset;
   }
-  @include medium-screen {
+  @include desktop-screen {
     z-index: 1;
     width: $site-nav-width;
+    max-width: $max-site-nav-width;
     left: 0;
     &.menu-toggled { 
-      left: $negative-site-nav-width;
+      left: -#{$site-nav-width};
+      right: unset;
+      box-shadow: none;
+    }
+  }
+
+  @include large-screen {
+    &.menu-toggled { 
+      left: -#{$max-site-nav-width};
       right: unset;
       box-shadow: none;
     }
@@ -124,16 +125,15 @@ body {
           opacity: 1;
         }
       }
-      &.filled .clear-button { display: unset; }
+      &.filled .clear-button { display: block; }
       input {
         display: block;
         width: 100%;
         border: none;
         outline: none;
-        font-size: 1.2em;
         padding-right: calc(#{$med-spacing} * 2);
         // Make room for the search icon
-        padding-left: calc(#{$spacing * 4} + 1em);
+        padding-left: calc(#{$large-spacing} * 3);
         padding-top: 0px;
         padding-bottom: 0px;
         margin-top: 20px;
@@ -141,9 +141,12 @@ body {
         opacity: 0.5;
         -webkit-font-smoothing: antialiased;
       }
+      // Do not show the in-built X in IE
+      input::-ms-clear {
+        display: none;
+      }
       input::placeholder {
         color: white;
-        font-weight: 100;
       }
       &.filled input {
         opacity: 1;
@@ -180,7 +183,7 @@ body {
     box-sizing: border-box;
     min-height: calc(100% - #{$nav-mobile-footer-height});
 
-    @include medium-screen {
+    @include desktop-screen {
       padding-left: $large-spacing;
       padding-bottom: calc(#{$large-spacing} * 2);
       padding-top: $large-spacing;
@@ -196,38 +199,52 @@ body {
   .nav-branch {
     position: relative;
 
+    // Sub links
     & .nav-branch {
       display: none;
-      margin-left: $item-spacing;
+      margin-left: calc( 2 * #{$large-spacing});
+
+      .nav-link {
+        color: $primary-text-color;
+      }
+
+      .nav-link:hover, .nav-link.selected {
+        color: $primary-brand-color;
+      }
+
+      .nav-link.selected {
+        border-left: 3px solid $primary-brand-color;
+      }
     }
+
+    // Expanded main links
     &.expanded {
+      & > .nav-link {
+        font-weight: bold;
+        color: $header-text-color;
+      }
       & .nav-branch { display: block; }
     }
   }
 
   .nav-link {
     display: block;
-    color: $primary-text-color;
-    padding-top: $spacing;
-    padding-bottom: $spacing;
-    padding-right: $spacing*2;
+    color: $secondary-text-color;
+    margin-top: $spacing;
+    margin-bottom: $large-spacing;
+    padding-right: calc( #{$spacing} * 2);
     padding-left: $spacing;
     cursor: pointer;
-    text-decoration: none;
-    border-left: 3px solid $well-background-color;
+    border-left: 3px solid transparent;
+    user-select: none;
 
     &:hover{
-      text-decoration: underline;
-    }
-
-    &.selected {
-      color: $primary-brand-color;
-      border-left: 3px solid $primary-brand-color;
+      text-decoration: none;
+      color: $primary-text-color;
     }
 
     p {
       margin: $item-spacing/2 0;
-      color: $primary-text-color;
       font-size: 90%;
     }
   }
@@ -235,7 +252,7 @@ body {
   .nav-header {
     height: $nav-header-height;
     background-color: $primary-brand-color;
-    @include medium-screen {
+    @include desktop-screen {
       box-shadow: $site-nav-shadow-inset;
       border-right: 1px solid $primary-brand-color;
     }
@@ -253,7 +270,7 @@ body {
     overflow-x: hidden;
     background-color: $well-background-color;
 
-    @include medium-screen {
+    @include desktop-screen {
       height: calc(100% - #{$nav-footer-height} - #{$nav-header-height});
       border-right: 1px solid $divider-color;
       box-shadow: $site-nav-shadow-inset;
@@ -274,9 +291,10 @@ body {
     .attribution {
       div {
         text-transform: uppercase;
-        font-size: 80%;
+        font-size: 10px;
         padding-bottom: 10px;
         letter-spacing: 0.7px;
+        color: $header-text-color;
       }
       img {
         max-height: 25px;
@@ -284,7 +302,7 @@ body {
       }
     }
 
-    @include medium-screen {
+    @include desktop-screen {
       height: $nav-footer-height;
       box-shadow: $site-nav-shadow-inset;
       border-right: 1px solid $divider-color;
@@ -296,7 +314,7 @@ body {
       .attribution {
         div {
           text-transform: uppercase;
-          font-size: 80%;
+          font-size: 10px;
           padding-bottom: 10px;
         }
         img {
@@ -334,10 +352,8 @@ body {
       top: -#{$site-header-height};
     }
   }
-
-  // On medium screens squeeze rather than shift the header
-  @include medium-screen {
-    padding: $large-spacing calc(2 * #{$large-spacing});
+  @include desktop-screen {
+    padding: $large-spacing calc( 3.25 * #{$large-spacing});
     left: $site-nav-width;
     .site-nav.menu-toggled ~ & { 
       left: 0;
@@ -351,8 +367,16 @@ body {
         flex: 1;
         margin-right: 180px;
       }
+      .description-title {
+        margin-bottom: 0;
+      }
     }
   }
+
+  @include large-screen {
+    left: $max-site-nav-width;
+  }
+
   background-color: $base-background-color;
   border-bottom: 1px solid $divider-color;
   // Other
@@ -379,6 +403,7 @@ body {
   position: fixed;
   z-index: 10;
   bottom: 0;
+  right: 0;
   width: 100%;
   border-top: 1px solid $divider-color;
   background:white;
@@ -393,14 +418,13 @@ body {
     display: flex;
     flex-direction: row-reverse;
     justify-content: flex-start;
-    margin-right: 20px;
+    margin-right: $spacing;
     
     .btn-item {
       padding: $med-spacing $spacing;
       cursor: pointer;
       color: #484848;
       display: flex;
-      justify-content: center;
       align-items: center;
       text-decoration: none;
       user-select: none;
@@ -408,11 +432,12 @@ body {
       @include mobile-screen {
         &#menu-toggle-btn {
           position: absolute;
-          width: 60px;
+          width: $mobile-bottom-bar-height;
           left: 0;
           top: 0;
           bottom: 0;
           text-align: center;
+          padding: 0;
 
           .btn-icon.mobile {
             margin-right: auto;
@@ -441,6 +466,7 @@ body {
 
       .btn-icon {
         height: 1.6rem;
+        width: 1.6rem;
         user-select: none;
         pointer-events: none;
         display: none;
@@ -454,7 +480,7 @@ body {
           display: block;
           margin-right: 10px;
         }
-        @include medium-screen {
+        @include desktop-screen {
           display: block;
           &.mobile {
             display: none;
@@ -464,11 +490,11 @@ body {
     }
   }
  
-  @include medium-screen {
+  @include desktop-screen {
     display: block;
-    right: calc( 2 * #{$large-spacing});
+    right: calc( 3.25 * #{$large-spacing});
     top: calc( 2 * #{$large-spacing});
-    bottom: unset;
+    bottom: auto;
     width: auto;
     transition: top $site-nav-collapse-duration;
     border-top: none;
@@ -496,6 +522,7 @@ body {
 
         .btn-icon {
           height: 1rem;
+          width: 1rem;
           pointer-events: none;
           user-select: none;
         }
@@ -507,6 +534,19 @@ body {
           }
           .btn-icon:not(.hover) {
             display: none;
+          }
+        }
+
+        // Needed to prevent doule tap bug for ios devices
+        @media (hover: none) {
+          &:hover {
+            background: transparent;
+            .btn-icon.hover {
+              display: none;
+            }
+            .btn-icon:not(.hover):not(.mobile) {
+              display: block;
+            }
           }
         }
 
@@ -544,11 +584,10 @@ body {
 
   // On medium screens fill the residual space
   // Expand to fill when the menu is closed
-  @include medium-screen {
+  @include desktop-screen {
     top: $site-header-height;
-    
-    padding: $large-spacing calc(2 * #{$large-spacing});
     left: $site-nav-width;
+    padding: $large-spacing calc( 3.25 * #{$large-spacing});
     height: calc(100% - #{$site-header-height});
 
     .site-nav.menu-toggled ~ & { 
@@ -557,6 +596,11 @@ body {
       transform: none;
       height: calc(100% - #{$site-header-small-height});
     }
+  }
+
+  @include large-screen {
+    left: $max-site-nav-width;
+    padding: $large-spacing $body-padding;
   }
 
   h1 { padding-top: calc(1.6 * #{$block-spacing}); border-top: 1px solid $divider-color;}
@@ -569,7 +613,7 @@ body {
     // padding-top: $site-header-height;
     &:first-child { margin-top: 0; padding-top: 0; border-top: 0px; }
   }
-  @include medium-screen {
+  @include desktop-screen {
     // Hack to get browser hash scrolling to work nicely with a fixed header
     h1 { padding-top: calc(2.0 * #{$block-spacing}); border-top: 1px solid $divider-color;}
     h2 { padding-top: calc(1.8 * #{$block-spacing}); border-top: 1px solid $divider-color;}
@@ -580,13 +624,6 @@ body {
   }
 }
 
-// For text directly under a h1 heading
-h1 + p {
-  font-size: 20px;
-}
-
-
-
 //search-results
 .search-results{
   padding-top: $spacing;
@@ -595,9 +632,12 @@ h1 + p {
   box-sizing: border-box;
   min-height: calc(100% - #{$nav-mobile-footer-height});
   .nav-link{
-    border-bottom: 1px solid #eee;
-    margin-bottom: $spacing;
-    padding-right: $spacing*2;
+    border-bottom: solid 1px $divider-color;
+    color: $secondary-text-color;
+  }
+
+  .nav-link.selected, .nav-link:hover{
+    color: $primary-text-color;
   }
 
   h1{

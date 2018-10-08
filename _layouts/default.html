@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     {% seo %}
     <link href="https://fonts.googleapis.com/css?family=Noto+Serif:400,700" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Noto+Sans:400,700" rel="stylesheet">
 
     <link rel="icon" href="{{ '/assets/images/favicon.ico' | relative_url }}">
     <link rel="stylesheet" href="{{ '/assets/normalize.css' | relative_url }}">
@@ -36,8 +36,8 @@
               <input id="search-box" placeholder="Search document" type="text" />
               <label class="clear-button">
                 <svg class="clear-icon" viewBox="0 0 18 18" width="18" height="18">
-                  <path d="M2.42755 1L17.0331 15.60554l-1.41423 1.4142L1 2.38402"/>
-                  <path d="M1 15.51932L15.51933 1l1.4142 1.4142L2.2978 17.0331"/>
+                  <path d="M2.42755 1L17.0331 15.60554l-1.41423 1.4142L1 2.38402"></path>
+                  <path d="M1 15.51932L15.51933 1l1.4142 1.4142L2.2978 17.0331"></path>
                 </svg>
               </label>
           </div>
@@ -91,13 +91,14 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.3.5/bluebird.min.js"></script>
     <script src="https://npmcdn.com/headroom.js@0.9.4/dist/headroom.min.js" charset="utf-8"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" charset="utf-8"></script>
     <script src="{{ '/assets/lunr.js' | relative_url }}"></script>
+    <script src="{{ '/assets/lunr-index.js' | relative_url }}"></script>
     <script src="{{ '/assets/search.js' | relative_url }}"></script>
     <script src="{{ '/assets/menu.js' | relative_url }}"></script>
     <script src="{{ '/assets/layout.js' | relative_url }}"></script>
     <script src="{{ '/assets/redirect-new-tab.js' | relative_url }}"></script>
     <script src="{{ '/assets/scroll-handler.js' | relative_url }}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" charset="utf-8"></script>
   </body>
 
 </html>

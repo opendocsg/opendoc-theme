@@ -93,35 +93,10 @@ pages.forEach (page) -> pageIndex[page.url] = page
 
 wordsToHighlight = []
 sectionIndex = {}
+lunrIndex = null
 
 # Site Hierarchy
 # =============================================================================
-
-
-startBuildingHierarchy = () ->
-  promise = new Promise (resolve, reject) ->
-    statusElement = document.createElement('div')
-    statusElement.id = 'hierarchyWorkerStatus'
-    statusElement.textContent = 'Building site hierarchy'
-    statusElement.classList.add('loading')
-    document.body.append(statusElement)
-    worker = new Worker "{{ '/assets/hierarchyWorker.js' | relative_url }}"
-    worker.onmessage = (event) ->
-      worker.terminate()
-      statusElement.remove()
-      sectionIndex = event.data.sectionIndex
-       # Build a serializable array for sending to workers
-      serializableSiteSections = Object.values(sectionIndex).map (section) ->
-        serializableSection = Object.assign {}, section
-        delete serializableSection.parent
-        delete serializableSection.component
-        delete serializableSection.subsections
-        return serializableSection
-      resolve serializableSiteSections
-    worker.onerror = (error) ->
-      Promise.reject(error)
-    worker.postMessage pages
-  return promise
 
 startBuildingIndex = (sections) ->
   searchBoxElement.setAttribute('placeholder', 'Building search index...')
@@ -143,11 +118,10 @@ searchIndexPromise = new Promise (resolve, reject) ->
     if req.readyState is 4 # ReadyState Complete
       successResultCodes = [200, 304]
       if req.status not in successResultCodes
-        hierarchyPromise = startBuildingHierarchy()
-        hierarchyPromise.then (sections) ->
-          indexPromise = startBuildingIndex sections
-          indexPromise.then (searchIndex) ->
-            resolve(searchIndex)
+        indexPromise = startLunrIndexing.then (results) ->
+          sectionIndex = results.sectionIndex
+          lunrIndex = lunr.Index.load results.index
+          resolve()
       else
         searchOnServer = true
         resolve 'Connected to server'
@@ -247,7 +221,7 @@ renderSearchResults = (searchResults) ->
   searchResults.forEach (result) ->
     element = document.createElement('a')
     element.classList.add 'nav-link'
-    element.setAttribute 'href', result.url
+    element.href = result.url
     element.innerHTML = result.title
     description = document.createElement('p')
     description.innerHTML = result.description
@@ -327,20 +301,18 @@ formatResult = (result) ->
 
   return { url: url, content: content, title: result._source.title }
 
-debounce = (func, wait, immediate) ->
+debounce = (func, threshold, execAsap) ->
   timeout = null
   (args...) ->
-    context = this
-    later = () ->
+    obj = this
+    delayed = ->
+      func.apply(obj, args) unless execAsap
       timeout = null
-      if not immediate
-        func.apply(context, args)
-
-    callImmediately = immediate && not timeout
-    clearTimeout timeout
-    timeout = setTimeout later, wait
-    if callImmediately
-      func.apply(context, args)
+    if timeout
+      clearTimeout(timeout)
+    else if (execAsap)
+      func.apply(obj, args)
+    timeout = setTimeout delayed, threshold || 100
 
 createEsQuery = (queryStr) ->
   source = [ 'title', 'url' ]
@@ -376,42 +348,45 @@ esSearch = (query) ->
   req.setRequestHeader 'X-Requested-With', 'XMLHttpRequest'
   req.send JSON.stringify esQuery
 
-lunrSearch = (searchIndex, query) ->
+lunrSearch = (query) ->
   # https://lunrjs.com/guides/searching.html
   # Add wildcard before and after
   queryTerm = '*' + query + '*'
-  lunrResults = searchIndex.search queryTerm
+  lunrResults = lunrIndex.search queryTerm
   results = translateLunrResults lunrResults
   highlightBody()
   renderSearchResults results
 
 # Enable the searchbox once the index is built
-enableSearchBox = (searchIndex) ->
+enableSearchBox = ->
   searchBoxElement.removeAttribute 'disabled'
   searchBoxElement.classList.remove('loading')
   searchBoxElement.setAttribute 'placeholder', 'Search document'
-  searchBoxElement.addEventListener 'input', (event) ->
-    searchResults = document.getElementsByClassName('search-results')[0]
-    query = searchBoxElement.value.trim()
-    wordsToHighlight = []
-    if query.length < minQueryLength
-      searchResults.setAttribute 'hidden', true
-      toc.removeAttribute 'hidden'
-      highlightBody()
+  searchBoxElement.addEventListener 'input', onSearchChange 
+
+onSearchChange = debounce((e) -> 
+  searchResults = document.getElementsByClassName('search-results')[0]
+  query = searchBoxElement.value.trim()
+  wordsToHighlight = []
+  if query.length < minQueryLength
+    searchResults.setAttribute 'hidden', true
+    toc.removeAttribute 'hidden'
+    highlightBody()
+  else
+    toc.setAttribute 'hidden', ''
+    searchResults.removeAttribute 'hidden'
+    if searchOnServer
+      esSearch query 
     else
-      toc.setAttribute 'hidden', ''
-      searchResults.removeAttribute 'hidden'
-      debounce( () ->
-        if searchOnServer
-          esSearch(query)
-        else
-          lunrSearch(searchIndex, query)
-      100, !searchOnServer)()
+      lunrSearch query
+, 500, false)
 
-searchIndexPromise.then (searchIndex) ->
-  enableSearchBox(searchIndex)
+searchIndexPromise.then ->
+  enableSearchBox()
 
-setSelectedAnchor = (path) ->
+setSelectedAnchor = ->
+  path = window.location.pathname
+  hash = window.location.hash
   # Make the nav-link pointing to this path selected
   selectedBranches = document.querySelectorAll('li.nav-branch.expanded')
   for i in [0...selectedBranches.length]
@@ -424,15 +399,19 @@ setSelectedAnchor = (path) ->
 
   selectedAnchors = document.querySelectorAll 'a.nav-link[href$="' + path + '"]'
   if selectedAnchors.length > 0
-    selectedAnchors[0].classList.add('selected')
     selectedAnchors[0].parentNode.classList.add('expanded')
+
+  if hash.length > 0
+    selectedAnchors = document.querySelectorAll 'a.nav-link[href$="' + path + hash + '"]'
+    if selectedAnchors.length > 0
+      selectedAnchors.forEach (anchor) ->
+        anchor.classList.add('selected')
   
-setSelectedAnchor window.location.pathname
+setSelectedAnchor()
 
 # HTML5 History
 # =============================================================================
 # Setup HTML 5 history for single page goodness
-# TODO: not exactly working right
 main = document.getElementsByTagName('main')[0]
 document.body.addEventListener('click', (event) ->
   # Check if its within an anchor tag any any point
@@ -441,12 +420,14 @@ document.body.addEventListener('click', (event) ->
   anchor = event.target
   while (anchor? and anchor.tagName isnt 'A')
     anchor = anchor.parentNode
-  if anchor? and anchor.host is window.location.host and !anchor.hasAttribute('download')
+  if anchor? and ( anchor.host == '' or anchor.host is window.location.host ) and !anchor.hasAttribute('download')
     event.preventDefault()
     event.stopPropagation()
-    history.pushState(null, null, anchor.href)
     if anchor.hash.length > 0 then window.location = anchor.hash
-    else window.location = '#'
+    else 
+      window.location = '#'
+    # This does not trigger hashchange for IE but is needed to replace the url
+    history.pushState(null, null, anchor.href)
 , true)
 
 
@@ -454,28 +435,39 @@ document.body.addEventListener('click', (event) ->
 # =============================================================================
 
 highlightBody = ->
-  instance = new Mark(main)
-  instance.unmark()
-  if wordsToHighlight.length > 0
-    instance.mark wordsToHighlight, {
-        exclude: [ 'h1' ]
-    }
+  # Check if Mark.js script is already imported
+  if Mark
+    instance = new Mark(main)
+    instance.unmark()
+    if wordsToHighlight.length > 0
+      instance.mark wordsToHighlight, {
+          exclude: [ 'h1' ]
+      }
 
 
 # Event when path changes
 # =============================================================================
-# Map the popstate event
-window.addEventListener 'popstate', (event) ->
+onHashChange = (event) ->
   # Hide menu if sub link clicked or clicking on search results
-  if window.location.hash.length > 0 || toc.hidden
-    window.dispatchEvent(new Event('link-click'))
+  id = window.location.hash.replace('#', '')
 
   path = window.location.pathname
-  setSelectedAnchor path
+  setSelectedAnchor()
   page = pageIndex[path]
   # Only reflow the main content if necessary
   originalBody = new DOMParser().parseFromString(page.content, 'text/html').body
   if main.innerHTML.trim() isnt originalBody.innerHTML.trim()
     main.innerHTML = page.content
 
+  # Make sure it is scrolled to the anchor
+  top = 0
+  if id.length > 0 then  top = document.getElementById(id).offsetTop
+  main.scrollTop = top
+  # Make sure the header is hidden when navigating
+  if id.length > 0 || toc.hidden
+    window.dispatchEvent(new Event('link-click'))
+
   highlightBody()
+
+# Dont use onpopstate as it is not supported in IE 
+window.addEventListener 'hashchange', onHashChange
