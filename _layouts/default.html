@@ -28,7 +28,7 @@
   </head>
 
   <body>
-    <nav class="site-nav">
+    <nav class="site-nav no-print">
       <div class="nav-header">
         <section class="site-search">
           <div class="search-container">
@@ -54,7 +54,7 @@
 {% include attribution.html %}
     </nav>
 
-    <div class=button-group-container>
+    <div class="button-group-container no-print">
       <div class="btn-group">
         <label for="menu-toggle" class="btn-item" id="menu-toggle-btn">
             <input type="checkbox" id="menu-toggle" hidden>
@@ -78,7 +78,7 @@
       </div>
     </div>
 
-    <header class="site-header">
+    <header class="site-header no-print">
       <div class=description-container>
         <h2 class="description-title">{{ site.title }}</h2>
         <div class="description-last-updated">LAST UPDATE: {{ site.time | date_to_long_string | upcase }}</div>
