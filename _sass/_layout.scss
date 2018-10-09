@@ -591,7 +591,7 @@ body {
 
     .site-nav.menu-toggled ~ & { 
       left: 0;
-      top: $site-header-small-height;
+      padding-top: calc(#{$site-header-small-height} + #{$large-spacing});
       transform: none;
       height: auto;
     }
