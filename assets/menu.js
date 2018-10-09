@@ -24,13 +24,11 @@
         return window.innerWidth < 992
     }
 
-    var mainContent = document.getElementById('main-content')
-
     window.addEventListener('link-click', function (event) {
         if (isMobileView()) {
             hideMenu()
             // Prevent the header from appearing when scrolling to anchors
-            if (mainContent.scrollTop > 0) {
+            if (window.pageYOffset > 0) {
                 setTimeout(function () {
                     document.querySelector('header').classList.remove('headroom--pinned')
                     document.querySelector('header').classList.add('headroom--unpinned')

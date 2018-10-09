@@ -571,9 +571,9 @@ body {
   z-index: 0;
   left: 0;
   right: 0;
-  padding: $spacing calc(2 * #{$spacing});
-  padding-top: calc(#{$site-header-height} + #{$large-spacing});
-  height: calc(100% - #{$mobile-bottom-bar-height});
+  top: 0;
+  padding: calc(#{$site-header-height} + #{$spacing}) calc(2 * #{$spacing}) calc(#{$spacing} + #{$mobile-bottom-bar-height});
+  height: auto;
   overflow: auto;
 
   // On small screens fill the screen with content
@@ -585,22 +585,22 @@ body {
   // On medium screens fill the residual space
   // Expand to fill when the menu is closed
   @include desktop-screen {
-    top: $site-header-height;
     left: $site-nav-width;
-    padding: $large-spacing calc( 3.25 * #{$large-spacing});
-    height: calc(100% - #{$site-header-height});
+    padding: calc(#{$site-header-height} + #{$large-spacing}) calc(3.25 * #{$large-spacing}) $large-spacing;
+    height: auto;
 
     .site-nav.menu-toggled ~ & { 
       left: 0;
       top: $site-header-small-height;
       transform: none;
-      height: calc(100% - #{$site-header-small-height});
+      height: auto;
     }
   }
 
   @include large-screen {
     left: $max-site-nav-width;
-    padding: $large-spacing $body-padding;
+    padding-left: $body-padding;
+    padding-right: $body-padding;
   }
 
   h1 { padding-top: calc(1.6 * #{$block-spacing}); border-top: 1px solid $divider-color;}
