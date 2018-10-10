@@ -367,9 +367,13 @@ enableSearchBox = ->
   searchBoxElement.removeAttribute 'disabled'
   searchBoxElement.classList.remove('loading')
   searchBoxElement.setAttribute 'placeholder', 'Search document'
-  searchBoxElement.addEventListener 'input', onSearchChange 
+  searchBoxElement.addEventListener 'input', (e) ->
+    if e.target.value == ''
+      onSearchChange()
+    else
+      onSearchChangeDebounced()
 
-onSearchChange = debounce((e) -> 
+onSearchChange = ->
   searchResults = document.getElementsByClassName('search-results')[0]
   query = searchBoxElement.value.trim()
   wordsToHighlight = []
@@ -384,7 +388,8 @@ onSearchChange = debounce((e) ->
       esSearch query 
     else
       lunrSearch query
-, 500, false)
+onSearchChangeDebounced = debounce(onSearchChange, 500, false)
+
 
 searchIndexPromise.then ->
   enableSearchBox()
