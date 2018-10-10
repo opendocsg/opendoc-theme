@@ -269,6 +269,7 @@ body {
     overflow-y: auto;
     overflow-x: hidden;
     background-color: $well-background-color;
+    overscroll-behavior: contain;
 
     @include desktop-screen {
       height: calc(100% - #{$nav-footer-height} - #{$nav-header-height});
