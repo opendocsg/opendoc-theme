@@ -296,7 +296,10 @@ formatResult = (result) ->
     urlparts.splice( 1, 0, '?terms=', encodeURI(terms.join('|')), '#' )
     url = urlparts.join ''
     # Highlight main body of page
-    wordsToHighlight = terms
+    terms.forEach (term)->
+      words = term.split(' ')
+      words.forEach (word) ->
+        if wordsToHighlight.indexOf word < 0 then wordsToHighlight.push word
     highlightBody()
 
   return { url: url, content: content, title: result._source.title }
@@ -316,9 +319,11 @@ debounce = (func, threshold, execAsap) ->
 
 createEsQuery = (queryStr) ->
   source = [ 'title', 'url' ]
-  title_q = { 'match': { 'title': { 'query': queryStr,'max_expansions':10, 'fuzziness': 'AUTO', 'boost':2 } } }
-  content_q = { 'match': { 'content':{ 'query':queryStr, 'max_expansions':10, 'fuzziness': 'AUTO' } } }
-  bool_q = {'bool': {'should': [ title_q, content_q ] }}
+  title_automcomplete_q = { 'match_phrase_prefix': { 'title': { 'query': queryStr, 'max_expansions':20, 'boost': 4, 'slop': 10 } } }
+  content_automcomplete_q = { 'match_phrase_prefix': { 'content':{ 'query': queryStr, 'max_expansions':20, 'boost': 3, 'slop': 10 } } }
+  title_keyword_q = { 'match': { 'title': { 'query': queryStr, 'fuzziness': 'AUTO', 'max_expansions':10, 'boost': 2}}}
+  content_keyword_q = { 'match': { 'content': { 'query': queryStr, 'fuzziness': 'AUTO', 'max_expansions':10 }}}
+  bool_q = {'bool': {'should': [ title_automcomplete_q, content_automcomplete_q, title_keyword_q, content_keyword_q ] }}
 
   highlight = {}
   highlight.require_field_match = false
@@ -459,9 +464,10 @@ onHashChange = (event) ->
   setSelectedAnchor()
   page = pageIndex[path]
   # Only reflow the main content if necessary
-  originalBody = new DOMParser().parseFromString(page.content, 'text/html').body
-  if main.innerHTML.trim() isnt originalBody.innerHTML.trim()
-    main.innerHTML = page.content
+  if page
+    originalBody = new DOMParser().parseFromString(page.content, 'text/html').body
+    if main.innerHTML.trim() isnt originalBody.innerHTML.trim()
+      main.innerHTML = page.content
 
   # Make sure it is scrolled to the anchor
   scrollToView()
