@@ -564,6 +564,66 @@ body {
   }
 }
 
+// Banner
+// ------------
+$banner-bg: #15499b;
+#banner {
+  background: $banner-bg;
+  box-shadow: 0 6px 8px 0 rgba(0, 0, 0, 0.24), 0 0 8px 0 rgba(0, 0, 0, 0.12);
+  font-size: 14px;
+  line-height: normal;
+  width: 330px;
+  max-width: 80vw;
+  padding: $spacing $med-spacing;
+  color: #f0f4f6;
+  display: none;
+  -webkit-font-smoothing: antialiased;
+  border-radius: 4px;
+  align-items: center;
+  #close-banner {
+    margin-left: 15px;
+    cursor: pointer;
+    height: 100%;
+    img {
+      width: 24px;
+      height: 24px;
+      max-width: 24px;
+    }
+  }
+  .popper__arrow {
+    width: 0;
+    height: 0;
+    border-style: solid;
+    position: absolute;
+    margin: 5px;
+  }
+
+  &[x-placement^="bottom"] {
+    margin-top: 5px;
+    .popper__arrow {
+      border-width: 0 5px 5px 5px;
+      border-color: transparent transparent $banner-bg transparent;
+      top: -5px;
+      left: calc(50% - 5px);
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+  }
+  &[x-placement^="top"] {
+    margin-bottom: 5px;
+    .popper__arrow {
+      border-width: 5px 5px 0 5px;
+      border-color: $banner-bg transparent transparent transparent;
+      bottom: -5px;
+      left: calc(50% - 5px);
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+  }
+}
+
+
+
 // Site Main
 //----------
 .site-main {
