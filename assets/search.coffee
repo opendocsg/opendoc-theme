@@ -423,7 +423,12 @@ document.body.addEventListener('click', (event) ->
   if anchor? and ( anchor.host == '' or anchor.host is window.location.host ) and !anchor.hasAttribute('download')
     event.preventDefault()
     event.stopPropagation()
-    if anchor.hash.length > 0 then window.location = anchor.hash
+    if anchor.hash.length > 0 
+      if ( window.location.pathname + window.location.hash ).endsWith anchor.hash
+        # If clicked on the same anchor, just scroll to view
+        scrollToView()
+        return
+      window.location = anchor.hash
     else 
       window.location = '#'
     # This does not trigger hashchange for IE but is needed to replace the url
@@ -449,7 +454,6 @@ highlightBody = ->
 # =============================================================================
 onHashChange = (event) ->
   # Hide menu if sub link clicked or clicking on search results
-  id = window.location.hash.replace('#', '')
 
   path = window.location.pathname
   setSelectedAnchor()
@@ -460,14 +464,25 @@ onHashChange = (event) ->
     main.innerHTML = page.content
 
   # Make sure it is scrolled to the anchor
-  top = 0
-  if id.length > 0 then  top = document.getElementById(id).offsetTop
-  main.scrollTop = top
+  scrollToView()
+
   # Make sure the header is hidden when navigating
-  if id.length > 0 || toc.hidden
+  if window.location.hash.replace('#', '').length > 0 || toc.hidden
     window.dispatchEvent(new Event('link-click'))
 
   highlightBody()
 
+scrollToView = ->
+  id = window.location.hash.replace('#', '')
+  topOffset = document.getElementsByTagName('header')[0].offsetHeight
+  top = 0
+  if id.length > 0 
+    anchor = document.getElementById(id)
+    if anchor
+      top = anchor.offsetTop
+      # hardcoded: topOffset not needed for mobile view
+      if window.innerWidth >= 992 then top -= topOffset
+  window.scrollTo(0, top)
+  
 # Dont use onpopstate as it is not supported in IE 
 window.addEventListener 'hashchange', onHashChange
