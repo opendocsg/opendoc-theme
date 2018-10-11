@@ -258,6 +258,9 @@ renderSearchResultsFromServer = (searchResults) ->
 formatResult = (result) ->
   terms = []
   content = null
+  title = result._source.title
+  start = '<mark>'
+  end = '</mark>'
   if result.highlight && result.highlight.content
     content = result.highlight.content.join '...'
 
@@ -267,8 +270,7 @@ formatResult = (result) ->
     # 2) '<strong>a</strong> <strong>Will</strong>'
     # We want to highlight 'make' or 'a Will', but not 'a' , or 'Will' by themselves
     # This should return ['make', 'a will']
-    start = '<mark><strong>'
-    end = '</strong></mark>'
+
     curr = content.trimLeft()
     s = curr.indexOf(start)
     e = curr.indexOf(end)
@@ -287,19 +289,32 @@ formatResult = (result) ->
     #For display purpose, only return 3 fragments max
     content = result.highlight.content.slice(0, Math.min(3, result.highlight.content.length))
 
+  if result.highlight && result.highlight.title
+    title = result.highlight.title[0]
+    curr = title.trimLeft()
+    s = curr.indexOf(start)
+    e = curr.indexOf(end)
+    k = ''
+    while s > -1 and e > -1
+      if e > s
+        k = curr.substring(s + start.length, e).toLowerCase()
+        if terms.length > 0 and s < 2
+          terms[terms.length - 1] = terms[terms.length - 1] + ' ' + k
+        else
+          terms.push(k)
+        curr = curr.substring( e + end.length ).trimLeft()
+        s = curr.indexOf(start)
+        e = curr.indexOf(end)
+
   url = result._source.url
   if terms.length > 0
-    set = {}
-    set[term] = 0 for term in terms
-    terms = Object.keys set
-    urlparts = url.split '#'
-    urlparts.splice( 1, 0, '?terms=', encodeURI(terms.join('|')), '#' )
-    url = urlparts.join ''
-    # Highlight main body of page
-    wordsToHighlight = terms
+    terms.forEach (term)->
+      # words = term.split(' ')
+      # words.forEach (word) ->
+      if wordsToHighlight.indexOf term < 0 then wordsToHighlight.push term
     highlightBody()
 
-  return { url: url, content: content, title: result._source.title }
+  return { url: url, content: content, title: title }
 
 debounce = (func, threshold, execAsap) ->
   timeout = null
@@ -316,14 +331,17 @@ debounce = (func, threshold, execAsap) ->
 
 createEsQuery = (queryStr) ->
   source = [ 'title', 'url' ]
-  title_q = { 'match': { 'title': { 'query': queryStr,'max_expansions':10, 'fuzziness': 'AUTO', 'boost':2 } } }
-  content_q = { 'match': { 'content':{ 'query':queryStr, 'max_expansions':10, 'fuzziness': 'AUTO' } } }
-  bool_q = {'bool': {'should': [ title_q, content_q ] }}
+  title_automcomplete_q = { 'match_phrase_prefix': { 'title': { 'query': queryStr, 'max_expansions':20, 'boost': 4, 'slop': 10 } } }
+  content_automcomplete_q = { 'match_phrase_prefix': { 'content':{ 'query': queryStr, 'max_expansions':20, 'boost': 3, 'slop': 10 } } }
+  title_keyword_q = { 'match': { 'title': { 'query': queryStr, 'fuzziness': 'AUTO', 'max_expansions':10, 'boost': 2}}}
+  content_keyword_q = { 'match': { 'content': { 'query': queryStr, 'fuzziness': 'AUTO', 'max_expansions':10 }}}
+  bool_q = {'bool': {'should': [ title_automcomplete_q, content_automcomplete_q, title_keyword_q, content_keyword_q ] }}
 
   highlight = {}
   highlight.require_field_match = false
   highlight.fields = {}
-  highlight.fields['content'] = {'fragment_size' : 80, 'number_of_fragments' : 6, 'pre_tags' : ['<mark><strong>'], 'post_tags' : ['</strong></mark>'] }
+  highlight.fields['content'] = {'fragment_size' : 80, 'number_of_fragments' : 6, 'pre_tags' : ['<mark>'], 'post_tags' : ['</mark>'] }
+  highlight.fields['title'] = {'fragment_size' : 80, 'number_of_fragments' : 6, 'pre_tags' : ['<mark>'], 'post_tags' : ['</mark>'] }
 
   {'_source': source, 'query' : bool_q, 'highlight' : highlight}
 
@@ -362,9 +380,13 @@ enableSearchBox = ->
   searchBoxElement.removeAttribute 'disabled'
   searchBoxElement.classList.remove('loading')
   searchBoxElement.setAttribute 'placeholder', 'Search document'
-  searchBoxElement.addEventListener 'input', onSearchChange 
+  searchBoxElement.addEventListener 'input', (e) ->
+    if e.target.value == ''
+      onSearchChange()
+    else
+      onSearchChangeDebounced()
 
-onSearchChange = debounce((e) -> 
+onSearchChange = ->
   searchResults = document.getElementsByClassName('search-results')[0]
   query = searchBoxElement.value.trim()
   wordsToHighlight = []
@@ -379,7 +401,8 @@ onSearchChange = debounce((e) ->
       esSearch query 
     else
       lunrSearch query
-, 500, false)
+onSearchChangeDebounced = debounce(onSearchChange, 500, false)
+
 
 searchIndexPromise.then ->
   enableSearchBox()
@@ -446,7 +469,8 @@ highlightBody = ->
     instance.unmark()
     if wordsToHighlight.length > 0
       instance.mark wordsToHighlight, {
-          exclude: [ 'h1' ]
+          exclude: [ 'h1' ],
+          accuracy: 'exactly'
       }
 
 
@@ -459,9 +483,10 @@ onHashChange = (event) ->
   setSelectedAnchor()
   page = pageIndex[path]
   # Only reflow the main content if necessary
-  originalBody = new DOMParser().parseFromString(page.content, 'text/html').body
-  if main.innerHTML.trim() isnt originalBody.innerHTML.trim()
-    main.innerHTML = page.content
+  if page
+    originalBody = new DOMParser().parseFromString(page.content, 'text/html').body
+    if main.innerHTML.trim() isnt originalBody.innerHTML.trim()
+      main.innerHTML = page.content
 
   # Make sure it is scrolled to the anchor
   scrollToView()
@@ -473,7 +498,7 @@ onHashChange = (event) ->
   highlightBody()
 
 scrollToView = ->
-  id = window.location.hash.replace('#', '')
+  id = window.location.hash.replace '#', ''
   topOffset = document.getElementsByTagName('header')[0].offsetHeight
   top = 0
   if id.length > 0 
@@ -482,7 +507,7 @@ scrollToView = ->
       top = anchor.offsetTop
       # hardcoded: topOffset not needed for mobile view
       if window.innerWidth >= 992 then top -= topOffset
-  window.scrollTo(0, top)
+  window.scrollTo 0, top
   
 # Dont use onpopstate as it is not supported in IE 
 window.addEventListener 'hashchange', onHashChange

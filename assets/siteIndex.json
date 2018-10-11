@@ -2,9 +2,9 @@
 ---
 [
 {%- for page in site.html_pages -%}
-    {%- unless page.exclude -%}
-        {%- assign page_url = page.url -%}
-        {%- assign split_content = page.content | markdownify | split: '<h2' | splice: 1  -%}
+{%- unless page.exclude -%}
+{%- assign page_url = page.url -%}
+{%- assign split_content = page.content | markdownify | split: '<h2' | splice: 1  -%}
         
 {%- comment -%}Deal with h1 section{%- endcomment -%}
 {%- assign page_header = split_content.first | split: '>' -%}
