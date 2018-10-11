@@ -1,4 +1,5 @@
-
+---
+---
 var startLunrIndexing = new Promise(function (resolve, reject) {
     console.log("Indexing lunr initialized")
     var request
@@ -7,7 +8,7 @@ var startLunrIndexing = new Promise(function (resolve, reject) {
         reject('No filereader api')
     }
     request = new XMLHttpRequest()
-    request.open('GET', "/assets/siteIndex.json", true)
+    request.open('GET', '{{ "/assets/siteIndex.json" | relative_url }}', true)
     request.responseType = 'blob'
     request.onload = function () {
         var fr
