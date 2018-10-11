@@ -258,6 +258,9 @@ renderSearchResultsFromServer = (searchResults) ->
 formatResult = (result) ->
   terms = []
   content = null
+  title = result._source.title
+  start = '<mark>'
+  end = '</mark>'
   if result.highlight && result.highlight.content
     content = result.highlight.content.join '...'
 
@@ -267,8 +270,7 @@ formatResult = (result) ->
     # 2) '<strong>a</strong> <strong>Will</strong>'
     # We want to highlight 'make' or 'a Will', but not 'a' , or 'Will' by themselves
     # This should return ['make', 'a will']
-    start = '<mark><strong>'
-    end = '</strong></mark>'
+
     curr = content.trimLeft()
     s = curr.indexOf(start)
     e = curr.indexOf(end)
@@ -287,22 +289,32 @@ formatResult = (result) ->
     #For display purpose, only return 3 fragments max
     content = result.highlight.content.slice(0, Math.min(3, result.highlight.content.length))
 
+  if result.highlight && result.highlight.title
+    title = result.highlight.title[0]
+    curr = title.trimLeft()
+    s = curr.indexOf(start)
+    e = curr.indexOf(end)
+    k = ''
+    while s > -1 and e > -1
+      if e > s
+        k = curr.substring(s + start.length, e).toLowerCase()
+        if terms.length > 0 and s < 2
+          terms[terms.length - 1] = terms[terms.length - 1] + ' ' + k
+        else
+          terms.push(k)
+        curr = curr.substring( e + end.length ).trimLeft()
+        s = curr.indexOf(start)
+        e = curr.indexOf(end)
+
   url = result._source.url
   if terms.length > 0
-    set = {}
-    set[term] = 0 for term in terms
-    terms = Object.keys set
-    urlparts = url.split '#'
-    urlparts.splice( 1, 0, '?terms=', encodeURI(terms.join('|')), '#' )
-    url = urlparts.join ''
-    # Highlight main body of page
     terms.forEach (term)->
-      words = term.split(' ')
-      words.forEach (word) ->
-        if wordsToHighlight.indexOf word < 0 then wordsToHighlight.push word
+      # words = term.split(' ')
+      # words.forEach (word) ->
+      if wordsToHighlight.indexOf term < 0 then wordsToHighlight.push term
     highlightBody()
 
-  return { url: url, content: content, title: result._source.title }
+  return { url: url, content: content, title: title }
 
 debounce = (func, threshold, execAsap) ->
   timeout = null
@@ -328,7 +340,8 @@ createEsQuery = (queryStr) ->
   highlight = {}
   highlight.require_field_match = false
   highlight.fields = {}
-  highlight.fields['content'] = {'fragment_size' : 80, 'number_of_fragments' : 6, 'pre_tags' : ['<mark><strong>'], 'post_tags' : ['</strong></mark>'] }
+  highlight.fields['content'] = {'fragment_size' : 80, 'number_of_fragments' : 6, 'pre_tags' : ['<mark>'], 'post_tags' : ['</mark>'] }
+  highlight.fields['title'] = {'fragment_size' : 80, 'number_of_fragments' : 6, 'pre_tags' : ['<mark>'], 'post_tags' : ['</mark>'] }
 
   {'_source': source, 'query' : bool_q, 'highlight' : highlight}
 
@@ -456,7 +469,8 @@ highlightBody = ->
     instance.unmark()
     if wordsToHighlight.length > 0
       instance.mark wordsToHighlight, {
-          exclude: [ 'h1' ]
+          exclude: [ 'h1' ],
+          accuracy: 'exactly'
       }
 
 
@@ -484,7 +498,7 @@ onHashChange = (event) ->
   highlightBody()
 
 scrollToView = ->
-  id = window.location.hash.replace('#', '')
+  id = window.location.hash.replace '#', ''
   topOffset = document.getElementsByTagName('header')[0].offsetHeight
   top = 0
   if id.length > 0 
@@ -493,7 +507,7 @@ scrollToView = ->
       top = anchor.offsetTop
       # hardcoded: topOffset not needed for mobile view
       if window.innerWidth >= 992 then top -= topOffset
-  window.scrollTo(0, top)
+  window.scrollTo 0, top
   
 # Dont use onpopstate as it is not supported in IE 
 window.addEventListener 'hashchange', onHashChange
