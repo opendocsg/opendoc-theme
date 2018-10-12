@@ -303,9 +303,5 @@ img { max-width: 100%; }
 // Links
 a {
   color: $primary-brand-color;
-  font-size: $nav-link-font-size;
-}
-// Use base font size for inline links
-p a {
   font-size: $base-font-size;
 }

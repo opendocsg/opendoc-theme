@@ -237,6 +237,7 @@ body {
     cursor: pointer;
     border-left: 3px solid transparent;
     user-select: none;
+    font-size: $nav-link-font-size;
 
     &:hover{
       text-decoration: none;
@@ -692,6 +693,7 @@ $banner-bg: #15499b;
   padding-bottom: $spacing;
   box-sizing: border-box;
   min-height: calc(100% - #{$nav-mobile-footer-height});
+  
   .nav-link{
     border-bottom: solid 1px $divider-color;
     color: $secondary-text-color;
