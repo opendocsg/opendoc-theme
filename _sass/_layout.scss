@@ -504,6 +504,41 @@ body {
 
     .site-nav.menu-toggled ~ & { 
       top: 20px;
+
+      #menu-toggle-btn {
+        .btn-icon.hover {
+          display: block;
+        }
+
+        .btn-icon:not(.hover) {
+          display: none;
+        }
+
+        // Uncomment below if menu icon should be white on hover in toggled state
+        // &:hover {
+        //   .btn-icon.hover {
+        //     display: none;
+        //   }
+  
+        //   .btn-icon:not(.hover):not(.mobile) {
+        //     display: block;
+        //   }
+        // }
+
+        // // Needed to prevent doule tap bug for ios devices  
+        // @media (hover: none) {
+        //   &:hover {
+        //     background: transparent;
+        //     .btn-icon.hover {
+        //       display: block;
+        //     }
+        //     .btn-icon:not(.hover):not(.mobile) {
+        //       display: none;
+        //     }
+        //   }
+        // }
+      }
+
     }
 
     .btn-group {
