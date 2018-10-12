@@ -23,25 +23,25 @@
 
 {%- comment -%}Then deal with h2 sections {%- endcomment -%}
 {%- for section in split_content offset:1 -%}
-{%- assign section_id = section | split: 'id="' -%}
-{%- assign section_id = section_id[1] | split: '">' -%}
-
-{%- comment -%}Get section header{%- endcomment -%}
-{%- assign section_header = section_id[1] | split: '</h2' -%}
-{%- assign section_header = section_header[0] -%}
+{%- assign section_header_html = section | split: 'id="' -%}
+{%- assign section_header_html = section_header_html[1] | split: '">' -%}
 
 {%- comment -%}Get section id{%- endcomment -%}
-{%- assign section_id = section_id[0] -%}
+{%- assign section_id = section_header_html[0] -%}
 {%- comment -%}Get section url{%- endcomment -%}
 {%- assign section_url = page_url | append: '#' | append: section_id -%}
 
+{%- comment -%}Get section header{%- endcomment -%}
+{%- assign section_header = section_header_html | shift | join | split: '</h2' -%}
+{%- assign section_header = section_header[0] | strip_html -%}
+
 {%- comment -%}Get section body{%- endcomment -%}
-{%- assign full_section = '<h2 ' | append:section | strip_html | newline_to_br | strip_newlines | replace: '<br />', ' ' | strip | jsonify -%}
+{%- assign full_section = '<h2 ' | append:section | strip_html | newline_to_br | strip_newlines | replace: '<br />', ' ' | strip | smartify| normalize_whitespace -%}
 {%- capture item -%}
 {
-"title": "{{ section_header }}",
+"title": "{{ section_header | smartify }}",
 "url": "{{ section_url }}",
-"text": {{ full_section }}
+"text": "{{ full_section }}"
 }
 {% endcapture %}
 {%- assign index_array = index_array | push: item -%}
