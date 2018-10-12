@@ -5,6 +5,7 @@ $med-spacing:                 1.5 * $spacing;
 $large-spacing:               2 * $spacing;
 $max-content-width:           864px;
 $body-padding:                calc( (100vw - 420px - 864px) / 2 );
+$body-full-view-padding:      calc( (100vw - 864px) / 2 );
 $nav-footer-height:           130px;
 $nav-mobile-footer-height:    80px;
 $nav-header-height:           80px;
@@ -663,6 +664,10 @@ $banner-bg: #15499b;
     left: $max-site-nav-width;
     padding-left: $body-padding;
     padding-right: $body-padding;
+    .site-nav.menu-toggled ~ & { 
+      padding-left: $body-full-view-padding;
+      padding-right: $body-full-view-padding;
+    }
   }
 
   h1 { padding-top: calc(1.6 * #{$block-spacing}); border-top: 1px solid $divider-color;}
