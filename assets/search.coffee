@@ -118,10 +118,7 @@ searchIndexPromise = new Promise (resolve, reject) ->
     if req.readyState is 4 # ReadyState Complete
       successResultCodes = [200, 304]
       if req.status not in successResultCodes
-        indexPromise = startLunrIndexing.then (results) ->
-          sectionIndex = results.sectionIndex
-          lunrIndex = lunr.Index.load results.index
-          resolve()
+        startBuildingLunrIndex resolve
       else
         searchOnServer = true
         resolve 'Connected to server'
@@ -129,6 +126,12 @@ searchIndexPromise = new Promise (resolve, reject) ->
   req.open 'GET', search_endpoint, true
   req.setRequestHeader 'X-Requested-With', 'XMLHttpRequest'
   req.send ''
+
+startBuildingLunrIndex = (cb) -> 
+  startLunrIndexing().then (results) ->
+    sectionIndex = results.sectionIndex
+    lunrIndex = lunr.Index.load results.index
+    cb()
 
 # Search
 # =============================================================================
@@ -402,7 +405,6 @@ onSearchChange = ->
     else
       lunrSearch query
 onSearchChangeDebounced = debounce(onSearchChange, 500, false)
-
 
 searchIndexPromise.then ->
   enableSearchBox()
