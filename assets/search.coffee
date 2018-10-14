@@ -250,7 +250,8 @@ renderSearchResultsFromServer = (searchResults) ->
       formatted = formatResult result
       element = document.createElement('a')
       element.classList.add 'nav-link'
-      element.setAttribute 'href', formatted.url
+      # required to set relative url for es search results
+      element.href = "{{ '/' | relative_url }}" +  formatted.url
       element.innerHTML = formatted.title
       description = document.createElement('p')
       if formatted.content
