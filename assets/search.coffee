@@ -513,3 +513,6 @@ scrollToView = ->
   
 # Dont use onpopstate as it is not supported in IE 
 window.addEventListener 'hashchange', onHashChange
+
+# Scroll to view onload
+window.onload = scrollToView
