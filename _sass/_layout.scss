@@ -498,7 +498,8 @@ body {
     right: calc( 3.25 * #{$large-spacing});
     top: calc( 2 * #{$large-spacing});
     bottom: auto;
-    width: auto;
+    // Fixed width here to allow popper to position properly in safari
+    width: 160px;
     transition: top $site-nav-collapse-duration;
     border-top: none;
 

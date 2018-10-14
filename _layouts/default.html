@@ -63,12 +63,12 @@
             <img class="btn-icon" src="{{ '/assets/images/sidebar.svg' | relative_url }}">
             <img class="btn-icon hover" src="{{ '/assets/images/sidebar-hover.svg' | relative_url }}">
         </label>
-        <div class="btn-item" id="convert-to-pdf">
+        <a class="btn-item" id="print-btn" href="{{ '/export.html' | absolute_url }}" target="_blank">
           <img class="btn-icon mobile" src="{{ '/assets/images/book-mobile.svg' | relative_url }}">
           <span class="btn-text mobile">PDF</span>
           <img class="btn-icon" src="{{ '/assets/images/printer.svg' | relative_url }}">
           <img class="btn-icon hover" src="{{ '/assets/images/printer-hover.svg' | relative_url }}">
-        </div>
+        </a>
         <a class="btn-item" id="feedback-btn" href="{{ site.styling_options.feedback_url }}" target="_blank">
           <img class="btn-icon mobile" src="{{ '/assets/images/feedback-mobile.svg' | relative_url }}">
           <span class="btn-text mobile">Feedback</span>
@@ -108,7 +108,6 @@
     <script src="{{ '/assets/search.js' | relative_url }}"></script>
     <script src="{{ '/assets/menu.js' | relative_url }}"></script>
     <script src="{{ '/assets/banner.js' | relative_url }}"></script>
-    <script src="{{ '/assets/redirect-new-tab.js' | relative_url }}"></script>
     <script src="{{ '/assets/scroll-handler.js' | relative_url }}"></script>
   </body>
 
