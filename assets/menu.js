@@ -1,4 +1,8 @@
+---
+---
 (function () {
+    // Site-nav
+    // --------------------------
     var menuToggle = document.getElementById('menu-toggle')
     var siteNav = document.getElementsByClassName('site-nav')[0]
     var showMenu = function showMenu() {
@@ -24,6 +28,8 @@
         return window.innerWidth < 992
     }
 
+    // Top header
+    // --------------------------
     window.addEventListener('link-click', function (event) {
         if (isMobileView()) {
             hideMenu()
@@ -36,4 +42,17 @@
             }
         }
     })
+
+
+    // Print button
+    // --------------------------
+    var iOS = /(iPad|iPhone|iPod)/g.test(navigator.userAgent)
+    var printButton = document.getElementById('print-btn')
+    if (iOS) {
+        printButton.style.display = 'none'
+    } else {
+        printButton.addEventListener('click', function () {
+            window.open('{{ "/export.html" | relative_url }}', '_blank')
+        })
+    }
 })()
