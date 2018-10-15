@@ -498,8 +498,7 @@ body {
     right: calc( 3.25 * #{$large-spacing});
     top: calc( 2 * #{$large-spacing});
     bottom: auto;
-    // Fixed width here to allow popper to position properly in safari
-    width: 160px;
+    width: auto;
     transition: top $site-nav-collapse-duration;
     border-top: none;
 
@@ -554,6 +553,8 @@ body {
         background: transparent;
         border: 1px solid $divider-color;
         padding: 10px 18px;
+        // Fixed width here to allow popper to position properly in safari
+        width: 16px;
         
         .btn-text {
           display: none;

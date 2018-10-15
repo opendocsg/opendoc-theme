@@ -46,10 +46,13 @@
 
     // Print button
     // --------------------------
-    document
-        .getElementById('print-btn')
-        .addEventListener('click', function() {
+    var iOS = /(iPad|iPhone|iPod)/g.test(navigator.userAgent)
+    var printButton = document.getElementById('print-btn')
+    if (iOS) {
+        printButton.style.display = 'none'
+    } else {
+        printButton.addEventListener('click', function () {
             window.open('{{ "/export.html" | relative_url }}', '_blank')
         })
-
+    }
 })()
