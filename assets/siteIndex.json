@@ -10,13 +10,13 @@
 {%- assign page_header = split_content.first | split: '>' -%}
 {%- assign page_header = page_header[1] | split: '</h1' -%}
 {%- assign page_header = page_header[0] -%}
-{%- assign header_section = '<h1' | append: split_content.first  | strip_html | newline_to_br | strip_newlines | replace: '<br />', ' ' | strip | jsonify -%}
+{%- assign header_section = '<h1' | append: split_content.first  | strip_html | newline_to_br | strip_newlines | replace: '<br />', ' ' | replace: '\', '' | strip | smartify | normalize_whitespace -%}
 
 {%- capture item -%}
 {
 "title": "{{ page_header}}",
 "url": "{{page_url | relative_url }}",
-"text": {{ header_section }}
+"text": "{{ header_section }}"
 }
 {% endcapture %}
 {%- assign index_array = index_array | push: item -%}
@@ -36,7 +36,7 @@
 {%- assign section_header = section_header[0] | strip_html -%}
 
 {%- comment -%}Get section body{%- endcomment -%}
-{%- assign full_section = '<h2 ' | append:section | strip_html | newline_to_br | strip_newlines | replace: '<br />', ' ' | strip | smartify| normalize_whitespace -%}
+{%- assign full_section = '<h2 ' | append:section | strip_html | newline_to_br | strip_newlines | replace: '<br />', ' ' | replace: '\', '' | strip | smartify | normalize_whitespace -%}
 {%- capture item -%}
 {
 "title": "{{ section_header | smartify }}",
