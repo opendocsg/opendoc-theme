@@ -12,3 +12,15 @@ var trackSearch = function(query, result, online) {
     }
 }
 
+var trackButton = function(buttonName, state, mobile) {
+    if (ga) {
+        ga('send', 'event', {
+            eventCategory: 'button',
+            eventAction: 'click',
+            eventLabel: mobile ? 'mobile-' + buttonName : buttonName,
+            eventValue: state
+        })
+    }
+}
+
+
