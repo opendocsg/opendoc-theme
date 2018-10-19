@@ -203,7 +203,7 @@ renderSearchResultsFromServer = (searchResults) ->
     error.classList.add('not-found')
     container.appendChild error
   else
-    searchResults.hits.hits.forEach (result) ->
+    searchResults.hits.hits.forEach (result, i) ->
       formatted = formatResult result
       element = document.createElement('a')
       element.classList.add 'nav-link'
