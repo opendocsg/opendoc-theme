@@ -11,5 +11,10 @@
 			popper.destroy()
 			banner.style.display = 'none'
 		}
+
+		// Remove banner after a while
+		setTimeout(function () {
+			closeBannerButton.onclick()
+		}, 5000)
 	}
 })()
