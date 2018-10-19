@@ -29,12 +29,18 @@ searchBoxElement.onblur = (event) ->
 
 # Assign search endpoint based on env config
 # ===========================================================================
-endpoint = 'INVALID-ENVIRONMENT'
-env = '{{ site.environment }}'
-if env == 'DEV'
-  endpoint = {{ site.server_DEV | append: '/' |  append: site.elastic_search.index | jsonify }}
-else if env == 'LOCAL'
-  endpoint = {{ site.server_LOCAL | append: '/' |  append: site.elastic_search.index | jsonify }} 
+endpoint = null
+env = '{{ jekyll.environment }}'
+elasticSearchIndex = '{{site.github.owner_name}}-{{site.github.repository_name}}'
+
+if env == 'production'
+  endpoint = {{ site.server_PROD | append: '/' | jsonify }} + elasticSearchIndex
+else
+  # Allow overriding of search index in dev env
+  configElasticSearchIndex = '{{site.elastic_search.index}}'
+  if configElasticSearchIndex then elasticSearchIndex = configElasticSearchIndex
+  endpoint = {{ site.server_DEV | append: '/' | jsonify }} + elasticSearchIndex
+
 search_endpoint = endpoint + '/search'
 
 
