@@ -2,7 +2,7 @@
 ---
 (function () {
     // Hard coded max-width for mobile view
-    var isMobileView = function isMobileView() {
+    window.isMobileView = function () {
         return window.innerWidth < 992
     }
 
@@ -29,18 +29,10 @@
         }
     })
 
-    // Top header
-    // --------------------------
-    window.addEventListener('link-click', function (event) {
+    // Hide site-nav on navigation
+    window.addEventListener('link-click', function () {
         if (isMobileView()) {
             hideMenu()
-            // Prevent the header from appearing when scrolling to anchors
-            if (window.pageYOffset > 0) {
-                setTimeout(function () {
-                    document.querySelector('header').classList.remove('headroom--pinned')
-                    document.querySelector('header').classList.add('headroom--unpinned')
-                }, 200)
-            }
         }
     })
 

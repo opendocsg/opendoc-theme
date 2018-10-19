@@ -37,56 +37,6 @@ else if env == 'LOCAL'
   endpoint = {{ site.server_LOCAL | append: '/' |  append: site.elastic_search.index | jsonify }} 
 search_endpoint = endpoint + '/search'
 
-# Data Blob
-# =============================================================================
-# The main "blob" of site data constructed by liquid
-# We cherry pick to minimize size
-# Also because jsonify doesn't work quite right and collapses the page objects
-# into just strings when we jsonify the whole site
-site =
-  title: {{ site.title | jsonify }}
-  url: {{ site.url | jsonify }}
-pages = [
-  {% for site_page in site.html_pages %}
-    {% unless site_page.exclude %}
-
-      {% capture name %}{{ site_page.name }}{% endcapture %}
-      {% if site_page.title == null %}
-      {% capture title %}{% assign words  = name | remove_first: '.md' | split: '-' %}{% for word in words %}{{ word | capitalize }} {% endfor %}{% endcapture %}
-      {% else %}
-      {% capture title %}{{ site_page.title }}{% endcapture %}
-      {% endif %}
-      {
-        'name': {{name | jsonify}},
-        'title': {{title | jsonify}},
-        # For consistency all page markdown is converted to HTML
-        {% if site_page.url == page.url %}
-        'content': {{ site_page.content | jsonify }},
-        {% else %}
-        'content': {{ site_page.content | markdownify | jsonify }},
-        {% endif %}
-        'url': {{ site_page.url | relative_url | jsonify }}
-      }
-    {% endunless %}
-  {% endfor %}
-]
-
-pageIndex = {}
-pageOrder = [
-  {% for section_title in site.section_order %}
-    {{ section_title | jsonify }}
-  {% endfor %}
-]
-if pageOrder.length > 0
-  pages.sort (a, b) -> return if pageOrder.indexOf(a.title) < pageOrder.indexOf(b.title) then -1 else 1
-else
-  pageOrder = [
-    {% for site_page in site.html_pages %}
-      {{ site_page.name | jsonify }}
-    {% endfor %}
-  ]
-  pages.sort (a, b) -> return if pageOrder.indexOf(a.name) < pageOrder.indexOf(b.name) then -1 else 1
-pages.forEach (page) -> pageIndex[page.url] = page
 
 # Global Variables
 # =============================================================================
@@ -440,7 +390,7 @@ document.body.addEventListener('click', (event) ->
     else 
       window.location = '#'
     # This does not trigger hashchange for IE but is needed to replace the url
-    history.pushState(null, null, anchor.href)
+    history.pushState null, null, anchor.href
 , true)
 
 
@@ -475,6 +425,7 @@ onHashChange = (event) ->
     originalBody = new DOMParser().parseFromString(page.content, 'text/html').body
     if main.innerHTML.trim() isnt originalBody.innerHTML.trim()
       main.innerHTML = page.content
+      document.title = page.title
 
   # Make sure it is scrolled to the anchor
   scrollToView()
@@ -490,11 +441,11 @@ scrollToView = ->
   topOffset = document.getElementsByTagName('header')[0].offsetHeight
   top = 0
   if id.length > 0 
-    anchor = document.getElementById(id)
+    anchor = document.getElementById id
     if anchor
       top = anchor.offsetTop
       # hardcoded: topOffset not needed for mobile view
-      if window.innerWidth >= 992 then top -= topOffset
+      if not isMobileView() then top -= topOffset
   window.scrollTo 0, top
   
 # Dont use onpopstate as it is not supported in IE 

@@ -2,7 +2,7 @@
 // Result - order of result that was clicked
 // Online - Whether online/offline search is used
 var trackSearch = function(query, result, online) {
-    if (ga) {
+    if (typeof ga !== 'undefined') {
         ga('send', 'event', {
             eventCategory: online ? 'search' : 'lunr-search',
             eventAction: 'input',
@@ -13,7 +13,7 @@ var trackSearch = function(query, result, online) {
 }
 
 var trackButton = function(buttonName, state, mobile) {
-    if (ga) {
+    if (typeof ga !== 'undefined') {
         ga('send', 'event', {
             eventCategory: 'button',
             eventAction: 'click',
