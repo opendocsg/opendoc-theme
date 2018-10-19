@@ -221,7 +221,7 @@ translateLunrResults = (allLunrResults) ->
 renderSearchResults = (searchResults) ->
   container = document.getElementsByClassName('search-results')[0]
   container.innerHTML = '<h1>Search Results</h1>'
-  searchResults.forEach (result) ->
+  searchResults.forEach (result, i) ->
     element = document.createElement('a')
     element.classList.add 'nav-link'
     element.href = result.url
@@ -229,9 +229,10 @@ renderSearchResults = (searchResults) ->
     description = document.createElement('p')
     description.innerHTML = result.description
     element.appendChild description
+    # For ga tracking
+    element.onmouseup = ->
+      trackSearch searchBoxElement.value.trim(), i, false
     container.appendChild element
-    return
-  return
 
 renderSearchResultsFromServer = (searchResults) ->
   container = document.getElementsByClassName('search-results')[0]
@@ -257,6 +258,9 @@ renderSearchResultsFromServer = (searchResults) ->
       if formatted.content
         description.innerHTML = '...' + formatted.content + '...'
       element.appendChild description
+      # For ga tracking
+      element.onmouseup = ->
+        trackSearch searchBoxElement.value.trim(), i, false
       container.appendChild element
     highlightBody()
 
