@@ -262,6 +262,7 @@ renderSearchResultsFromServer = (searchResults) ->
       element.onmouseup = ->
         trackSearch searchBoxElement.value.trim(), i, false
       container.appendChild element
+    highlightBody()
 
 formatResult = (result) ->
   terms = []
@@ -269,58 +270,35 @@ formatResult = (result) ->
   title = result._source.title
   start = '<mark>'
   end = '</mark>'
-  if result.highlight && result.highlight.content
-    content = result.highlight.content.join '...'
+  regex = /<mark>(.*?)<\/mark>/g
+  # If adjacent highlighted terms, combine them
+  joinHighlights = (str) ->
+    if str then str.replace(/<\/mark> <mark>/g, ' ')
+  if result.highlight
+    ['title', 'content'].forEach (field) ->
+      if ( result.highlight[field])
+        curr = result.highlight[field].join '...'
 
-    # We don't use regex here because we want to concatenate phrases for highlighting.
-    # For example, searching for 'make a will' can return fragments like
-    # 1) 'will not be able to <strong>make</strong>'
-    # 2) '<strong>a</strong> <strong>Will</strong>'
-    # We want to highlight 'make' or 'a Will', but not 'a' , or 'Will' by themselves
-    # This should return ['make', 'a will']
+        # For example, searching for 'make a will' can return fragments like
+        # 1) 'will not be able to <strong>make</strong>'
+        # 2) '<strong>a</strong> <strong>Will</strong>'
+        # We want to highlight 'make' or 'a Will', but not 'a' , or 'Will' by themselves
+        # This should return ['make', 'a will']
 
-    curr = content.trimLeft()
-    s = curr.indexOf(start)
-    e = curr.indexOf(end)
-    k = ''
-    while s > -1 and e > -1
-      if e > s
-        k = curr.substring(s + start.length, e).toLowerCase()
-        if terms.length > 0 and s < 2
-          terms[terms.length - 1] = terms[terms.length - 1] + ' ' + k
-        else
-          terms.push(k)
-        curr = curr.substring( e + end.length ).trimLeft()
-        s = curr.indexOf(start)
-        e = curr.indexOf(end)
+        curr = curr.trimLeft()
+        # Join highlights that are next to each other
+        curr = joinHighlights curr
+        match = true
+        while match
+            match = regex.exec curr
+            if match
+              term = match[1].toLowerCase()
+              if ( wordsToHighlight.indexOf term ) < 0 then wordsToHighlight.push term
 
-    #For display purpose, only return 3 fragments max
-    content = result.highlight.content.slice(0, Math.min(3, result.highlight.content.length))
-
-  if result.highlight && result.highlight.title
-    title = result.highlight.title[0]
-    curr = title.trimLeft()
-    s = curr.indexOf(start)
-    e = curr.indexOf(end)
-    k = ''
-    while s > -1 and e > -1
-      if e > s
-        k = curr.substring(s + start.length, e).toLowerCase()
-        if terms.length > 0 and s < 2
-          terms[terms.length - 1] = terms[terms.length - 1] + ' ' + k
-        else
-          terms.push(k)
-        curr = curr.substring( e + end.length ).trimLeft()
-        s = curr.indexOf(start)
-        e = curr.indexOf(end)
-
+  #For display purpose, only return 3 fragments max
+  if result.highlight.content then content = joinHighlights result.highlight.content.slice(0, Math.min(3, result.highlight.content.length)).join('...')
+  if result.highlight.title then title = joinHighlights result.highlight.title[0]
   url = result._source.url
-  if terms.length > 0
-    terms.forEach (term)->
-      # words = term.split(' ')
-      # words.forEach (word) ->
-      if wordsToHighlight.indexOf term < 0 then wordsToHighlight.push term
-    highlightBody()
 
   return { url: url, content: content, title: title }
 
@@ -339,10 +317,10 @@ debounce = (func, threshold, execAsap) ->
 
 createEsQuery = (queryStr) ->
   source = [ 'title', 'url' ]
-  title_automcomplete_q = { 'match_phrase_prefix': { 'title': { 'query': queryStr, 'max_expansions':20, 'boost': 4, 'slop': 10 } } }
-  content_automcomplete_q = { 'match_phrase_prefix': { 'content':{ 'query': queryStr, 'max_expansions':20, 'boost': 3, 'slop': 10 } } }
-  title_keyword_q = { 'match': { 'title': { 'query': queryStr, 'fuzziness': 'AUTO', 'max_expansions':10, 'boost': 2}}}
-  content_keyword_q = { 'match': { 'content': { 'query': queryStr, 'fuzziness': 'AUTO', 'max_expansions':10 }}}
+  title_automcomplete_q = { 'match_phrase_prefix': { 'title': { 'query': queryStr, 'max_expansions':20, 'boost': 40, 'slop': 10 } } }
+  content_automcomplete_q = { 'match_phrase_prefix': { 'content':{ 'query': queryStr, 'max_expansions':20, 'boost': 30, 'slop': 10 } } }
+  title_keyword_q = { 'match': { 'title': { 'query': queryStr, 'fuzziness': 'AUTO', 'max_expansions':10, 'boost': 20, 'analyzer': 'stop' }}}
+  content_keyword_q = { 'match': { 'content': { 'query': queryStr, 'fuzziness': 'AUTO', 'max_expansions':10 , 'analyzer': 'stop' }}}
   bool_q = {'bool': {'should': [ title_automcomplete_q, content_automcomplete_q, title_keyword_q, content_keyword_q ] }}
 
   highlight = {}
@@ -477,9 +455,12 @@ highlightBody = ->
     if wordsToHighlight.length > 0
       instance.mark wordsToHighlight, {
           exclude: [ 'h1' ],
-          accuracy: 'exactly'
+          accuracy: {
+            value: 'exactly',
+            limiters: [',', '.', '(', ')', '-', '\'', '[', ']', '?' , '/', '\\', ':', '*', '!', '@', '&']
+          },
+          separateWordSearch: false
       }
-
 
 # Event when path changes
 # =============================================================================
