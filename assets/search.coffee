@@ -267,12 +267,14 @@ formatResult = (result) ->
   start = '<mark>'
   end = '</mark>'
   regex = /<mark>(.*?)<\/mark>/g
+  # If adjacent highlighted terms, combine them
+  joinHighlights = (str) ->
+    if str then str.replace(/<\/mark> <mark>/g, ' ')
   if result.highlight
     ['title', 'content'].forEach (field) ->
       if ( result.highlight[field])
         curr = result.highlight[field].join '...'
 
-        # We don't use regex here because we want to concatenate phrases for highlighting.
         # For example, searching for 'make a will' can return fragments like
         # 1) 'will not be able to <strong>make</strong>'
         # 2) '<strong>a</strong> <strong>Will</strong>'
@@ -281,7 +283,7 @@ formatResult = (result) ->
 
         curr = curr.trimLeft()
         # Join highlights that are next to each other
-        curr = curr.replace(/<\/mark> <mark>/g, ' ')
+        curr = joinHighlights curr
         match = true
         while match
             match = regex.exec curr
@@ -290,8 +292,8 @@ formatResult = (result) ->
               if ( wordsToHighlight.indexOf term ) < 0 then wordsToHighlight.push term
 
   #For display purpose, only return 3 fragments max
-  if result.highlight.content then content = result.highlight.content.slice(0, Math.min(3, result.highlight.content.length)).join('...').replace(/<\/mark> <mark>/g, ' ')
-  if result.highlight.title then title = result.highlight.title[0].replace(/<mark> <\/mark>/g, ' ')
+  if result.highlight.content then content = joinHighlights result.highlight.content.slice(0, Math.min(3, result.highlight.content.length)).join('...')
+  if result.highlight.title then title = joinHighlights result.highlight.title[0]
   url = result._source.url
 
   return { url: url, content: content, title: title }
@@ -449,10 +451,12 @@ highlightBody = ->
     if wordsToHighlight.length > 0
       instance.mark wordsToHighlight, {
           exclude: [ 'h1' ],
-          accuracy: 'exactly',
+          accuracy: {
+            value: 'exactly',
+            limiters: [',', '.', '(', ')', '-', '\'', '[', ']', '?' , '/', '\\', ':', '*', '!', '@', '&']
+          },
           separateWordSearch: false
       }
-
 
 # Event when path changes
 # =============================================================================
