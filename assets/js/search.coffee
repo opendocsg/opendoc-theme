@@ -37,7 +37,7 @@ if env == 'production'
   endpoint = {{ site.server_PROD | append: '/' | jsonify }} + elasticSearchIndex
 else
   # Allow overriding of search index in dev env
-  configElasticSearchIndex = '{{site.elastic_search.index}}'
+  configElasticSearchIndex = '{{site.elastic_search_index}}'
   if configElasticSearchIndex then elasticSearchIndex = configElasticSearchIndex
   endpoint = {{ site.server_DEV | append: '/' | jsonify }} + elasticSearchIndex
 
