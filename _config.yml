@@ -4,13 +4,10 @@ theme: minima
 plugins:
   - jekyll-seo-tag
   - jekyll-coffeescript
-elastic_search:
-  index: default_index
-  doctype: bare
+  - jekyll-github-metadata
 kramdown:
   auto_id_stripping: true
-environment: DEV
-server_LOCAL: https://search.opendoc.sg
+server_PROD: https://search.opendoc.sg
 server_DEV: https://search.opendoc.sg
 styling_options:
   primary_brand_color: '#990921'
