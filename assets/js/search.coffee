@@ -407,8 +407,6 @@ searchBoxElement.onkeyup = (e) ->
       container.style.opacity = 1
 	, 100)
 
-	
-
 # Highlighting
 # =============================================================================
 
