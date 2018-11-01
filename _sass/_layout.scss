@@ -739,6 +739,8 @@ $banner-bg: #15499b;
   padding-bottom: $spacing;
   box-sizing: border-box;
   min-height: calc(100% - #{$nav-mobile-footer-height});
+  transition: all 0.1s;
+  
   
   .nav-link{
     border-bottom: solid 1px $divider-color;
@@ -754,6 +756,8 @@ $banner-bg: #15499b;
     margin-top: $spacing;
     margin-bottom: $spacing;
   }
+  
+  
 }
 
 //not-found search results{
