@@ -399,6 +399,13 @@ document.body.addEventListener('click', (event) ->
     history.pushState null, null, anchor.href
 , true)
 
+searchBoxElement.onkeyup = (e) ->
+  if e.keyCode == 13
+    container = document.getElementsByClassName('search-results')[0]
+    container.style.opacity = 0
+    setTimeout(() -> 
+      container.style.opacity = 1
+    , 100)
 
 # Highlighting
 # =============================================================================
