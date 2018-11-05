@@ -502,7 +502,7 @@ body {
     right: calc( 3.25 * #{$large-spacing});
     top: calc( 2 * #{$large-spacing});
     bottom: auto;
-    width: auto;
+    width: 160px;
     transition: top $site-nav-collapse-duration;
     border-top: none;
 
