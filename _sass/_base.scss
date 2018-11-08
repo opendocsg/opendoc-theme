@@ -8,6 +8,7 @@
 $base-font-family:        'Noto Sans', sans-serif;
 $header-font-family:      'Noto Serif', serif;
 $base-font-size:          18px;
+$mobile-font-size:        16px;
 $base-font-weight:        400;
 $mono-font-family:        'Fira Mono', monospace;
 // Colors
@@ -76,9 +77,13 @@ h6 { font-size: 20px; line-height: 1.5; letter-spacing: 0; }
 
 
 // For text directly under a h1 heading
-h1 + p {
-  font-size: 20px;
-}
+// h1 + p {
+//   font-size: 20px;
+// }
+
+@include mobile-screen {
+  body { font-size: $mobile-font-size };
+};
 
 // @include large-screen {
 //   h1 { font-size: 2.5vw; line-height: 1.2;  letter-spacing: -.1rem;}
