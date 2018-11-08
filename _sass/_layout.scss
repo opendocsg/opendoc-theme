@@ -21,6 +21,7 @@ $max-site-nav-width:          420px;
 $site-nav-shadow-inset:       inset -7px 0 13px -5px rgba(0, 0, 0, 0.15);
 $site-nav-shadow-outset:      7px 0 13px 5px rgba(0, 0, 0, 0.15);
 $mobile-bottom-bar-height:    67px;
+$search-container-height:     46px;
 
 // Body
 // ----
@@ -83,22 +84,26 @@ body {
   .site-search {
     position: relative;
     display: block;
-    height: 40px;
+    height: $search-container-height;
     background-color: $primary-brand-color;
-    margin: 0 $item-spacing;
+    margin: 0 1.3rem;
     flex: 0 0 auto;
     font-weight: normal;
 
     .search-container {
-      height: 40px;
+      background-color: rgba(0, 0, 0, 0.2);
+      border-radius: 8px;
+      height: $search-container-height;
+      margin-top: -5px;
 
       .search-icon {
         position: absolute;
         top: 0;
         bottom: 0;
-        left: $spacing*2;
+        left: 1.3rem;
+        height: $search-container-height;
         display: block;
-        height: 1.5em;
+        height: 1.3em;
         width: auto;
         margin-top: auto;
         margin-bottom: auto;
@@ -134,14 +139,15 @@ body {
       input {
         display: block;
         width: 100%;
+        height: $search-container-height;
         border: none;
         outline: none;
         padding-right: calc(#{$med-spacing} * 2);
         // Make room for the search icon
-        padding-left: calc(#{$large-spacing} * 3);
+        padding-left: calc(1rem * 4);
         padding-top: 0px;
         padding-bottom: 0px;
-        margin-top: 20px;
+        margin-top: 22px;
         color: white;
         opacity: 0.5;
         -webkit-font-smoothing: antialiased;
