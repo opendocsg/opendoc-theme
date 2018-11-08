@@ -288,6 +288,10 @@ body {
       border-right: 1px solid $divider-color;
       box-shadow: $site-nav-shadow-inset;
     }
+
+    @include mobile-screen {
+      .nav-link { font-size: $mobile-font-size };
+    }
   }
 
   .nav-footer {
