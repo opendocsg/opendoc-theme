@@ -8,6 +8,7 @@ plugins:
 section_order:
   - Introduction
   - Getting started
+repository: opendocsg/opendoc-theme
 kramdown:
   auto_id_stripping: true
 server_PROD: https://search.opendoc.sg
