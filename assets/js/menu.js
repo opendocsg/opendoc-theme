@@ -46,14 +46,9 @@
 
     // Print button
     // --------------------------
-    var iOS = /(iPad|iPhone|iPod)/g.test(navigator.userAgent)
     var printButton = document.getElementById('print-btn')
-    if (iOS) {
-        printButton.style.display = 'none'
-    } else {
-        printButton.addEventListener('click', function () {
-            trackButton('pdf', null, isMobileView())
-            window.open('{{ "/export.html" | relative_url }}', '_blank')
-        })
-    }
+    printButton.addEventListener('click', function () {
+        trackButton('pdf', null, isMobileView())
+        window.open('{{ "/export.pdf" | relative_url }}', '_blank')
+    })
 })()
