@@ -1,0 +1,10 @@
+{
+  "name": "opendoc-theme",
+  "description": "jekyll theme for Opendoc",
+  "dependencies": {
+    "html-pdf": "=2.2.0"
+  },
+  "scripts": {
+    "pdf": "node assets/js/pdf-gen.js"
+  }
+}
