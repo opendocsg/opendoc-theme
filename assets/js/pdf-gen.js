@@ -3,15 +3,19 @@ var pdf = require('html-pdf')
 var sitePath = __dirname + '/../../_site'
 var html = fs.readFileSync(sitePath + '/export.html', 'utf8');
 var options = {
-    format: 'A4',
-    base: 'file://' + sitePath + '/',
+    height: "594mm",        // allowed units: mm, cm, in, px
+    width: "420mm",
+    base: 'file://' + sitePath + "/",
     border: {
-        top: '20px',            // default is 0, units: mm, cm, in, px
-        right: '10px',
-        bottom: '20px',
-        left: '10px'
+        right: '60px', // default is 0, units: mm, cm, in, px
+        left: '60px',
     },
-    zoomFactor: '0.5',
+    header: {
+        height: "80px",
+    },
+    footer: {
+        height: '80px',
+    },
 };
 
 console.log('Creating pdf.....')
