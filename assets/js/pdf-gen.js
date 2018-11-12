@@ -16,7 +16,6 @@ var options = {
     footer: {
         height: '80px',
     },
-    renderDelay: 2000,
 };
 
 console.log('Creating pdf.....')
