@@ -5,6 +5,7 @@ plugins:
   - jekyll-seo-tag
   - jekyll-coffeescript
   - jekyll-github-metadata
+baseurl: ''
 section_order:
   - Introduction
   - Getting started
