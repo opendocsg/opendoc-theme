@@ -6,14 +6,14 @@ plugins:
   - jekyll-coffeescript
   - jekyll-github-metadata
 baseurl: ''
+kramdown:
+  auto_id_stripping: true
 section_order:
   - Introduction
   - Getting started
   - Import your files
   - Contribute
 repository: opendocsg/opendoc-theme
-kramdown:
-  auto_id_stripping: true
 server_PROD: https://search.opendoc.sg
 server_DEV: https://search-staging.opendoc.sg
 styling_options:

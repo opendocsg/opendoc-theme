@@ -29,7 +29,7 @@ Navigate into the working directory and clone the template repo onto your local 
 
 ```
 cd <directory_path>
-git clone git@github.com:opengovsg/opendoc-template.git
+git clone git@github.com:opendocsg/opendoc-template.git
 ```
 
 **Step 3:**
@@ -39,16 +39,15 @@ Rename the folder to match the name of the repository that was created, and upda
 ```
 mv opendoc-template opendoc-<name_of_document>
 cd opendoc-<name_of_document>
-git remote set-url origin git@github.com:opengovsg/opendoc-<name_of_document>.git
+git remote set-url origin git@github.com:opendocsg/opendoc-<name_of_document>.git
 ```
 
 **Step 4:**
 
-Update the following configuration fields in the _condig.yml file:
+Update the following configuration fields in the _config.yml file:
 ```
 - title                           <------- Change
-- elastic_search 
-	- index                   <------- Change
+- repository 					<--------- change
 - styling_options
 	- primary_brand_color     <------- Change
 	- logo_path               <------- Change
@@ -57,7 +56,7 @@ Update the following configuration fields in the _condig.yml file:
 Definitions:
 
 - title: Name of document
-- elastic_search -> index: Name of index that the documents will be searched against
+- repository -> opendocsg/opendc-<name_of_document>
 - primary_brand_colour: Primary brand color of Ministry/Agency publishing the document
 - logo_path: Path to logo file in this directory
 
