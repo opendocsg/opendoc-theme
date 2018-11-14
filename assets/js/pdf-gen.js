@@ -1,6 +1,6 @@
 var fs = require('fs')
 var pdf = require('html-pdf')
-var sitePath = __dirname + '/../../_site'
+var sitePath = __dirname + '/../..'
 var html = fs.readFileSync(sitePath + '/export.html', 'utf8');
 var options = {
     height: '594mm',        // allowed units: mm, cm, in, px
