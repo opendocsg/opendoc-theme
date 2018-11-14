@@ -8,6 +8,8 @@ plugins:
 section_order:
   - Introduction
   - Getting started
+  - Import your files
+  - Contribute
 repository: opendocsg/opendoc-theme
 kramdown:
   auto_id_stripping: true
