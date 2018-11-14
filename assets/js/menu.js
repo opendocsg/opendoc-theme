@@ -46,8 +46,10 @@
 
     // Print button
     // --------------------------
-    var iOS = /(iPad|iPhone|iPod)/g.test(navigator.userAgent)
     var printButton = document.getElementById('print-btn')
+
+    {% if jekyll.environment == 'production' %}
+    var iOS = /(iPad|iPhone|iPod)/g.test(navigator.userAgent)
     if (iOS) {
         printButton.style.display = 'none'
     } else {
@@ -56,4 +58,10 @@
             window.open('{{ "/export.html" | relative_url }}', '_blank')
         })
     }
+    {% else %}
+    printButton.addEventListener('click', function () {
+        trackButton('pdf', null, isMobileView())
+        window.open('{{ "/export.pdf" | relative_url }}', '_blank')
+    })
+    {% endif %}
 })()

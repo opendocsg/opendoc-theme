@@ -8,11 +8,13 @@ plugins:
 section_order:
   - Introduction
   - Getting started
+  - Import your files
+  - Contribute
 repository: opendocsg/opendoc-theme
 kramdown:
   auto_id_stripping: true
 server_PROD: https://search.opendoc.sg
-server_DEV: https://search.opendoc.sg
+server_DEV: https://search-staging.opendoc.sg
 styling_options:
   primary_brand_color: '#990921'
   opendoc_logo_path: /assets/images/logo-full.png
