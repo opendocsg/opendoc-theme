@@ -155,15 +155,15 @@
                     snippetCount++
                     if (range[0] <= endIndex) {
                         endIndex = Math.max(range[1], endIndex)
-                        highlightRanges = highlightRanges.concat[range[2], range[3]]
+                        highlightRanges = highlightRanges.concat([range[2], range[3]])
                     } else {
-                        mergedRanges.push([startIndex]).concat(highlightRanges).concat([endIndex])
+                        mergedRanges.push([startIndex].concat(highlightRanges).concat([endIndex]))
                         startIndex = range[0]
                         endIndex = range[1]
                         highlightRanges = [range[2], range[3]]
                     }
                     if (snippetCount >= maxSnippets) {
-                        mergedRanges.push([startIndex]).concat(highlightRanges).concat([endIndex])
+                        mergedRanges.push([startIndex].concat(highlightRanges).concat([endIndex]))
                         snippetsRangesByFields[field] = mergedRanges
                         break
                     }
@@ -171,7 +171,7 @@
                         if (snippetCount + 1 < maxSnippets) {
                             snippetCount++
                         }
-                        mergedRanges.push([startIndex]).concat(highlightRanges).concat([endIndex])
+                        mergedRanges.push([startIndex].concat(highlightRanges).concat([endIndex]))
                         snippetsRangesByFields[field] = mergedRanges
                         if (snippetCount >= maxSnippets) {
                             break
@@ -190,14 +190,14 @@
                         snippet += '...'
                     }
                     snippet += matchedText.substring(position[0], position[1])
-                    for ( var i = 0; i < position.length - 2; i ++ ) {
+                    for (var i = 1; i <= position.length - 2; i ++ ) {
                         if (i % 2 == 1) {
                             snippet += '<mark>'
                         } else {
                             snippet += '</mark> '
                         }
+                        snippet += matchedText.substring(position[i], position[i + 1])
                     }
-                    snippet += matchedText.substring(position[i], position[i + 1])
                     snippet += '...'
                     snippets.push(snippet)
                 })
