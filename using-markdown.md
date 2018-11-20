@@ -17,7 +17,7 @@ Headers come in different types, from the largest h1 size to the moderate h4 siz
 #### This is the moderate h4 header!
 ```
 <div class="creating-headers">
-      <iframe width="100%" height="355" src="iframes/creating-headers-iframe.html" frameborder="0" scrolling="yes" style="border: 1px solid grey;"></iframe>
+      <iframe width="100%" height="0" src="iframes/creating-headers-iframe.html" frameborder="0" scrolling="no" style="border: 1px solid grey;" onload="resizeIframe(this)"></iframe>
 </div>
 
 <button name="creating-headers-button" onclick="window.open('markdown-helper-master/opendoc-creating-headers.html')">Try it out!</button>
@@ -30,7 +30,7 @@ You can add a variety of styles to your text for emphasis or clarity. These incl
 Add footers easily! <sup>[1]</sup> <sub>[2]</sub>
 ```
 <div class="styling-text">
-      <iframe width="100%" height="45" src="iframes/styling-text-iframe.html" frameborder="0" scrolling="yes" style="border: 1px solid grey;"></iframe>
+      <iframe width="100%" height="0" src="iframes/styling-text-iframe.html" frameborder="0" scrolling="no" style="border: 1px solid grey;" onload="resizeIframe(this)"></iframe>
 </div>
 
 <button name="styling-text-button" onclick="window.open('markdown-helper-master/opendoc-styling-text.html')">Try it out!</button>
@@ -42,7 +42,7 @@ Use the > symbol at the start of your text to indent it for formatting purposes.
 > This is an indented text!
 ```
 <div class="indentations">
-      <iframe width="100%" height="45" src="iframes/indentations-iframe.html" frameborder="0" scrolling="yes" style="border: 1px solid grey;"></iframe>
+      <iframe width="100%" height="0" src="iframes/indentations-iframe.html" frameborder="0" scrolling="no" style="border: 1px solid grey;" onload="resizeIframe(this)"></iframe>
 </div>
 
 <button name="indentations-button" onclick="window.open('markdown-helper-master/opendoc-indentations.html')">Try it out!</button>
@@ -63,7 +63,7 @@ This is a number list:
 2. Item B
 ```
 <div class="using-lists">
-      <iframe width ="100%" height="370" src="iframes/using-lists-iframe.html" frameborder="0" scrolling="yes" style="border: 1px solid grey;"></iframe>
+      <iframe width ="100%" height="0" src="iframes/using-lists-iframe.html" frameborder="0" scrolling="no" style="border: 1px solid grey;" onload="resizeIframe(this)"></iframe>
 </div>
 
 <button name="using-lists-button" onclick="window.open('markdown-helper-master/opendoc-using-lists.html')">Try it out!</button>
@@ -83,7 +83,7 @@ As they say, a picture speaks a thousand words. To add a image, you need both th
 ![Alternative text if image doesn't load](/images/govtech-logo.jpg)
 ```
 <div class="adding-images">
-      <iframe width ="100%" height="145" src="iframes/adding-images-iframe.html" frameborder="0" scrolling="yes" style="border: 1px solid grey;"></iframe>
+      <iframe width ="100%" height="0" src="iframes/adding-images-iframe.html" frameborder="0" scrolling="no" style="border: 1px solid grey;" onload="resizeIframe(this)"></iframe>
 </div>
 
 <button name="adding-images-button" onclick="window.open('markdown-helper-master/opendoc-adding-images.html')">Try it out!</button>
@@ -103,7 +103,7 @@ Videos are a good platform to bring across content effectively to viewers. You c
 </div>
 ```
 <div class="adding-videos">
-      <iframe width ="100%" height="335" src="iframes/adding-videos-iframe.html" frameborder="0" scrolling="yes" style="border: 1px solid grey;"></iframe>
+      <iframe width ="100%" height="0" src="iframes/adding-videos-iframe.html" frameborder="0" scrolling="yes" style="border: 1px solid grey;" onload="resizeIframe(this)"></iframe>
 </div>
 
 <button name="adding-videos-button" onclick="window.open('markdown-helper-master/opendoc-adding-videos.html')">Try it out!</button>
@@ -117,7 +117,7 @@ Sometimes, it may be important to direct your user to another website using a hy
 Send an email to <email@something.com>!
 ```
 <div class="adding-links">
-      <iframe width ="100%" height="50" src="iframes/adding-links-iframe.html" frameborder="0" scrolling="yes" style="border: 1px solid grey;"></iframe>
+      <iframe width ="100%" height="0" src="iframes/adding-links-iframe.html" frameborder="0" scrolling="yes" style="border: 1px solid grey;" onload="resizeIframe(this)"></iframe>
 </div>
 
 <button name="adding-links-button" onclick="window.open('markdown-helper-master/opendoc-adding-links.html')">Try it out!</button>
@@ -130,7 +130,7 @@ Finally, you may wish to attach supplementary documents on your webpage to allow
 Download the [Digital Government Blueprint (Summary)](/files/digital-govt-blueprint.pdf) here!
 ```
 <div class="adding-documents">
-      <iframe width ="100%" height="50" src="iframes/adding-documents-iframe.html" frameborder="0" scrolling="yes" style="border: 1px solid grey;"></iframe>
+      <iframe width ="100%" height="0" src="iframes/adding-documents-iframe.html" frameborder="0" scrolling="no" style="border: 1px solid grey;" onload="resizeIframe(this)"></iframe>
 </div>
 
 <button name="adding-documents-button" onclick="window.open('markdown-helper-master/opendoc-adding-documents.html')">Try it out!</button>
