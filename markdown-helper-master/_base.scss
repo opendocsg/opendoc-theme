@@ -1,0 +1,309 @@
+
+@import url('https://fonts.googleapis.com/css?family=Fira+Sans|Source+Sans+Pro:400,600');
+
+
+// Variables
+// ============================================================================
+// Fonts
+$base-font-family:        'Noto Sans', sans-serif;
+$header-font-family:      'Noto Serif', serif;
+$base-font-size:          18px;
+$mobile-font-size:        16px;
+$base-font-weight:        400;
+$mono-font-family:        'Fira Mono', monospace;
+// Colors
+$primary-text-color:      #444;
+$secondary-text-color:    #999;
+$header-text-color:       #454f5b;
+$selected-text-color:     #000;
+$divider-color:           #d8d8d8;
+$base-background-color:   #FFF;
+// $well-background-color:   darken($base-background-color, 9%);
+$well-background-color:   #eeeeee;
+
+// Spacing
+$base-line-height:        1.75;
+$base-horizontal-padding: 1.0em;
+$base-vertical-padding:   0.5em;
+$block-spacing:           1.5rem;
+$item-spacing:            1.0rem;
+$inline-spacing:          0.2em;
+$base-border-radius:      0.2rem;
+// Breakpoints, if this breakpoint is changed, be sure to change those in the .js files too
+$desktop-screen-breakpoint:    992px;
+$large-screen-breakpoint:     1400px;
+
+// Implementation
+// ============================================================================
+@mixin desktop-screen() {
+  @media (min-width: $desktop-screen-breakpoint) { @content; }
+}
+@mixin large-screen() {
+  @media (min-width: $large-screen-breakpoint) { @content; }
+}
+
+@mixin mobile-screen() {
+  @media (max-width: 991.999px) { @content; }
+}
+
+// Typography Defaults
+// -------------------
+body {
+  background-color: $base-background-color;
+  color: $primary-text-color;
+  font-family: $base-font-family;
+  font-size: $base-font-size;
+  font-weight: $base-font-weight;
+  line-height: $base-line-height;
+  word-wrap: break-word;
+}
+
+// Headers
+// -------
+h1, h2, h3, h4, h5, h6 {
+  font-family: $header-font-family;
+  margin-top: 0;
+  margin-bottom: 2rem;
+  font-weight: 700;
+  color: $header-text-color;
+}
+
+h1 { font-size: 36px; line-height: 1.25; letter-spacing: -0.5px; }
+h2 { font-size: 24px; line-height: 1.22; letter-spacing: 0; }
+h3 { font-size: 22px; line-height: 1.5; letter-spacing: 0; }
+h4 { font-size: 20px; line-height: 1.5; letter-spacing: 0; }
+h5 { font-size: 20px; line-height: 1.5; letter-spacing: 0; }
+h6 { font-size: 20px; line-height: 1.5; letter-spacing: 0; }
+
+
+// For text directly under a h1 heading
+// h1 + p {
+//   font-size: 20px;
+// }
+
+@include mobile-screen {
+  body { font-size: $mobile-font-size };
+};
+
+// @include large-screen {
+//   h1 { font-size: 2.5vw; line-height: 1.2;  letter-spacing: -.1rem;}
+//   h2 { font-size: 1.8vw; line-height: 1.25; letter-spacing: -.08rem; }
+//   h3 { font-size: 1.5vw; line-height: 1.3;  letter-spacing: -.08rem; }
+//   h4 { font-size: 1.3vw; line-height: 1.35; letter-spacing: -.08rem; }
+//   h5 { font-size: 1.2vw; line-height: 1.5;  letter-spacing: -.05rem; }
+//   h6 { font-size: 1.2vw; line-height: 1.6;  letter-spacing: 0; }
+//   body {
+//     font-size: 1.25vw;
+//   }
+//   h1 + p {
+//     font-size: 1.4vw;
+//   }
+// }
+
+// Blocks
+// ------
+blockquote,
+figure,
+p,
+pre {
+  margin-bottom: $block-spacing;
+}
+
+// Lists
+// -----
+dl { list-style: none; }
+ol, ul {
+  padding-left: 2em;
+}
+dl {
+  padding-left: 0;
+}
+ol, ul, dl {
+  margin-bottom: $block-spacing;
+  ol, ul, dl { margin: $item-spacing 0 $item-spacing 2em; }
+}
+li, dt, dd, { margin-bottom: $item-spacing; }
+dd + dt { margin-top: $block-spacing; }
+
+// indentations
+// this is a hack to allow users to create custom lists and indent text
+ul[type="*"] {
+  list-style-type: none;
+}
+
+// Code
+// ----
+pre{
+  // Box
+  padding: $item-spacing;
+  margin: $item-spacing*2 0;
+  // Layout
+  font-size: 90%;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  // Appearance
+  background: $well-background-color;
+  border-radius: $base-border-radius;
+}
+
+pre > code {
+  display: block;
+  padding: $base-vertical-padding $base-horizontal-padding;
+  margin: 0;
+}
+
+// Tables
+// ------
+table {
+  box-sizing: border-box;
+  width: 100%;
+  margin-bottom: $block-spacing;
+}
+th,
+td {
+  padding: $base-vertical-padding $base-horizontal-padding/2;
+  text-align: left;
+  border-bottom: 1px solid $divider-color;
+  border-right: 1px solid $divider-color;
+}
+th:first-child,
+td:first-child {
+  padding-left: 0;
+}
+th:last-child,
+td:last-child {
+  padding-right: 0;
+  border-right: 0;
+}
+
+// Links
+// -----
+a {
+  text-decoration: none;
+  &:hover { text-decoration: underline; }
+}
+
+// Forms
+// -----
+form { margin-bottom: $block-spacing; }
+// Common Input Box Design
+input[type="email"],
+input[type="number"],
+input[type="search"],
+input[type="text"],
+input[type="tel"],
+input[type="url"],
+input[type="password"],
+textarea,
+select {
+  // Box
+  box-sizing: border-box;
+  height: 2em;
+  padding: $base-vertical-padding $base-horizontal-padding;
+  border: 1px solid $divider-color;
+  // Appearance
+  background-color: transparent;
+  border-radius: $base-border-radius;
+  box-shadow: none;
+}
+// Block Inputs
+textarea,
+input,
+select,
+legend,
+fieldset {
+  margin-bottom: $item-spacing;
+}
+// Specific Element Tweaks
+fieldset {
+  padding: 0;
+  border: none;
+}
+legend { display: block; }
+textarea {
+  display: block;
+  min-height: 5em;
+}
+// Removes awkward default styles on some inputs for iOS
+input[type="email"],
+input[type="number"],
+input[type="search"],
+input[type="text"],
+input[type="tel"],
+input[type="url"],
+input[type="password"],
+textarea {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+}
+
+// Buttons
+// -------
+button,
+input[type="submit"],
+input[type="reset"],
+input[type="button"] {
+  // Box
+  display: inline-block;
+  padding: $base-vertical-padding $base-horizontal-padding;
+  margin-bottom: $item-spacing;
+  margin-left: $inline-spacing;
+  margin-right: $inline-spacing;
+  border: 1px solid $secondary-text-color;
+  // Layout
+  line-height: inherit;
+  text-align: center;
+  white-space: nowrap;
+  // Appearance
+  background-color: transparent;
+  border-radius: $base-border-radius;
+  color: $secondary-text-color;
+  cursor: pointer;
+  outline: none;
+  text-decoration: none;
+}
+button:hover,
+input[type="submit"]:hover,
+input[type="reset"]:hover,
+input[type="button"]:hover,
+button:focus,
+input[type="submit"]:focus,
+input[type="reset"]:focus,
+input[type="button"]:focus {
+  color: $primary-text-color;
+  border-color: $primary-text-color;
+}
+button:active,
+input[type="submit"]:active,
+input[type="reset"]:active,
+input[type="button"]:active {
+  color: invert($primary-text-color);
+  background-color: $primary-text-color;
+}
+
+// Horizontal Rule
+// ---------------
+hr {
+  margin-top: $block-spacing * 2;
+  margin-bottom: $block-spacing * 2;
+}
+
+// Images
+// ------
+img { max-width: 100%; }
+
+// Loading Ellipsis
+// ------
+.loading { font-size: inherit; }
+.loading:after {overflow: hidden; display: inline-block; vertical-align: bottom; -webkit-animation: ellipsis steps(4,end) 1200ms infinite; animation: ellipsis steps(4,end) 1200ms infinite; content: "\2026"; width: 0px; }
+@keyframes ellipsis {to {width: 1.25em; } }
+@-webkit-keyframes ellipsis {to {width: 1.25em; } }
+
+#hierarchyWorkerStatus { position: fixed; left: 0px; bottom: 0px; font-size: 10px; color: $secondary-text-color; z-index: 2}
+
+// Links
+a {
+  color: $primary-brand-color;
+  font-size: $base-font-size;
+}

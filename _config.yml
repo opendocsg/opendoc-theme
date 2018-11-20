@@ -12,6 +12,7 @@ section_order:
   - Introduction
   - Getting started
   - Import your files
+  - Using Markdown
   - Contribute
 repository: opendocsg/opendoc-theme
 server_PROD: https://search.opendoc.sg
