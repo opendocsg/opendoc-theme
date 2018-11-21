@@ -16,11 +16,11 @@ Headers come in different types, from the largest h1 size to the moderate h4 siz
 ### This is the large h3 header!
 #### This is the moderate h4 header!
 ```
-<div class="creating-headers">
-      <iframe width="100%" height="0" src="iframes/creating-headers-iframe.html" frameborder="0" scrolling="no" style="border: 1px solid grey;" onload="resizeIframe(this)"></iframe>
+<div class="examples-box">
+    <iframe width="100%" height="0" src="iframes/creating-headers-iframe.html" frameborder="0" scrolling="auto" onload="resizeIframe(this)"></iframe>
 </div>
 
-<button name="creating-headers-button" onclick="window.open('markdown-helper-master/opendoc-creating-headers.html')">Try it out!</button>
+<button name="creating-headers-button" onclick="window.open('editor/#U1AAAi5lhZCMzGIFICrJSFXISSxKTy0uUcgwVMhITUxJLVLkUkZVUZZaVAlRppBhhKQIizkKGcbIClBV5OYDxRNLgIpM4IpADgIA')">Try it out!</button>
 
 **Styling Text**
 
@@ -29,11 +29,12 @@ You can add a variety of styles to your text for emphasis or clarity. These incl
 **Bold** and *italicize* your text like this.
 Add footers easily! <sup>[1]</sup> <sub>[2]</sub>
 ```
-<div class="styling-text">
-      <iframe width="100%" height="0" src="iframes/styling-text-iframe.html" frameborder="0" scrolling="no" style="border: 1px solid grey;" onload="resizeIframe(this)"></iframe>
+<div class="examples-box">
+	<b>Bold</b> and <i>italicize</i> your text like this.
+	Add footers easily! <sup>[1]</sup> <sub>[2]</sub>
 </div>
 
-<button name="styling-text-button" onclick="window.open('markdown-helper-master/opendoc-styling-text.html')">Try it out!</button>
+<button name="styling-text-button" onclick="window.open('editor/#HY2xDoMwDAX3fMXr6oGqzCgS/Q3UIcGuahGRihiJ8PU0veluOuCHI3rmxEQIK4PUQtJZTyHUvG8wOQxJF4F9tHRuZMY7Z5OtQELRVG8Yyv710+M13Ju0jH7q/xm9a5ML')">Try it out!</button>
 
 **Indentations**
 
@@ -41,11 +42,11 @@ Use the > symbol at the start of your text to indent it for formatting purposes.
 ```
 > This is an indented text!
 ```
-<div class="indentations">
-      <iframe width="100%" height="0" src="iframes/indentations-iframe.html" frameborder="0" scrolling="no" style="border: 1px solid grey;" onload="resizeIframe(this)"></iframe>
+<div class="examples-box">
+    <div style="margin-left: 40px"> This is an indented text! </div>
 </div>
 
-<button name="indentations-button" onclick="window.open('markdown-helper-master/opendoc-indentations.html')">Try it out!</button>
+<button name="indentations-button" onclick="window.open('editor/#U1AAAi47hZCMzGIFIErMU8jMS0nNK0lNUShJrShR5AIpAAA=')">Try it out!</button>
 
 ## Organising your Content
 **Using Lists**
@@ -62,17 +63,32 @@ This is a number list:
 1. Item A
 2. Item B
 ```
-<div class="using-lists">
-      <iframe width ="100%" height="0" src="iframes/using-lists-iframe.html" frameborder="0" scrolling="no" style="border: 1px solid grey;" onload="resizeIframe(this)"></iframe>
+<div class="examples-box">
+	This is a bullet list:
+	<ul>
+		<li>Item 1</li>
+		<li>Item 2
+		<ul>
+			<li>Item 2.1</li>
+			<li>Item 2.2</li>
+		</ul>
+	</li>
+	</ul>
+
+	This is a number list:
+	<ol>
+		<li>Item A</li>
+		<li>Item B</li>
+	</ol>
 </div>
 
-<button name="using-lists-button" onclick="window.open('markdown-helper-master/opendoc-using-lists.html')">Try it out!</button>
+<button name="using-lists-button" onclick="window.open('editor/#U1AAAq6QjMxiBSBKVEgqzclJLVHIySwuseJS0FLwLEnNVTCEs4y4gMphbD1DFJ4RF5I5eaW5SalFUHMM9SBqHLmMoCwnkE4FAA==')">Try it out!</button>
 
 **Using Tables**
 
 Tables are used to organise information in a clear, easy-to-read manner. Here's how to add one to your webpage.
 
-Visit the <a href="https://www.tablesgenerator.com/html_tables" target="_blank"> HTML Table Generator </a> and select File > New Table. Once the table is created, double-click a cell to add in data. Then click the Generate button and copy the generated code to your Markdown file.
+Visit the <a href="https://www.tablesgenerator.com/html_tables" target="_blank"> HTML Table Generator</a> and select File > New Table. Once the table is created, double-click a cell to add in data. Then click the Generate button and copy the generated code to your Markdown file.
 
 
 ## Adding Media Enhancements
@@ -82,11 +98,11 @@ As they say, a picture speaks a thousand words. To add a image, you need both th
 ```
 ![Alternative text if image doesn't load](/images/govtech-logo.jpg)
 ```
-<div class="adding-images">
-      <iframe width ="100%" height="0" src="iframes/adding-images-iframe.html" frameborder="0" scrolling="no" style="border: 1px solid grey;" onload="resizeIframe(this)"></iframe>
+<div class="examples-box">
+	<img src="../images/govtech-logo.jpg" alt="Alternative text if image doesn't load"/>
 </div>
 
-<button name="adding-images-button" onclick="window.open('markdown-helper-master/opendoc-adding-images.html')">Try it out!</button>
+<button name="adding-images-button" onclick="window.open('editor/#U1AAAi7FaMecktSivMSSzLJUhZLUihKFzDSFzNzE9FSFlPzU4jz1EoWc/MSUWA19sGCxfnp+WUlqcoZuTn56vl5WQbomF8ggAA==')">Try it out!</button>
 
 **Adding Videos (YouTube)**
 
@@ -95,18 +111,20 @@ Videos are a good platform to bring across content effectively to viewers. You c
 1. Click on "Share" button at the bottom of the video.
 2. Click on "Embed".
 3. Copy the code &lt;iframe...&gt; &lt;/iframe&gt;.
-4. Paste it between the &lt;div class="bp-youtube"&gt; and &lt;/div&gt; tags in the following example.
+4. Paste it between the &lt;div class="opendoc-video"&gt; and &lt;/div&gt; tags in the following example.
 
 ```
-<div class="bp-youtube">
-      <iframe width="560" height="315" src="https://www.youtube.com/embed/BBcR4KGDdL0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+<div class="opendoc-video">
+	<iframe width="560" height="315" src="https://www.youtube.com/embed/BBcR4KGDdL0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 </div>
 ```
-<div class="adding-videos">
-      <iframe width ="100%" height="0" src="iframes/adding-videos-iframe.html" frameborder="0" scrolling="yes" style="border: 1px solid grey;" onload="resizeIframe(this)"></iframe>
+<div class="examples-box">
+	<div class="opendoc-video">
+		<iframe width="560" height="315" src="https://www.youtube.com/embed/BBcR4KGDdL0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+	</div>
 </div>
 
-<button name="adding-videos-button" onclick="window.open('markdown-helper-master/opendoc-adding-videos.html')">Try it out!</button>
+<button name="adding-videos-button" onclick="window.open('editor/#LY7LDoIwFET3fEVz91CN4kJbFsTEha78gz6u0qRQ0ocNf28DzG6SmZNDSEnFtPkRZUUIHORcLy7FJBG6iqxh5uPFiCQbHQcO7eUAZEDzHSKH07EFErziMMQ4hyulOedmJzTKjRRHiZr2vXqfn4+7fpXzipPOa/QcShfWusxBpOhmK5YbwUn5ZY6o6xG1Efvik6wNyiNOHaObU1cxWuQ30z8=')">Try it out!</button>
 
 **Adding Links**
 
@@ -116,11 +134,12 @@ Sometimes, it may be important to direct your user to another website using a hy
 [This](https://www.tech.gov.sg/) links to GovTech!
 Send an email to <email@something.com>!
 ```
-<div class="adding-links">
-      <iframe width ="100%" height="0" src="iframes/adding-links-iframe.html" frameborder="0" scrolling="yes" style="border: 1px solid grey;" onload="resizeIframe(this)"></iframe>
+<div class="examples-box">
+	<a href = "https://www.tech.gov.sg/" target="_blank"> This </a> links to GovTech!
+	Send an email to <a href = "mailto:email@something.com">email@something.com</a>!
 </div>
 
-<button name="adding-links-button" onclick="window.open('markdown-helper-master/opendoc-adding-links.html')">Try it out!</button>
+<button name="adding-links-button" onclick="window.open('editor/#U1AAAq7okIzM4liNjJKSgmIrff3y8nK9ktTkDL30/DK94nR9TYWczLzsYoWSfAX3/LIQoIwiV3BqXopCYp5Cam5iZg5IxgbMcijOz00tycjMS9dLzs+1U+QCmQ8A')">Try it out!</button>
 
 **Adding Documents**
 
@@ -129,8 +148,8 @@ Finally, you may wish to attach supplementary documents on your webpage to allow
 ```
 Download the [Digital Government Blueprint (Summary)](/files/digital-govt-blueprint.pdf) here!
 ```
-<div class="adding-documents">
-      <iframe width ="100%" height="0" src="iframes/adding-documents-iframe.html" frameborder="0" scrolling="no" style="border: 1px solid grey;" onload="resizeIframe(this)"></iframe>
+<div class="examples-box">
+	Download the <a href="../files/digital-govt-blueprint.pdf" download>Digital Government Blueprint (Summary)</a> here!
 </div>
 
-<button name="adding-documents-button" onclick="window.open('markdown-helper-master/opendoc-adding-documents.html')">Try it out!</button>
+<button name="adding-documents-button" onclick="window.open('editor/#U1AAAi6X/PK8nPzEFIWSjFSFaJfM9MySxBwF9/yy1KK83NS8EgWnnNLUgqJMIEsjuDQ3N7GoUjNWQz8tMye1WD8Folw3Pb+sRDcJplCvICVNUyEjtShVkQtkBwA=')">Try it out!</button>
