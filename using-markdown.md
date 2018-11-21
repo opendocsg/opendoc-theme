@@ -124,7 +124,7 @@ Videos are a good platform to bring across content effectively to viewers. You c
 	</div>
 </div>
 
-<button name="adding-videos-button" onclick="window.open('editor/#LY7LDoIwFET3fEVz91CN4kJbFsTEha78gz6u0qRQ0ocNf28DzG6SmZNDSEnFtPkRZUUIHORcLy7FJBG6iqxh5uPFiCQbHQcO7eUAZEDzHSKH07EFErziMMQ4hyulOedmJzTKjRRHiZr2vXqfn4+7fpXzipPOa/QcShfWusxBpOhmK5YbwUn5ZY6o6xG1Efvik6wNyiNOHaObU1cxWuQ30z8=')">Try it out!</button>
+<button name="adding-videos-button" onclick="window.open('editor/#LY5BDoIwFET3nKL5e6hGcaEtC2LiQlfeoPR/bJNCSVtouL1EfLtJZiaPsY1CoF2YdipGCX6iEb0uF4vkoSnYD2H7oAZi2WIyEurLAZgh+zFJwulYA4tBSzApTfHKec65Wv2c5o4q7QdOQ0fI21a/z8/HHV/b+HfX+YAUJGxZOeezBDUnPzm13hiNOqxTIiwHQqv+jX52LupANDaC705NIfjmv5t+AQ==')">Try it out!</button>
 
 **Adding Links**
 
