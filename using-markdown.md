@@ -17,24 +17,32 @@ Headers come in different types, from the largest h1 size to the moderate h4 siz
 #### This is the moderate h4 header!
 ```
 <div class="examples-box">
-    <iframe width="100%" height="0" src="iframes/creating-headers-iframe.html" frameborder="0" scrolling="auto" onload="resizeIframe(this)"></iframe>
+    <iframe width="100%" height="0" src="/iframes/creating-headers-iframe.html" frameborder="0" scrolling="auto" onload="resizeIframe(this)"></iframe>
 </div>
 
-<button name="creating-headers-button" onclick="window.open('editor/#U1AAAi5lhZCMzGIFICrJSFXISSxKTy0uUcgwVMhITUxJLVLkUkZVUZZaVAlRppBhhKQIizkKGcbIClBV5OYDxRNLgIpM4IpADgIA')">Try it out!</button>
+<button name="creating-headers-button" onclick="window.open('{{ '/editor/#U1AAAi5lhZCMzGIFICrJSFXISSxKTy0uUcgwVMhITUxJLVLkUkZVUZZaVAlRppBhhKQIizkKGcbIClBV5OYDxRNLgIpM4IpADgIA' | relative_url }}')">Try it out!</button>
 
 **Styling Text**
 
 You can add a variety of styles to your text for emphasis or clarity. These include bold, italics and footers.
 ```markdown
 **Bold** and *italicize* your text like this.
-Add footers easily! <sup>[1]</sup> <sub>[2]</sub>
+
+Add footers easily! [^1]
+[^1]: Your footer here.
 ```
 <div class="examples-box">
 	<b>Bold</b> and <i>italicize</i> your text like this.
-	Add footers easily! <sup>[1]</sup> <sub>[2]</sub>
+	Add footers easily!<sup class="footnote-ref">[1]</sup>
+	<section class="footnotes">
+		<ol class="footnotes-list">
+			<li id="fn1" class="footnote-item"><p>Footnote↩</p>
+			</li>
+		</ol>
+	</section>
 </div>
 
-<button name="styling-text-button" onclick="window.open('editor/#HY2xDoMwDAX3fMXr6oGqzCgS/Q3UIcGuahGRihiJ8PU0veluOuCHI3rmxEQIK4PUQtJZTyHUvG8wOQxJF4F9tHRuZMY7Z5OtQELRVG8Yyv710+M13Ju0jH7q/xm9a5ML')">Try it out!</button>
+<button name="styling-text-button" onclick="window.open('{{ '/editor/#09Jyys9J0dJSSMxLUdDKLEnMyUzOrErVUqjMLy1SKEmtKFHIycxOVSjJyCzW43JMSVFIy88vSS0qVkhNLM7MqVSMjjOM5eICkVYKbkCpPKAsAA==' | relative_url }}')">Try it out!</button>
 
 **Indentations**
 
@@ -46,7 +54,7 @@ Use the > symbol at the start of your text to indent it for formatting purposes.
     <div style="margin-left: 40px"> This is an indented text! </div>
 </div>
 
-<button name="indentations-button" onclick="window.open('editor/#88vP083MS0nNK0lNUShJrShR5LJTCMnILFYAosQ8BTQ5AA==')">Try it out!</button>
+<button name="indentations-button" onclick="window.open('{{ '/editor/#88vP083MS0nNK0lNUShJrShR5LJTCMnILFYAosQ8BTQ5AA==' | relative_url }}')">Try it out!</button>
 
 ## Organising your Content
 **Using Lists**
@@ -82,7 +90,7 @@ This is a number list:
 	</ol>
 </div>
 
-<button name="using-lists-button" onclick="window.open('editor/#C8nILFYAokSFpNKcnNQShZzM4hIrLgVdBc+S1FwFQzjLiEtBAc7WM0ThGXFxhcDNySvNTUotgppjqAdR48hlBGU5cQEA')">Try it out!</button>
+<button name="using-lists-button" onclick="window.open('{{ '/editor/#C8nILFYAokSFpNKcnNQShZzM4hIrLgVdBc+S1FwFQzjLiEtBAc7WM0ThGXFxhcDNySvNTUotgppjqAdR48hlBGU5cQEA' | relative_url }}')">Try it out!</button>
 
 **Using Tables**
 
@@ -102,7 +110,7 @@ As they say, a picture speaks a thousand words. To add a image, you need both th
 	<img src="/images/govtech-logo.gif" alt="Alternative text if image doesn't load"/>
 </div>
 
-<button name="adding-images-button" onclick="window.open('editor/#U1AAAi7FaMecktSivMSSzLJUhZLUihKFzDSFzNzE9FSFlPzU4jz1EoWc/MSUWA19sGCxfnp+WUlqcoZuTn56vl5WQbomF8ggAA==')">Try it out!</button>
+<button name="adding-images-button" onclick="window.open('{{ '/editor/#U4x2zClJLcpLLMksS1UoSa0oUchMU8jMTUxPVUjJTy3OUy9RyMlPTInV0AcLFuun55eVpCZn6Obkp+frZRWkawIA' | relative_url }}')">Try it out!</button>
 
 **Adding Videos (YouTube)**
 
@@ -124,7 +132,7 @@ Videos are a good platform to bring across content effectively to viewers. You c
 	</div>
 </div>
 
-<button name="adding-videos-button" onclick="window.open('editor/#Lc7LDoIwFATQPV/R3D1Uo7hQyoKYuNCVf1B6L7ZJoaQPGv5efCwnmZmcBs3ClJUhCHAzTehUuRgkB21RNGbwciSWDUYtoD7tgGkyLx0FHPY1sOCVAB3jHM6c55yr1aWYeqqUGzmNPSHvOvU83m9XfGzj713vPJIXsGVprcsCZIputnK9MJqUX+dIWI6ERv4bQ7I2KE80tQ3/mT46vtnb4g0=')">Try it out!</button>
+<button name="adding-videos-button" onclick="window.open('{{ '/editor/#Lc7LDoIwFATQPV/R3D1Uo7hQyoKYuNCVf1B6L7ZJoaQPGv5efCwnmZmcBs3ClJUhCHAzTehUuRgkB21RNGbwciSWDUYtoD7tgGkyLx0FHPY1sOCVAB3jHM6c55yr1aWYeqqUGzmNPSHvOvU83m9XfGzj713vPJIXsGVprcsCZIputnK9MJqUX+dIWI6ERv4bQ7I2KE80tQ3/mT46vtnb4g0=' | relative_url }}')">Try it out!</button>
 
 **Adding Links**
 
@@ -139,7 +147,7 @@ Send an email to <email@something.com>!
 	Send an email to <a href = "mailto:email@something.com">email@something.com</a>!
 </div>
 
-<button name="adding-links-button" onclick="window.open('editor/#U1AAAq7okIzM4liNjJKSgmIrff3y8nK9ktTkDL30/DK94nR9TYWczLzsYoWSfAX3/LIQoIwiV3BqXopCYp5Cam5iZg5IxgbMcijOz00tycjMS9dLzs+1U+QCmQ8A')">Try it out!</button>
+<button name="adding-links-button" onclick="window.open('{{ '/editor/#iw7JyCyO1cgoKSkottLXLy8v1ytJTc7QS88v0ytO19dUyMnMyy5WKMlXcM8vCwHKKHIFp+alKCTmKaTmJmbmgGRswCyH4vzc1JKMzLx0veT8XDtFLgA=' | relative_url }}')">Try it out!</button>
 
 **Adding Documents**
 
@@ -152,4 +160,4 @@ Download the <a href="/files/digital-govt-blueprint.pdf" download>Digital Govern
 	Download the <a href="/files/digital-govt-blueprint.pdf" download>Digital Government Blueprint (Summary)</a> here!
 </div>
 
-<button name="adding-documents-button" onclick="window.open('editor/#U1AAAi6X/PK8nPzEFIWSjFSFaJfM9MySxBwF9/yy1KK83NS8EgWnnNLUgqJMIEsjuDQ3N7GoUjNWQz8tMye1WD8Folw3Pb+sRDcJplCvICVNUyEjtShVkQtkBwA=')">Try it out!</button>
+<button name="adding-documents-button" onclick="window.open('{{ '/editor/#c8kvz8vJT0xRKMlIVYh2yUzPLEnMUXDPL0stystNzStRcMopTS0oygSyNIJLc3MTiyo1YzX00zJzUov1UyDKddPzy0p0k2AK9QpS0jQVMlKLUhUB' | relative_url }}')">Try it out!</button>

@@ -1,31 +1,17 @@
 ---
-layout: iframe
 ---
-
 <!DOCTYPE html>
 <html>
 <head>
   <title>Markdown Editor</title>
-  <meta name="google-site-verification" content="gVP49FM8bbofcu_y_fb3Wgfhm_B0b80NSdRSXQae4K4" />
-  <script src="markdown-it.js"></script>
-  <script src="markdown-it-footnote.js"></script>
-  <script src="highlight.pack.js"></script>
-  <script src="emojify.js"></script>
-  <script src="codemirror/lib/codemirror.js"></script>
-  <script src="codemirror/overlay.js"></script>
-  <script src="codemirror/xml/xml.js"></script>
-  <script src="codemirror/markdown/markdown.js"></script>
-  <script src="codemirror/gfm/gfm.js"></script>
-  <script src="codemirror/javascript/javascript.js"></script>
-  <script src="codemirror/css/css.js"></script>
-  <script src="codemirror/htmlmixed/htmlmixed.js"></script>
-  <script src="codemirror/lib/util/continuelist.js"></script>
-  <script src="rawinflate.js"></script>
-  <script src="rawdeflate.js"></script>
   <link rel="stylesheet" href="base16-light.css">
   <link rel="stylesheet" href="codemirror/lib/codemirror.css">
   <link rel="stylesheet" href="default.css">
-  <link href="https://fonts.googleapis.com/css?family=Lato:200,300,400,500,600,700,800" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Fira+Sans:400,600" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Noto+Serif:400,700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Noto+Sans:400,700" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="{{ '/assets/styles/normalize.css' | relative_url }}">
+  <link rel="stylesheet" href="{{ '/assets/styles/main.css' | relative_url }}">
   <style>
     body {margin: 0;}
 
@@ -41,7 +27,7 @@ layout: iframe
       width: 50%;
       height: auto;
       overflow: auto;
-      font-size: 20px;
+      font-size: 16px;
       box-shadow: -10px 2px 6px 10px rgba(0,0,0,0.4);
     }
 
@@ -69,9 +55,6 @@ layout: iframe
       overflow: auto;
       padding: 10px;
       padding-left: 20px;
-      color: #444;
-      font-family:Georgia, Palatino, 'Palatino Linotype', Times, 'Times New Roman', serif;
-      font-size: 16px;
       line-height: 1.5em
     }
 
@@ -129,12 +112,6 @@ layout: iframe
       cursor: pointer;
     }
 
-    .emoji {
-      width: 1em;
-      height: 1em;
-      vertical-align: baseline;
-    }
-
     @media screen and (max-width: 1024px) {
       #in {
         display: none;
@@ -152,7 +129,7 @@ layout: iframe
     </textarea>
     </form>
   </div>
-  <div id="out" class="content"></div>
+  <div id="out" class="site-main"></div>
   <div id="menu">
     <span>Save As</span>
     <div id="saveas-markdown">
@@ -175,6 +152,21 @@ layout: iframe
     </div>
     <a id="close-menu">&times;</a>
   </div>
+  <script src="markdown-it.js"></script>
+  <script src="markdown-it-footnote.js"></script>
+  <script src="highlight.pack.js"></script>
+  <!-- <script src="emojify.js"></script> -->
+  <script src="codemirror/lib/codemirror.js"></script>
+  <script src="codemirror/overlay.js"></script>
+  <script src="codemirror/xml/xml.js"></script>
+  <script src="codemirror/markdown/markdown.js"></script>
+  <script src="codemirror/gfm/gfm.js"></script>
+  <script src="codemirror/javascript/javascript.js"></script>
+  <script src="codemirror/css/css.js"></script>
+  <script src="codemirror/htmlmixed/htmlmixed.js"></script>
+  <script src="codemirror/lib/util/continuelist.js"></script>
+  <script src="rawinflate.js"></script>
+  <script src="rawdeflate.js"></script>
   <script type="text/javascript">
     var URL = window.URL || window.webkitURL || window.mozURL || window.msURL;
     navigator.saveBlob = navigator.saveBlob || navigator.msSaveBlob || navigator.mozSaveBlob || navigator.webkitSaveBlob;
@@ -186,7 +178,7 @@ layout: iframe
       html: 'xml'
     };
 
-    emojify.setConfig({ img_dir: 'emoji' });
+    // emojify.setConfig({ img_dir: 'emoji' });
 
     var md = markdownit({
       html: true,
@@ -220,7 +212,7 @@ layout: iframe
       var out = document.getElementById('out');
       var old = out.cloneNode(true);
       out.innerHTML = md.render(val);
-      emojify.run(out);
+      // emojify.run(out);
 
       var allold = old.getElementsByTagName("*");
       if (allold === undefined) return;
