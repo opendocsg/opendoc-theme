@@ -814,7 +814,8 @@ $banner-bg: #15499b;
 //Examples
 .examples-box {
 	padding: 10px;
-	border: 1px solid grey;
+  border: 1px solid $divider-color;
+  border-radius: $base-border-radius;
 }
 
 //Videos

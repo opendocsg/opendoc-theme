@@ -25,7 +25,7 @@ Headers come in different types, from the largest h1 size to the moderate h4 siz
 **Styling Text**
 
 You can add a variety of styles to your text for emphasis or clarity. These include bold, italics and footers.
-```
+```markdown
 **Bold** and *italicize* your text like this.
 Add footers easily! <sup>[1]</sup> <sub>[2]</sub>
 ```
@@ -46,7 +46,7 @@ Use the > symbol at the start of your text to indent it for formatting purposes.
     <div style="margin-left: 40px"> This is an indented text! </div>
 </div>
 
-<button name="indentations-button" onclick="window.open('editor/#U1AAAi47hZCMzGIFIErMU8jMS0nNK0lNUShJrShR5AIpAAA=')">Try it out!</button>
+<button name="indentations-button" onclick="window.open('editor/#88vP083MS0nNK0lNUShJrShR5LJTCMnILFYAosQ8BTQ5AA==')">Try it out!</button>
 
 ## Organising your Content
 **Using Lists**
@@ -54,10 +54,10 @@ Use the > symbol at the start of your text to indent it for formatting purposes.
 As its name suggests, a list is used to display a collection of items. There are two kinds of lists - bullet lists and number lists.
 ```
 This is a bullet list:
- * Item 1
- * Item 2
-   * Item 2.1
-   * Item 2.2
+ - Item 1
+ - Item 2
+   - Item 2.1
+   - Item 2.2
 
 This is a number list:
 1. Item A
@@ -82,7 +82,7 @@ This is a number list:
 	</ol>
 </div>
 
-<button name="using-lists-button" onclick="window.open('editor/#U1AAAq6QjMxiBSBKVEgqzclJLVHIySwuseJS0FLwLEnNVTCEs4y4gMphbD1DFJ4RF5I5eaW5SalFUHMM9SBqHLmMoCwnkE4FAA==')">Try it out!</button>
+<button name="using-lists-button" onclick="window.open('editor/#C8nILFYAokSFpNKcnNQShZzM4hIrLgVdBc+S1FwFQzjLiEtBAc7WM0ThGXFxhcDNySvNTUotgppjqAdR48hlBGU5cQEA')">Try it out!</button>
 
 **Using Tables**
 
@@ -95,11 +95,11 @@ Visit the <a href="https://www.tablesgenerator.com/html_tables" target="_blank">
 **Adding Images (jpg, png and gif)**
 
 As they say, a picture speaks a thousand words. To add a image, you need both the image filepath, and an alternative text if the image fails to show up.
-```
-![Alternative text if image doesn't load](/images/govtech-logo.jpg)
+```markdown
+![Alternative text if image doesn't load](/images/govtech-logo.gif)
 ```
 <div class="examples-box">
-	<img src="../images/govtech-logo.jpg" alt="Alternative text if image doesn't load"/>
+	<img src="/images/govtech-logo.gif" alt="Alternative text if image doesn't load"/>
 </div>
 
 <button name="adding-images-button" onclick="window.open('editor/#U1AAAi7FaMecktSivMSSzLJUhZLUihKFzDSFzNzE9FSFlPzU4jz1EoWc/MSUWA19sGCxfnp+WUlqcoZuTn56vl5WQbomF8ggAA==')">Try it out!</button>
@@ -113,9 +113,9 @@ Videos are a good platform to bring across content effectively to viewers. You c
 3. Copy the code &lt;iframe...&gt; &lt;/iframe&gt;.
 4. Paste it between the &lt;div class="opendoc-video"&gt; and &lt;/div&gt; tags in the following example.
 
-```
+```html
 <div class="opendoc-video">
-	<iframe width="560" height="315" src="https://www.youtube.com/embed/BBcR4KGDdL0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/BBcR4KGDdL0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 </div>
 ```
 <div class="examples-box">
@@ -124,18 +124,18 @@ Videos are a good platform to bring across content effectively to viewers. You c
 	</div>
 </div>
 
-<button name="adding-videos-button" onclick="window.open('editor/#LY5BDoIwFET3nKL5e6hGcaEtC2LiQlfeoPR/bJNCSVtouL1EfLtJZiaPsY1CoF2YdipGCX6iEb0uF4vkoSnYD2H7oAZi2WIyEurLAZgh+zFJwulYA4tBSzApTfHKec65Wv2c5o4q7QdOQ0fI21a/z8/HHV/b+HfX+YAUJGxZOeezBDUnPzm13hiNOqxTIiwHQqv+jX52LupANDaC705NIfjmv5t+AQ==')">Try it out!</button>
+<button name="adding-videos-button" onclick="window.open('editor/#Lc7LDoIwFATQPV/R3D1Uo7hQyoKYuNCVf1B6L7ZJoaQPGv5efCwnmZmcBs3ClJUhCHAzTehUuRgkB21RNGbwciSWDUYtoD7tgGkyLx0FHPY1sOCVAB3jHM6c55yr1aWYeqqUGzmNPSHvOvU83m9XfGzj713vPJIXsGVprcsCZIputnK9MJqUX+dIWI6ERv4bQ7I2KE80tQ3/mT46vtnb4g0=')">Try it out!</button>
 
 **Adding Links**
 
 Sometimes, it may be important to direct your user to another website using a hyperlink. Two types of links are covered here, namely URL links and email links.
 
-```
+```markdown
 [This](https://www.tech.gov.sg/) links to GovTech!
 Send an email to <email@something.com>!
 ```
 <div class="examples-box">
-	<a href = "https://www.tech.gov.sg/" target="_blank"> This </a> links to GovTech!
+	<a href="https://www.tech.gov.sg/"> This </a> links to GovTech!
 	Send an email to <a href = "mailto:email@something.com">email@something.com</a>!
 </div>
 
@@ -145,11 +145,11 @@ Send an email to <email@something.com>!
 
 Finally, you may wish to attach supplementary documents on your webpage to allow users to download them. These can be word documents, pdf files or excel spreadsheets.
 
-```
-Download the [Digital Government Blueprint (Summary)](/files/digital-govt-blueprint.pdf) here!
+```html
+Download the <a href="/files/digital-govt-blueprint.pdf" download>Digital Government Blueprint (Summary)</a> here!
 ```
 <div class="examples-box">
-	Download the <a href="../files/digital-govt-blueprint.pdf" download>Digital Government Blueprint (Summary)</a> here!
+	Download the <a href="/files/digital-govt-blueprint.pdf" download>Digital Government Blueprint (Summary)</a> here!
 </div>
 
 <button name="adding-documents-button" onclick="window.open('editor/#U1AAAi6X/PK8nPzEFIWSjFSFaJfM9MySxBwF9/yy1KK83NS8EgWnnNLUgqJMIEsjuDQ3N7GoUjNWQz8tMye1WD8Folw3Pb+sRDcJplCvICVNUyEjtShVkQtkBwA=')">Try it out!</button>
