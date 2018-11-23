@@ -20,7 +20,7 @@ Headers come in different types, from the largest h1 size to the moderate h4 siz
     <iframe width="100%" height="0" src="/iframes/creating-headers-iframe.html" frameborder="0" scrolling="auto" onload="resizeIframe(this)"></iframe>
 </div>
 
-<button name="creating-headers-button" onclick="window.open('{{ '/editor/#U1AAAi5lhZCMzGIFICrJSFXISSxKTy0uUcgwVMhITUxJLVLkUkZVUZZaVAlRppBhhKQIizkKGcbIClBV5OYDxRNLgIpM4IpADgIA' | relative_url }}')">Try it out!</button>
+<button name="creating-headers-button" onclick="window.open('{{ '/editor/#U1YIycgsVgCikoxUhZzEovTU4hKFDEOFjNTElNQiRS5lZRQVZalFlRBlChlGSIqUMc1RyDBGVoCqIjcfKJ5YAlRkAlMEAA==' | relative_url }}')">Try it out!</button>
 
 **Styling Text**
 
