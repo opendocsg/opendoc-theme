@@ -1,7 +1,3 @@
----
-title: Getting started
----
-
 # Getting started 
 
 [Github](https://github.com) is an online service that helps people collaborate on large projects remotely. Along with Github, we'll be using another feature called Github Pages to store and serve the generated documents to the public. More on this feature can be found [here](https://pages.github.com/).
