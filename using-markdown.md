@@ -160,4 +160,4 @@ Download the <a href="/files/digital-govt-blueprint.pdf" download>Digital Govern
 	Download the <a href="/files/digital-govt-blueprint.pdf" download>Digital Government Blueprint (Summary)</a> here!
 </div>
 
-<button name="adding-documents-button" onclick="https://opendocsg.github.io/editor/#JcyxDsIgEADQX8GtHQR1Mo6miR/gaEyDcgUM3JHjKPHvNen2pjdRx0TWKQmgHlP0UWxSN1qBMQOKuqYGheNfw73lbPk7PocgUurFmN67FngH7WnV1ZslJqjGbcte2GJdiLOVSGicf811K+ZPQzgdjmdd3DKqAAy7Hw==">Try it out!</button>
+<button name="adding-documents-button" onclick="window.open('https://opendocsg.github.io/editor/#JcyxDsIgEADQX8GtHQR1Mo6miR/gaEyDcgUM3JHjKPHvNen2pjdRx0TWKQmgHlP0UWxSN1qBMQOKuqYGheNfw73lbPk7PocgUurFmN67FngH7WnV1ZslJqjGbcte2GJdiLOVSGicf811K+ZPQzgdjmdd3DKqAAy7Hw==')">Try it out!</button>
