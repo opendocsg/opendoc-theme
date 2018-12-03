@@ -1,7 +1,3 @@
----
-title: Introduction
----
-
 # Introduction
 OpenDoc is a simple and easy way to make documents easily searchable and available to the public. You can modify, track changes and submit edit requests easily on the platform. This can be done through the web interface or locally on your computer.
 
