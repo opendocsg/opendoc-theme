@@ -245,17 +245,15 @@ input[type="button"] {
   display: inline-block;
   padding: $base-vertical-padding $base-horizontal-padding;
   margin-bottom: $item-spacing;
-  margin-left: $inline-spacing;
-  margin-right: $inline-spacing;
-  border: 1px solid $secondary-text-color;
+  border: 1px solid $primary-brand-color;
   // Layout
   line-height: inherit;
   text-align: center;
   white-space: nowrap;
   // Appearance
-  background-color: transparent;
+  background-color: $primary-brand-color;
   border-radius: $base-border-radius;
-  color: $secondary-text-color;
+  color: white;
   cursor: pointer;
   outline: none;
   text-decoration: none;
@@ -268,15 +266,15 @@ button:focus,
 input[type="submit"]:focus,
 input[type="reset"]:focus,
 input[type="button"]:focus {
-  color: $primary-text-color;
-  border-color: $primary-text-color;
+  border-color: darken($primary-brand-color, 5%);
+  background-color: darken($primary-brand-color, 5%);
 }
 button:active,
 input[type="submit"]:active,
 input[type="reset"]:active,
 input[type="button"]:active {
-  color: invert($primary-text-color);
-  background-color: $primary-text-color;
+  border-color: darken($primary-brand-color, 10%);
+  background-color: darken($primary-brand-color, 10%);
 }
 
 // Horizontal Rule
