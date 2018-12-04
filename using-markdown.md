@@ -17,7 +17,7 @@ Headers come in different types, from the largest h1 size to the moderate h4 siz
 #### This is the moderate h4 header!
 ```
 <div class="examples-box">
-    <iframe width="100%" height="0" src="/iframes/creating-headers-iframe.html" frameborder="0" scrolling="auto" onload="resizeIframe(this)"></iframe>
+    <iframe width="100%" height="0" src="{{ '/iframes/creating-headers-iframe.html' | relative_url }}" frameborder="0" scrolling="auto" onload="resizeIframe(this)"></iframe>
 </div>
 
 <button name="creating-headers-button" onclick="window.open('https://opendocsg.github.io/editor/#U1YIycgsVgCikoxUhZzEovTU4hKFDEOFjNTElNQiRS5lZRQVZalFlRBlChlGSIqUMc1RyDBGVoCqIjcfKJ5YAlRkAlMEAA==')">Try it out!</button>
@@ -107,7 +107,7 @@ As they say, a picture speaks a thousand words. To add a image, you need both th
 ![Alternative text if image doesn't load](/images/govtech-logo.gif)
 ```
 <div class="examples-box">
-	<img src="/images/govtech-logo.gif" alt="Alternative text if image doesn't load"/>
+	<img src="{{ '/images/govtech-logo.gif' | relative_url }}" alt="Alternative text if image doesn't load"/>
 </div>
 
 <button name="adding-images-button" onclick="window.open('https://opendocsg.github.io/editor/#HcoxCoAwDADAr8RJXZrdzc3BH4hIwRgDtSlNKD5f8Obrtjk51RxdGoHT6yAXyBOZ4FSy3Dskjec+3O7FJkQtlANrC8b4P8NVWY9FqwRrPH4=')">Try it out!</button>
@@ -144,7 +144,7 @@ Send an email to <email@something.com>!
 ```
 <div class="examples-box">
 	<a href="https://www.tech.gov.sg/"> This </a> links to GovTech!
-	Send an email to <a href = "mailto:email@something.com">email@something.com</a>!
+	Send an email to <a href="mailto:email@something.com">email@something.com</a>!
 </div>
 
 <button name="adding-links-button" onclick="window.open('https://opendocsg.github.io/editor/#iw7JyCyO1cgoKSkottLXLy8v1ytJTc7QS88v0ytO19dUyMnMyy5WKMlXcM8vCwHKKHIFp+alKCTmKaTmJmbmgGRswCyH4vzc1JKMzLx0veT8XDtFLgA=')">Try it out!</button>
@@ -157,7 +157,7 @@ Finally, you may wish to attach supplementary documents on your webpage to allow
 Download the <a href="/files/digital-govt-blueprint.pdf" download>Digital Government Blueprint (Summary)</a> here!
 ```
 <div class="examples-box">
-	Download the <a href="/files/digital-govt-blueprint.pdf" download>Digital Government Blueprint (Summary)</a> here!
+	Download the <a href="{{ '/files/digital-govt-blueprint.pdf' | relative_url }}" download>Digital Government Blueprint (Summary)</a> here!
 </div>
 
 <button name="adding-documents-button" onclick="window.open('https://opendocsg.github.io/editor/#JcyxDsIgEADQX8GtHQR1Mo6miR/gaEyDcgUM3JHjKPHvNen2pjdRx0TWKQmgHlP0UWxSN1qBMQOKuqYGheNfw73lbPk7PocgUurFmN67FngH7WnV1ZslJqjGbcte2GJdiLOVSGicf811K+ZPQzgdjmdd3DKqAAy7Hw==')">Try it out!</button>
