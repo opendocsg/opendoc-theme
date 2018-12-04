@@ -5,6 +5,7 @@ plugins:
   - jekyll-seo-tag
   - jekyll-coffeescript
   - jekyll-github-metadata
+  - jekyll-include-cache
 baseurl: ''
 kramdown:
   auto_id_stripping: true
