@@ -492,7 +492,13 @@
 
         selectedAnchors = document.querySelectorAll('a.nav-link[href$="' + path + '"]')
         if (selectedAnchors.length > 0) {
-            selectedAnchors[0].parentNode.classList.add('expanded')
+            let parentLinkNode = selectedAnchors[0].parentNode
+            parentLinkNode.classList.add('expanded')
+            // Checks if there are sublinks (contains <a> and <ul> elements)
+            if (parentLinkNode.children.length === 1) {
+                // Closes menu if there are no sublinks
+                window.dispatchEvent(new Event('link-click'))                
+            }
         }
         if (hash.length > 0) {
             selectedAnchors = document.querySelectorAll('a.nav-link[href$="' + path + hash + '"]')
@@ -570,7 +576,6 @@
     // Event when path changes
     // =============================================================================
     var onHashChange = function(event) {
-        // Hide menu if sub link clicked or clicking on search results
         var path = window.location.pathname
         setSelectedAnchor()
         var page = pageIndex[path]
@@ -587,7 +592,7 @@
         // Make sure it is scrolled to the anchor
         scrollToView()
 
-        // Make sure the header is hidden when navigating
+        // Hide menu if sub link clicked or clicking on search results        
         if (window.location.hash.replace('#', '').length > 0 || toc.hidden) {
             window.dispatchEvent(new Event('link-click'))
         }
