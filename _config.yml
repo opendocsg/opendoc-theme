@@ -3,8 +3,6 @@ title: Opendoc Theme
 theme: minima
 plugins:
   - jekyll-seo-tag
-  - jekyll-coffeescript
-  - jekyll-github-metadata
   - jekyll-include-cache
 baseurl: ''
 kramdown:
