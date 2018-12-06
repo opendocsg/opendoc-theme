@@ -31,34 +31,6 @@
     ]
 
     var pageIndex = {}
-    var pageOrder = [
-        {% for section_title in site.section_order %}
-            {{ section_title | jsonify }},
-        {% endfor %}
-    ]
-
-    if (pageOrder.length > 0) {
-        pages.sort(function(a, b) {
-            if (pageOrder.indexOf(a.title) < pageOrder.indexOf(b.title)) {
-                return -1
-            } else {
-                return 1
-            }
-        })
-    } else {
-        pageOrder = [
-            {% for site_page in site.html_pages %}
-            {{ site_page.name | jsonify }},
-            {% endfor %}
-        ]
-        pages.sort(function(a, b) {
-            if (pageOrder.indexOf(a.name) < pageOrder.indexOf(b.name)) {
-                return -1
-            } else {
-                return 1
-            }
-        })
-    }
 
     pages.forEach(function(page) {
         return pageIndex[page.url] = page
