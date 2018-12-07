@@ -249,7 +249,7 @@
                 var formatted = formatResult(result)
                 var element = document.createElement('a')
                 element.classList.add('nav-link')
-                element.href = "/" + formatted.url
+                element.href = formatted.url
                 element.innerHTML = formatted.title
                 var description = document.createElement('p')
                 if (formatted.content) {
