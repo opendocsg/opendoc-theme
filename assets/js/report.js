@@ -60,50 +60,50 @@ var generatePage = function(){
 		'<table cellpadding="5">\n'+
 			'<tr>\n'+
 				'<td>No. of Lines:</td>\n'+
-				'<td>'+lc.count(text).lines.toString()+'</td>\n'+
+				'<td>'+lc.count(text).lines+'</td>\n'+
 			'</tr>\n'+
 			'<tr>\n'+
 				'<td>No. of Sentences:</td>\n'+
-				'<td>'+sentences.toString()+'</td>\n'+
+				'<td>'+sentences+'</td>\n'+
 			'</tr>\n'+
 		'<tr>\n'+
 			'<td>No. of Words:</td>\n'+
-			'<td>'+wc(text).toString()+'</td>\n'+
+			'<td>'+wc(text)+'</td>\n'+
 		'</tr>\n'+
 		'<tr>\n'+
 			'<td>No. of Syllables:</td>\n'+
-			'<td>'+syllable(text).toString()+'</td>\n'+
+			'<td>'+syllable(text)+'</td>\n'+
 		'</tr>\n'+
 		'<tr>\n'+
 			'<td>No. of Letters:</td>\n'+
-			'<td>'+lc.count(text).letters.toString()+'</td>\n'+
+			'<td>'+lc.count(text).letters+'</td>\n'+
 		'</tr>\n'+
 		'<tr>\n'+
 			'<td>No. of Characters:</td>\n'+
-			'<td>'+lc.count(text).chars.toString()+'</td>\n'+
+			'<td>'+lc.count(text).chars+'</td>\n'+
 		'</tr>\n'+
 		'<tr>\n'+
 			'<td>No. of Figures:</td>\n'+
-			'<td>'+lc.count(text).numbers.toString()+'</td>\n'+
+			'<td>'+lc.count(text).numbers+'</td>\n'+
 		'</tr>\n'+
 		'<tr>\n'+
 			'<td>No. of Symbols:</td>\n'+
-			'<td>'+lc.count(text).wordsigns.toString()+'</td>\n'+
+			'<td>'+lc.count(text).wordsigns+'</td>\n'+
 		'</tr>\n'+
 	'</table>\n'+
-	'<h3 style="padding: 5;">Flesch–Kincaid Reading Ease</h3>\n'+
+	'<h3 style="padding: 5;">Flesch–Kincaid Readability Tests</h3>\n'+
 	'<table cellpadding="5">\n'+
 		'<tr>\n'+
 			'<td>Readability Score:</td>\n'+
-			'<td>'+readability.ease(text).score.toFixed(4).toString()+'</td>\n'+
+			'<td>'+readability.ease(text).score.toFixed(4)+'</td>\n'+
 		'</tr>\n'+
 		'<tr>\n'+
 			'<td>School Level:</td>\n'+
-			'<td>'+readability.ease(text).schoolLevel.toString()+'</td>\n'+
+			'<td>'+readability.ease(text).schoolLevel+'</td>\n'+
 		'</tr>\n'+
 		'<tr>\n'+
 			'<td>Remarks:</td>\n'+
-			'<td>'+readability.ease(text).notes.toString()+'</td>\n'+
+			'<td>'+readability.ease(text).notes+'</td>\n'+
 		'</tr>\n'+
 	'</table>\n'+
 	'<h3 style="padding: 5;">Other Readability Indicators</h3>\n'+
