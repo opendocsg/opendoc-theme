@@ -1,6 +1,5 @@
 
 title: Opendoc Theme
-theme: minima
 plugins:
   - jekyll-seo-tag
   - jekyll-include-cache

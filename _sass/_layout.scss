@@ -8,13 +8,12 @@ $body-padding:                calc( (100vw - 420px - 864px) / 2 );
 $body-full-view-padding:      calc( (100vw - 864px) / 2 );
 $nav-footer-height:           130px;
 $nav-mobile-footer-height:    80px;
-$nav-header-height:           80px;
 $site-nav-collapse-duration:  0.2s;
 $site-nav-collapse-timing:    ease-out;
 
 // Implementation
 // ============================================================================
-$site-header-height:          105px;
+$site-header-height:          80px;
 $site-header-small-height:    80px;
 $site-nav-width:              30vw;
 $max-site-nav-width:          420px;
@@ -30,6 +29,90 @@ body {
 
   mark {
     font-weight: bold;
+  }
+}
+
+// Search bar 
+.site-search {
+  position: relative;
+  display: block;
+  height: $search-container-height;
+  background-color: $primary-brand-color;
+  flex: 0 0 auto;
+  font-weight: normal;
+  border-radius: 8px;
+
+  .search-container {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    height: $search-container-height;
+
+    .search-icon {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 1.3rem;
+      height: $search-container-height;
+      display: block;
+      height: 1.3em;
+      width: auto;
+      margin-top: auto;
+      margin-bottom: auto;
+      opacity: 0.5;
+    }
+    &.filled .search-icon { 
+      opacity: 1; 
+    }
+    .clear-button {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      display: none;
+      height: 1em;
+      width: 1em;
+      padding: $spacing;
+      margin-top: auto;
+      margin-bottom: auto;
+      cursor: pointer;
+      .clear-icon {
+        display: block;
+        height: 1em;
+        width: 1em;
+        opacity: 0.5;
+        path { fill: white; }
+      }
+      &:hover .clear-icon {
+        opacity: 1;
+      }
+    }
+    &.filled .clear-button { display: block; }
+    input {
+      display: block;
+      width: 100%;
+      height: $search-container-height;
+      border: none;
+      outline: none;
+      padding-right: calc(#{$med-spacing} * 2);
+      // Make room for the search icon
+      padding-left: calc(1rem * 4);
+      padding-top: 0px;
+      padding-bottom: 0px;
+      color: white;
+      opacity: 0.5;
+      -webkit-font-smoothing: antialiased;
+    }
+    // Do not show the in-built X in IE
+    input::-ms-clear {
+      display: none;
+    }
+    input::placeholder {
+      color: white;
+    }
+    &.filled input {
+      opacity: 1;
+    }
+    input:disabled ~ .search-icon { display: none; }
   }
 }
 
@@ -77,92 +160,6 @@ body {
       left: -#{$max-site-nav-width};
       right: unset;
       box-shadow: none;
-    }
-  }
-
-  // Children
-  .site-search {
-    position: relative;
-    display: block;
-    height: $search-container-height;
-    background-color: $primary-brand-color;
-    margin: 0 1.3rem;
-    flex: 0 0 auto;
-    font-weight: normal;
-
-    .search-container {
-      background-color: rgba(0, 0, 0, 0.2);
-      border-radius: 8px;
-      height: $search-container-height;
-      margin-top: -5px;
-
-      .search-icon {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 1.3rem;
-        height: $search-container-height;
-        display: block;
-        height: 1.3em;
-        width: auto;
-        margin-top: auto;
-        margin-bottom: auto;
-        opacity: 0.5;
-      }
-      &.filled .search-icon { 
-        opacity: 1; 
-      }
-      .clear-button {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        right: 0;
-        display: none;
-        height: 1em;
-        width: 1em;
-        padding: $spacing;
-        margin-top: auto;
-        margin-bottom: auto;
-        cursor: pointer;
-        .clear-icon {
-          display: block;
-          height: 1em;
-          width: 1em;
-          opacity: 0.5;
-          path { fill: white; }
-        }
-        &:hover .clear-icon {
-          opacity: 1;
-        }
-      }
-      &.filled .clear-button { display: block; }
-      input {
-        display: block;
-        width: 100%;
-        height: $search-container-height;
-        border: none;
-        outline: none;
-        padding-right: calc(#{$med-spacing} * 2);
-        // Make room for the search icon
-        padding-left: calc(1rem * 4);
-        padding-top: 0px;
-        padding-bottom: 0px;
-        margin-top: 22px;
-        color: white;
-        opacity: 0.5;
-        -webkit-font-smoothing: antialiased;
-      }
-      // Do not show the in-built X in IE
-      input::-ms-clear {
-        display: none;
-      }
-      input::placeholder {
-        color: white;
-      }
-      &.filled input {
-        opacity: 1;
-      }
-      input:disabled ~ .search-icon { display: none; }
     }
   }
   
@@ -261,30 +258,21 @@ body {
     }
   }
 
-  .nav-header {
-    height: $nav-header-height;
-    background-color: $primary-brand-color;
-    @include desktop-screen {
-      box-shadow: $site-nav-shadow-inset;
-      border-right: 1px solid $primary-brand-color;
-    }
-  }
-
   @include mobile-screen {
     &.menu-toggled.keyboard-expanded .nav-main {
-      height: calc(100% - #{$nav-header-height});
+      height: calc(100% - #{$site-header-height});
     }
   }
 
   .nav-main {
-    height: calc(100% - #{$mobile-bottom-bar-height} - #{$nav-header-height});
+    margin-top: $site-header-height;
+    height: calc(100% - #{$site-header-height});
     overflow-y: auto;
     overflow-x: hidden;
     background-color: $well-background-color;
     overscroll-behavior: contain;
 
     @include desktop-screen {
-      height: calc(100% - #{$nav-footer-height} - #{$nav-header-height});
       border-right: 1px solid $divider-color;
       box-shadow: $site-nav-shadow-inset;
     }
@@ -356,7 +344,7 @@ body {
   align-self: stretch;
   padding: $spacing calc(2 * #{$spacing});
   height: $site-header-height;
-  background: white;
+  background: $primary-brand-color;
   transition-duration: $site-nav-collapse-duration;
   transition-timing-function: ease-out;
 
@@ -371,7 +359,6 @@ body {
   }
   @include desktop-screen {
     padding: $large-spacing calc( 3.25 * #{$large-spacing});
-    left: $site-nav-width;
     .site-nav.menu-toggled ~ & { 
       left: 0;
       transform: none;
@@ -390,11 +377,6 @@ body {
     }
   }
 
-  @include large-screen {
-    left: $max-site-nav-width;
-  }
-
-  background-color: $base-background-color;
   border-bottom: 1px solid $divider-color;
   // Other
   flex-direction: row;
@@ -771,16 +753,6 @@ $banner-bg: #15499b;
 //not-found search results{
 .not-found{
   margin: $spacing*2 $spacing;
-}
-
-
-.site-branding{
-  position: fixed;
-  bottom: $spacing;
-  right: $spacing;
-  padding: $spacing;
-  background: $divider-color;
-  border-radius: $spacing;
 }
 
 //custom-scrollbar

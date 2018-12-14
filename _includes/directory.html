@@ -1,0 +1,10 @@
+{% assign folders = "" | split: ',' %}
+{% for page in site.html_pages %}
+{% unless page.exclude %}
+{% assign folders = folders | push: page.dir %}
+{% endunless %}
+{% endfor %}
+{% assign folders = folders | uniq | sort %}
+{% for folder in folders %}
+ - {: .{{ include.item_class }} }[{{ folder | capitalize | replace: '_', ' ' }}]({{folder}})
+{% endfor %}

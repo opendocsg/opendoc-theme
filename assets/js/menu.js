@@ -6,6 +6,8 @@
         return window.innerWidth < 992
     }
 
+    // Documents - Section toggle
+
     // Site-nav
     // --------------------------
     var menuToggle = document.getElementById('menu-toggle')
