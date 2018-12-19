@@ -15,7 +15,7 @@ permalink: /export
 {% for order in pageOrder %}
 {% for site_page in site.html_pages %}
 {% unless site_page.exclude %}
-{% if site_page.title == order %}
+{% if site_page.title == order or site_page.name == order %}
 {{site_page.content}}
 {% endif %}
 {% endunless %}

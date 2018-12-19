@@ -219,7 +219,7 @@
         searchResults.forEach(function(result, i) {
             var element = document.createElement('a')
             element.classList.add('nav-link')
-            element.href = result.url
+            element.href = '{{site.baseurl}}' + '/' + result.url
             element.innerHTML = result.title
             var description = document.createElement('p')
             description.innerHTML = result.description
@@ -249,7 +249,7 @@
                 var formatted = formatResult(result)
                 var element = document.createElement('a')
                 element.classList.add('nav-link')
-                element.href = "/" + formatted.url
+                element.href = '{{site.baseurl}}' + '/' + formatted.url
                 element.innerHTML = formatted.title
                 var description = document.createElement('p')
                 if (formatted.content) {

@@ -8,14 +8,14 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" href="{{ '/assets/images/favicon.ico' | relative_url | remove_first:'/' }}">
-    <link rel="stylesheet" href="{{ '/assets/styles/normalize.css' | relative_url | remove_first:'/' }}">
-    <link rel="stylesheet" href="{{ '/assets/styles/main.css' | relative_url | remove_first:'/' }}">
+    <link rel="icon" href="./assets/images/favicon.ico">
+    <link rel="stylesheet" href="./assets/styles/normalize.css">
+    <link rel="stylesheet" href="./assets/styles/main.css">
   </head>
 
   <body id="print-content">
     <section class="description">
-      <img class="description-logo" src="{{ site.styling_options.logo_path | relative_url | remove_first:'/' }}">
+      <img class="description-logo" src="{{ '.' | append: site.styling_options.logo_path }}">
       <div class="description-title">{{ site.title }}</div>
     </section>
 
