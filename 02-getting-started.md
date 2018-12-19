@@ -85,6 +85,8 @@ Link [here](https://help.github.com/articles/configuring-a-publishing-source-for
 
 ## Editing an existing OpenDoc (Content owners)
 
+Follow these steps if you want to make a change to one of your documents. Changes made here will **NOT** take effect immediately, and you will be able to review the document before publishing it online.
+
 **Step 1:** 
 
 > Visit [Github.com](https://github.com)
@@ -155,7 +157,7 @@ Congrats!!! 🎉🎉🎉 You have made a change to the document.
 
 ## Updating OpenDoc (IT administrators)
 
-To publish changes onto the production environment, you will need to have another user to review the changes made.
+Follow these steps if you want to publish the changes made in the draft environment. This process will require a second person to review the changes before the document can be published live.
 
 **IMPORTANT:** Before you proceed with the next steps, check if the draft site is reflecting the changes accurately.
 
