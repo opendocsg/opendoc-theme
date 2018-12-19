@@ -4,16 +4,25 @@ title: Getting Started
 
 # Getting Started 
 
+[Github](https://github.com) is an online service that helps people collaborate on large projects remotely. OpenDoc makes use Github's platform to manage the documents and provide a simple user interface from which you can make changes to your documents. 
+
+Before you proceed with the rest of this tutorial, we recommend that you take some time to complete the following online courses. Each course will take around half an hour to complete, and it will walk you through the user interface of Github, as well as some of the process flows that we'll be using for OpenDoc.
+
+> **Introduction to Github** (Strongly recommend)
+
+> [https://lab.github.com/githubtraining/introduction-to-github](https://lab.github.com/githubtraining/introduction-to-github)
+
+> **Communicating using Markdown** (Strongly recommend)
+
+> [https://lab.github.com/githubtraining/communicating-using-markdown](https://lab.github.com/githubtraining/communicating-using-markdown)
+
+> **Reviewing pull requests** (Optional)
+
+> [https://lab.github.com/githubtraining/reviewing-pull-requests](https://lab.github.com/githubtraining/reviewing-pull-requests)
+
+More on this feature can be found [here](https://pages.github.com/).
+
 ## Creating an OpenDoc (IT administrators)
-
-[Github](https://github.com) is an online service that helps people collaborate on large projects remotely. Along with Github, we'll be using another feature called Github Pages to store and serve the generated documents to the public. More on this feature can be found [here](https://pages.github.com/).
-
-### Prerequisites
-
-- Basic understanding of the command line
-- Local machine with Git installed
-
-### Instructions
 
 **Step 1:**
 
@@ -27,7 +36,7 @@ opendoc-<name_of_document> e.g. opendoc-example-doc
 
 **Step 2:**
 
-Navigate into the working directory and clone the template repo onto your local machine
+Navigate into the working directory and clone the template repo onto your local machine.
 
 ```
 cd <directory_path>
@@ -58,7 +67,7 @@ Update the following configuration fields in the _config.yml file:
 Definitions:
 
 - title: Name of document
-- repository -> opendocsg/opendc-<name_of_document>
+- repository -> opendocsg/opendoc-<name_of_document>
 - primary_brand_colour: Primary brand color of Ministry/Agency publishing the document
 - logo_path: Path to logo file in this directory
 
@@ -69,7 +78,7 @@ Copy the markdown documents into the root directory of the repo. The documents h
 
 **Step 6:**
 
-Commit your changes, and update the online repository with the new version
+Commit your changes, and update the online repository with the new version.
 
 ```
 git add .
@@ -79,7 +88,7 @@ git push origin master
 
 ### Configuring Github Pages
 
-Follow these instructions on "Enabling Github Pages to publish your site from master or gh-pages"
+Follow these instructions on "Enabling Github Pages to publish your site from master or gh-pages".
 
 Link [here](https://help.github.com/articles/configuring-a-publishing-source-for-github-pages/#enabling-github-pages-to-publish-your-site-from-master-or-gh-pages)
 
@@ -89,7 +98,7 @@ Follow these steps if you want to make a change to one of your documents. Change
 
 **Step 1:** 
 
-> Visit [Github.com](https://github.com)
+> Visit [Github.com](https://github.com).
 
 > ![](/images/edit-document/step-1-visit-site.png)
 
@@ -103,7 +112,7 @@ Follow these steps if you want to make a change to one of your documents. Change
 
 **Step 3:** 
 
-> Cick on the "Sign in" button,
+> Click on the "Sign in" button.
 
 > ![](/images/edit-document/step-3-sign-in-button.png)
 
@@ -113,43 +122,43 @@ Follow these steps if you want to make a change to one of your documents. Change
 
 **Step 4:** 
 
-> Select the OpenDoc document you want to edit
+> Select the OpenDoc document you want to edit.
 
 > ![](/images/edit-document/step-4-select-document.png)
 
 **Step 5:** 
 
-> Select the "staging" branch
+> Select the "staging" branch.
 
 > ![](/images/edit-document/step-5-select-staging-branch.png)
 
 **Step 6:** 
 
-> Select the file that you would like to make changes to
+> Select the file that you would like to make changes to.
 
 > ![](/images/edit-document/step-6-select-file-to-edit.png)
 
 **Step 7:** 
 
-> Click on the "Edit" icon
+> Click on the "Edit" icon.
 
 > ![](/images/edit-document/step-7-click-on-edit.png)
 
 **Step 8:** 
 
-> Make the necessary edits
+> Make the necessary edits.
 
 > ![](/images/edit-document/step-8-make-changes-to-file.png)
 
 **Step 9:** 
 
-> Add a description for the changes made
+> Add a description for the changes made.
 
 > ![](/images/edit-document/step-9-add-description-for-changes-made.png)
 
 **Step 10:** 
 
-> Click on the "Commit change" button
+> Click on the "Commit change" button.
 
 > ![](/images/edit-document/step-10-commit-changes.png)
 
@@ -165,7 +174,7 @@ Follow these steps if you want to publish the changes made in the draft environm
 
 **Step 1:** 
 
-> Visit [Github.com](https://github.com)
+> Visit [Github.com](https://github.com).
 
 > ![](/images/update-website/step-1-visit-site.png)
 
@@ -179,7 +188,7 @@ Follow these steps if you want to publish the changes made in the draft environm
 
 **Step 3:** 
 
-> Cick on the "Sign in" button,
+> Click on the "Sign in" button.
 
 > ![](/images/update-website/step-3-sign-in-button.png)
 
@@ -189,13 +198,13 @@ Follow these steps if you want to publish the changes made in the draft environm
 
 **Step 4:** 
 
-> Select the OpenDoc document you want to edit
+> Select the OpenDoc document you want to edit.
 
 > ![](/images/update-website/step-4-select-document.png)
 
 **Step 5:** 
 
-> Click on the "Pull requests" tab
+> Click on the "Pull requests" tab.
 
 > ![](/images/update-website/step-5-click-pull-request.png)
 
@@ -207,7 +216,7 @@ Follow these steps if you want to publish the changes made in the draft environm
 
 **Step 7:**
 
-> Click on the "Create pull request" button
+> Click on the "Create pull request" button.
 
 > ![](/images/update-website/step-7-create-pull-request.png)
 
@@ -219,7 +228,7 @@ Follow these steps if you want to publish the changes made in the draft environm
 
 **Step 9:**
 
-> Create the pull request
+> Create the pull request.
 
 > ![](/images/update-website/step-9-create-pull-request.png)
 
@@ -231,13 +240,13 @@ You've just created a pull request. Now, someone else from your team can proceed
 
 **Step 10:**
 
-> Click on the "Pull requests" tab
+> Click on the "Pull requests" tab.
 
 > ![](/images/update-website/step-10-click-pull-request.png)
 
 **Step 11:**
 
-> Select the pull request that was submmited
+> Select the pull request that was submitted.
 
 **Step 12:**
 
@@ -265,7 +274,7 @@ You've just created a pull request. Now, someone else from your team can proceed
 
 **Step 16:**
 
-> Lastly, click on the "Confirm merge" button
+> Lastly, click on the "Confirm merge" button.
 
 > ![](/images/update-website/step-16-confirm-merge.png)
 
