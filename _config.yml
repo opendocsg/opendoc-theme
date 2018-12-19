@@ -8,7 +8,6 @@ baseurl: ''
 kramdown:
   auto_id_stripping: true
 section_order:
-  - Introduction
   - Getting Started
   - Using Markdown
   - Useful References
