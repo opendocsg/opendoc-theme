@@ -1,5 +1,5 @@
 
-title: Opendoc Theme
+title: Opendoc Documentation
 theme: minima
 plugins:
   - jekyll-seo-tag
@@ -9,8 +9,9 @@ kramdown:
   auto_id_stripping: true
 section_order:
   - Introduction
-  - Getting started
-  - using-markdown.md
+  - Getting Started
+  - Using Markdown
+  - Useful References
   - Contribute
 repository: opendocsg/opendoc-theme
 server_PROD: https://search.opendoc.sg
