@@ -32,10 +32,12 @@
 </head>
 
 <body>
-  <header class="site-header no-print">
-    <section class="site-search">
+  <nav class="site-nav no-print">
+    <div class="nav-header">
       <div class="search-container">
-        <img class="search-icon" src="{{ '/assets/images/search-icon.png' | relative_url }}" width="24" height="20" />
+        <div class="search-icon-container">
+          <img class="search-icon" src="{{ '/assets/images/search-icon.png' | relative_url }}" width="24" height="20" />
+        </div>
         <input id="search-box" autofocus placeholder="Search document" type="text" />
         <label class="clear-button">
           <svg class="clear-icon" viewBox="0 0 18 18" width="18" height="18">
@@ -44,20 +46,55 @@
           </svg>
         </label>
       </div>
-    </section>
-  </header>
-  <nav class="site-nav no-print">
-    <div class="nav-main">
-      <section class="document-list">
-        {% include_cached directory.html %}
-      </section>
-      <section class="table-of-contents">
-        {% include_cached toc.html h_min=1 h_max=2 item_class="nav-branch" anchor_class="nav-link" %}
-      </section>
-      <section class="search-results" hidden>
       </section>
     </div>
+    <div class="nav-main">
+        {% include directory.html %}
+      </section>
+      <section class="search-results" hidden>
+    </div>
   </nav>
+
+  <div class="button-group-container no-print">
+    <div class="btn-group">
+      <label for="menu-toggle" class="btn-item" id="menu-toggle-btn">
+        <input type="checkbox" id="menu-toggle" hidden>
+        <img class="btn-icon mobile" src="{{ '/assets/images/menu.svg' | relative_url }}">
+        <img class="btn-icon mobile close" src="{{ '/assets/images/x-mobile.svg' | relative_url }}">
+        <img class="btn-icon" src="{{ '/assets/images/sidebar.svg' | relative_url }}">
+        <img class="btn-icon hover" src="{{ '/assets/images/sidebar-hover.svg' | relative_url }}">
+      </label>
+      <div class="btn-item" id="print-btn">
+        <img class="btn-icon mobile" src="{{ '/assets/images/book-mobile.svg' | relative_url }}">
+        <span class="btn-text mobile">PDF</span>
+        <img class="btn-icon" src="{{ '/assets/images/printer.svg' | relative_url }}">
+        <img class="btn-icon hover" src="{{ '/assets/images/printer-hover.svg' | relative_url }}">
+      </div>
+      <a class="btn-item" id="feedback-btn" href="{{ site.styling_options.feedback_url }}" target="_blank">
+        <img class="btn-icon mobile" src="{{ '/assets/images/feedback-mobile.svg' | relative_url }}">
+        <span class="btn-text mobile">Feedback</span>
+        <img class="btn-icon" src="{{ '/assets/images/feedback.svg' | relative_url }}">
+        <img class="btn-icon hover" src="{{ '/assets/images/feedback-hover.svg' | relative_url }}">
+      </a>
+    </div>
+    <div id="banner">
+      <div class="popper__arrow" x-arrow=""></div>
+      <span>
+        Hello, this document uses OpenDoc, which is in beta testing. Help us improve by giving us some feedback here.
+      </span>
+      <div id="close-banner">
+        <img src="{{ '/assets/images/x-mobile.svg' | relative_url }}">
+      </div>
+    </div>
+  </div>
+
+
+  <header class="site-header no-print">
+    <div class=description-container>
+      <h2 class="description-title">{{ site.title }}</h2>
+      <div class="description-last-updated">LAST UPDATE: {{ site.time | date_to_long_string | upcase }}</div>
+    </div>
+  </header>
 
   <main class="site-main" id="main-content" aria-label="Content">
     {{ content | replace: "!!^", "<i style='margin-left:30px'></i>"}}
@@ -69,7 +106,6 @@
   <script src="https://unpkg.com/popper.js@1.14.4/dist/umd/popper.min.js"></script>
   <script src="{{ '/assets/js/ga-tracking.js' | relative_url }}"></script>
   <script src="{{ '/assets/js/menu.js' | relative_url }}"></script>
-  <script src="{{ '/assets/js/navigation.js' | relative_url }}"></script>
   <script src="{{ '/assets/js/lunr.js' | relative_url }}"></script>
   <script src="{{ '/assets/js/lunr-index.js' | relative_url }}"></script>
   <script src="{{ '/assets/js/page-index.js' | relative_url }}"></script>
