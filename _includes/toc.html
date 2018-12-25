@@ -1,9 +1,10 @@
 {% comment %}
 Adapted from: https://github.com/allejo/jekyll-toc
 Usage:
-    {% include toc.htmlsanitize=true class="inline_toc" id="my_toc" h_min=2 h_max=3 %}
+    {% include toc.html path=dir class="inline_toc" id="my_toc" h_min=2 h_max=3 %}
 
 Optional Parameters:
+    * path         (string) :   ''   - the path of the files for the toc to be generated
     * h_min        (int)    :   1    - the minimum TOC header level to use; any header lower than this value will be ignored
     * h_max        (int)    :   6    - the maximum TOC header level to use; any header greater than this value will be ignored
     * item_class   (string) :   ''   - add custom class(es) for each list item; has support for '%level%' placeholder, which is the current heading level
@@ -15,25 +16,18 @@ Output:
 {% endcomment %}
 
 {% assign pages = "" | split: ',' %}
-{% if site.section_order == null %}
 {% assign sorted_pages = site.html_pages | sort: 'name' %}
 {% for site_page in sorted_pages %}
-{% unless site_page.exclude %}
-{% assign pages = pages | push: site_page %}
-{% endunless %}
+    {% unless site_page.exclude %}
+        {% if include.path == null %}
+            {% assign pages = pages | push: site_page %}
+        {% else %}
+            {% if site_page.dir == include.path %}
+                {% assign pages = pages | push: site_page %}
+            {% endif %}        
+        {% endif %}        
+    {% endunless %}
 {% endfor %}
-{% else %}
-{% assign pageOrder = site.section_order %}
-{% for order in pageOrder %}
-{% for site_page in site.html_pages %}
-{% unless site_page.exclude %}
-{% if site_page.title == order or site_page.name == order %}
-{% assign pages = pages | push: site_page %}
-{% endif %}
-{% endunless %}
-{% endfor %}
-{% endfor %}
-{% endif %}
 {% capture tocWorkspace %}
     {% capture my_toc %}{% endcapture %}
     {% assign orderedList = include.ordered | default: false %}

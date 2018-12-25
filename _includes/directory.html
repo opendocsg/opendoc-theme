@@ -1,4 +1,12 @@
-<section class="table-of-contents">
+{% comment %}
+Usage:
+    {% include directory.html item_class="something" %}
+
+Optional Parameters:
+    * item_class   (string) :   ''   - add custom class(es) for each list item; has support for '%level%' placeholder, which is the current heading level
+{% endcomment %}
+
+<section class="directory">
 {% capture folder_directory %}
 {% assign folders = "" | split: ',' %}
 {% for page in site.html_pages %}
@@ -8,10 +16,14 @@
 {% endfor %}
 {% assign folders = folders | uniq | sort %}
 {% for folder in folders %}
-- {: .{{ include.item_class }} }[{{ folder | capitalize | replace: '_', ' ' }}]({{folder}})
+- {: .{{ include.item_class }} }[{{ folder | capitalize }}]({{folder}})
 {% endfor %}
 {% endcapture %}
 
 {{ folder_directory | markdownify | strip }}
-{% include_cached toc.html h_min=1 h_max=2 item_class="nav-branch" anchor_class="nav-link" %}
+{% for folder in folders %}
+<section class="table-of-contents" id="{{ folder | replace: ' ', '_' }}" hidden>
+    {% include toc.html path=folder h_min=1 h_max=2 item_class="nav-branch" anchor_class="nav-link" %}
+</section>
+{% endfor %}
 </section>
