@@ -2,6 +2,7 @@
     var main = document.getElementsByTagName('main')[0]
     var tod = document.getElementsByClassName('table-of-directories')[0]
     var backButton = document.getElementsByClassName('back-to-documents')[0]
+    var docHeader = document.getElementsByTagName('header')[0]
 
     // Directory navigation
     var allDirectories = document.querySelectorAll('a.directory-item')
@@ -10,7 +11,7 @@
             var tocId = event.target.id.replace(/^dir_/, 'toc_')
             var correspondingToc = document.getElementById(tocId)
             if (correspondingToc) {
-                document.querySelectorAll('.contents').forEach(function(toc) {
+                document.querySelectorAll('.contents').forEach(function (toc) {
                     toc.hidden = true
                 })
                 correspondingToc.hidden = false
@@ -22,7 +23,7 @@
     })
 
 
-    backButton.addEventListener('click', function() {
+    backButton.addEventListener('click', function () {
         tod.classList.remove('hidden')
     })
 
@@ -104,7 +105,7 @@
         if (page) {
             var originalBody = new DOMParser().parseFromString(page.content, 'text/html').body
             // Not sure if comparing html or reflow no matter what is quicker
-            if (main.innerHTML.trim() !== originalBody.innerHTML.trim()) {
+            if (main.innerHTML.trim().replace(/\<iframe.*\<\/iframe\>/g, '') !== originalBody.innerHTML.trim().replace(/\<iframe.*\<\/iframe\>/g, '')) {
                 main.innerHTML = page.content
                 document.title = page.title
             }
@@ -122,7 +123,7 @@
 
     var scrollToView = function () {
         var id = window.location.hash.replace('#', '')
-        var topOffset = document.getElementsByTagName('header')[0].offsetHeight
+        var topOffset = docHeader.offsetTop + document.getElementsByTagName('header')[0].offsetHeight
         var top = 0
         if (id.length > 0) {
             var anchor = document.getElementById(id)

@@ -7,11 +7,12 @@ $max-content-width: 864px;
 $body-padding: calc((100vw - 420px - 864px) / 2);
 $body-full-view-padding: calc((100vw - 864px) / 2);
 
+$site-header-height: 80px;
 $nav-header-height: 128px;
 $search-container-height: 46px;
 $site-nav-collapse-duration: 0.2s;
 $site-nav-collapse-timing: ease-out;
-$site-header-small-height: 80px;
+$doc-header-small-height: 80px;
 $site-nav-width: 30vw;
 $back-to-docs-width: calc(
   1.5 * #{$large-spacing} + #{$search-container-height}
@@ -28,6 +29,31 @@ body {
 
   mark {
     font-weight: bold;
+  }
+}
+
+.site-header {
+  z-index: 10;
+  height: $site-header-height;
+  background: white;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  border-bottom: 2px inset $well-background-color;
+  display: flex;
+  align-items: center;
+  padding: 0 $large-spacing;
+
+  @include mobile-screen {
+    & {
+      display: none;
+    }
+  }
+
+  .site-header-text {
+    color: $primary-brand-color;
+    margin: 0;
   }
 }
 
@@ -62,6 +88,7 @@ body {
     z-index: 1;
     width: $site-nav-width;
     max-width: $max-site-nav-width;
+    top: $site-header-height;
     left: 0;
     &.menu-toggled {
       left: -#{$site-nav-width};
@@ -371,12 +398,12 @@ body {
   }
 }
 
-// Site Header
+// Document Header
 // -----------
-.site-header {
+.doc-header {
   position: fixed;
   z-index: 2;
-  top: 0;
+  top: $site-header-height;
   left: 0;
   right: 0;
   display: flex;
@@ -389,6 +416,7 @@ body {
   transition-timing-function: ease-out;
 
   @include mobile-screen {
+    top: 0;
     &.headroom--pinned {
       top: 0;
     }
@@ -403,7 +431,7 @@ body {
     .site-nav.menu-toggled ~ & {
       left: 0;
       transform: none;
-      height: $site-header-small-height;
+      height: $doc-header-small-height;
 
       .description-container {
         display: flex;
@@ -732,7 +760,7 @@ $banner-bg: #15499b;
 
     .site-nav.menu-toggled ~ & {
       left: 0;
-      padding-top: calc(#{$site-header-small-height} + #{$large-spacing});
+      padding-top: calc(#{$doc-header-small-height} + #{$large-spacing});
       transform: none;
       height: auto;
     }
