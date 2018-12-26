@@ -1,12 +1,4 @@
-{% comment %}
-Usage:
-    {% include directory.html item_class="something" %}
-
-Optional Parameters:
-    * item_class   (string) :   ''   - add custom class(es) for each list item; has support for '%level%' placeholder, which is the current heading level
-{% endcomment %}
-
-<section class="directory">
+<section class="navigation">
 {% capture folder_directory %}
 {% assign folders = "" | split: ',' %}
 {% for page in site.html_pages %}
@@ -15,15 +7,30 @@ Optional Parameters:
 {% endunless %}
 {% endfor %}
 {% assign folders = folders | uniq | sort %}
+<ul class="table-of-directories">
 {% for folder in folders %}
-- {: .{{ include.item_class }} }[{{ folder | capitalize }}]({{folder}})
+<li>
+<div class="tod-padding"></div>
+<a href="{{folder}}" id="dir_{{ folder }}" class="directory-item">
+{% if folder == '/' %}
+I am root
+{% else %}
+{{ folder | replace: '/',  '' | prepend: 'folder ' | capitalize }}
+{% endif %}
+</a>
+</li>
 {% endfor %}
+</ul>
 {% endcapture %}
 
 {{ folder_directory | markdownify | strip }}
+<div class="back-to-documents">
+    <p>Back to Documents <img class="btn-icon" src="{{ '/assets/images/chevron-up.svg' | relative_url }}"></p>
+</div>
 {% for folder in folders %}
-<section class="table-of-contents" id="{{ folder | replace: ' ', '_' }}" hidden>
-    {% include toc.html path=folder h_min=1 h_max=2 item_class="nav-branch" anchor_class="nav-link" %}
+
+<section class="contents" id="toc_{{ folder | replace: ' ', '_' }}" hidden>
+    {% include toc.html path=folder class="table-of-contents" h_min=1 h_max=2 item_class="nav-branch" anchor_class="nav-link" %}
 </section>
 {% endfor %}
 </section>

@@ -1,12 +1,33 @@
----
----
-
-(function() {
+(function () {
     var main = document.getElementsByTagName('main')[0]
-    var toc = document.getElementsByClassName('table-of-contents')[0]
+    var tod = document.getElementsByClassName('table-of-directories')[0]
+    var backButton = document.getElementsByClassName('back-to-documents')[0]
+
+    // Directory navigation
+    var allDirectories = document.querySelectorAll('a.directory-item')
+    allDirectories.forEach(function (directory) {
+        directory.addEventListener('click', function (event) {
+            var tocId = event.target.id.replace(/^dir_/, 'toc_')
+            var correspondingToc = document.getElementById(tocId)
+            if (correspondingToc) {
+                document.querySelectorAll('.contents').forEach(function(toc) {
+                    toc.hidden = true
+                })
+                correspondingToc.hidden = false
+                tod.classList.add('hidden')
+            }
+            event.preventDefault()
+            event.stopPropagation()
+        }, true)
+    })
+
+
+    backButton.addEventListener('click', function() {
+        tod.classList.remove('hidden')
+    })
 
     //  Nav bar expansion and selection
-    var setSelectedAnchor = function() {
+    var setSelectedAnchor = function () {
         var path = window.location.pathname
         var hash = window.location.hash
         // Make the nav - link pointing to this path selected
@@ -26,13 +47,13 @@
             // Checks if there are sublinks (contains <a> and <ul> elements)
             if (parentLinkNode.children.length === 1) {
                 // Closes menu if there are no sublinks
-                window.dispatchEvent(new Event('link-click'))                
+                window.dispatchEvent(new Event('link-click'))
             }
         }
         if (hash.length > 0) {
             selectedAnchors = document.querySelectorAll('a.nav-link[href$="' + path + hash + '"]')
             if (selectedAnchors.length > 0) {
-                selectedAnchors.forEach(function(anchor) {
+                selectedAnchors.forEach(function (anchor) {
                     anchor.classList.add('selected')
                 })
             }
@@ -42,11 +63,11 @@
     // Initial anchoring
     setSelectedAnchor()
 
-        // HTML5 History
+    // HTML5 History
     // =============================================================================
     // Setup HTML 5 history for single page goodness
 
-    document.body.addEventListener('click', function(event) {
+    document.body.addEventListener('click', function (event) {
         // Check if its within an anchor tag any any point
         // Traverse up its click tree and see if it affects any of them
         // If it does not find anything it just terminates as a null
@@ -54,7 +75,8 @@
         while (anchor && anchor.tagName !== 'A') {
             anchor = anchor.parentNode
         }
-        if (anchor && (anchor.host === '' || anchor.host === window.location.host) && !anchor.hasAttribute('download')) {
+        if (anchor && (anchor.host === '' || anchor.host === window.location.host) && anchor.classList.contains('nav-link') && !anchor.hasAttribute('download')) {
+            // Prevent page load
             event.preventDefault()
             event.stopPropagation()
             if (anchor.hash.length > 0) {
@@ -74,7 +96,7 @@
 
     // Event when path changes
     // =============================================================================
-    var onHashChange = function(event) {
+    var onHashChange = function (event) {
         var path = window.location.pathname
         setSelectedAnchor()
         var page = pageIndex[path]
@@ -92,13 +114,13 @@
         scrollToView()
 
         // Hide menu if sub link clicked or clicking on search results        
-        if (window.location.hash.replace('#', '').length > 0 || toc.hidden) {
+        if (window.location.hash.replace('#', '').length > 0 || navigation.classList.contains('hidden')) {
             window.dispatchEvent(new Event('link-click'))
         }
         highlightBody()
     }
 
-    var scrollToView = function() {
+    var scrollToView = function () {
         var id = window.location.hash.replace('#', '')
         var topOffset = document.getElementsByTagName('header')[0].offsetHeight
         var top = 0

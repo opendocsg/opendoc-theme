@@ -6,19 +6,20 @@ $large-spacing: 2 * $spacing;
 $max-content-width: 864px;
 $body-padding: calc((100vw - 420px - 864px) / 2);
 $body-full-view-padding: calc((100vw - 864px) / 2);
+
 $nav-header-height: 128px;
+$search-container-height: 46px;
 $site-nav-collapse-duration: 0.2s;
 $site-nav-collapse-timing: ease-out;
-
-// Implementation
-// ============================================================================
 $site-header-small-height: 80px;
 $site-nav-width: 30vw;
+$back-to-docs-width: calc(
+  1.5 * #{$large-spacing} + #{$search-container-height}
+);
 $max-site-nav-width: 420px;
 $site-nav-shadow-inset: inset -7px 0 13px -5px rgba(0, 0, 0, 0.15);
 $site-nav-shadow-outset: 7px 0 13px 5px rgba(0, 0, 0, 0.15);
 $mobile-bottom-bar-height: 67px;
-$search-container-height: 46px;
 
 // Body
 // ----
@@ -77,38 +78,95 @@ body {
     }
   }
 
-  .description {
-    text-align: center;
-    padding: $spacing * 2 $spacing;
-    display: block;
+  .back-to-documents {
+    min-height: calc(100vh - #{$nav-header-height});
+    width: $back-to-docs-width;
+    border-right: $divider-color 1px solid;
+    cursor: pointer;
 
-    .description-logo {
-      width: 80%;
-      margin-bottom: $spacing;
-    }
-    .description-last-updated {
-      font-size: 80%;
-      color: $secondary-text-color;
-    }
+    p {
+      height: $back-to-docs-width;
+      width: calc(100vh - 128px);
+      line-height: $back-to-docs-width;
+      text-transform: uppercase;
+      color: $header-text-color;
+      font-size: 14px;
+      letter-spacing: 1px;
+      transform: rotate(-90deg) translateY(calc(128px - 100vh));
+      transform-origin: right 0;
+      margin: 0;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
 
-    a {
-      text-decoration: none;
-      cursor: pointer;
-      color: $primary-text-color;
+      img {
+        height: 30px;
+        padding-left: 40px;
+        padding-right: $large-spacing;
+      }
     }
   }
 
-  .table-of-contents {
-    padding-left: calc(#{$spacing} * 2);
-    padding-bottom: calc(#{$spacing} * 2);
-    padding-top: $spacing;
-    box-sizing: border-box;
-    min-height: 100%;
+  .navigation {
+    display: flex;
+    flex-direction: row;
 
-    @include desktop-screen {
-      padding-left: $large-spacing;
-      padding-bottom: calc(#{$large-spacing} * 2);
+    &.hidden {
+      display: none;
+    }
+
+    ul.table-of-directories {
+      list-style: none;
+      padding-left: 0;
+      margin-left: 0;
+      min-width: 100%;
+      max-width: $max-site-nav-width;
+      transition: $site-nav-collapse-duration;
+
+      &.hidden {
+        margin-left: -100%;
+      }
+
+      li {
+        display: flex;
+        width: 100%;
+        padding: 0;
+        margin: 0;
+
+        .tod-padding {
+          width: $back-to-docs-width;
+          height: 60px;
+        }
+
+        a {
+          color: $secondary-text-color;
+          line-height: 60px;
+          flex: 1;
+          border-bottom: 2px inset $well-background-color;
+          &:hover {
+            color: $primary-text-color;
+            text-decoration: none;
+          }
+        }
+
+        &:hover .tod-padding,
+        &:hover a {
+          background-color: $well-background-color;
+        }
+      }
+    }
+  }
+
+  .contents {
+    box-sizing: border-box;
+    min-height: calc(100vh - #{$nav-header-height});
+    width: 100%;
+
+    ul.table-of-contents {
       padding-top: $large-spacing;
+      padding-bottom: $large-spacing;
+      margin: 0;
+      padding-left: $large-spacing;
     }
 
     ul,
@@ -116,29 +174,49 @@ body {
       padding: 0;
       list-style: none;
       margin: 0;
+      display: block;
     }
   }
 
   .nav-branch {
     position: relative;
+    border-bottom: 2px solid $well-background-color;
+    display: flex;
+    flex-direction: row;
+
+    .toc-padding {
+      height: 100%;
+      width: $large-spacing;
+    }
 
     // Sub links
     & .nav-branch {
       display: none;
-      margin-left: calc(2 * #{$large-spacing});
+      margin-left: $large-spacing;
+      border-bottom: 2px solid $well-background-color;
 
       .nav-link {
+        padding-left: $large-spacing;
+        border-left: 2px solid $well-background-color;
         color: $primary-text-color;
+
+        &:hover,
+        &.selected {
+          color: $primary-brand-color;
+        }
+
+        &.selected {
+          border-left: 2px solid $primary-brand-color;
+        }
       }
 
-      .nav-link:hover,
-      .nav-link.selected {
-        color: $primary-brand-color;
+      &:last-child {
+        border-bottom: none;
       }
+    }
 
-      .nav-link.selected {
-        border-left: 3px solid $primary-brand-color;
-      }
+    &:last-child {
+      border-bottom: none;
     }
 
     // Expanded main links
@@ -146,6 +224,7 @@ body {
       & > .nav-link {
         font-weight: bold;
         color: $header-text-color;
+        border-bottom: 2px solid $well-background-color;
       }
       & .nav-branch {
         display: block;
@@ -156,18 +235,17 @@ body {
   .nav-link {
     display: block;
     color: $secondary-text-color;
-    margin-top: $spacing;
-    margin-bottom: $spacing;
+    padding-top: $spacing;
+    padding-bottom: $spacing;
     padding-right: calc(#{$spacing} * 2);
-    padding-left: $spacing;
     cursor: pointer;
-    border-left: 3px solid transparent;
     user-select: none;
     font-size: $base-font-size;
 
     &:hover {
       text-decoration: none;
       color: $primary-text-color;
+      background-color: $well-background-color;
     }
 
     p {
@@ -189,6 +267,7 @@ body {
 
     // Children
     .search-container {
+      width: calc(100% - 3 * #{$large-spacing});
       border-radius: 4px;
       height: $search-container-height;
       display: flex;
@@ -238,6 +317,7 @@ body {
       input {
         display: block;
         height: $search-container-height;
+        flex: 1;
         border: none;
         outline: none;
         padding-right: 0;
@@ -529,7 +609,7 @@ body {
         }
 
         &:hover {
-          background: #eeeeee;
+          background: $well-background-color;
           .btn-icon.hover {
             display: block;
           }

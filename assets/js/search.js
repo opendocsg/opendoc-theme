@@ -4,7 +4,7 @@
     // Search Box Element
     // =============================================================================
     // This allows the search box to be hidden if javascript is disabled
-    var toc = document.getElementsByClassName('table-of-contents')[0]
+    var navigation = document.getElementsByClassName('navigation')[0]
     var siteSearchElement = document.getElementsByClassName('search-container')[0]
     var searchBoxElement = document.getElementById('search-box')
     var clearButton = document.getElementsByClassName('clear-button')[0]
@@ -457,12 +457,12 @@
         // Clear highlights
         wordsToHighlight = []
         if (query.length < minQueryLength) {
-            searchResults.setAttribute('hidden', true)
-            toc.removeAttribute('hidden')
+            searchResults.hidden = true
+            navigation.classList.remove('hidden')
             highlightBody()
         } else {
-            toc.setAttribute('hidden', '')
-            searchResults.removeAttribute('hidden')
+            navigation.classList.add('hidden')
+            searchResults.hidden = false
             if (searchOnServer) {
                 esSearch(query)
             } else {

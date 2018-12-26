@@ -1,7 +1,7 @@
 {% comment %}
 Adapted from: https://github.com/allejo/jekyll-toc
 Usage:
-    {% include toc.html path=dir class="inline_toc" id="my_toc" h_min=2 h_max=3 %}
+    {% include toc.html path=dir class="inline_toc" h_min=2 h_max=3 %}
 
 Optional Parameters:
     * path         (string) :   ''   - the path of the files for the toc to be generated
@@ -75,4 +75,8 @@ Output:
 {{ space }}-{{ listModifier }} {{ listItemClass }} [{{ header }}]({% if page.url %}{{ page.url | relative_url }}{% endif %}{% if headerLevel > minHeader %}#{{ html_id }}{% endif %}){% if include.anchor_class %}{:.{{ include.anchor_class }}}{% endif %}{% endcapture %}
         {% endfor %}
     {% endfor %}
-{% endcapture %}{% assign tocWorkspace = '' %}{{ my_toc | markdownify | strip  }}
+{% if include.class %}
+{% capture my_toc %}{:.{{ include.class }}}
+{{ my_toc | lstrip }}{% endcapture %}
+{% endif %}
+{% endcapture %}{% assign tocWorkspace = '' %}{{ my_toc | markdownify | strip | replace: '"nav-branch">' :  '"nav-branch"><div class="toc-padding"></div>'  }}
