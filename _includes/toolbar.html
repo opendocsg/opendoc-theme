@@ -1,0 +1,31 @@
+<div class="toolbar-container {{ include.mobile ? 'mobile' : null }} no-print">
+    <label for="menu-toggle" class="toolbar-button" id="menu-toggle-btn">
+        <input type="checkbox" id="menu-toggle" hidden>
+        <img class="btn-icon mobile" src="{{ '/assets/images/menu.svg' | relative_url }}">
+        <img class="btn-icon mobile close" src="{{ '/assets/images/x-mobile.svg' | relative_url }}">
+        <img class="btn-icon" src="{{ '/assets/images/sidebar.svg' | relative_url }}">
+        <img class="btn-icon hover" src="{{ '/assets/images/sidebar-hover.svg' | relative_url }}">
+    </label>
+
+    <div class="toolbar-button" id="print-btn">
+        <img class="btn-icon mobile" src="{{ '/assets/images/book-mobile.svg' | relative_url }}">
+        <span class="btn-text mobile">PDF</span>
+        <img class="btn-icon" src="{{ '/assets/images/printer.svg' | relative_url }}">
+        <img class="btn-icon hover" src="{{ '/assets/images/printer-hover.svg' | relative_url }}">
+    </div>
+    <a class="toolbar-button" id="feedback-btn" href="{{ site.styling_options.feedback_url }}" target="_blank">
+        <img class="btn-icon mobile" src="{{ '/assets/images/feedback-mobile.svg' | relative_url }}">
+        <span class="btn-text mobile">Feedback</span>
+        <img class="btn-icon" src="{{ '/assets/images/feedback.svg' | relative_url }}">
+        <img class="btn-icon hover" src="{{ '/assets/images/feedback-hover.svg' | relative_url }}">
+    </a>
+</div>
+<div id="banner">
+    <div class="popper__arrow" x-arrow=""></div>
+    <span>
+        Hello, this document uses OpenDoc, which is in beta testing. Help us improve by giving us some feedback here.
+    </span>
+    <div id="close-banner">
+        <img src="{{ '/assets/images/x-mobile.svg' | relative_url }}">
+    </div>
+</div>

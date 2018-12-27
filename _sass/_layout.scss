@@ -19,6 +19,7 @@ $back-to-docs-width: calc(
 );
 $max-site-nav-width: 420px;
 $site-nav-shadow-inset: inset -7px 0 13px -5px rgba(0, 0, 0, 0.15);
+$site-nav-header-shadow-inset: inset -7px 7px 13px -5px rgba(0, 0, 0, 0.15);
 $site-nav-shadow-outset: 7px 0 13px 5px rgba(0, 0, 0, 0.15);
 $mobile-bottom-bar-height: 67px;
 
@@ -40,10 +41,11 @@ body {
   top: 0;
   left: 0;
   right: 0;
-  border-bottom: 2px inset $well-background-color;
+  border-bottom: 1px inset $divider-color;
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  padding: 0 $large-spacing;
+  padding: 0 calc(1.5 * #{$large-spacing});
 
   @include mobile-screen {
     & {
@@ -51,9 +53,34 @@ body {
     }
   }
 
-  .site-header-text {
-    color: $primary-brand-color;
-    margin: 0;
+  .site-header-left {
+    display: flex;
+    align-items: baseline;
+
+    .site-header-text {
+      color: $primary-brand-color;
+      margin: 0;
+      font-family: $base-font-family;
+      font-size: 30px;
+    }
+
+    .site-last-updated {
+      margin: 0;
+      color: $secondary-text-color;
+      font-size: 12px;
+      margin-left: $med-spacing;
+    }
+  }
+
+  .site-header-right {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    .agency-logo {
+      max-width: 180px;
+      max-height: 40px;
+    }
   }
 }
 
@@ -282,14 +309,14 @@ body {
   }
 
   .nav-header {
-    height: $nav-header-height;
+    height: calc(#{$nav-header-height} - 1px);
     background-color: $well-background-color;
     display: flex;
     align-items: center;
     justify-content: center;
     @include desktop-screen {
-      box-shadow: $site-nav-shadow-inset;
-      border-bottom: 1px inset solid $divider-color;
+      box-shadow: $site-nav-header-shadow-inset;
+      border-bottom: 1px solid $divider-color;
     }
 
     // Children
@@ -305,13 +332,13 @@ body {
         background-color: $primary-brand-color;
         height: 100%;
         width: $search-container-height;
+        min-width: $search-container-height;
         display: flex;
         align-items: center;
         justify-content: center;
 
         .search-icon {
           left: 1.3rem;
-          height: $search-container-height;
           display: block;
           height: 1.3em;
           width: auto;
@@ -470,267 +497,6 @@ body {
   }
 }
 
-// Button Group
-// ------------
-.button-group-container {
-  position: fixed;
-  z-index: 10;
-  bottom: 0;
-  right: 0;
-  width: 100%;
-  border-top: 1px solid $divider-color;
-  background: white;
-
-  @include mobile-screen {
-    .site-nav.menu-toggled.keyboard-expanded ~ & {
-      display: none;
-    }
-  }
-
-  .btn-group {
-    display: flex;
-    flex-direction: row-reverse;
-    justify-content: flex-start;
-    margin-right: $spacing;
-
-    .btn-item {
-      padding: $med-spacing $spacing;
-      cursor: pointer;
-      color: #484848;
-      display: flex;
-      align-items: center;
-      text-decoration: none;
-      user-select: none;
-
-      @include mobile-screen {
-        &#menu-toggle-btn {
-          position: absolute;
-          width: $mobile-bottom-bar-height;
-          left: 0;
-          top: 0;
-          bottom: 0;
-          text-align: center;
-          padding: 0;
-          background: $primary-brand-color;
-
-          .btn-icon.mobile {
-            margin-right: auto;
-            display: block;
-          }
-          .btn-icon.mobile.close {
-            margin-right: auto;
-            display: none;
-          }
-        }
-
-        .site-nav.menu-toggled ~ &#menu-toggle-btn {
-          background: $header-text-color;
-          .btn-icon.mobile {
-            display: none;
-          }
-          .btn-icon.mobile.close {
-            display: block;
-          }
-        }
-      }
-
-      .btn-text {
-        display: block;
-      }
-
-      .btn-icon {
-        height: 1.6rem;
-        user-select: none;
-        pointer-events: none;
-        display: none;
-        margin-left: auto;
-        margin-right: auto;
-
-        &.hover {
-          display: none;
-        }
-        &.mobile {
-          display: block;
-          margin-right: 10px;
-        }
-        @include desktop-screen {
-          display: block;
-          &.mobile {
-            display: none;
-          }
-        }
-      }
-    }
-  }
-
-  @include desktop-screen {
-    display: block;
-    right: calc(3.25 * #{$large-spacing});
-    top: calc(2 * #{$large-spacing});
-    bottom: auto;
-    width: 160px;
-    transition: top $site-nav-collapse-duration;
-    border-top: none;
-
-    .site-nav.menu-toggled ~ & {
-      top: 20px;
-
-      #menu-toggle-btn {
-        .btn-icon.hover {
-          display: block;
-        }
-
-        .btn-icon:not(.hover) {
-          display: none;
-        }
-
-        // Uncomment below if menu icon should be white on hover in toggled state
-        // &:hover {
-        //   .btn-icon.hover {
-        //     display: none;
-        //   }
-
-        //   .btn-icon:not(.hover):not(.mobile) {
-        //     display: block;
-        //   }
-        // }
-
-        // // Needed to prevent doule tap bug for ios devices
-        // @media (hover: none) {
-        //   &:hover {
-        //     background: transparent;
-        //     .btn-icon.hover {
-        //       display: block;
-        //     }
-        //     .btn-icon:not(.hover):not(.mobile) {
-        //       display: none;
-        //     }
-        //   }
-        // }
-      }
-    }
-
-    .btn-group {
-      flex-direction: row;
-      height: auto;
-      margin-right: 0;
-
-      .btn-item {
-        flex-grow: 1;
-        float: left; /* Float the buttons side by side */
-        cursor: pointer;
-        background: transparent;
-        border: 1px solid $divider-color;
-        padding: 10px 18px;
-        // Fixed width here to allow popper to position properly in safari
-        width: 16px;
-
-        .btn-text {
-          display: none;
-        }
-
-        .btn-icon {
-          height: 1rem;
-          width: 1rem;
-          pointer-events: none;
-          user-select: none;
-        }
-
-        &:hover {
-          background: $well-background-color;
-          .btn-icon.hover {
-            display: block;
-          }
-          .btn-icon:not(.hover) {
-            display: none;
-          }
-        }
-
-        // Needed to prevent doule tap bug for ios devices
-        @media (hover: none) {
-          &:hover {
-            background: transparent;
-            .btn-icon.hover {
-              display: none;
-            }
-            .btn-icon:not(.hover):not(.mobile) {
-              display: block;
-            }
-          }
-        }
-
-        &:not(:last-child) {
-          border-right: none; /* Prevent double borders */
-        }
-        &:first-child {
-          border-radius: 4px 0px 0px 4px;
-        }
-        &:last-child {
-          border-radius: 0px 4px 4px 0px;
-        }
-      }
-    }
-  }
-}
-
-// Banner
-// ------------
-$banner-bg: #15499b;
-#banner {
-  background: $banner-bg;
-  box-shadow: 0 6px 8px 0 rgba(0, 0, 0, 0.24), 0 0 8px 0 rgba(0, 0, 0, 0.12);
-  font-size: 14px;
-  line-height: normal;
-  width: 330px;
-  max-width: 80vw;
-  padding: $spacing $med-spacing;
-  color: #f0f4f6;
-  display: none;
-  -webkit-font-smoothing: antialiased;
-  border-radius: 4px;
-  align-items: center;
-  #close-banner {
-    margin-left: 15px;
-    cursor: pointer;
-    height: 100%;
-    img {
-      width: 24px;
-      height: 24px;
-      max-width: 24px;
-    }
-  }
-  .popper__arrow {
-    width: 0;
-    height: 0;
-    border-style: solid;
-    position: absolute;
-    margin: 5px;
-  }
-
-  &[x-placement^="bottom"] {
-    margin-top: 5px;
-    .popper__arrow {
-      border-width: 0 5px 5px 5px;
-      border-color: transparent transparent $banner-bg transparent;
-      top: -5px;
-      left: calc(50% - 5px);
-      margin-top: 0;
-      margin-bottom: 0;
-    }
-  }
-  &[x-placement^="top"] {
-    margin-bottom: 5px;
-    .popper__arrow {
-      border-width: 5px 5px 0 5px;
-      border-color: $banner-bg transparent transparent transparent;
-      bottom: -5px;
-      left: calc(50% - 5px);
-      margin-top: 0;
-      margin-bottom: 0;
-    }
-  }
-}
-
 // Site Main
 //----------
 .site-main {
@@ -739,7 +505,7 @@ $banner-bg: #15499b;
   left: 0;
   right: 0;
   top: 0;
-  padding: calc(#{$nav-header-height} + #{$spacing}) calc(2 * #{$spacing})
+  padding: calc(#{$nav-header-height} + #{$spacing} + #{$site-header-height}) calc(2 * #{$spacing})
     calc(#{$spacing} + #{$mobile-bottom-bar-height});
   height: auto;
   overflow: auto;

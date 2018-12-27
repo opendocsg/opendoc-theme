@@ -15,6 +15,6 @@
 		// Remove banner after a while
 		setTimeout(function () {
 			closeBannerButton.onclick()
-		}, 5000)
+		}, 8000)
 	}
 })()

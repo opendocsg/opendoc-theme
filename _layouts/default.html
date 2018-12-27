@@ -8,16 +8,7 @@
   <meta property="og:image" content="{{ '/assets/images/logo-full.png' | relative_url }}">
   {% seo %}
   {% if jekyll.environment == 'production' and site.google_analytics %}
-  <script>
-    (function (i, s, o, g, r, a, m) {
-      i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
-        (i[r].q = i[r].q || []).push(arguments)
-      }, i[r].l = 1 * new Date(); a = s.createElement(o),
-        m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
-    })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
-    ga('create', '{{ site.google_analytics }}', 'auto');
-    ga('send', 'pageview');
-  </script>
+  {% include_cached google_analytics.html api=site.google_analytics %}
   {% endif %}
 
   <link rel="icon" href="{{ '/assets/images/favicon.ico' | relative_url }}">
@@ -33,10 +24,18 @@
 
 <body>
   <div class="site-header">
-    <h1 class="site-header-text">
-      {{ site.title }}
-    </h1>
+    <div class="site-header-left">
+      <h1 class="site-header-text">
+        {{ site.title }}
+      </h1>
+      <p class="site-last-updated">LAST UPDATED ON {{ site.time | date_to_long_string | upcase }}</p>
+    </div>
+    <div class="site-header-right">
+      {% include toolbar.html %}
+      <img class="agency-logo" src="{{ site.styling_options.logo_path | relative_url }}">
+    </div>
   </div>
+
   <nav class="site-nav no-print">
     <div class="nav-header">
       <div class="search-container">
@@ -51,48 +50,12 @@
           </svg>
         </label>
       </div>
-      </section>
     </div>
     <div class="nav-main">
       {% include directory.html %}
-      </section>
-      <section class="search-results" hidden>
+      <section class="search-results" hidden> </section>
     </div>
   </nav>
-
-  <div class="button-group-container no-print">
-    <div class="btn-group">
-      <label for="menu-toggle" class="btn-item" id="menu-toggle-btn">
-        <input type="checkbox" id="menu-toggle" hidden>
-        <img class="btn-icon mobile" src="{{ '/assets/images/menu.svg' | relative_url }}">
-        <img class="btn-icon mobile close" src="{{ '/assets/images/x-mobile.svg' | relative_url }}">
-        <img class="btn-icon" src="{{ '/assets/images/sidebar.svg' | relative_url }}">
-        <img class="btn-icon hover" src="{{ '/assets/images/sidebar-hover.svg' | relative_url }}">
-      </label>
-      <div class="btn-item" id="print-btn">
-        <img class="btn-icon mobile" src="{{ '/assets/images/book-mobile.svg' | relative_url }}">
-        <span class="btn-text mobile">PDF</span>
-        <img class="btn-icon" src="{{ '/assets/images/printer.svg' | relative_url }}">
-        <img class="btn-icon hover" src="{{ '/assets/images/printer-hover.svg' | relative_url }}">
-      </div>
-      <a class="btn-item" id="feedback-btn" href="{{ site.styling_options.feedback_url }}" target="_blank">
-        <img class="btn-icon mobile" src="{{ '/assets/images/feedback-mobile.svg' | relative_url }}">
-        <span class="btn-text mobile">Feedback</span>
-        <img class="btn-icon" src="{{ '/assets/images/feedback.svg' | relative_url }}">
-        <img class="btn-icon hover" src="{{ '/assets/images/feedback-hover.svg' | relative_url }}">
-      </a>
-    </div>
-    <div id="banner">
-      <div class="popper__arrow" x-arrow=""></div>
-      <span>
-        Hello, this document uses OpenDoc, which is in beta testing. Help us improve by giving us some feedback here.
-      </span>
-      <div id="close-banner">
-        <img src="{{ '/assets/images/x-mobile.svg' | relative_url }}">
-      </div>
-    </div>
-  </div>
-
 
   <header class="doc-header no-print">
     <div class=description-container>
@@ -104,6 +67,8 @@
   <main class="site-main" id="main-content" aria-label="Content">
     {{ content | replace: "!!^", "<i style='margin-left:30px'></i>"}}
   </main>
+
+  {% include toolbar.html mobile="true" %}
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.3.5/bluebird.min.js"></script>
   <script src="https://npmcdn.com/headroom.js@0.9.4/dist/headroom.min.js" charset="utf-8"></script>

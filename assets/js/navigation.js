@@ -105,6 +105,7 @@
         if (page) {
             var originalBody = new DOMParser().parseFromString(page.content, 'text/html').body
             // Not sure if comparing html or reflow no matter what is quicker
+            // Don't compare iframes
             if (main.innerHTML.trim().replace(/\<iframe.*\<\/iframe\>/g, '') !== originalBody.innerHTML.trim().replace(/\<iframe.*\<\/iframe\>/g, '')) {
                 main.innerHTML = page.content
                 document.title = page.title

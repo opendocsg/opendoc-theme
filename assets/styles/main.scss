@@ -4,6 +4,7 @@ $primary-brand-color: {{site.styling_options.primary_brand_color}};
 
 @import "base";
 @import "layout";
+@import "toolbar";
 @import "syntax-highlighting";
 @import "print";
 @import "iframe";

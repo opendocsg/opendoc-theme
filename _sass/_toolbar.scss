@@ -1,0 +1,129 @@
+// Button Group
+// ------------
+.toolbar-container {
+  margin-right: $large-spacing;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+
+  .toolbar-button {
+    cursor: pointer;
+    background: transparent;
+    // Fixed width here to allow popper to position properly in safari
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: calc(1.5 * #{$large-spacing});
+
+    .btn-icon.mobile, .btn-text.mobile {
+      display: none;
+      @include mobile-screen {
+        display: block;
+
+        &:not(.mobile) {
+          display: none;
+        }
+      }
+    }
+
+    .btn-icon {
+      height: 1.2rem;
+      width: 1.2rem;
+      pointer-events: none;
+      user-select: none;
+      display: block;
+
+      &.hover {
+        display: none;
+      }
+    }
+
+    &:hover {
+      .btn-icon.hover {
+        display: block;
+      }
+      .btn-icon:not(.hover) {
+        display: none;
+      }
+    }
+
+    // Needed to prevent doule tap bug for ios devices
+    @media (hover: none) {
+      &:hover {
+        background: transparent;
+        .btn-icon.hover {
+          display: none;
+        }
+        .btn-icon:not(.hover):not(.mobile) {
+          display: block;
+        }
+      }
+    }
+    //  specifically for menu button
+    #menu-toggle:checked ~ .btn-icon.hover {
+      display: block;
+    }
+
+    #menu-toggle:checked ~ .btn-icon {
+      display: none;
+    }
+  }
+}
+
+// Banner
+// ------------
+$banner-bg: #15499b;
+#banner {
+  background: $banner-bg;
+  box-shadow: 0 6px 8px 0 rgba(0, 0, 0, 0.24), 0 0 8px 0 rgba(0, 0, 0, 0.12);
+  font-size: 14px;
+  line-height: normal;
+  width: 330px;
+  max-width: 80vw;
+  padding: $spacing $med-spacing;
+  color: #f0f4f6;
+  display: none;
+  -webkit-font-smoothing: antialiased;
+  border-radius: 4px;
+  align-items: center;
+  #close-banner {
+    margin-left: 15px;
+    cursor: pointer;
+    height: 100%;
+    img {
+      width: 24px;
+      height: 24px;
+      max-width: 24px;
+    }
+  }
+  .popper__arrow {
+    width: 0;
+    height: 0;
+    border-style: solid;
+    position: absolute;
+    margin: 5px;
+  }
+
+  &[x-placement^="bottom"] {
+    margin-top: 5px;
+    .popper__arrow {
+      border-width: 0 5px 5px 5px;
+      border-color: transparent transparent $banner-bg transparent;
+      top: -4px;
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+  }
+  &[x-placement^="top"] {
+    margin-bottom: 5px;
+    .popper__arrow {
+      border-width: 5px 5px 0 5px;
+      border-color: $banner-bg transparent transparent transparent;
+      bottom: -4px;
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+  }
+}
