@@ -57,10 +57,14 @@
     </div>
   </nav>
 
+  {% if page.name == 'index.html' %}
+  <header class="doc-header no-print hidden">
+  {% else %}
   <header class="doc-header no-print">
+  {% endif %}
     <div class=description-container>
-      <h2 class="description-title">{{ site.title }}</h2>
-      <div class="description-last-updated">LAST UPDATE: {{ site.time | date_to_long_string | upcase }}</div>
+      <h2 class="description-title" id="document-title" >{{ page.title }}</h2>
+      <div class="description-last-updated">metadata</div>
     </div>
   </header>
 

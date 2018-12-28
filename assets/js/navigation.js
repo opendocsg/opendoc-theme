@@ -3,6 +3,8 @@
     var tod = document.getElementsByClassName('table-of-directories')[0]
     var backButton = document.getElementsByClassName('back-to-documents')[0]
     var docHeader = document.getElementsByTagName('header')[0]
+    var documentTitle = document.getElementById('document-title')
+    var navigation = document.getElementsByClassName('navigation')[0]
 
     // Directory navigation
     var allDirectories = document.querySelectorAll('a.directory-item')
@@ -109,6 +111,8 @@
             if (main.innerHTML.trim().replace(/\<iframe.*\<\/iframe\>/g, '') !== originalBody.innerHTML.trim().replace(/\<iframe.*\<\/iframe\>/g, '')) {
                 main.innerHTML = page.content
                 document.title = page.title
+                documentTitle.innerText = page.title
+                docHeader.classList.remove('hidden')
             }
         }
 

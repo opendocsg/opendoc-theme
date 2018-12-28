@@ -442,6 +442,10 @@ body {
   transition-duration: $site-nav-collapse-duration;
   transition-timing-function: ease-out;
 
+  &.hidden {
+    display: none;
+  }
+
   @include mobile-screen {
     top: 0;
     &.headroom--pinned {
@@ -505,7 +509,7 @@ body {
   left: 0;
   right: 0;
   top: 0;
-  padding: calc(#{$nav-header-height} + #{$spacing} + #{$site-header-height}) calc(2 * #{$spacing})
+  padding: calc(#{$nav-header-height} + #{$spacing}) calc(2 * #{$spacing})
     calc(#{$spacing} + #{$mobile-bottom-bar-height});
   height: auto;
   overflow: auto;
@@ -520,7 +524,7 @@ body {
   // Expand to fill when the menu is closed
   @include desktop-screen {
     left: $site-nav-width;
-    padding: calc(#{$nav-header-height} + #{$large-spacing})
+    padding: calc(#{$nav-header-height} + #{$large-spacing} + #{$site-header-height})
       calc(3.25 * #{$large-spacing}) $large-spacing;
     height: auto;
 

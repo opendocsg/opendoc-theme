@@ -3,7 +3,9 @@
 {% assign folders = "" | split: ',' %}
 {% for page in site.html_pages %}
 {% unless page.exclude %}
+{% unless page.name == 'index.html' %}
 {% assign folders = folders | push: page.dir %}
+{% endunless %}
 {% endunless %}
 {% endfor %}
 {% assign folders = folders | uniq | sort %}
