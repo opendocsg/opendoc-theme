@@ -25,9 +25,11 @@
 <body>
   <div class="site-header">
     <div class="site-header-left">
-      <h1 class="site-header-text">
-        {{ site.title }}
-      </h1>
+      <a href="{{ '/'  | relative_url }}">
+        <h1 class="site-header-text">
+          {{ site.title }}
+        </h1>
+      </a>
       <p class="site-last-updated">LAST UPDATED ON {{ site.time | date_to_long_string | upcase }}</p>
     </div>
     <div class="site-header-right">
