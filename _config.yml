@@ -6,11 +6,6 @@ plugins:
 baseurl: ''
 kramdown:
   auto_id_stripping: true
-section_order:
-  - Introduction
-  - Getting started
-  - using-markdown.md
-  - Contribute
 repository: opendocsg/opendoc-theme
 server_PROD: https://search.opendoc.sg
 server_DEV: https://search-staging.opendoc.sg

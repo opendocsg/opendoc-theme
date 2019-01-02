@@ -111,7 +111,7 @@
             if (main.innerHTML.trim().replace(/\<iframe.*\<\/iframe\>/g, '') !== originalBody.innerHTML.trim().replace(/\<iframe.*\<\/iframe\>/g, '')) {
                 main.innerHTML = page.content
                 document.title = page.title
-                documentTitle.innerText = page.title
+                documentTitle.innerText = page.documentTitle
                 docHeader.classList.remove('hidden')
             }
         }

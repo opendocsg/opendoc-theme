@@ -1,0 +1,11 @@
+{%- for page in site.html_pages -%}
+{%- if page.dir == include.dir -%}
+{%- if page.name == 'index.html' -%}
+{%- assign document_title = page.title -%}
+{%- endif -%}
+{%- endif -%}
+{%- endfor -%}
+{%- if document_title == null -%}
+{%- assign document_title = include.dir  | replace: '/',  '' | capitalize -%}
+{%- endif -%}
+{{ document_title }}

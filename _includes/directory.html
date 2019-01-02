@@ -4,7 +4,8 @@
 {% for page in site.html_pages %}
 {% unless page.exclude %}
 {% unless page.name == 'index.html' %}
-{% assign folders = folders | push: page.dir %}
+{% assign unescaped_dir = page.dir | url_decode %}
+{% assign folders = folders | push: unescaped_dir %}
 {% endunless %}
 {% endunless %}
 {% endfor %}
@@ -13,11 +14,11 @@
 {% for folder in folders %}
 <li>
 <div class="tod-padding"></div>
-<a href="{{ folder }}" id="dir_{{ folder }}" class="directory-item">
+<a href="{{ folder | uri_escape }}" id="dir_{{ folder | replace: ' ', '_' | uri_escape }}" class="directory-item">
 {% if folder == '/' %}
 I am root
 {% else %}
-{{ folder | replace: '/',  '' | prepend: 'folder ' | capitalize }}
+{{ folder | replace: '/',  '' | capitalize }}
 {% endif %}
 </a>
 </li>
@@ -31,8 +32,9 @@ I am root
 </div>
 {% for folder in folders %}
 
-<section class="contents" id="toc_{{ folder | replace: ' ', '_' }}" hidden>
-    {% include toc.html path=folder class="table-of-contents" h_min=1 h_max=2 item_class="nav-branch" anchor_class="nav-link" %}
+<section class="contents" id="toc_{{ folder | replace: ' ', '_' | uri_escape }}" hidden>
+    {% assign folder_path = folder %}
+    {% include toc.html path=folder_path class="table-of-contents" h_min=1 h_max=2 item_class="nav-branch" anchor_class="nav-link" %}
 </section>
 {% endfor %}
 </section>

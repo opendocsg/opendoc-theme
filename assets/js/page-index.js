@@ -25,7 +25,8 @@
                 {% else %}
                 'content': {{ site_page.content | markdownify | jsonify }},
                 {% endif %}
-                'url': {{ site_page.url | relative_url | jsonify }}
+                'url': {{ site_page.url | relative_url | jsonify }},
+                'documentTitle': "{% include document-title.txt dir=site_page.dir %}"
             },
             {% endunless %}
             {% endunless %}

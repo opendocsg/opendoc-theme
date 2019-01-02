@@ -6,7 +6,6 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta property="og:image" content="{{ '/assets/images/logo-full.png' | relative_url }}">
-  {% seo %}
   {% if jekyll.environment == 'production' and site.google_analytics %}
   {% include_cached google_analytics.html api=site.google_analytics %}
   {% endif %}
@@ -65,7 +64,7 @@
   <header class="doc-header no-print">
   {% endif %}
     <div class=description-container>
-      <h2 class="description-title" id="document-title" >{{ page.title }}</h2>
+      <h2 class="description-title" id="document-title" >{% include document-title.txt dir=page.dir %}</h2>
       <div class="description-last-updated">metadata</div>
     </div>
   </header>
