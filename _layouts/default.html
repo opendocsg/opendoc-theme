@@ -53,7 +53,7 @@
       </div>
     </div>
     <div class="nav-main">
-      {% include directory.html %}
+      {% include directory.html currdir=page.dir %}
       <section class="search-results" hidden> </section>
     </div>
   </nav>
@@ -64,11 +64,10 @@
   <header class="doc-header no-print">
   {% endif %}
     <div class=description-container>
-      <h2 class="description-title" id="document-title" >{% include document-title.txt dir=page.dir %}</h2>
-      <div class="description-last-updated">metadata</div>
+      <h2 class="description-title" id="document-title" >{% include document-title.txt dir=page.dir info="title" %}</h2>
+      <div class="description-subtitle" id="document-subtitle">{% include document-title.txt dir=page.dir info="subtitle" %}</div>
     </div>
   </header>
-
   <main class="site-main" id="main-content" aria-label="Content">
     {{ content | replace: "!!^", "<i style='margin-left:30px'></i>"}}
   </main>

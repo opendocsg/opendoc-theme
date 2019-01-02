@@ -10,7 +10,7 @@
     var pages = [
         {% for site_page in site.html_pages %}
             {% unless site_page.exclude %}
-            {% unless site_page.name == 'index.html' %}
+            {% unless site_page.name == 'index.html' or site_page.name == 'index.md' %}
             {% capture name %}{{ site_page.name }}{% endcapture %}
             {% if site_page.title == null %}
             {% capture title %}{% assign words  = name | remove_first: '.md' | split: '-' %}{% for word in words %}{{ word | capitalize }} {% endfor %}{% endcapture %}
@@ -26,7 +26,7 @@
                 'content': {{ site_page.content | markdownify | jsonify }},
                 {% endif %}
                 'url': {{ site_page.url | relative_url | jsonify }},
-                'documentTitle': "{% include document-title.txt dir=site_page.dir %}"
+                'documentInfo': {% include document-title.txt dir=site_page.dir -%}
             },
             {% endunless %}
             {% endunless %}

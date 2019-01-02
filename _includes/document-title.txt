@@ -1,11 +1,22 @@
+{%- comment -%}
+May want to just return entire HTML chunk if build takes too long
+i.e.:
+    <h2 class="description-title" id="document-title" >Title</h2>
+    <div class="description-subtitle" id="document-subtitle">Subtitle</div>
+{%- endcomment -%}
+{%- assign document_info = null -%}
 {%- for page in site.html_pages -%}
-{%- if page.dir == include.dir -%}
-{%- if page.name == 'index.html' -%}
-{%- assign document_title = page.title -%}
-{%- endif -%}
+{%- assign page_dir = page.dir | uri_escape -%}
+{%- assign include_dir = include.dir | uri_escape -%}
+{%- if page_dir == include_dir and page.name == 'index.html' or page.name == 'index.md' -%}
+{%- assign document_info = page -%}
 {%- endif -%}
 {%- endfor -%}
 {%- if document_title == null -%}
-{%- assign document_title = include.dir  | replace: '/',  '' | capitalize -%}
+{%- assign document_title = include.dir  | url_decode | replace: '/',  '' | capitalize -%}
 {%- endif -%}
-{{ document_title }}
+{%- if include.info -%}
+{{ document_info[include.info] }}
+{%- else -%}
+{{ document_info | jsonify }}
+{%- endif -%}

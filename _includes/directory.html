@@ -3,23 +3,23 @@
 {% assign folders = "" | split: ',' %}
 {% for page in site.html_pages %}
 {% unless page.exclude %}
-{% unless page.name == 'index.html' %}
-{% assign unescaped_dir = page.dir | url_decode %}
-{% assign folders = folders | push: unescaped_dir %}
+{% unless page.name == 'index.html' or page.name == 'index.md' %}
+{% assign escaped_dir = page.dir | uri_escape %}
+{% assign folders = folders | push: escaped_dir %}
 {% endunless %}
 {% endunless %}
 {% endfor %}
 {% assign folders = folders | uniq | sort %}
+{% if include.currdir == '/' %}
 <ul class="table-of-directories">
+{% else %}
+<ul class="table-of-directories hidden">
+{% endif %}
 {% for folder in folders %}
 <li>
 <div class="tod-padding"></div>
-<a href="{{ folder | uri_escape }}" id="dir_{{ folder | replace: ' ', '_' | uri_escape }}" class="directory-item">
-{% if folder == '/' %}
-I am root
-{% else %}
-{{ folder | replace: '/',  '' | capitalize }}
-{% endif %}
+<a href="{{ folder }}" id="dir_{{ folder }}" class="directory-item">
+{% include document-title.txt dir=folder info="title" %}
 </a>
 </li>
 {% endfor %}
@@ -32,7 +32,12 @@ I am root
 </div>
 {% for folder in folders %}
 
-<section class="contents" id="toc_{{ folder | replace: ' ', '_' | uri_escape }}" hidden>
+{% assign include_currdir_decode = include.currdir | uri_escape %}
+{% if include_currdir_decode == folder and include.currdir != '/' %}
+<section class="contents" id="toc_{{ folder | replace: ' ', '_' }}">
+{% else %}
+<section class="contents" id="toc_{{ folder | replace: ' ', '_' }}" hidden>
+{% endif %}    
     {% assign folder_path = folder %}
     {% include toc.html path=folder_path class="table-of-contents" h_min=1 h_max=2 item_class="nav-branch" anchor_class="nav-link" %}
 </section>

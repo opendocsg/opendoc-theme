@@ -22,7 +22,7 @@ Output:
         {% if include.path == null %}
             {% assign pages = pages | push: site_page %}
         {% else %}
-            {% assign site_page_dir = site_page.dir | url_decode %}
+            {% assign site_page_dir = site_page.dir | uri_escape %}
             {% if site_page_dir == include.path %}
                 {% assign pages = pages | push: site_page %}
             {% endif %}        

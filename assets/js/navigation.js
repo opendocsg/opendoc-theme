@@ -4,6 +4,7 @@
     var backButton = document.getElementsByClassName('back-to-documents')[0]
     var docHeader = document.getElementsByTagName('header')[0]
     var documentTitle = document.getElementById('document-title')
+    var documentSubtitle = document.getElementById('document-subtitle')
     var navigation = document.getElementsByClassName('navigation')[0]
 
     // Directory navigation
@@ -33,6 +34,7 @@
     var setSelectedAnchor = function () {
         var path = window.location.pathname
         var hash = window.location.hash
+
         // Make the nav - link pointing to this path selected
         var selectedBranches = document.querySelectorAll('li.nav-branch.expanded')
         for (var i = 0; i < selectedBranches.length; i++) {
@@ -111,7 +113,8 @@
             if (main.innerHTML.trim().replace(/\<iframe.*\<\/iframe\>/g, '') !== originalBody.innerHTML.trim().replace(/\<iframe.*\<\/iframe\>/g, '')) {
                 main.innerHTML = page.content
                 document.title = page.title
-                documentTitle.innerText = page.documentTitle
+                documentTitle.innerText = page.documentInfo.title
+                documentSubtitle.innerText = page.documentInfo.subtitle
                 docHeader.classList.remove('hidden')
             }
         }
