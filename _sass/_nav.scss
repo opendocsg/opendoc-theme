@@ -114,7 +114,7 @@
           color: $secondary-text-color;
           border-bottom: 2px inset $well-background-color;
           padding: $spacing 0;
-          font-size: $nav-font-size;
+          font-size: calc( #{$nav-font-size} + 2px);
         }
 
         &:hover a {

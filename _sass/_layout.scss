@@ -1,8 +1,8 @@
-
 // Body
 // ----
 body {
   -webkit-overflow-scrolling: touch;
+  overflow-x: hidden;
 
   mark {
     font-weight: bold;
@@ -64,7 +64,6 @@ body {
   }
 }
 
-
 // Document Header
 // -----------
 .doc-header {
@@ -76,7 +75,7 @@ body {
   display: flex;
   box-sizing: border-box;
   align-self: stretch;
-  padding: $spacing calc(2 * #{$spacing});
+  padding: 0 calc(2 * #{$spacing});
   height: $nav-header-height;
   background: white;
   transition-duration: $site-nav-collapse-duration;
@@ -97,7 +96,7 @@ body {
     }
   }
   @include desktop-screen {
-    padding: $large-spacing calc(3.25 * #{$large-spacing});
+    padding: 0 calc(3.25 * #{$large-spacing});
     left: $site-nav-width;
     .site-nav.menu-toggled ~ & {
       left: 0;
@@ -133,7 +132,7 @@ body {
       color: $primary-brand-color;
       margin-bottom: 10px;
     }
-    .description-subtitle{
+    .description-subtitle {
       font-size: 13px;
       letter-spacing: 0.7px;
       color: #9b9b9b;
@@ -144,7 +143,7 @@ body {
 // Site Main
 //----------
 .site-main {
-  position: absolute;
+  position: relative;
   z-index: 0;
   left: 0;
   right: 0;
@@ -152,7 +151,6 @@ body {
   padding: calc(#{$nav-header-height} + #{$spacing}) calc(2 * #{$spacing})
     calc(#{$spacing} + #{$mobile-bottom-bar-height});
   height: auto;
-  overflow: auto;
 
   // On small screens fill the screen with content
   // Shift everything right when menu is open
@@ -164,14 +162,16 @@ body {
   // Expand to fill when the menu is closed
   @include desktop-screen {
     left: $site-nav-width;
-    padding: calc(#{$nav-header-height} + #{$large-spacing} + #{$site-header-height})
-      calc(3.25 * #{$large-spacing}) $large-spacing;
+    padding: calc(#{$nav-header-height} + #{$large-spacing} + #{$site-header-height}) calc(3.25 * #{$large-spacing})
+      $large-spacing;
+    width: calc(100vw - #{$site-nav-width});
     height: auto;
 
     .site-nav.menu-toggled ~ & {
       left: 0;
       padding-top: calc(#{$doc-header-small-height} + #{$large-spacing});
       transform: none;
+      width: 100vw;
       height: auto;
     }
   }
@@ -180,9 +180,12 @@ body {
     left: $max-site-nav-width;
     padding-left: $body-padding;
     padding-right: $body-padding;
+    width: calc(100vw - #{$max-site-nav-width});
+
     .site-nav.menu-toggled ~ & {
       padding-left: $body-full-view-padding;
       padding-right: $body-full-view-padding;
+      width: 100vw;
     }
   }
 
@@ -284,12 +287,28 @@ body {
 }
 
 .site-branding {
-  position: fixed;
-  bottom: $spacing;
-  right: $spacing;
-  padding: $spacing;
-  background: $divider-color;
-  border-radius: $spacing;
+  position: relative;
+  padding-top: $large-spacing;
+  padding-bottom: $large-spacing;
+  font-size: calc(#{$base-font-size} - 2px);
+  color: $secondary-text-color;
+  opacity: 0.5;
+  text-align: right;
+  left: 0;
+  width: calc(100vw - (2 * #{$spacing}));
+  transition-duration: $site-nav-collapse-duration;
+  transition-timing-function: ease-out;
+
+  @include desktop-screen {
+    width: calc(100vw - (3.25 * #{$large-spacing}));
+  }
+
+  @include large-screen {
+    width: calc(100vw - #{$body-padding});
+    .site-nav.menu-toggled ~ & {
+      width: calc(100vw - #{$body-full-view-padding});
+    }
+  }
 }
 
 //custom-scrollbar

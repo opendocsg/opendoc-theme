@@ -71,8 +71,7 @@
   <main class="site-main" id="main-content" aria-label="Content">
     {{ content | replace: "!!^", "<i style='margin-left:30px'></i>"}}
   </main>
-
-  {% include toolbar.html mobile="true" %}
+  <div class="site-branding">Powered by Opendoc</div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.3.5/bluebird.min.js"></script>
   <script src="https://npmcdn.com/headroom.js@0.9.4/dist/headroom.min.js" charset="utf-8"></script>

@@ -17,17 +17,6 @@
     align-items: center;
     margin-right: $large-spacing;
 
-    .btn-icon.mobile, .btn-text.mobile {
-      display: none;
-      @include mobile-screen {
-        display: block;
-
-        &:not(.mobile) {
-          display: none;
-        }
-      }
-    }
-
     .btn-icon {
       height: 1.2rem;
       width: 1.2rem;
@@ -56,7 +45,7 @@
         .btn-icon.hover {
           display: none;
         }
-        .btn-icon:not(.hover):not(.mobile) {
+        .btn-icon:not(.hover) {
           display: block;
         }
       }

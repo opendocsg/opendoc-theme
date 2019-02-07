@@ -5,7 +5,7 @@
 $base-font-family:        'Noto Sans', sans-serif;
 $header-font-family:      'Noto Serif', serif;
 $base-font-size:          18px;
-$mobile-font-size:        16px;
+$mobile-font-size:        15px;
 $nav-font-size:           16px;
 $base-font-weight:        400;
 $mono-font-family:        'Fira Mono', monospace;
@@ -65,12 +65,12 @@ h1, h2, h3, h4, h5, h6 {
   color: $header-text-color;
 }
 
-h1 { font-size: 36px; line-height: 1.25; letter-spacing: -0.5px; }
-h2 { font-size: 24px; line-height: 1.22; letter-spacing: 0; }
-h3 { font-size: 22px; line-height: 1.5; letter-spacing: 0; }
-h4 { font-size: 20px; line-height: 1.5; letter-spacing: 0; }
-h5 { font-size: 20px; line-height: 1.5; letter-spacing: 0; }
-h6 { font-size: 20px; line-height: 1.5; letter-spacing: 0; }
+h1 { font-size: 34px; line-height: 1.25; letter-spacing: -0.5px; }
+h2 { font-size: 22px; line-height: 1.22; letter-spacing: 0; }
+h3 { font-size: 20px; line-height: 1.5; letter-spacing: 0; }
+h4 { font-size: 18px; line-height: 1.5; letter-spacing: 0; }
+h5 { font-size: 18px; line-height: 1.5; letter-spacing: 0; }
+h6 { font-size: 18px; line-height: 1.5; letter-spacing: 0; }
 
 
 // For text directly under a h1 heading
