@@ -17,10 +17,10 @@
 {% endif %}
 {% for folder in folders %}
 <li>
-<div class="tod-padding"></div>
-<a href="{{ folder }}" id="dir_{{ folder }}" class="directory-item">
+<a href="{{ folder }}" id="dir_{{ folder }}" class="tod-container">
+<div class="directory-item">
 {% include document-title.txt dir=folder info="title" %}
-</a>
+</div></a>
 </li>
 {% endfor %}
 </ul>

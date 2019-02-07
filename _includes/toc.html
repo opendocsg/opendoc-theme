@@ -73,11 +73,11 @@ Output:
             {% endunless %}
 
             {% capture my_toc %}{{ my_toc }} 
-{{ space }}-{{ listModifier }} {{ listItemClass }} [{{ header }}]({% if page.url %}{{ page.url | relative_url }}{% endif %}{% if headerLevel > minHeader %}#{{ html_id }}{% endif %}){% if include.anchor_class %}{:.{{ include.anchor_class }}}{% endif %}{% endcapture %}
+{{ space }} -  {{ listItemClass }}<a href="{% if page.url %}{{ page.url | relative_url }}{% endif %}{% if headerLevel > minHeader %}#{{ html_id }}{% endif %}" class="{% if include.anchor_class %}{{ include.anchor_class }}{% endif %}"><span class="directory-item"> {{ header }} </span></a>{% endcapture %}
         {% endfor %}
     {% endfor %}
 {% if include.class %}
 {% capture my_toc %}{:.{{ include.class }}}
 {{ my_toc | lstrip }}{% endcapture %}
 {% endif %}
-{% endcapture %}{% assign tocWorkspace = '' %}{{ my_toc | markdownify | strip | replace: '"nav-branch">' :  '"nav-branch"><div class="toc-padding"></div>'  }}
+{% endcapture %}{% assign tocWorkspace = '' %}{{ my_toc | markdownify | strip }}

@@ -218,7 +218,7 @@
         container.innerHTML = '<h1>Search Results</h1>'
         searchResults.forEach(function(result, i) {
             var element = document.createElement('a')
-            element.classList.add('nav-link')
+            element.classList.add('search-link')
             element.href = '{{site.baseurl}}' + '/' + result.url
             element.innerHTML = result.title
             var description = document.createElement('p')
@@ -248,7 +248,7 @@
             searchResults.hits.hits.forEach(function(result, i) {
                 var formatted = formatResult(result)
                 var element = document.createElement('a')
-                element.classList.add('nav-link')
+                element.classList.add('search-link')
                 element.href = '{{site.baseurl}}' + '/' + formatted.url
                 element.innerHTML = formatted.title
                 var description = document.createElement('p')

@@ -8,10 +8,17 @@
     var navigation = document.getElementsByClassName('navigation')[0]
 
     // Directory navigation
-    var allDirectories = document.querySelectorAll('a.directory-item')
+    var allDirectories = document.querySelectorAll('a.tod-container')
     allDirectories.forEach(function (directory) {
         directory.addEventListener('click', function (event) {
-            var tocId = event.target.id.replace(/^dir_/, 'toc_')
+            event.stopPropagation()
+            event.preventDefault()
+            var target = event.target;
+            while (target !== this) {
+                // Goes to parent node if child element is clicked
+                target = target.parentNode;
+            }
+            var tocId = target.id.replace(/^dir_/, 'toc_')
             var correspondingToc = document.getElementById(tocId)
             if (correspondingToc) {
                 document.querySelectorAll('.contents').forEach(function (toc) {
@@ -20,8 +27,6 @@
                 correspondingToc.hidden = false
                 tod.classList.add('hidden')
             }
-            event.preventDefault()
-            event.stopPropagation()
         }, true)
     })
 
