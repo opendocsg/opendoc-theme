@@ -32,7 +32,7 @@
       <p class="site-last-updated">LAST UPDATED ON {{ site.time | date_to_long_string | upcase }}</p>
     </div>
     <div class="site-header-right">
-      {% include toolbar.html %}
+      <a class="contact-us" href="">Contact Us</a>
       <img class="agency-logo" src="{{ site.styling_options.logo_path | relative_url }}">
     </div>
   </div>
@@ -67,6 +67,7 @@
       <h2 class="description-title" id="document-title" >{% include document-title.txt dir=page.dir info="title" %}</h2>
       <div class="description-subtitle" id="document-subtitle">{% include document-title.txt dir=page.dir info="subtitle" %}</div>
     </div>
+    {% include toolbar.html %}
   </header>
   <main class="site-main" id="main-content" aria-label="Content">
     {{ content | replace: "!!^", "<i style='margin-left:30px'></i>"}}

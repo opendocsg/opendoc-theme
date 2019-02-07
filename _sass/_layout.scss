@@ -31,7 +31,7 @@ body {
 
   .site-header-left {
     display: flex;
-    align-items: baseline;
+    align-items: center;
 
     a:hover {
       text-decoration: none;
@@ -56,6 +56,12 @@ body {
     display: flex;
     flex-direction: row;
     align-items: center;
+
+    .contact-us {
+      margin-right: $med-spacing;
+      font-size: $base-font-size;
+      font-size: 12px;
+    }
 
     .agency-logo {
       max-width: 180px;
