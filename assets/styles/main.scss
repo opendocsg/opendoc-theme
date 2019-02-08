@@ -2,8 +2,8 @@
 ---
 $primary-brand-color: {{site.styling_options.primary_brand_color}};
 
-@import "base";
-@import "constants";
+@import "constants";    // Must be imported first
+@import "base";         // Must be imported second
 @import "layout";
 @import "nav";
 @import "toolbar";

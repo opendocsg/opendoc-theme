@@ -1,6 +1,6 @@
 (function () {
 	if (Popper) {
-		var feedbackButton = document.getElementById('feedback-btn')
+		var feedbackButton = document.getElementById('contact-us')
 		var banner = document.getElementById('banner')
 		banner.style.display = 'flex'
 		var popper = new Popper(feedbackButton, banner, {

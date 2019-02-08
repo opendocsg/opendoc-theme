@@ -48,7 +48,7 @@ body {
       margin: 0;
       color: $secondary-text-color;
       font-size: 12px;
-      margin-left: $med-spacing;
+      margin-left: $large-spacing;
     }
   }
 
@@ -57,10 +57,18 @@ body {
     flex-direction: row;
     align-items: center;
 
-    .contact-us {
-      margin-right: $med-spacing;
-      font-size: $base-font-size;
+    #contact-us {
+      margin-right: calc(2 * #{$large-spacing});
       font-size: 12px;
+      color: $header-text-color;
+      font-weight: bold;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+
+      &:hover {
+        text-decoration: none;
+        color: $primary-brand-color;
+      }
     }
 
     .agency-logo {
@@ -79,6 +87,7 @@ body {
   left: 0;
   right: 0;
   display: flex;
+  justify-content: space-between;
   box-sizing: border-box;
   align-self: stretch;
   padding: 0 calc(2 * #{$spacing});
@@ -108,16 +117,17 @@ body {
       left: 0;
       transform: none;
       height: $doc-header-small-height;
+      padding: 0 calc(1.5 * #{$large-spacing});
 
       .description-container {
         display: flex;
-        align-items: center;
-        justify-content: space-between;
+        align-items: baseline;
         flex: 1;
         margin-right: 180px;
       }
       .description-title {
         margin-bottom: 0;
+        margin-right: 30px;
       }
     }
   }
@@ -175,7 +185,7 @@ body {
 
     .site-nav.menu-toggled ~ & {
       left: 0;
-      padding-top: calc(#{$doc-header-small-height} + #{$large-spacing});
+      padding-top: calc(#{$doc-header-small-height} + #{$large-spacing} + #{$site-header-height});
       transform: none;
       width: 100vw;
       height: auto;

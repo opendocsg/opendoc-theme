@@ -1,35 +1,3 @@
-
-// Variables
-// ============================================================================
-// Fonts
-$base-font-family:        'Noto Sans', sans-serif;
-$header-font-family:      'Noto Serif', serif;
-$base-font-size:          18px;
-$mobile-font-size:        15px;
-$nav-font-size:           16px;
-$base-font-weight:        400;
-$mono-font-family:        'Fira Mono', monospace;
-// Colors
-$primary-text-color:      #444;
-$secondary-text-color:    #999;
-$header-text-color:       #454f5b;
-$selected-text-color:     #000;
-$divider-color:           #d8d8d8;
-$base-background-color:   #FFF;
-$well-background-color:   #eeeeee;
-
-// Spacing
-$base-line-height:        1.75;
-$base-horizontal-padding: 1.0em;
-$base-vertical-padding:   0.5em;
-$block-spacing:           1.5rem;
-$item-spacing:            1.0rem;
-$inline-spacing:          0.2em;
-$base-border-radius:      0.2rem;
-// Breakpoints, if this breakpoint is changed, be sure to change those in the .js files too
-$desktop-screen-breakpoint:    992px;
-$large-screen-breakpoint:     1400px;
-
 // Implementation
 // ============================================================================
 @mixin desktop-screen() {

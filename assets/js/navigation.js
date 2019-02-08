@@ -136,7 +136,8 @@
 
     var scrollToView = function () {
         var id = window.location.hash.replace('#', '')
-        var topOffset = docHeader.offsetTop + document.getElementsByTagName('header')[0].offsetHeight
+        // minus 1 to hide the border on top
+        var topOffset = docHeader.offsetTop + document.getElementsByTagName('header')[0].offsetHeight - 1
         var top = 0
         if (id.length > 0) {
             var anchor = document.getElementById(id)

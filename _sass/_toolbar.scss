@@ -1,10 +1,12 @@
 // Button Group
 // ------------
 .toolbar-container {
-  margin-right: $large-spacing;
   display: flex;
   flex-direction: row;
   justify-content: center;
+  border: 1px solid $divider-color;
+  border-radius: 4px;
+  overflow: hidden;
 
   .toolbar-button {
     cursor: pointer;
@@ -15,7 +17,11 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-right: $large-spacing;
+    border-right: 1px inset $divider-color;
+    
+    &:last-child {
+      border-right: none;
+    }
 
     .btn-icon {
       height: 1.2rem;
@@ -30,12 +36,17 @@
     }
 
     &:hover {
+      background: $well-background-color;
       .btn-icon.hover {
         display: block;
       }
       .btn-icon:not(.hover) {
         display: none;
       }
+    }
+
+    &:active {
+      background: $divider-color;
     }
 
     // Needed to prevent doule tap bug for ios devices

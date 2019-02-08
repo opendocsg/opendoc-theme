@@ -16,7 +16,8 @@
   <link href="https://fonts.googleapis.com/css?family=Noto+Sans:400,700" rel="stylesheet" type="text/css">
   <link rel="stylesheet" href="{{ '/assets/styles/normalize.css' | relative_url }}">
   <link rel="stylesheet" href="{{ '/assets/styles/main.css' | relative_url }}">
-  <link rel="alternate" type="application/rss+xml" title="{{ site.title | escape }}" href="{{ '/feed.xml' | relative_url }}">
+  <link rel="alternate" type="application/rss+xml" title="{{ site.title | escape }}"
+    href="{{ '/feed.xml' | relative_url }}">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.0.0/polyfill.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/dom4/3.0.0/dom4.max.js" charset="utf-8"></script>
 </head>
@@ -29,13 +30,23 @@
           {{ site.title }}
         </h1>
       </a>
-      <p class="site-last-updated">LAST UPDATED ON {{ site.time | date_to_long_string | upcase }}</p>
+      <!-- <p class="site-last-updated">LAST UPDATED ON {{ site.time | date_to_long_string | upcase }}</p> -->
     </div>
     <div class="site-header-right">
-      <a class="contact-us" href="">Contact Us</a>
+      <a id="contact-us" href="{{ site.styling_options.feedback_url }}" target="_blank">Contact Us</a>
       <img class="agency-logo" src="{{ site.styling_options.logo_path | relative_url }}">
     </div>
   </div>
+<!-- 
+  <div id="banner">
+    <div class="popper__arrow" x-arrow=""></div>
+    <span>
+      Hello, this document uses OpenDoc, which is in beta testing. Help us improve by giving us some feedback here.
+    </span>
+    <div id="close-banner">
+      <img src="{{ '/assets/images/x-mobile.svg' | relative_url }}">
+    </div>
+  </div> -->
 
   <nav class="site-nav no-print">
     <div class="nav-header">
@@ -60,34 +71,36 @@
 
   {% if page.name == 'index.html' %}
   <header class="doc-header no-print hidden">
-  {% else %}
-  <header class="doc-header no-print">
-  {% endif %}
-    <div class=description-container>
-      <h2 class="description-title" id="document-title" >{% include document-title.txt dir=page.dir info="title" %}</h2>
-      <div class="description-subtitle" id="document-subtitle">{% include document-title.txt dir=page.dir info="subtitle" %}</div>
-    </div>
-    {% include toolbar.html %}
-  </header>
-  <main class="site-main" id="main-content" aria-label="Content">
-    {{ content | replace: "!!^", "<i style='margin-left:30px'></i>"}}
-  </main>
-  <div class="site-branding">Powered by Opendoc</div>
+    {% else %}
+    <header class="doc-header no-print">
+      {% endif %}
+      <div class=description-container>
+        <h2 class="description-title" id="document-title">{% include document-title.txt dir=page.dir info="title" %}
+        </h2>
+        <div class="description-subtitle" id="document-subtitle">
+          {% include document-title.txt dir=page.dir info="subtitle" %}</div>
+      </div>
+      {% include toolbar.html %}
+    </header>
+    <main class="site-main" id="main-content" aria-label="Content">
+      {{ content | replace: "!!^", "<i style='margin-left:30px'></i>"}}
+    </main>
+    <div class="site-branding">Powered by Opendoc</div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.3.5/bluebird.min.js"></script>
-  <script src="https://npmcdn.com/headroom.js@0.9.4/dist/headroom.min.js" charset="utf-8"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" charset="utf-8"></script>
-  <script src="https://unpkg.com/popper.js@1.14.4/dist/umd/popper.min.js"></script>
-  <script src="{{ '/assets/js/ga-tracking.js' | relative_url }}"></script>
-  <script src="{{ '/assets/js/menu.js' | relative_url }}"></script>
-  <script src="{{ '/assets/js/navigation.js' | relative_url }}"></script>
-  <script src="{{ '/assets/js/lunr.js' | relative_url }}"></script>
-  <script src="{{ '/assets/js/lunr-index.js' | relative_url }}"></script>
-  <script src="{{ '/assets/js/page-index.js' | relative_url }}"></script>
-  <script src="{{ '/assets/js/search.js' | relative_url }}"></script>
-  <script src="{{ '/assets/js/banner.js' | relative_url }}"></script>
-  <script src="{{ '/assets/js/header.js' | relative_url }}"></script>
-  <script src="{{ '/assets/js/helpers.js' | relative_url }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.3.5/bluebird.min.js"></script>
+    <script src="https://npmcdn.com/headroom.js@0.9.4/dist/headroom.min.js" charset="utf-8"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" charset="utf-8"></script>
+    <script src="https://unpkg.com/popper.js@1.14.4/dist/umd/popper.min.js"></script>
+    <script src="{{ '/assets/js/ga-tracking.js' | relative_url }}"></script>
+    <script src="{{ '/assets/js/toolbar.js' | relative_url }}"></script>
+    <script src="{{ '/assets/js/navigation.js' | relative_url }}"></script>
+    <script src="{{ '/assets/js/lunr.js' | relative_url }}"></script>
+    <script src="{{ '/assets/js/lunr-index.js' | relative_url }}"></script>
+    <script src="{{ '/assets/js/page-index.js' | relative_url }}"></script>
+    <script src="{{ '/assets/js/search.js' | relative_url }}"></script>
+    <!-- <script src="{{ '/assets/js/banner.js' | relative_url }}"></script> -->
+    <script src="{{ '/assets/js/header.js' | relative_url }}"></script>
+    <script src="{{ '/assets/js/helpers.js' | relative_url }}"></script>
 </body>
 
 </html>

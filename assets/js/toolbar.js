@@ -40,11 +40,28 @@
 
     // Feedback button
     // --------------------------
-    var feedbackButton = document.getElementById('feedback-btn')
-    feedbackButton.addEventListener('click', function() {
+    var contactUsButton = document.getElementById('contact-us')
+    contactUsButton.addEventListener('click', function() {
         trackButton('feedback', null, isMobileView())
     })
 
+    // Edit button
+    // --------------------------
+    var editButton = document.getElementById('edit-btn')
+    editButton.addEventListener('click', function() { 
+        var repoUrl = '{{ site.github.repository_url }}'
+        var page = pageIndex[window.location.pathname]
+        var pageUrl = page ? page['absolute_url'] : null
+        var pageName = page ? page.name : null
+        if (pageUrl && pageName) {
+            console.log(pageUrl)
+            var markdownUrl = pageUrl.split('/')
+            markdownUrl[markdownUrl.length - 1] = pageName
+            markdownUrl = markdownUrl.join('/')
+            repoUrl += markdownUrl
+        }
+        window.open(repoUrl, '_blank')
+    });
 
     // Print button
     // --------------------------
