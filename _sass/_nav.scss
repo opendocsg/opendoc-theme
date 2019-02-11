@@ -232,19 +232,38 @@
       border-bottom: 1px solid $divider-color;
     }
 
+    .search-filter {
+      border-radius: 4px;
+      background: $header-text-color;
+      color: white;
+      text-transform: uppercase;
+      font-size: 9px;
+      flex: 0 0 auto;
+      max-width: 70px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      margin-left: 5px;
+      padding: 5px;
+
+      &.hidden {
+        display: none;
+      }
+    }
+
     // Children
     .search-box {
       border-radius: 4px;
       height: $search-box-height;
       display: flex;
       flex-direction: row;
+      align-items: center;
       border: 2px solid $primary-brand-color;
 
       .search-icon-container {
         background-color: $primary-brand-color;
         height: 100%;
-        width: $search-box-height;
-        min-width: $search-box-height;
+        flex: 0 0 $search-box-height;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -258,11 +277,12 @@
       }
       .clear-button {
         opacity: 0;
-        height: 1em;
-        width: 1em;
-        padding: $spacing;
-        margin-top: auto;
-        margin-bottom: auto;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex: 0 0 $search-box-height;
+
         .clear-icon {
           display: block;
           height: 1em;
@@ -283,14 +303,15 @@
       input {
         display: block;
         height: $search-box-height;
-        flex: 1;
+        flex: 1 1 0;
+        min-width: 0;
         border: none;
         outline: none;
-        padding-right: 0;
-        padding-top: 0px;
-        padding-bottom: 0px;
         color: black;
         opacity: 0.5;
+        margin: 0;
+        margin-left: 15px;
+        padding: 0;
         // -webkit-font-smoothing: antialiased;
       }
       // Do not show the in-built X in IE
@@ -356,6 +377,11 @@
       user-select: none;
       font-size: $base-font-size;
 
+      &.selected {
+        color: $primary-text-color;
+        background-color: $well-background-color;
+      }
+
       &:hover {
         text-decoration: none;
         color: $primary-text-color;
@@ -389,7 +415,7 @@
         border-left: 1px solid $divider-color;
         padding: $spacing $med-spacing;
         overflow: hidden;
-        
+
         .search-header {
           font-weight: bold;
           font-size: 14px;

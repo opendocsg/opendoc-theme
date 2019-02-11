@@ -6,6 +6,7 @@
     var documentTitle = document.getElementById('document-title')
     var documentSubtitle = document.getElementById('document-subtitle')
     var navigation = document.getElementsByClassName('navigation')[0]
+    var searchFilter = document.getElementsByClassName('search-filter')[0]
 
     // Directory navigation
     var allDirectories = document.querySelectorAll('a.tod-container')
@@ -121,6 +122,8 @@
                 documentTitle.innerText = page.documentInfo.title
                 documentSubtitle.innerText = page.documentInfo.subtitle
                 docHeader.classList.remove('hidden')
+                searchFilter.innerText = page.documentInfo.title
+                searchFilter.classList.remove('hidden')
             }
         }
 
