@@ -37,7 +37,7 @@
       <img class="agency-logo" src="{{ site.styling_options.logo_path | relative_url }}">
     </div>
   </div>
-<!-- 
+  <!-- 
   <div id="banner">
     <div class="popper__arrow" x-arrow=""></div>
     <span>
@@ -51,21 +51,25 @@
   <nav class="site-nav no-print">
     <div class="nav-header">
       <div class="search-container">
-        <div class="search-icon-container">
-          <img class="search-icon" src="{{ '/assets/images/search-icon.png' | relative_url }}" width="24" height="20" />
+        <div class="search-box">
+          <div class="search-icon-container">
+            <img class="search-icon" src="{{ '/assets/images/search-icon.png' | relative_url }}" width="24"
+              height="20" />
+          </div>
+          <input id="search-box" autofocus placeholder="Search document" type="text" />
+          <label class="clear-button">
+            <svg class="clear-icon" viewBox="0 0 18 18" width="18" height="18">
+              <path d="M2.42755 1L17.0331 15.60554l-1.41423 1.4142L1 2.38402"></path>
+              <path d="M1 15.51932L15.51933 1l1.4142 1.4142L2.2978 17.0331"></path>
+            </svg>
+          </label>
         </div>
-        <input id="search-box" autofocus placeholder="Search document" type="text" />
-        <label class="clear-button">
-          <svg class="clear-icon" viewBox="0 0 18 18" width="18" height="18">
-            <path d="M2.42755 1L17.0331 15.60554l-1.41423 1.4142L1 2.38402"></path>
-            <path d="M1 15.51932L15.51933 1l1.4142 1.4142L2.2978 17.0331"></path>
-          </svg>
-        </label>
+        <div class="search-results">
+        </div>
       </div>
     </div>
     <div class="nav-main">
       {% include directory.html currdir=page.dir %}
-      <section class="search-results" hidden> </section>
     </div>
   </nav>
 

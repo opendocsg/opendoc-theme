@@ -41,13 +41,14 @@ $body-full-view-padding: calc((100vw - 864px) / 2);
 
 $site-header-height: 80px;
 $nav-header-height: 110px;
-$search-container-height: 46px;
+$search-box-height: 46px;
+$search-box-width: calc(100% - 3 * #{$large-spacing});
 $site-nav-collapse-duration: 0.2s;
 $site-nav-collapse-timing: ease-out;
 $doc-header-small-height: 80px;
 $site-nav-width: 30vw;
 $back-to-docs-width: calc(
-  1.5 * #{$large-spacing} + #{$search-container-height}
+  1.5 * #{$large-spacing} + #{$search-box-height}
 );
 $max-site-nav-width: 420px;
 $site-nav-shadow-inset: inset -7px 0 13px -5px rgba(0, 0, 0, 0.15);

@@ -3,6 +3,7 @@
 {% assign index_array = "" | split: ',' %}
 {%- for page in site.html_pages -%}
 {%- unless page.exclude -%}
+{% unless page.name == 'index.html' or page.name == 'index.md' %}
 {%- assign page_url = page.url -%}
 {%- assign split_content = page.content | markdownify | split: '<h2' | splice: 1  -%}
         
@@ -47,6 +48,7 @@
 {%- assign index_array = index_array | push: item -%}
 
 {%- endfor -%}
+{%- endunless -%}
 {%- endunless -%}
 {%- endfor -%}
 

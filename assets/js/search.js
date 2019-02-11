@@ -5,7 +5,7 @@
     // =============================================================================
     // This allows the search box to be hidden if javascript is disabled
     var navigation = document.getElementsByClassName('navigation')[0]
-    var siteSearchElement = document.getElementsByClassName('search-container')[0]
+    var siteSearchElement = document.getElementsByClassName('search-box')[0]
     var searchBoxElement = document.getElementById('search-box')
     var clearButton = document.getElementsByClassName('clear-button')[0]
     var siteNav = document.getElementsByClassName('site-nav')[0]
@@ -112,7 +112,7 @@
     // Search
     // =============================================================================
     // Helper function to translate lunr search results
-    // Returns a simple { title, description, link } array
+    // Returns a simple { title, content, link } array
     var snippetSpace = 40
     var maxSnippets = 4
     var maxResults = 10
@@ -205,29 +205,19 @@
             // Build a simple flat object per lunr result
             return {
                 title: matchedDocument.title,
-                description: snippets.join(' '),
+                content: snippets.join(' '),
                 url: matchedDocument.url
             }
         })
     }
 
     // Displays the search results in HTML
-    // Takes an array of objects with "title" and "description" properties
+    // Takes an array of objects with "title" and "content" properties
     var renderSearchResults = function(searchResults) {
         var container = document.getElementsByClassName('search-results')[0]
-        container.innerHTML = '<h1>Search Results</h1>'
+        container.innerHTML = ''
         searchResults.forEach(function(result, i) {
-            var element = document.createElement('a')
-            element.classList.add('search-link')
-            element.href = '{{site.baseurl}}' + '/' + result.url
-            element.innerHTML = result.title
-            var description = document.createElement('p')
-            description.innerHTML = result.description
-            element.appendChild(description)
-            // For ga tracking
-            element.onmouseup = function() {
-                trackSearch(searchBoxElement.value.trim(), i, false)
-            }
+            var element = generateResultHTML(result, i)
             container.appendChild(element)
         })
     }
@@ -246,36 +236,50 @@
             container.appendChild(error)
         } else {
             searchResults.hits.hits.forEach(function(result, i) {
-                var formatted = formatResult(result)
-                var element = document.createElement('a')
-                element.classList.add('search-link')
-                element.href = '{{site.baseurl}}' + '/' + formatted.url
-                element.innerHTML = formatted.title
-                var description = document.createElement('p')
-                if (formatted.content) {
-                    description.innerHTML = '...' + formatted.content + '...'
-                }
-                element.appendChild(description)
-                element.onmouseup = function() {
-                    return trackSearch(searchBoxElement.value.trim(), i, false)
-                }
+                var formatted = formatResult(result, i)
+                var element = generateResultHTML(formatted)
                 container.appendChild(element)
             });
             highlightBody()
         }
     }
 
+    var generateResultHTML = function(result, i) {
+        var element = document.createElement('a')
+        element.className = 'search-link nav-link'
+        {% if site.baseurl != '/' and site.baseurl != '' %}
+        result.url = '{{site.baseurl}}' + '/' + result.url
+        {% endif %}
+        element.href = result.url
+        var elementLeft = document.createElement('div')
+        elementLeft.className = 'left'
+        elementLeft.innerHTML = 'document'
+        var elementRight = document.createElement('div')
+        elementRight.className = 'right'
+        var header = document.createElement('p')
+        header.className = 'search-header'
+        header.innerHTML = result.title
+        elementRight.appendChild(header)
+        var content = document.createElement('p')
+        content.className = 'search-content'
+        content.innerHTML = result.content
+        elementRight.appendChild(content)
+        element.onmouseup = function() {
+            return trackSearch(searchBoxElement.value.trim(), i, false)
+        }
+        element.appendChild(elementLeft)
+        element.appendChild(elementRight)
+        return element
+    }
+
     formatResult = function(result) {
-        var terms = []
         var content = null
         var title = result._source.title
-        var start = '<mark>'
-        var end = '</mark>'
         var regex = /<mark>(.*?)<\/mark>/g
         var joinHighlights = function(str) {
-        if (str) {
-            return str.replace(/<\/mark> <mark>/g, ' ')
-        }
+            if (str) {
+                return str.replace(/<\/mark> <mark>/g, ' ')
+            }
         }
         if (result.highlight) {
             ['title', 'content'].forEach(function(field) {
@@ -306,7 +310,7 @@
         var url = result._source.url;
         return {
             url: url,
-            content: content,
+            content: '...' + content + '...',
             title: title
         }
     }
@@ -457,12 +461,10 @@
         // Clear highlights
         wordsToHighlight = []
         if (query.length < minQueryLength) {
-            searchResults.hidden = true
-            navigation.classList.remove('hidden')
+            searchResults.style.display = 'none'
             highlightBody()
         } else {
-            navigation.classList.add('hidden')
-            searchResults.hidden = false
+            searchResults.style.display = 'block'
             if (searchOnServer) {
                 esSearch(query)
             } else {
