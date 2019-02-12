@@ -11,17 +11,14 @@
     // Site-nav
     // --------------------------
     var menuToggle = document.getElementById('menu-toggle')
-    var siteNav = document.getElementsByClassName('site-nav')[0]
     var showMenu = function showMenu() {
         menuToggle.checked = true
-        siteNav.classList.add('menu-toggled')
+        document.body.classList.add('menu-toggled')
     }
-
     var hideMenu = function hideMenu() {
         menuToggle.checked = false
-        siteNav.classList.remove('menu-toggled')
+        document.body.classList.remove('menu-toggled')
     }
-
     menuToggle.addEventListener('change', function () {
         trackButton('sidebar', menuToggle.checked, isMobileView())
         if (menuToggle.checked) {

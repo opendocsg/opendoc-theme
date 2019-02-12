@@ -24,9 +24,8 @@ body {
   padding: 0 calc(1.5 * #{$large-spacing});
 
   @include mobile-screen {
-    & {
-      display: none;
-    }
+    padding: 0 $large-spacing;
+    height: $mobile-site-header-height;
   }
 
   .site-header-left {
@@ -50,6 +49,10 @@ body {
       font-size: 12px;
       margin-left: $large-spacing;
     }
+
+    @include mobile-screen {
+      display: none;
+    }
   }
 
   .site-header-right {
@@ -65,6 +68,10 @@ body {
       letter-spacing: 1px;
       text-transform: uppercase;
 
+      @include mobile-screen {
+        margin: 0;
+      }
+
       &:hover {
         text-decoration: none;
         color: $primary-brand-color;
@@ -75,6 +82,44 @@ body {
       max-width: 180px;
       max-height: 40px;
     }
+
+    .mobile-menu {
+      background: $primary-brand-color;
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: $mobile-site-header-height;
+      height: $mobile-site-header-height;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+
+      .btn-icon.toggled {
+        display: none;
+      }
+
+      body.menu-toggled & {
+        .btn-icon:not(.toggled) {
+          display: none;
+        }
+
+        .btn-icon.toggled {
+          display: "block";
+        }
+      }
+    }
+
+    @include mobile-screen {
+      flex-direction: row-reverse;
+      justify-content: space-between;
+      width: 100%;
+
+      .agency-logo {
+        max-width: 150px;
+        max-height: 30px;
+      }
+    }
   }
 }
 
@@ -83,7 +128,7 @@ body {
 .doc-header {
   position: fixed;
   z-index: 2;
-  top: $site-header-height;
+  top: $mobile-site-header-height;
   left: 0;
   right: 0;
   display: flex;
@@ -101,19 +146,20 @@ body {
   }
 
   @include mobile-screen {
-    top: 0;
     &.headroom--pinned {
-      top: 0;
+      top: $mobile-site-header-height;
     }
 
     &.headroom--unpinned {
-      top: -#{$nav-header-height};
+      top: calc(#{$mobile-site-header-height} - #{$nav-header-height});
     }
   }
   @include desktop-screen {
     padding: 0 calc(3.25 * #{$large-spacing});
     left: $site-nav-width;
-    .site-nav.menu-toggled ~ & {
+    top: $site-header-height;
+
+    body.menu-toggled & {
       left: 0;
       transform: none;
       height: $doc-header-small-height;
@@ -164,8 +210,8 @@ body {
   left: 0;
   right: 0;
   top: 0;
-  padding: calc(#{$nav-header-height} + #{$spacing}) calc(2 * #{$spacing})
-    calc(#{$spacing} + #{$mobile-bottom-bar-height});
+  padding: calc(#{$nav-header-height} + #{$large-spacing} + #{$mobile-site-header-height}) calc(2 * #{$spacing})
+    $spacing;
   height: auto;
 
   // On small screens fill the screen with content
@@ -183,7 +229,7 @@ body {
     width: calc(100vw - #{$site-nav-width});
     height: auto;
 
-    .site-nav.menu-toggled ~ & {
+    body.menu-toggled & {
       left: 0;
       padding-top: calc(#{$doc-header-small-height} + #{$large-spacing} + #{$site-header-height});
       transform: none;
@@ -198,7 +244,7 @@ body {
     padding-right: $body-padding;
     width: calc(100vw - #{$max-site-nav-width});
 
-    .site-nav.menu-toggled ~ & {
+    body.menu-toggled & {
       padding-left: $body-full-view-padding;
       padding-right: $body-full-view-padding;
       width: 100vw;
@@ -290,7 +336,7 @@ body {
 
   @include large-screen {
     width: calc(100vw - #{$body-padding});
-    .site-nav.menu-toggled ~ & {
+    body.menu-toggled & {
       width: calc(100vw - #{$body-full-view-padding});
     }
   }

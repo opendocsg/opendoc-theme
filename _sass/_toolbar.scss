@@ -8,6 +8,10 @@
   border-radius: 4px;
   overflow: hidden;
 
+  @include mobile-screen {
+    display: none;
+  }
+
   .toolbar-button {
     cursor: pointer;
     background: transparent;

@@ -4,11 +4,9 @@
     // Search Box Element
     // =============================================================================
     // This allows the search box to be hidden if javascript is disabled
-    var navigation = document.getElementsByClassName('navigation')[0]
     var siteSearchElement = document.getElementsByClassName('search-box')[0]
     var searchBoxElement = document.getElementById('search-box')
     var clearButton = document.getElementsByClassName('clear-button')[0]
-    var siteNav = document.getElementsByClassName('site-nav')[0]
     var main = document.getElementsByTagName('main')[0]
 
     searchBoxElement.oninput = function (event) {
@@ -17,14 +15,6 @@
         } else {
             siteSearchElement.classList.remove('filled')
         }
-    }
-
-    searchBoxElement.onfocus = function (event) {
-        siteNav.classList.add('keyboard-expanded')
-    }
-
-    searchBoxElement.onblur = function (event) {
-        siteNav.classList.remove('keyboard-expanded')
     }
 
     clearButton.onclick = function () {

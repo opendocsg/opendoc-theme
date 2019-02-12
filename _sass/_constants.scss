@@ -40,6 +40,7 @@ $body-padding: calc((100vw - 420px - 864px) / 2);
 $body-full-view-padding: calc((100vw - 864px) / 2);
 
 $site-header-height: 80px;
+$mobile-site-header-height: 60px;
 $nav-header-height: 110px;
 $search-box-height: 46px;
 $search-box-width: calc(100% - 3 * #{$large-spacing});
@@ -54,4 +55,3 @@ $max-site-nav-width: 420px;
 $site-nav-shadow-inset: inset -7px 0 13px -5px rgba(0, 0, 0, 0.15);
 $site-nav-header-shadow-inset: inset -7px 7px 13px -5px rgba(0, 0, 0, 0.15);
 $site-nav-shadow-outset: 7px 0 13px 5px rgba(0, 0, 0, 0.15);
-$mobile-bottom-bar-height: 67px;

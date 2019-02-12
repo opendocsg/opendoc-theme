@@ -21,7 +21,7 @@
   transition: left $site-nav-collapse-duration $site-nav-collapse-timing;
   left: -100vw;
   width: 100vw;
-  &.menu-toggled {
+  body.menu-toggled & {
     left: 0;
     box-shadow: $site-nav-shadow-outset;
   }
@@ -31,7 +31,7 @@
     max-width: $max-site-nav-width;
     top: $site-header-height;
     left: 0;
-    &.menu-toggled {
+    body.menu-toggled & {
       left: -#{$site-nav-width};
       right: unset;
       box-shadow: none;
@@ -39,7 +39,7 @@
   }
 
   @include large-screen {
-    &.menu-toggled {
+    body.menu-toggled & {
       left: -#{$max-site-nav-width};
       right: unset;
       box-shadow: none;
@@ -331,14 +331,8 @@
     }
   }
 
-  @include mobile-screen {
-    &.menu-toggled.keyboard-expanded .nav-main {
-      height: calc(100% - #{$nav-header-height});
-    }
-  }
-
   .nav-main {
-    height: calc(100% - #{$mobile-bottom-bar-height} - #{$nav-header-height});
+    height: calc(100% - #{$nav-header-height});
     overflow-y: auto;
     overflow-x: hidden;
     background-color: $base-background-color;
