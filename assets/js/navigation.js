@@ -121,7 +121,7 @@
                 document.title = page.title
                 documentTitle.innerText = page.documentInfo.title
                 documentSubtitle.innerText = page.documentInfo.subtitle
-                docHeader.classList.remove('hidden')
+                docHeader.classList.remove('index')
                 searchFilter.innerText = page.documentInfo.title
                 searchFilter.classList.remove('hidden')
             }

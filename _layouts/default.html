@@ -35,10 +35,6 @@
       <!-- <p class="site-last-updated">LAST UPDATED ON {{ site.time | date_to_long_string | upcase }}</p> -->
     </div>
     <div class="site-header-right">
-      <div class="mobile-menu">
-        <img class="btn-icon" src="{{ '/assets/images/menu.svg' | relative_url }}">
-        <img class="btn-icon toggled" src="{{ '/assets/images/x-mobile.svg' | relative_url }}">
-      </div>
       <a id="contact-us" href="{{ site.styling_options.feedback_url }}" target="_blank">
         <span>Contact Us</span>
         <img class="btn-icon" src="{{ '/assets/images/feedback.svg' | relative_url }}">
@@ -93,8 +89,13 @@
     <div class=description-container>
       <h2 class="description-title" id="document-title">{% include document-title.txt dir=page.dir info="title" %}
       </h2>
+      <h2 class="description-title" id="site-title">
+        {{ site.title }}
+      </h2>
+      </he>
       <div class="description-subtitle" id="document-subtitle">
-        {% include document-title.txt dir=page.dir info="subtitle" %}</div>
+        {% include document-title.txt dir=page.dir info="subtitle" %}
+      </div>
     </div>
     {% include toolbar.html %}
   </header>

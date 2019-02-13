@@ -4,12 +4,20 @@
   display: flex;
   flex-direction: row;
   justify-content: center;
+  align-items: center;
   border: 1px solid $divider-color;
   border-radius: 4px;
   overflow: hidden;
 
   @include mobile-screen {
-    display: none;
+    background: $primary-brand-color;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: $mobile-site-header-height;
+    height: $mobile-site-header-height;
+    border: none;
+    border-radius: 0;
   }
 
   .toolbar-button {
@@ -22,7 +30,7 @@
     justify-content: center;
     align-items: center;
     border-right: 1px inset $divider-color;
-    
+
     &:last-child {
       border-right: none;
     }
@@ -36,6 +44,19 @@
 
       &.hover {
         display: none;
+      }
+
+      &.mobile {
+        display: none;
+      }
+
+      @include mobile-screen {
+        &.mobile {
+          display: block;
+        }
+        &:not(.mobile), &.hover:not(.mobile) {
+          display: none;
+        }
       }
     }
 
@@ -70,8 +91,14 @@
       display: block;
     }
 
-    #menu-toggle:checked ~ .btn-icon {
+    #menu-toggle:checked ~ .btn-icon:not(.hover) {
       display: none;
+    }
+
+    @include mobile-screen {
+      &:not(#menu-toggle-btn) {
+        display: none;
+      }
     }
   }
 }

@@ -173,10 +173,14 @@ body {
   transition-duration: $site-nav-collapse-duration;
   transition-timing-function: ease-out;
 
-  @include desktop-screen {
-    &.index {
+  &.index {
+    @include desktop-screen {
       display: none;
     }
+  }
+
+  &:not(.index) #site-title {
+    display: none;
   }
 
   @include mobile-screen {
@@ -188,6 +192,7 @@ body {
       top: calc(#{$mobile-site-header-height} - #{$nav-header-height});
     }
   }
+
   @include desktop-screen {
     padding: 0 calc(3.25 * #{$large-spacing});
     left: $site-nav-width;
@@ -224,13 +229,21 @@ body {
 
   // Children
   .description-container {
+    width: 100%;
     .description-title {
       color: $primary-brand-color;
-      margin-bottom: 10px;
+      overflow: hidden;
+      line-height: 1.3em;
+      max-height: 2.6em;
+      margin-bottom: 0;
     }
     .description-subtitle {
+      margin-top: 0.5em;
       font-size: 13px;
       letter-spacing: 0.7px;
+      overflow: hidden;
+      line-height: 1.2em;
+      max-height: 2.4em;
       color: #9b9b9b;
     }
   }
@@ -355,7 +368,7 @@ body {
   position: relative;
   padding-top: $large-spacing;
   padding-bottom: $large-spacing;
-  font-size: calc(#{$base-font-size} - 2px);
+  font-size: calc(#{$base-font-size} - 6px);
   color: $secondary-text-color;
   opacity: 0.5;
   text-align: right;
@@ -366,6 +379,7 @@ body {
 
   @include desktop-screen {
     width: calc(100vw - (3.25 * #{$large-spacing}));
+    font-size: calc(#{$base-font-size} - 2px);
   }
 
   @include large-screen {
