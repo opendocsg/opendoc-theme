@@ -1,7 +1,7 @@
 
 title: Opendoc Theme
+description: Jekyll Theme for Opendocs
 plugins:
-  - jekyll-seo-tag
   - jekyll-include-cache
 baseurl: ''
 kramdown:

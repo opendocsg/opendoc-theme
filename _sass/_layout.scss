@@ -68,13 +68,40 @@ body {
       letter-spacing: 1px;
       text-transform: uppercase;
 
-      @include mobile-screen {
-        margin: 0;
+      .btn-icon {
+        display: none;
       }
 
-      &:hover {
+      span {
         text-decoration: none;
-        color: $primary-brand-color;
+      }
+
+      @include mobile-screen {
+        margin-right: $mobile-site-header-height;
+
+        span {
+          display: none;
+        }
+
+        .btn-icon {
+          display: block;
+
+          &.hover {
+            display: none;
+          }
+        }
+      }
+
+      // search for below if not working properly on ios devices
+      // Needed to prevent doule tap bug for ios devices
+      &:hover {
+        .btn-icon:not(.hover) {
+          display: none;
+        }
+
+        .btn-icon.hover {
+          display: block;
+        }
       }
     }
 
@@ -85,15 +112,20 @@ body {
 
     .mobile-menu {
       background: $primary-brand-color;
+      display: none;
       position: absolute;
       right: 0;
       top: 0;
       width: $mobile-site-header-height;
       height: $mobile-site-header-height;
-      display: flex;
       align-items: center;
       justify-content: center;
+
       cursor: pointer;
+
+      @include mobile-screen {
+        display: flex;
+      }
 
       .btn-icon.toggled {
         display: none;
@@ -105,7 +137,7 @@ body {
         }
 
         .btn-icon.toggled {
-          display: "block";
+          display: block;
         }
       }
     }
@@ -141,8 +173,10 @@ body {
   transition-duration: $site-nav-collapse-duration;
   transition-timing-function: ease-out;
 
-  &.hidden {
-    display: none;
+  @include desktop-screen {
+    &.index {
+      display: none;
+    }
   }
 
   @include mobile-screen {

@@ -1,0 +1,29 @@
+.welcome-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 70%;
+  margin-left: 15%;
+
+  .welcome-image {
+    width: auto;
+    max-height: 30vh;
+  }
+
+  h2.welcome-text {
+    text-align: center;
+    font-size: 25px;
+    color: #454f5b;
+    line-height: 1.4;
+    padding-top: 5vh;
+  }
+
+  @include mobile-screen {
+    width: 90%;
+    margin-left: 5%;
+    h2.welcome-text {
+      font-size: 20px;
+    }
+  }
+}
