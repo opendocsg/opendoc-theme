@@ -362,6 +362,11 @@
     box-shadow: 0 5px 20px 0 rgba(155, 155, 155, 0.3);
     display: none;
 
+    //not-found search results{
+    .not-found {
+      margin: $spacing $spacing $spacing $search-box-height;
+    }
+
     .search-link {
       border-bottom: 1px solid $divider-color;
       display: flex;
@@ -382,10 +387,6 @@
         background-color: $well-background-color;
       }
 
-      //not-found search results{
-      .not-found {
-        margin: $spacing * 2 $spacing;
-      }
       &:last-child {
         border-bottom: none;
       }

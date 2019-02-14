@@ -206,10 +206,15 @@
     var renderSearchResults = function(searchResults) {
         var container = document.getElementsByClassName('search-results')[0]
         container.innerHTML = ''
-        searchResults.forEach(function(result, i) {
-            var element = generateResultHTML(result, i)
-            container.appendChild(element)
-        })
+        if (!searchResults || searchResults.length === 0) {
+            var error = generateErrorHTML()
+            container.append(error)
+        } else {
+            searchResults.forEach(function(result, i) {
+                var element = generateResultHTML(result, i)
+                container.appendChild(element)
+            })
+        }
     }
 
     var renderSearchResultsFromServer = function(searchResults) {
@@ -220,9 +225,7 @@
             error.innerHTML = searchResults
             container.appendChild(error)
         } else if (searchResults.hits.hits.length === 0) {
-            var error = document.createElement('p')
-            error.innerHTML = 'Results matching your query were not found.'
-            error.classList.add('not-found')
+            var error = generateErrorHTML()
             container.appendChild(error)
         } else {
             searchResults.hits.hits.forEach(function(result, i) {
@@ -232,6 +235,13 @@
             });
             highlightBody()
         }
+    }
+
+    var generateErrorHTML = function() {
+        var error = document.createElement('p')
+        error.innerHTML = 'Results matching your query were not found.'
+        error.classList.add('not-found')
+        return error
     }
 
     var generateResultHTML = function(result, i) {
