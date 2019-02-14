@@ -8,17 +8,7 @@
   border: 1px solid $divider-color;
   border-radius: 4px;
   overflow: hidden;
-
-  @include mobile-screen {
-    background: $primary-brand-color;
-    position: absolute;
-    right: 0;
-    top: 0;
-    width: $mobile-site-header-height;
-    height: $mobile-site-header-height;
-    border: none;
-    border-radius: 0;
-  }
+  z-index: 10000;
 
   .toolbar-button {
     cursor: pointer;
@@ -29,7 +19,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    border-right: 1px inset $divider-color;
+    border-right: 1px solid $divider-color;
 
     &:last-child {
       border-right: none;
@@ -41,22 +31,15 @@
       pointer-events: none;
       user-select: none;
       display: block;
+    }
 
-      &.hover {
+    .mobile-btn-icon {
+      display: none;
+    }
+
+    &:not(:hover) {
+      .btn-icon.hover {
         display: none;
-      }
-
-      &.mobile {
-        display: none;
-      }
-
-      @include mobile-screen {
-        &.mobile {
-          display: block;
-        }
-        &:not(.mobile), &.hover:not(.mobile) {
-          display: none;
-        }
       }
     }
 
@@ -95,9 +78,40 @@
       display: none;
     }
 
+    // For mobile menu
     @include mobile-screen {
+      background: $primary-brand-color;
+      position: fixed;
+      right: 0;
+      top: 0;
+      width: $mobile-site-header-height;
+      height: $mobile-site-header-height;
+      border: none;
+      border-radius: 0;
+
       &:not(#menu-toggle-btn) {
         display: none;
+      }
+
+      &:hover {
+        background: $primary-brand-color;
+      }
+
+      .mobile-btn-icon {
+        display: block;
+        &.close {
+          display: none;
+        }
+      }
+      #menu-toggle:checked ~ .mobile-btn-icon.close {
+        display: block;
+      }
+      #menu-toggle:checked ~ .mobile-btn-icon:not(.close) {
+        display: none;
+      }
+      // Always disable btn-icon in mobile view
+      .btn-icon {
+        display: none !important;
       }
     }
   }

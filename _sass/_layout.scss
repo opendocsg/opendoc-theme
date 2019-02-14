@@ -10,6 +10,8 @@ body {
 }
 
 .site-header {
+  // site-header should be beneath mobile-menu
+  box-sizing: border-box;
   z-index: 10;
   height: $site-header-height;
   background: white;
@@ -17,24 +19,28 @@ body {
   top: 0;
   left: 0;
   right: 0;
-  border-bottom: 1px inset $divider-color;
+  border-bottom: 1px solid $divider-color;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0 calc(1.5 * #{$large-spacing});
 
+  a {
+    line-height: 1;
+    &:hover {
+      text-decoration: none;
+    }
+  }
+
   @include mobile-screen {
     padding: 0 $large-spacing;
     height: $mobile-site-header-height;
+    right: $mobile-site-header-height;
   }
 
   .site-header-left {
     display: flex;
     align-items: center;
-
-    a:hover {
-      text-decoration: none;
-    }
 
     .site-header-text {
       color: $primary-brand-color;
@@ -77,7 +83,7 @@ body {
       }
 
       @include mobile-screen {
-        margin-right: $mobile-site-header-height;
+        margin-right: 0;
 
         span {
           display: none;
@@ -85,61 +91,14 @@ body {
 
         .btn-icon {
           display: block;
-
-          &.hover {
-            display: none;
-          }
         }
       }
 
-      // search for below if not working properly on ios devices
-      // Needed to prevent doule tap bug for ios devices
-      &:hover {
-        .btn-icon:not(.hover) {
-          display: none;
-        }
-
-        .btn-icon.hover {
-          display: block;
-        }
-      }
     }
 
     .agency-logo {
       max-width: 180px;
       max-height: 40px;
-    }
-
-    .mobile-menu {
-      background: $primary-brand-color;
-      display: none;
-      position: absolute;
-      right: 0;
-      top: 0;
-      width: $mobile-site-header-height;
-      height: $mobile-site-header-height;
-      align-items: center;
-      justify-content: center;
-
-      cursor: pointer;
-
-      @include mobile-screen {
-        display: flex;
-      }
-
-      .btn-icon.toggled {
-        display: none;
-      }
-
-      body.menu-toggled & {
-        .btn-icon:not(.toggled) {
-          display: none;
-        }
-
-        .btn-icon.toggled {
-          display: block;
-        }
-      }
     }
 
     @include mobile-screen {
@@ -172,6 +131,8 @@ body {
   background: white;
   transition-duration: $site-nav-collapse-duration;
   transition-timing-function: ease-out;
+  // to allow mobile menu to be visible outside of doc-header
+  overflow: visible;
 
   &.index {
     @include desktop-screen {
@@ -229,7 +190,6 @@ body {
 
   // Children
   .description-container {
-    width: 100%;
     .description-title {
       color: $primary-brand-color;
       overflow: hidden;
@@ -260,6 +220,7 @@ body {
   padding: calc(#{$nav-header-height} + #{$large-spacing} + #{$mobile-site-header-height}) calc(2 * #{$spacing})
     $spacing;
   height: auto;
+  overflow: hidden;
 
   // On small screens fill the screen with content
   // Shift everything right when menu is open
@@ -428,4 +389,5 @@ body {
 //Videos
 .opendoc-video {
   text-align: center;
+  overflow: hidden;
 }

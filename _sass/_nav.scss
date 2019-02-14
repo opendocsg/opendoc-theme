@@ -3,7 +3,7 @@
 .site-nav {
   // Position
   position: fixed;
-  top: 0;
+  top: $mobile-site-header-height;
   z-index: 5;
 
   // Sidebar content could be too long for the page

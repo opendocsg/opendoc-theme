@@ -3,6 +3,7 @@
     var tod = document.getElementsByClassName('table-of-directories')[0]
     var backButton = document.getElementsByClassName('back-to-documents')[0]
     var docHeader = document.getElementsByTagName('header')[0]
+    var siteHeader = document.getElementsByClassName('site-header')[0]
     var documentTitle = document.getElementById('document-title')
     var documentSubtitle = document.getElementById('document-subtitle')
     var navigation = document.getElementsByClassName('navigation')[0]
@@ -140,17 +141,15 @@
     var scrollToView = function () {
         var id = window.location.hash.replace('#', '')
         // minus 1 to hide the border on top
-        var topOffset = docHeader.offsetTop + document.getElementsByTagName('header')[0].offsetHeight - 1
-        var top = 0
         if (id.length > 0) {
             var anchor = document.getElementById(id)
         }
         if (anchor) {
-            top = anchor.offsetTop
-            // hardcoded: topOffset not needed for mobile view
+            var topOffset = siteHeader.offsetHeight
             if (!isMobileView()) {
-                top -= topOffset
+                topOffset += docHeader.offsetTop
             }
+            var top = anchor.offsetTop - topOffset
             window.scrollTo(0, top)
         }
     }
