@@ -1,7 +1,12 @@
 {%- comment -%}
-Returns title, subtitle if config exists or else just return title based on folder name
+    Accepts:
+        dir: folder name
+        info: title/subtitle/order
 {%- endcomment -%}
 {%- assign page_info = null -%}
+{%- comment -%}
+    Look for config file
+{%- endcomment -%}
 {%- for page in site.html_pages -%}
 {%- assign page_dir = page.dir | uri_escape -%}
 {%- assign include_dir = include.dir | uri_escape -%}
@@ -10,6 +15,9 @@ Returns title, subtitle if config exists or else just return title based on fold
 {%- endif -%}
 {%- endfor -%}
 {%- assign document_info = '' | split: ',' -%}
+{%- comment -%}
+    If no config file or title not set, use folder name
+{%- endcomment -%}
 {%- if page_info == null or page_info.title == null -%}
 {%- assign folder_name = include.dir  | url_decode | replace: '/',  '' | capitalize -%}
 {%- assign document_info = document_info | push: folder_name -%}
@@ -18,6 +26,10 @@ Returns title, subtitle if config exists or else just return title based on fold
 {%- endif -%}
 {%- assign document_info = document_info | push: page_info.subtitle -%}
 {%- assign document_info = document_info | push: page_info.order -%}
+{%- comment -%}
+    If info prop is set, return specific field
+    else, return all in array [ title, subtitle, order ]
+{%- endcomment -%}
 {%- if include.info == 'title' -%}
 {{ document_info[0] }}
 {%- endif -%}
