@@ -247,13 +247,15 @@
     var generateResultHTML = function(result, i) {
         var element = document.createElement('a')
         element.className = 'search-link nav-link'
-        {% if site.baseurl != '/' and site.baseurl != '' %}
-        result.url = '{{site.baseurl}}' + '/' + result.url
-        {% endif %}
-        element.href = result.url
+        var urlParts = ('{{site.baseurl}}' + result.url).split('/')
+        urlParts = urlParts.filter(function(part) {
+            return part !== ''
+        })
+        element.href = '/' + urlParts.join('/')
         var elementLeft = document.createElement('div')
         elementLeft.className = 'left'
-        elementLeft.innerHTML = 'document'
+        // Document title
+        elementLeft.innerHTML = result.documentTitle || '{{ site.title }}'
         var elementRight = document.createElement('div')
         elementRight.className = 'right'
         var header = document.createElement('p')
@@ -308,10 +310,12 @@
             title = joinHighlights(result.highlight.title[0])
         }
         var url = result._source.url;
+        var documentTitle = result._source.documentTitle;
         return {
             url: url,
             content: '...' + content + '...',
-            title: title
+            title: title,
+            documentTitle: documentTitle
         }
     }
 
@@ -337,7 +341,7 @@
 
 
     var createEsQuery = function(queryStr) {
-        var source = ['title', 'url']
+        var source = ['title', 'url', 'documentTitle']
         var title_automcomplete_q = {
             'match_phrase_prefix': {
                 'title': {

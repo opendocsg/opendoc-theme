@@ -217,7 +217,7 @@ body {
   left: 0;
   right: 0;
   top: 0;
-  padding: calc(#{$nav-header-height} + #{$large-spacing} + #{$mobile-site-header-height}) calc(2 * #{$spacing})
+  padding: calc(#{$nav-header-height} + #{$mobile-site-header-height}) calc(2 * #{$spacing})
     $spacing;
   height: auto;
   overflow: hidden;
@@ -232,14 +232,14 @@ body {
   // Expand to fill when the menu is closed
   @include desktop-screen {
     left: $site-nav-width;
-    padding: calc(#{$nav-header-height} + #{$large-spacing} + #{$site-header-height}) calc(3.25 * #{$large-spacing})
+    padding: calc(#{$nav-header-height} + #{$site-header-height}) calc(3.25 * #{$large-spacing})
       $large-spacing;
     width: calc(100vw - #{$site-nav-width});
     height: auto;
 
     body.menu-toggled & {
       left: 0;
-      padding-top: calc(#{$doc-header-small-height} + #{$large-spacing} + #{$site-header-height});
+      padding-top: calc(#{$doc-header-small-height} + #{$site-header-height});
       transform: none;
       width: 100vw;
       height: auto;
@@ -289,10 +289,8 @@ body {
   h4,
   h5,
   h6 {
-    // padding-top: $nav-header-height;
     &:first-child {
       margin-top: 0;
-      padding-top: 0;
       border-top: 0px;
     }
   }

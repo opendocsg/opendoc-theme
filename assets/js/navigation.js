@@ -123,7 +123,7 @@
                 documentTitle.innerText = page.documentInfo[0] // document title
                 documentSubtitle.innerText = page.documentInfo[1] // document subtitle
                 docHeader.classList.remove('index')
-                searchFilter.innerText = page.title
+                searchFilter.innerText = page.documentInfo[0] // document title
                 searchFilter.classList.remove('hidden')
             }
         }
