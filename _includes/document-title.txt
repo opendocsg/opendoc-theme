@@ -1,22 +1,32 @@
 {%- comment -%}
-May want to just return entire HTML chunk if build takes too long
-i.e.:
-    <h2 class="description-title" id="document-title" >Title</h2>
-    <div class="description-subtitle" id="document-subtitle">Subtitle</div>
+Returns title, subtitle if config exists or else just return title based on folder name
 {%- endcomment -%}
-{%- assign document_info = null -%}
+{%- assign page_info = null -%}
 {%- for page in site.html_pages -%}
 {%- assign page_dir = page.dir | uri_escape -%}
 {%- assign include_dir = include.dir | uri_escape -%}
 {%- if page_dir == include_dir and page.name == 'index.html' or page.name == 'index.md' -%}
-{%- assign document_info = page -%}
+{%- assign page_info = page -%}
 {%- endif -%}
 {%- endfor -%}
-{%- if document_title == null -%}
-{%- assign document_title = include.dir  | url_decode | replace: '/',  '' | capitalize -%}
-{%- endif -%}
-{%- if include.info -%}
-{{ document_info[include.info] }}
+{%- assign document_info = '' | split: ',' -%}
+{%- if page_info == null or page_info.title == null -%}
+{%- assign folder_name = include.dir  | url_decode | replace: '/',  '' | capitalize -%}
+{%- assign document_info = document_info | push: folder_name -%}
 {%- else -%}
+{%- assign document_info = document_info | push: page_info.title -%}
+{%- endif -%}
+{%- assign document_info = document_info | push: page_info.subtitle -%}
+{%- assign document_info = document_info | push: page_info.order -%}
+{%- if include.info == 'title' -%}
+{{ document_info[0] }}
+{%- endif -%}
+{%- if include.info == 'subtitle' -%}
+{{ document_info[1] }}
+{%- endif -%}
+{%- if include.info == 'order' -%}
+{{ document_info[2] }}
+{%- endif -%}
+{%- if include.info == null -%}
 {{ document_info | jsonify }}
 {%- endif -%}

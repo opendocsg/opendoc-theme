@@ -120,10 +120,10 @@
             if (main.innerHTML.trim().replace(/\<iframe.*\<\/iframe\>/g, '') !== originalBody.innerHTML.trim().replace(/\<iframe.*\<\/iframe\>/g, '')) {
                 main.innerHTML = page.content
                 document.title = page.title
-                documentTitle.innerText = page.documentInfo.title
-                documentSubtitle.innerText = page.documentInfo.subtitle
+                documentTitle.innerText = page.documentInfo[0] // document title
+                documentSubtitle.innerText = page.documentInfo[1] // document subtitle
                 docHeader.classList.remove('index')
-                searchFilter.innerText = page.documentInfo.title
+                searchFilter.innerText = page.title
                 searchFilter.classList.remove('hidden')
             }
         }
@@ -147,7 +147,7 @@
         if (anchor) {
             var topOffset = siteHeader.offsetHeight
             if (!isMobileView()) {
-                topOffset += docHeader.offsetTop
+                topOffset += docHeader.clientHeight
             }
             var top = anchor.offsetTop - topOffset
             window.scrollTo(0, top)

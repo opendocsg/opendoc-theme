@@ -27,7 +27,7 @@
                 {% endif %}
                 'url': {{ site_page.url | relative_url | jsonify }},
                 'absolute_url': {{ site_page.url | jsonify}},
-                'documentInfo': {% include document-title.txt dir=site_page.dir -%}
+                'documentInfo': {% include document-title.txt dir=site_page.dir %}
             },
             {% endunless %}
             {% endunless %}
