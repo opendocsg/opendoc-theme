@@ -32,10 +32,12 @@
         }, true)
     })
 
-
-    backButton.addEventListener('click', function () {
-        tod.classList.remove('hidden')
-    })
+    if (backButton) {
+        // If there is only one document, backButton is hidden
+        backButton.addEventListener('click', function () {
+            tod.classList.remove('hidden')
+        })
+    }
 
     //  Nav bar expansion and selection
     var setSelectedAnchor = function () {

@@ -249,6 +249,10 @@
       &.hidden {
         display: none;
       }
+
+      &:empty {
+        display: none;
+      }
     }
 
     // Children

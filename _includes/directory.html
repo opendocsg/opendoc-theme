@@ -26,14 +26,25 @@
 </ul>
 {% endcapture %}
 
+{% comment %}
+If there is only one folder or documents all at root, dont show back button
+{% endcomment %}
+{% if folders.size > 1 %}
 {{ folder_directory | markdownify | strip }}
 <div class="back-to-documents">
     <p>Back to Documents <img class="btn-icon" src="{{ '/assets/images/chevron-up.svg' | relative_url }}"></p>
 </div>
-{% for folder in folders %}
+{% endif %}
 
+{% for folder in folders %}
 {% assign include_currdir_decode = include.currdir | uri_escape %}
-{% if include_currdir_decode == folder and include.currdir != '/' %}
+
+{% comment %}
+If there is only one folder, show expanded content list
+{% endcomment %}
+{% if folders.size == 1 %}
+<section class="contents lonely" id="toc_{{ folder | replace: ' ', '_' }}">
+{% elsif include_currdir_decode == folder and include.currdir != '/' %}
 <section class="contents" id="toc_{{ folder | replace: ' ', '_' }}">
 {% else %}
 <section class="contents" id="toc_{{ folder | replace: ' ', '_' }}" hidden>
@@ -41,5 +52,6 @@
     {% assign folder_path = folder %}
     {% include toc.html path=folder_path class="table-of-contents" h_min=1 h_max=2 item_class="nav-branch" anchor_class="nav-link" %}
 </section>
+
 {% endfor %}
 </section>
