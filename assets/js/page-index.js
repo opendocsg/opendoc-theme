@@ -20,6 +20,9 @@
             {
                 'name': {{name | jsonify}},
                 'title': {{title | jsonify}},
+                {% comment %}
+                    this checks if it's already a HTML file, so you don't need to markdownify it
+                {% endcomment %}
                 {% if site_page.url == page.url %}
                 'content': {{ site_page.content | jsonify }},
                 {% else %}
@@ -35,9 +38,16 @@
     ]
 
     var pageIndex = {}
+    var documentList = {}
 
     pages.forEach(function(page) {
-        return pageIndex[page.url] = page
+        pageIndex[page.url] = page
+        var documentTitle = page.documentInfo ? page.documentInfo[0] : 'root'
+        if (documentList[documentTitle]) {
+            documentList[documentTitle].push(page)
+        } else {
+            documentList[documentTitle] = [page]
+        }
     })
 
     // Expose as global var
