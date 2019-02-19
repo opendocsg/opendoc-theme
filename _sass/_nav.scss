@@ -147,6 +147,19 @@
     }
   }
 
+  // If there is only one document
+  .contents.lonely {
+    .nav-branch {
+      .nav-link {
+        padding-left: calc(1.5 * #{$large-spacing});
+      }
+      & .nav-branch {
+        margin-left: calc(1.5 * #{$large-spacing});
+        padding-left: $search-box-height;
+      }
+    }
+  }
+
   .nav-branch {
     position: relative;
     display: flex;
