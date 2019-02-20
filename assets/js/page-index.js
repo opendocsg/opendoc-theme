@@ -23,11 +23,11 @@
                 {% comment %}
                     this checks if it's already a HTML file, so you don't need to markdownify it
                 {% endcomment %}
-                {% if site_page.url == page.url %}
-                'content': {{ site_page.content | jsonify }},
-                {% else %}
-                'content': {{ site_page.content | markdownify | jsonify }},
-                {% endif %}
+                // {% if site_page.url == page.url %}
+                // 'content': {{ site_page.content | jsonify }},
+                // {% else %}
+                // 'content': {{ site_page.content | markdownify | jsonify }},
+                // {% endif %}
                 'url': {{ site_page.url | relative_url | jsonify }},
                 'absolute_url': {{ site_page.url | jsonify}},
                 'documentInfo': {% include document-title.txt dir=site_page.dir %}
@@ -54,4 +54,5 @@
     root = typeof exports !== 'undefined' && exports !== null ? exports : this
 
     root.pageIndex = pageIndex;
+    root.documentList = documentList;
 })()

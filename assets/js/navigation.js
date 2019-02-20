@@ -23,6 +23,9 @@
             var tocId = target.id.replace(/^dir_/, 'toc_')
             var correspondingToc = document.getElementById(tocId)
             if (correspondingToc) {
+                // TODO: May break
+                let documentTitle = target.children[0].innerText.trim()
+                loadDocumentContent(documentTitle)
                 document.querySelectorAll('.contents').forEach(function (toc) {
                     toc.hidden = true
                 })
@@ -31,6 +34,9 @@
             }
         }, true)
     })
+
+    // loadDocumentContent should happen here since directory might be pre-accessed
+    // loadDocumentContent should be progressive as well
 
     if (backButton) {
         // If there is only one document, backButton is hidden
@@ -116,28 +122,28 @@
         var page = pageIndex[path]
         // Only reflow the main content if necessary
         if (page) {
-            var originalBody = new DOMParser().parseFromString(page.content, 'text/html').body
-            // Not sure if comparing html or reflow no matter what is quicker
-            // Don't compare iframes
-            if (main.innerHTML.trim().replace(/\<iframe.*\<\/iframe\>/g, '') !== originalBody.innerHTML.trim().replace(/\<iframe.*\<\/iframe\>/g, '')) {
-                main.innerHTML = page.content
-                document.title = page.title
-                documentTitle.innerText = page.documentInfo[0] // document title
-                documentSubtitle.innerText = page.documentInfo[1] // document subtitle
-                docHeader.classList.remove('index')
-                searchFilter.innerText = page.documentInfo[0] // document title
-                searchFilter.classList.remove('hidden')
-            }
-        }
+            loadPageContent(page).then(function(pageContent) {
+                // Not sure if comparing html or reflow no matter what is quicker
+                // Don't compare iframes
+                if (main.innerHTML.trim().replace(/\<iframe.*\<\/iframe\>/g, '') !== pageContent.trim().replace(/\<iframe.*\<\/iframe\>/g, '')) {
+                    main.innerHTML = pageContent
+                    document.title = page.title
+                    documentTitle.innerText = page.documentInfo[0] // document title
+                    documentSubtitle.innerText = page.documentInfo[1] // document subtitle
+                    docHeader.classList.remove('index')
+                    searchFilter.innerText = page.documentInfo[0] // document title
+                    searchFilter.classList.remove('hidden')
+                }
+                // Make sure it is scrolled to the anchor
+                scrollToView()
 
-        // Make sure it is scrolled to the anchor
-        scrollToView()
-
-        // Hide menu if sub link clicked or clicking on search results        
-        if (window.location.hash.replace('#', '').length > 0 || navigation.classList.contains('hidden')) {
-            window.dispatchEvent(new Event('link-click'))
+                // Hide menu if sub link clicked or clicking on search results        
+                if (window.location.hash.replace('#', '').length > 0 || navigation.classList.contains('hidden')) {
+                    window.dispatchEvent(new Event('link-click'))
+                }
+                highlightBody()
+            })
         }
-        highlightBody()
     }
 
     var scrollToView = function () {
