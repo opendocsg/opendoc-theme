@@ -313,9 +313,16 @@
           opacity: 1;
         }
       }
-      &.filled .clear-button {
-        opacity: 1;
-        cursor: pointer;
+      &.filled {
+        background: rgba(255, 255, 255, 0.75);
+
+        .clear-button {
+          opacity: 1;
+          cursor: pointer;
+        }
+        input {
+          opacity: 1;
+        }
       }
       input {
         display: block;
@@ -338,9 +345,6 @@
       input::placeholder {
         color: $header-text-color;
         opacity: 0.5;
-      }
-      &.filled input {
-        opacity: 1;
       }
       input:disabled ~ .search-icon {
         display: none;
