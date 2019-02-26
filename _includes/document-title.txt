@@ -6,10 +6,11 @@
 {%- assign page_info = null -%}
 {%- comment -%}
     Look for config file
+    Compare only first folder
 {%- endcomment -%}
+{%- assign include_dir = include.dir | uri_escape | remove_first: '/' | split: '/' | first -%}
 {%- for page in site.html_pages -%}
-{%- assign page_dir = page.dir | uri_escape -%}
-{%- assign include_dir = include.dir | uri_escape -%}
+{%- assign page_dir = page.dir | uri_escape | remove_first: '/' | split: '/' | first -%}
 {%- if page_dir == include_dir and page.name == 'index.html' or page.name == 'index.md' -%}
 {%- assign page_info = page -%}
 {%- endif -%}
@@ -17,9 +18,10 @@
 {%- assign document_info = '' | split: ',' -%}
 {%- comment -%}
     If no config file or title not set, use folder name
+    /document 1/something/blah -> Document 1
 {%- endcomment -%}
 {%- if page_info == null or page_info.title == null -%}
-{%- assign folder_name = include.dir  | url_decode | replace: '/',  '' | capitalize -%}
+{%- assign folder_name = include.dir | url_decode | remove_first: '/' | split: '/' | first | capitalize -%}
 {%- assign document_info = document_info | push: folder_name -%}
 {%- else -%}
 {%- assign document_info = document_info | push: page_info.title -%}

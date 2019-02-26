@@ -22,8 +22,11 @@ Output:
         {% if include.path == null %}
             {% assign pages = pages | push: site_page %}
         {% else %}
-            {% assign site_page_dir = site_page.dir | uri_escape %}
-            {% if site_page_dir == include.path %}
+            {% assign site_page_folder = site_page.dir | uri_escape | remove_first: '/' | split: '/' | first | prepend: '/' %}
+            {% if site_page_folder != '/' %}
+            {% assign site_page_folder = site_page_folder | append: '/' %}
+            {% endif %}
+            {% if site_page_folder == include.path %}
                 {% assign pages = pages | push: site_page %}
             {% endif %}        
         {% endif %}        

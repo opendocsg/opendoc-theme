@@ -4,7 +4,15 @@
 {% for page in site.html_pages %}
 {% unless page.exclude %}
 {% unless page.name == 'index.html' or page.name == 'index.md' %}
-{% assign escaped_dir = page.dir | uri_escape %}
+{% comment %}
+    Get first folder only
+    e.g. /, /folder1/, 
+{% endcomment %}
+{% assign escaped_dir = page.dir | uri_escape | remove_first: '/' | split: '/' | first | prepend: '/' %}
+{% if escaped_dir != '/' %}
+{% assign escaped_dir = escaped_dir | append: '/' %}
+{% endif %}
+
 {% assign folders = folders | push: escaped_dir %}
 {% endunless %}
 {% endunless %}
@@ -37,7 +45,13 @@ If there is only one folder or documents all at root, dont show back button
 {% endif %}
 
 {% for folder in folders %}
-{% assign include_currdir_decode = include.currdir | uri_escape %}
+{% comment %}
+    Similarly, get only first subfolder of the currdir being passed in 
+{% endcomment %}
+{% assign include_currdir_decode = include.currdir  remove_first: '/' | split: '/' | first | prepend: '/' %}
+{% if include_currdir_decode != '/' %}
+{% assign include_currdir_decode = include_currdir_decode | append: '/' %}
+{% endif %}
 
 {% comment %}
 If there is only one folder, show expanded content list
