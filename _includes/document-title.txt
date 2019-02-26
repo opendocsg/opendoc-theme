@@ -16,12 +16,20 @@
 {%- endif -%}
 {%- endfor -%}
 {%- assign document_info = '' | split: ',' -%}
+
+{%- if page_info == null or page_info.title == null -%}
+{%- if include.dir == '/' -%}
+{%- comment -%}
+    If root folder, show root
+{%- endcomment -%}
+{%- assign folder_name = site.title -%}
+{%- else -%}
 {%- comment -%}
     If no config file or title not set, use folder name
     /document 1/something/blah -> Document 1
 {%- endcomment -%}
-{%- if page_info == null or page_info.title == null -%}
 {%- assign folder_name = include.dir | url_decode | remove_first: '/' | split: '/' | first | capitalize -%}
+{%- endif -%}
 {%- assign document_info = document_info | push: folder_name -%}
 {%- else -%}
 {%- assign document_info = document_info | push: page_info.title -%}

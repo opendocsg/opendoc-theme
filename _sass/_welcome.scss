@@ -9,6 +9,9 @@
   .welcome-image {
     width: auto;
     max-height: 30vh;
+    @include mobile-screen {
+      margin-top: 7vh;
+    }
   }
 
   h2.welcome-text {
