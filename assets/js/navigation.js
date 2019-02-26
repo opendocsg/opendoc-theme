@@ -9,6 +9,11 @@
     var navigation = document.getElementsByClassName('navigation')[0]
     var searchFilter = document.getElementsByClassName('search-filter')[0]
 
+    // If subfolder was accessed directory via url, load the subfolder's pages
+    if (documentTitle && documentTitle.innerText.trim()) {
+        loadDocumentContent(documentTitle.innerText)
+    }
+
     // Directory navigation
     var allDirectories = document.querySelectorAll('a.tod-container')
     allDirectories.forEach(function (directory) {
@@ -23,9 +28,11 @@
             var tocId = target.id.replace(/^dir_/, 'toc_')
             var correspondingToc = document.getElementById(tocId)
             if (correspondingToc) {
-                // TODO: May break
-                let documentTitle = target.children[0].innerText.trim()
-                loadDocumentContent(documentTitle)
+                // TODO: May break if user changes the html
+                // Loads on document click if it hasnt loaded yet
+                var directoryTitle = target.innerText.trim()
+                loadDocumentContent(directoryTitle)
+
                 document.querySelectorAll('.contents').forEach(function (toc) {
                     toc.hidden = true
                 })
@@ -33,13 +40,13 @@
                 tod.classList.add('hidden')
             }
         }, true)
+        // Load pages in background based on directory order
+        var directoryTitle = directory.innerText.trim()
+        loadDocumentContent(directoryTitle)
     })
 
-    // loadDocumentContent should happen here since directory might be pre-accessed
-    // loadDocumentContent should be progressive as well
-
     if (backButton) {
-        // If there is only one document, backButton is hidden
+        // Reminder: If there is only one document, backButton is hidden
         backButton.addEventListener('click', function () {
             tod.classList.remove('hidden')
         })
@@ -122,7 +129,7 @@
         var page = pageIndex[path]
         // Only reflow the main content if necessary
         if (page) {
-            loadPageContent(page).then(function(pageContent) {
+            loadPageContent(page).then(function (pageContent) {
                 // Not sure if comparing html or reflow no matter what is quicker
                 // Don't compare iframes
                 if (main.innerHTML.trim().replace(/\<iframe.*\<\/iframe\>/g, '') !== pageContent.trim().replace(/\<iframe.*\<\/iframe\>/g, '')) {
