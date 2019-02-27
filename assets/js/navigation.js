@@ -11,7 +11,7 @@
 
     // If subfolder was accessed directory via url, load the subfolder's pages
     if (documentTitle && documentTitle.innerText.trim()) {
-        loadDocumentContent(documentTitle.innerText)
+        loadDocumentContent(documentTitle.innerText, 1)
     }
 
     // Directory navigation
@@ -31,7 +31,7 @@
                 // TODO: May break if user changes the html
                 // Loads on document click if it hasnt loaded yet
                 var directoryTitle = target.innerText.trim()
-                loadDocumentContent(directoryTitle)
+                loadDocumentContent(directoryTitle, 1)
 
                 document.querySelectorAll('.contents').forEach(function (toc) {
                     toc.hidden = true
@@ -42,7 +42,7 @@
         }, true)
         // Load pages in background based on directory order
         var directoryTitle = directory.innerText.trim()
-        loadDocumentContent(directoryTitle)
+        loadDocumentContent(directoryTitle, 0)
     })
 
     if (backButton) {
@@ -129,7 +129,7 @@
         var page = pageIndex[path]
         // Only reflow the main content if necessary
         if (page) {
-            loadPageContent(page).then(function (pageContent) {
+            loadPageContent(page, 2).then(function (pageContent) {
                 // Not sure if comparing html or reflow no matter what is quicker
                 // Don't compare iframes
                 if (main.innerHTML.trim().replace(/\<iframe.*\<\/iframe\>/g, '') !== pageContent.trim().replace(/\<iframe.*\<\/iframe\>/g, '')) {

@@ -48,7 +48,7 @@ If there is only one folder or documents all at root, dont show back button
 {% comment %}
     Similarly, get only first subfolder of the currdir being passed in 
 {% endcomment %}
-{% assign include_currdir_decode = include.currdir  remove_first: '/' | split: '/' | first | prepend: '/' %}
+{% assign include_currdir_decode = include.currdir | remove_first: '/' | split: '/' | first | prepend: '/' %}
 {% if include_currdir_decode != '/' %}
 {% assign include_currdir_decode = include_currdir_decode | append: '/' %}
 {% endif %}

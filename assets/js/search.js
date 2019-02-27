@@ -62,6 +62,7 @@
         container.innerHTML = ''
         if (typeof searchResults.hits === 'undefined') {
             var error = document.createElement('p')
+            error.classList.add('not-found')
             error.innerHTML = searchResults
             container.appendChild(error)
         // Check if there are hits and max_score is more than 0 
@@ -268,27 +269,23 @@
 
     // Call the API
     esSearch = function(query) {
-        var req = new XMLHttpRequest();
-        req.addEventListener('readystatechange', function() {
-            if (req.readyState === 4) {
-                var successResultCodes = [200, 304]
-                if (successResultCodes.includes(req.status)) {
-                var result = JSON.parse(req.responseText)
-                if (typeof result.error === 'undefined') {
-                    return renderSearchResultsFromServer(result.body)
-                } else {
-                    return renderSearchResultsFromServer(result.error)
-                }
-                } else {
-                return renderSearchResultsFromServer('Error retrieving search results ...')
-                }
-            }
-        })
         var esQuery = createEsQuery(query)
-        req.open('POST', search_endpoint, true)
-        req.setRequestHeader('Content-Type', 'application/json')
-        req.setRequestHeader('X-Requested-With', 'XMLHttpRequest')
-        req.send(JSON.stringify(esQuery))
+        fetch(search_endpoint, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(esQuery)
+        })
+        .then(checkStatus)
+        .then(parseJSON)
+        .then(function(data) {
+            renderSearchResultsFromServer(data.body)
+        })
+        .catch(function(err) {
+            console.error(err)
+            renderSearchResultsFromServer('Failed to fetch search results')
+        })
     }
 
     var onSearchChange = function() {
