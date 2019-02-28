@@ -14,3 +14,8 @@ styling_options:
   opendoc_logo_path: /assets/images/logo-full.png
   logo_path: /assets/images/logo-full.png
   feedback_url: https://form.gov.sg/forms/govtech/5bbdc1959d1bb0000f818d8c
+document_order: 
+  - document 2
+  - document 1
+  - Document 5
+  - document 10

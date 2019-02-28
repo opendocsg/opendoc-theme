@@ -72,7 +72,7 @@
               height="20" />
           </div>
           <span class="search-filter {% if page.name == 'index.html' %}hidden{% endif %}">
-            {%- include document-title.txt dir=page.dir info="title" -%}
+            {%- include_cached document-title.txt dir=page.dir info="title" -%}
           </span>
           <input id="search-box" autofocus placeholder="Search document" type="text" />
           <label class="clear-button">
@@ -87,7 +87,7 @@
       </div>
     </div>
     <div class="nav-main">
-      {% include directory.html currdir=page.dir %}
+      {% include_cached directory.html currdir=page.dir %}
     </div>
   </nav>
 
@@ -97,13 +97,13 @@
     <header class="doc-header no-print">
       {% endif %}
       <div class=description-container>
-        <h2 class="description-title" id="document-title">{% include document-title.txt dir=page.dir info="title" %}
+        <h2 class="description-title" id="document-title">{% include_cached document-title.txt dir=page.dir info="title" %}
         </h2>
         <div class="description-subtitle" id="document-subtitle">
-          {% include document-title.txt dir=page.dir info="subtitle" %}
+          {% include_cached document-title.txt dir=page.dir info="subtitle" %}
         </div>
       </div>
-      {% include toolbar.html %}
+      {% include_cached toolbar.html %}
     </header>
     <main class="site-main" id="main-content" aria-label="Content">
       {{ content | replace: "!!^", "<i style='margin-left:30px'></i>"}}

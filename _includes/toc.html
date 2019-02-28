@@ -1,7 +1,7 @@
 {% comment %}
 Adapted from: https://github.com/allejo/jekyll-toc
 Usage:
-    {% include toc.html path=dir class="inline_toc" h_min=2 h_max=3 %}
+    {% include_cached toc.html path=dir class="inline_toc" h_min=2 h_max=3 %}
 
 Optional Parameters:
     * path         (string) :   ''   - the path of the files for the toc to be generated
@@ -15,23 +15,44 @@ Output:
     generate the table of contents and will NOT output the markdown given to it
 {% endcomment %}
 
-{% assign pages = "" | split: ',' %}
+{% assign unsorted_pages = "" | split: ',' %}
 {% assign sorted_pages = site.html_pages | sort: 'name' %}
 {% for site_page in sorted_pages %}
     {% unless site_page.exclude %}
         {% if include.path == null %}
-            {% assign pages = pages | push: site_page %}
+            {% assign unsorted_pages = unsorted_pages | push: site_page %}
         {% else %}
             {% assign site_page_folder = site_page.dir | uri_escape | remove_first: '/' | split: '/' | first | prepend: '/' %}
             {% if site_page_folder != '/' %}
             {% assign site_page_folder = site_page_folder | append: '/' %}
             {% endif %}
             {% if site_page_folder == include.path %}
-                {% assign pages = pages | push: site_page %}
+                {% assign unsorted_pages = unsorted_pages | push: site_page %}
             {% endif %}        
         {% endif %}        
     {% endunless %}
 {% endfor %}
+
+{% comment %}
+    Page ordering
+{% endcomment %}
+{% capture page_order %}
+{% include document-title.txt dir=include.path info="order" %}
+{% endcapture %}
+{% assign page_order = page_order | strip | split: '/' %}
+{% if page_order.size > 0 %}
+    {% assign pages = '' | split: ',' %}
+    {% for order in page_order %}
+        {% for unsorted_page in unsorted_pages %}
+            {% if unsorted_page.title == order or unsorted_page.name == order %}
+                {% assign pages = pages | push: unsorted_page %}
+            {% endif %}
+        {% endfor %}
+    {% endfor %}
+{% else %}
+{% assign pages = unsorted_pages | sort: 'name' %}
+{% endif %}
+
 {% capture tocWorkspace %}
     {% capture my_toc %}{% endcapture %}
     {% assign orderedList = include.ordered | default: false %}

@@ -371,5 +371,3 @@ var PQueue =
 
         return PQueue;
     }();
-
-module.exports = PQueue;

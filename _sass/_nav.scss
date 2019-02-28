@@ -179,9 +179,9 @@
 
       .directory-item {
         border-bottom: 2px solid $well-background-color;
-        padding: $spacing 0;
+        padding: $spacing $large-spacing $spacing 0;
         display: inline-block;
-        width: 100%;
+        width: calc(100% - #{$large-spacing});
       }
     }
 

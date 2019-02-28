@@ -18,33 +18,58 @@
 {% endunless %}
 {% endfor %}
 {% assign folders = folders | uniq | sort %}
+
+{% comment %}
+    Show table of directories only in root path
+{% endcomment %}
 {% if include.currdir == '/' %}
 <ul class="table-of-directories">
 {% else %}
 <ul class="table-of-directories hidden">
 {% endif %}
-{% for folder in folders %}
+
+
+{% comment %}
+    if document_order is listed, sort according to document_order
+{% endcomment %}
+{% if site.document_order %}
+    {% assign sorted_folders = '' | split: '' %}
+    {% for document in site.document_order %}
+        {% assign document_to_compare = document | strip | uri_escape | downcase %}
+        {% for folder in folders %}
+            {% assign folder_to_compare = folder | remove: '/' | downcase %}
+            {% if document_to_compare == folder_to_compare %}
+                {% assign sorted_folders = sorted_folders | push: folder %}
+            {% endif %}
+        {% endfor %}
+    {% endfor %}
+{% else %}
+{% assign sorted_folders = folders %}
+{% endif %}
+
+{% for folder in sorted_folders %}
 <li>
 <a href="{{ folder }}" id="dir_{{ folder }}" class="tod-container">
 <div class="directory-item">
-{% include document-title.txt dir=folder info="title" %}
+{% include_cached document-title.txt dir=folder info="title" %}
 </div></a>
 </li>
 {% endfor %}
+
 </ul>
 {% endcapture %}
 
 {% comment %}
 If there is only one folder or documents all at root, dont show back button
 {% endcomment %}
-{% if folders.size > 1 %}
+{% if sorted_folders.size > 1 %}
 {{ folder_directory | markdownify | strip }}
 <div class="back-to-documents">
     <p>Back to Documents <img class="btn-icon" src="{{ '/assets/images/chevron-up.svg' | relative_url }}"></p>
 </div>
 {% endif %}
 
-{% for folder in folders %}
+{% for folder in sorted_folders %}
 {% comment %}
     Similarly, get only first subfolder of the currdir being passed in 
 {% endcomment %}
@@ -63,8 +88,7 @@ If there is only one folder, show expanded content list
 {% else %}
 <section class="contents" id="toc_{{ folder | replace: ' ', '_' }}" hidden>
 {% endif %}    
-    {% assign folder_path = folder %}
-    {% include toc.html path=folder_path class="table-of-contents" h_min=1 h_max=2 item_class="nav-branch" anchor_class="nav-link" %}
+{% include_cached toc.html path=folder class="table-of-contents" h_min=1 h_max=2 item_class="nav-branch" anchor_class="nav-link" %}
 </section>
 
 {% endfor %}

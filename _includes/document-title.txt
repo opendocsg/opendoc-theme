@@ -18,6 +18,10 @@
 {%- assign document_info = '' | split: ',' -%}
 
 {%- if page_info == null or page_info.title == null -%}
+
+{%- comment -%}
+    FOLDER NAME
+{%- endcomment -%}
 {%- if include.dir == '/' -%}
 {%- comment -%}
     If root folder, show root
@@ -30,10 +34,13 @@
 {%- endcomment -%}
 {%- assign folder_name = include.dir | url_decode | remove_first: '/' | split: '/' | first | capitalize -%}
 {%- endif -%}
+
 {%- assign document_info = document_info | push: folder_name -%}
 {%- else -%}
 {%- assign document_info = document_info | push: page_info.title -%}
 {%- endif -%}
+
+
 {%- assign document_info = document_info | push: page_info.subtitle -%}
 {%- assign document_info = document_info | push: page_info.order -%}
 {%- comment -%}
@@ -47,7 +54,7 @@
 {{ document_info[1] }}
 {%- endif -%}
 {%- if include.info == 'order' -%}
-{{ document_info[2] }}
+{{ document_info[2] | join: '/' }}
 {%- endif -%}
 {%- if include.info == null -%}
 {{ document_info | jsonify }}
