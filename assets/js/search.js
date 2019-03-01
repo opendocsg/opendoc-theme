@@ -128,7 +128,7 @@
         }
         if (result.highlight) {
             ['title', 'content'].forEach(function(field) {
-                var curr, match, results1, term;
+                var curr, match, term;
                 if (result.highlight[field]) {
                     var curr = result.highlight[field].join('...')
                     var curr = curr.trimLeft()
@@ -145,12 +145,12 @@
                     }
                 }
             })
-        }
-        if (result.highlight.content) {
-            content = joinHighlights(result.highlight.content.slice(0, Math.min(3, result.highlight.content.length)).join('...'))
-        }
-        if (result.highlight.title) {
-            title = joinHighlights(result.highlight.title[0])
+            if (result.highlight.content) {
+                content = joinHighlights(result.highlight.content.slice(0, Math.min(3, result.highlight.content.length)).join('...'))
+            }
+            if (result.highlight.title) {
+                title = joinHighlights(result.highlight.title[0])
+            }
         }
         var url = result._source.url;
         var documentTitle = result._source.documentTitle;
