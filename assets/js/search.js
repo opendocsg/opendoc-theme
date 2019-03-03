@@ -72,7 +72,7 @@
             container.appendChild(error)
         } else {
             searchResults.hits.hits.forEach(function(result, i) {
-                if (result.score) {
+                if (result._score) {
                     var formatted = formatResult(result, i)
                     var element = generateResultHTML(formatted)
                     container.appendChild(element)
