@@ -192,7 +192,7 @@
                 'title': {
                 'query': queryStr,
                 'max_expansions': 20,
-                'boost': 40,
+                'boost': 100,
                 'slop': 10
                 }
             }
@@ -202,7 +202,7 @@
             'content': {
             'query': queryStr,
             'max_expansions': 20,
-            'boost': 30,
+            'boost': 60,
             'slop': 10
             }
         }
