@@ -158,7 +158,7 @@
         var documentTitle = result._source.documentTitle;
         return {
             url: url,
-            content: '...' + content + '...',
+            content: content ? '...' + content + '...' : '',
             title: title,
             documentTitle: documentTitle
         }
