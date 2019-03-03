@@ -72,9 +72,11 @@
             container.appendChild(error)
         } else {
             searchResults.hits.hits.forEach(function(result, i) {
-                var formatted = formatResult(result, i)
-                var element = generateResultHTML(formatted)
-                container.appendChild(element)
+                if (result.score) {
+                    var formatted = formatResult(result, i)
+                    var element = generateResultHTML(formatted)
+                    container.appendChild(element)
+                }
             });
             highlightBody()
         }
