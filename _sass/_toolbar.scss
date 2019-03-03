@@ -9,6 +9,7 @@
   border-radius: 4px;
   overflow: hidden;
   z-index: 10000;
+  flex-shrink: 0;
 
   .toolbar-button {
     cursor: pointer;
