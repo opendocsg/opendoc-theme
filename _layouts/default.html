@@ -33,7 +33,7 @@
 </head>
 
 <body>
-  <div class="site-header">
+  <div class="site-header no-print">
     <div class="site-header-left">
       <a href="{{ '/'  | relative_url }}">
         <h1 class="site-header-text">
@@ -93,33 +93,34 @@
 
   {% if page.name == 'index.html' %}
   <header class="doc-header no-print index">
-    {% else %}
-    <header class="doc-header no-print">
-      {% endif %}
-      <div class=description-container>
-        <h2 class="description-title" id="document-title">{% include_cached document-title.txt dir=page.dir info="title" %}
-        </h2>
-        <div class="description-subtitle" id="document-subtitle">
-          {% include_cached document-title.txt dir=page.dir info="subtitle" %}
-        </div>
+  {% else %}
+  <header class="doc-header no-print">
+  {% endif %}
+    <div class=description-container>
+      <h2 class="description-title" id="document-title">
+        {% include_cached document-title.txt dir=page.dir info="title" %}
+      </h2>
+      <div class="description-subtitle" id="document-subtitle">
+        {% include_cached document-title.txt dir=page.dir info="subtitle" %}
       </div>
-      {% include_cached toolbar.html %}
-    </header>
-    <main class="site-main" id="main-content" aria-label="Content">
-      {{ content | replace: "!!^", "<i style='margin-left:30px'></i>"}}
-    </main>
-    <div class="site-branding">Powered by Opendoc</div>
+    </div>
+    {% include_cached toolbar.html %}
+  </header>
+  <main class="site-main" id="main-content" aria-label="Content">
+    {{ content | replace: "!!^", "<i style='margin-left:30px'></i>"}}
+  </main>
+  <div class="site-branding no-print">Powered by Opendoc</div>
 
-    <script src="https://npmcdn.com/headroom.js@0.9.4/dist/headroom.min.js" charset="utf-8"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" charset="utf-8"></script>
-    <!-- <script src="https://unpkg.com/popper.js@1.14.4/dist/umd/popper.min.js"></script> -->
-    <script src="{{ '/assets/js/ga-tracking.js' | relative_url }}"></script>
-    <script src="{{ '/assets/js/toolbar.js' | relative_url }}"></script>
-    <script src="{{ '/assets/js/page-index.js' | relative_url }}"></script>
-    <script src="{{ '/assets/js/pre-loader.js' | relative_url }}"></script>
-    <script src="{{ '/assets/js/search.js' | relative_url }}"></script>
-    <script src="{{ '/assets/js/header.js' | relative_url }}"></script>
-    <script src="{{ '/assets/js/navigation.js' | relative_url }}"></script>
+  <script src="https://npmcdn.com/headroom.js@0.9.4/dist/headroom.min.js" charset="utf-8"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" charset="utf-8"></script>
+  <!-- <script src="https://unpkg.com/popper.js@1.14.4/dist/umd/popper.min.js"></script> -->
+  <script src="{{ '/assets/js/ga-tracking.js' | relative_url }}"></script>
+  <script src="{{ '/assets/js/toolbar.js' | relative_url }}"></script>
+  <script src="{{ '/assets/js/page-index.js' | relative_url }}"></script>
+  <script src="{{ '/assets/js/pre-loader.js' | relative_url }}"></script>
+  <script src="{{ '/assets/js/search.js' | relative_url }}"></script>
+  <script src="{{ '/assets/js/header.js' | relative_url }}"></script>
+  <script src="{{ '/assets/js/navigation.js' | relative_url }}"></script>
 </body>
 
 </html>
