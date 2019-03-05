@@ -25,25 +25,34 @@
                 // Goes to parent node if child element is clicked
                 target = target.parentNode;
             }
+            // this tocId is basically the directory path
+            // e.g. /Document%20One/ with spaces replaced with underscores
             var tocId = target.id.replace(/^dir_/, 'toc_')
-            var correspondingToc = document.getElementById(tocId)
-            if (correspondingToc) {
+            if (showToc(tocId)) {
                 // TODO: May break if user changes the html
                 // Loads on document click if it hasnt loaded yet
                 var directoryTitle = target.innerText.trim()
                 loadDocumentContent(directoryTitle, 1)
-
-                document.querySelectorAll('.contents').forEach(function (toc) {
-                    toc.hidden = true
-                })
-                correspondingToc.hidden = false
-                tod.classList.add('hidden')
             }
         }, true)
         // Load pages in background based on directory order
         var directoryTitle = directory.innerText.trim()
         loadDocumentContent(directoryTitle, 0)
     })
+
+    // Returns whether corresponding toc is found and displays it
+    var showToc = function (tocId) {
+        var correspondingToc = document.getElementById(tocId)
+        if (correspondingToc) {
+            document.querySelectorAll('.contents').forEach(function (toc) {
+                toc.hidden = true
+            })
+            correspondingToc.hidden = false
+            tod.classList.add('hidden')
+            return true
+        }
+        return false
+    }
 
     if (backButton) {
         // Reminder: If there is only one document, backButton is hidden
@@ -129,6 +138,8 @@
         var page = pageIndex[path]
         // Only reflow the main content if necessary
         if (page) {
+            var tocId = 'toc_' + page.dir.replace(/\s/g, '_')
+            showToc(tocId)
             loadPageContent(page, 2).then(function (pageContent) {
                 // Not sure if comparing html or reflow no matter what is quicker
                 // Don't compare iframes

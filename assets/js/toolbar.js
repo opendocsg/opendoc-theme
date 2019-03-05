@@ -46,12 +46,12 @@
     // --------------------------
     var editButton = document.getElementById('edit-btn')
     editButton.addEventListener('click', function() { 
-        var repoUrl = '{{ site.github.repository_url }}'
+        var repoUrl = '{{ site.github.repository_url }}' + '/blob/master'
         var page = pageIndex[window.location.pathname]
-        var pageUrl = page ? page['absolute_url'] : null
+        var pageUrl = page ? page['nobase_url'] : null
         var pageName = page ? page.name : null
         if (pageUrl && pageName) {
-            console.log(pageUrl)
+            console.log('opening:', pageUrl)
             var markdownUrl = pageUrl.split('/')
             markdownUrl[markdownUrl.length - 1] = pageName
             markdownUrl = markdownUrl.join('/')

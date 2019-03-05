@@ -49,7 +49,7 @@
 
 {% for folder in sorted_folders %}
 <li>
-<a href="{{ folder }}" id="dir_{{ folder }}" class="tod-container">
+<a href="{{ folder | relative_url }}" id="dir_{{ folder }}" class="tod-container">
 <div class="directory-item">
 {% include_cached document-title.txt dir=folder info="title" %}
 </div></a>

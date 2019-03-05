@@ -21,7 +21,8 @@
                 'name': {{name | jsonify}},
                 'title': {{title | jsonify}},
                 'url': {{ site_page.url | relative_url | jsonify }},
-                'absolute_url': {{ site_page.url | jsonify}},
+                'nobase_url': {{ site_page.url | jsonify}},
+                'dir': {{ site_page.dir | jsonify }},
                 'documentInfo': {% include_cached document-title.txt dir=site_page.dir %}
             },
             {% endunless %}
