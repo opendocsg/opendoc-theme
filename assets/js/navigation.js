@@ -134,12 +134,12 @@
     // =============================================================================
     var onHashChange = function (event) {
         var path = window.location.pathname
-        setSelectedAnchor()
         var page = pageIndex[path]
         // Only reflow the main content if necessary
         if (page) {
             var tocId = 'toc_' + page.dir.replace(/\s/g, '_')
             showToc(tocId)
+            setSelectedAnchor()
             loadPageContent(page, 2).then(function (pageContent) {
                 // Not sure if comparing html or reflow no matter what is quicker
                 // Don't compare iframes
