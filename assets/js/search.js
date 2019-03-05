@@ -7,6 +7,7 @@
     var searchBoxElement = document.getElementById('search-box')
     var clearButton = document.getElementsByClassName('clear-button')[0]
     var main = document.getElementsByTagName('main')[0]
+    var searchFilter = document.getElementsByClassName('search-filter')[0]
 
     searchBoxElement.oninput = function (event) {
         if (searchBoxElement.value && searchBoxElement.value.trim().length > 0) {
@@ -237,7 +238,9 @@
 
         // If document filter is present
         var page = pageIndex[window.location.pathname]
-        if (page && page.documentInfo[0]) {
+        if (!searchFilter.classList.contains('hidden') && page && page.documentInfo[0]) {
+            // documentId is the alphanumeric and lowercase version of document title
+            // used as a keyword filter to search within the document
             var documentId = page.documentInfo[0].replace(/[^\w]/g, '').toLowerCase()
             var filter_by_document = {
                 'term': {
@@ -306,13 +309,35 @@
 
     var onSearchChangeDebounced = debounce(onSearchChange, 500, false)
 
+    var isBackspaceFirstPress = true
+    var isBackspacePressedOnEmpty = false
+    // Detect that backspace is not part of longpress
+    searchBoxElement.onkeydown = function(e) {
+        if (isBackspaceFirstPress && e.keyCode === 8) {
+            isBackspaceFirstPress = false
+            if (searchBoxElement.value === '') {
+                isBackspacePressedOnEmpty = true
+            }
+        }
+    }
+
     searchBoxElement.onkeyup = function(e) {
+        // flash search results on enter
         if (e.keyCode === 13) {
             var container = document.getElementsByClassName('search-results')[0]
             container.style.opacity = 0
             return setTimeout(function() {
                 return container.style.opacity = 1
             }, 100)
+        }
+        // Delete filter on backspace when input is empty and not part of longpress
+        if (e.keyCode === 8 ) {
+            isBackspaceFirstPress = true
+            if (searchBoxElement.value === '' && isBackspacePressedOnEmpty) {
+                searchFilter.classList.add('hidden')
+                isBackspacePressedOnEmpty = false
+                return
+            }
         }
     }
 
