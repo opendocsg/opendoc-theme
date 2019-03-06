@@ -20,6 +20,8 @@
     color: #454f5b;
     line-height: 1.4;
     padding-top: 5vh;
+    border-top: none;
+    font-family: 'Noto Sans'
   }
 
   @include mobile-screen {

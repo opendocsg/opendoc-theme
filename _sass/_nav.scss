@@ -121,9 +121,9 @@
 
         .directory-item {
           color: $secondary-text-color;
-          border-bottom: 2px inset $well-background-color;
+          border-bottom: 1px inset $well-background-color;
           padding: $spacing 0;
-          font-size: calc(#{$nav-font-size} + 2px);
+          font-size: $nav-font-size;
         }
 
         &:hover a {
@@ -191,7 +191,7 @@
       }
 
       .directory-item {
-        border-bottom: 2px solid $well-background-color;
+        border-bottom: 1px solid $well-background-color;
         padding: $spacing $large-spacing $spacing 0;
         display: inline-block;
         width: calc(100% - #{$large-spacing});
@@ -206,7 +206,7 @@
 
       .nav-link {
         border-left: 2px solid $well-background-color;
-        border-bottom: 2px solid $well-background-color;
+        border-bottom: 1px solid $well-background-color;
 
         &:hover,
         &.selected {
@@ -223,7 +223,7 @@
       }
 
       &:last-child {
-        border-bottom: 2px solid $well-background-color;
+        border-bottom: 1px solid $well-background-color;
 
         .nav-link {
           border-bottom: none;
@@ -249,12 +249,12 @@
 
   .nav-header {
     height: calc(#{$nav-header-height} - 1px);
-    background-color: $well-background-color;
+    background-color: $search-box-background-color;
     display: flex;
     align-items: center;
     justify-content: center;
     @include desktop-screen {
-      box-shadow: $site-nav-header-shadow-inset;
+      box-shadow: $site-nav-shadow-inset;
       border-bottom: 1px solid $divider-color;
     }
 
@@ -289,6 +289,7 @@
       flex-direction: row;
       align-items: center;
       border: 2px solid $primary-brand-color;
+      font-size: $nav-font-size;
 
       .search-icon-container {
         background-color: $primary-brand-color;
