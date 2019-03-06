@@ -141,7 +141,8 @@
             showToc(tocId)
             setSelectedAnchor()
             loadPageContent(page, 2).then(function (pageContent) {
-                // Not sure if comparing html or reflow no matter what is quicker
+                searchFilter.innerText = page.documentInfo[0] // document title
+                searchFilter.classList.remove('hidden')
                 // Don't compare iframes
                 if (main.innerHTML.trim().replace(/\<iframe.*\<\/iframe\>/g, '') !== pageContent.trim().replace(/\<iframe.*\<\/iframe\>/g, '')) {
                     main.innerHTML = pageContent
@@ -149,8 +150,6 @@
                     documentTitle.innerText = page.documentInfo[0] // document title
                     documentSubtitle.innerText = page.documentInfo[1] // document subtitle
                     docHeader.classList.remove('index')
-                    searchFilter.innerText = page.documentInfo[0] // document title
-                    searchFilter.classList.remove('hidden')
                 }
                 // Make sure it is scrolled to the anchor
                 scrollToView()
