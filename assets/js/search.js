@@ -134,7 +134,8 @@
                 var curr, match, term;
                 if (result.highlight[field]) {
                     var curr = result.highlight[field].join('...')
-                    var curr = curr.trimLeft()
+                    //  trimLeft not supported in IE
+                    var curr = curr.replace(/^\s+/,"")
                     var curr = joinHighlights(curr)
                     var match = true
                     while (match) {
