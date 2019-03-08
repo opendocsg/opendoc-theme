@@ -104,17 +104,25 @@
           display: none;
         }
       }
-      #menu-toggle:checked ~ .mobile-btn-icon.close {
-        display: block;
-      }
-      #menu-toggle:checked ~ .mobile-btn-icon:not(.close) {
-        display: none;
+      #menu-toggle:checked {
+        & ~ .mobile-btn-icon.close {
+          display: block;
+        }
+        & ~ .mobile-btn-icon:not(.close) {
+          display: none;
+        }
       }
       // Always disable btn-icon in mobile view
       .btn-icon {
         display: none !important;
       }
     }
+  }
+}
+
+@include mobile-screen {
+  body.menu-toggled #menu-toggle-btn{
+    background: $header-text-color;
   }
 }
 

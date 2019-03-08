@@ -28,6 +28,11 @@
         }
     })
 
+    var welcomeButton = document.getElementsByClassName('welcome-button')[0]
+    if (welcomeButton) {
+        welcomeButton.onclick = showMenu
+    }
+
     // Hide site-nav on navigation
     window.addEventListener('link-click', function () {
         if (isMobileView()) {
