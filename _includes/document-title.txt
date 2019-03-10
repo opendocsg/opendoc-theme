@@ -43,6 +43,7 @@
 
 {%- assign document_info = document_info | push: page_info.subtitle -%}
 {%- assign document_info = document_info | push: page_info.order -%}
+{%- assign document_info = document_info | push: page_info.tags -%}
 {%- comment -%}
     If info prop is set, return specific field
     else, return all in array [ title, subtitle, order ]
@@ -55,6 +56,9 @@
 {%- endif -%}
 {%- if include.info == 'order' -%}
 {{ document_info[2] | join: '/' }}
+{%- endif -%}
+{%- if include.info == 'tags' -%}
+{{ document_info[3] | jsonify }}
 {%- endif -%}
 {%- if include.info == null -%}
 {{ document_info | jsonify }}

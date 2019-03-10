@@ -17,6 +17,7 @@ $divider-color:           #d8d8d8;
 $base-background-color:   #FFF;
 $well-background-color:   #eeeeee;
 $search-box-background-color: #f3f3f3;
+$tag-background-color:    #e0e2e5;
 
 // Spacing
 $base-line-height:        1.75;
@@ -41,9 +42,9 @@ $max-content-width: 864px;
 $body-padding: calc((100vw - 420px - 864px) / 2);
 $body-full-view-padding: calc((100vw - 864px) / 2);
 
-$site-header-height: 80px;
+$site-header-height: 70px;
 $mobile-site-header-height: 60px;
-$nav-header-height: 110px;
+$nav-header-height: 120px;
 $search-box-height: 46px;
 $search-box-width: calc(100% - 2 * #{$site-padding});
 $site-nav-collapse-duration: 0.2s;
