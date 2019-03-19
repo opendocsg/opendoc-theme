@@ -87,17 +87,17 @@
     ul.table-of-directories {
       list-style: none;
       padding-left: 0;
-      padding-top: $spacing;
+      padding-top: 0;
       margin-left: 0;
       margin-top: 0;
       min-width: 100%;
       max-width: $max-site-nav-width;
       transition: $site-nav-collapse-duration;
-      max-height: calc(100vh - #{$site-header-height} - #{$nav-header-height} - #{$spacing});
+      max-height: calc(100vh - #{$site-header-height} - #{$nav-header-height});
       overflow: auto;
 
       @include mobile-screen {
-        max-height: calc(100vh - #{$mobile-site-header-height} - #{$nav-header-height} - #{$spacing});
+        max-height: calc(100vh - #{$mobile-site-header-height} - #{$nav-header-height});
       }
 
       &.hidden {
@@ -142,12 +142,12 @@
 
     ul.table-of-contents {
       margin: 0;
-      padding: $large-spacing 0;
-      max-height: calc(100vh - #{$nav-header-height} - #{$site-header-height} - (2 * #{$large-spacing}));
+      padding: 0;
+      max-height: calc(100vh - #{$nav-header-height} - #{$site-header-height});
       overflow: auto;
 
       @include mobile-screen {
-        max-height: calc(100vh - #{$nav-header-height} - #{$mobile-site-header-height} - (2 * #{$large-spacing}));
+        max-height: calc(100vh - #{$nav-header-height} - #{$mobile-site-header-height});
       }
     }
 
@@ -262,14 +262,13 @@
       border-radius: 4px;
       background: $header-text-color;
       color: white;
-      text-transform: uppercase;
       font-size: 9px;
       flex: 0 0 auto;
-      max-width: 70px;
+      max-width: 80px;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-      margin-left: 5px;
+      margin-left: $small-spacing;
       padding: 5px;
 
       &.hidden {
@@ -312,7 +311,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        flex: 0 0 $search-box-height;
+        flex: 0 0 calc( #{$search-box-height} - 10px);
 
         .clear-icon {
           display: block;
@@ -348,7 +347,7 @@
         color: black;
         opacity: 0.5;
         margin: 0;
-        margin-left: 15px;
+        margin-left: $small-spacing;
         padding: 0;
         // -webkit-font-smoothing: antialiased;
       }
