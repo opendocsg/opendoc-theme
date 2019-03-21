@@ -98,7 +98,7 @@ body {
 
     .agency-logo {
       max-width: 180px;
-      max-height: 40px;
+      max-height: 44px;
     }
 
     @include mobile-screen {
@@ -190,21 +190,42 @@ body {
 
   // Children
   .description-container {
-    .description-title {
+    #document-title {
       color: $primary-brand-color;
       overflow: hidden;
       line-height: 1.3em;
-      max-height: 2.6em;
+      // Max two lines
+      max-height: 2.6em; 
       margin-bottom: 0;
     }
-    .description-subtitle {
+    #document-subtitle {
       margin-top: 0.5em;
-      font-size: 13px;
-      letter-spacing: 0.7px;
+      font-size: 11px;
+      letter-spacing: 0.6px;
       overflow: hidden;
       line-height: 1.2em;
-      max-height: 2.4em;
+      // Max one line
+      max-height: 1.2em;
       color: #9b9b9b;
+      text-transform: uppercase;
+    }
+    #document-tags {
+      overflow: hidden;
+      max-height: 30px;
+
+      @include mobile-screen {
+        display: none;
+      }
+      
+      .tag {
+        margin-right: $spacing;
+        font-size: 8px;
+        color: $header-text-color;
+        padding: 4px 12px;
+        background-color: $tag-background-color;
+        border-radius: 14px;
+        text-transform: uppercase;
+      }
     }
   }
 }
@@ -338,7 +359,7 @@ body {
 
   @include desktop-screen {
     width: calc(100vw - (3.25 * #{$large-spacing}));
-    font-size: calc(#{$base-font-size} - 2px);
+    font-size: calc(#{$base-font-size} - 4px);
   }
 
   @include large-screen {

@@ -6,6 +6,7 @@
     var siteHeader = document.getElementsByClassName('site-header')[0]
     var documentTitle = document.getElementById('document-title')
     var documentSubtitle = document.getElementById('document-subtitle')
+    var documentTags = document.getElementById('document-tags')
     var navigation = document.getElementsByClassName('navigation')[0]
     var searchFilter = document.getElementsByClassName('search-filter')[0]
 
@@ -96,9 +97,6 @@
         }
     }
 
-    // Initial anchoring
-    setSelectedAnchor()
-
     // HTML5 History
     // =============================================================================
     // Setup HTML 5 history for single page goodness
@@ -140,6 +138,7 @@
             var tocId = 'toc_' + page.dir.replace(/\s/g, '_')
             showToc(tocId)
             setSelectedAnchor()
+            setDocumentTags(page.documentInfo[3]) // document tags
             loadPageContent(page, 2).then(function (pageContent) {
                 searchFilter.innerText = page.documentInfo[0] // document title
                 searchFilter.classList.remove('hidden')
@@ -163,6 +162,21 @@
         }
     }
 
+    var setDocumentTags = function(tags) {
+        documentTags.innerHTML = ''
+        if (!tags || tags.length === 0) {
+            documentTags.hidden = true
+            return
+        }
+        documentTags.hidden = false
+        tags.forEach(function(tag) {
+            var tagElement = document.createElement('span')
+            tagElement.classList.add('tag')
+            tagElement.innerText = tag
+            documentTags.appendChild(tagElement)
+        })
+    }
+
     var scrollToView = function () {
         var id = window.location.hash.replace('#', '')
         // minus 1 to hide the border on top
@@ -183,5 +197,5 @@
     window.addEventListener('hashchange', onHashChange)
 
     // Scroll to view onload
-    window.onload = scrollToView
+    window.onload = onHashChange
 })()
