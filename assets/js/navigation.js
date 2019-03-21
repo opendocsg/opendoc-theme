@@ -48,7 +48,7 @@
                 toc.hidden = true
             })
             correspondingToc.hidden = false
-            tod.classList.add('hidden')
+            if (tod) tod.classList.add('hidden')
             return true
         }
         return false
