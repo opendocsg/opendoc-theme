@@ -21,9 +21,7 @@
     }
 
     searchBoxElement.onfocus= function() {
-        if (searchResults.classList.contains('visible')) {
-            searchResults.classList.remove('hidden')
-        }
+        searchResults.classList.remove('hidden')
     }
 
     document.body.addEventListener('click', function (event) {
@@ -326,6 +324,7 @@
     var isBackspacePressedOnEmpty = false
     // Detect that backspace is not part of longpress
     searchBoxElement.onkeydown = function(e) {
+        searchResults.classList.remove('hidden')
         if (isBackspaceFirstPress && e.keyCode === 8) {
             isBackspaceFirstPress = false
             if (searchBoxElement.value === '') {
