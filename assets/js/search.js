@@ -8,6 +8,7 @@
     var clearButton = document.getElementsByClassName('clear-button')[0]
     var main = document.getElementsByTagName('main')[0]
     var searchFilter = document.getElementsByClassName('search-filter')[0]
+    var searchResults = document.getElementsByClassName('search-results')[0]
 
     searchBoxElement.oninput = function (event) {
         if (searchBoxElement.value && searchBoxElement.value.trim().length > 0) {
@@ -18,6 +19,18 @@
             onSearchChange()
         }
     }
+
+    searchBoxElement.onfocus= function() {
+        if (searchResults.classList.contains('visible')) {
+            searchResults.classList.remove('hidden')
+        }
+    }
+
+    document.body.addEventListener('click', function (event) {
+        if (event.target.id !== 'search-box') {
+            searchResults.classList.add('hidden')
+        }
+    })
 
     clearButton.onclick = function () {
         searchBoxElement.value = ''
@@ -295,15 +308,14 @@
     }
 
     var onSearchChange = function() {
-        var searchResults = document.getElementsByClassName('search-results')[0]
         var query = searchBoxElement.value.trim()
         // Clear highlights
         wordsToHighlight = []
         if (query.length < minQueryLength) {
-            searchResults.style.display = 'none'
+            searchResults.classList.remove('visible')
             highlightBody()
         } else {
-            searchResults.style.display = 'block'
+            searchResults.classList.add('visible')
             esSearch(query)
         }
     }
@@ -336,6 +348,7 @@
             isBackspaceFirstPress = true
             if (searchBoxElement.value === '' && isBackspacePressedOnEmpty) {
                 searchFilter.classList.add('hidden')
+                searchBoxElement.placeholder = 'Search across documents'
                 isBackspacePressedOnEmpty = false
                 return
             }

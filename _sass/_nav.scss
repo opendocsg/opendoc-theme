@@ -396,6 +396,14 @@
     box-shadow: 0 5px 20px 0 rgba(155, 155, 155, 0.3);
     display: none;
 
+    &.visible {
+      display: block;
+    }
+
+    &.hidden {
+      display: none !important;
+    }
+
     //not-found search results{
     .not-found {
       margin: $spacing $spacing $spacing $search-box-height;

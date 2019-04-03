@@ -9,6 +9,7 @@
     var documentTags = document.getElementById('document-tags')
     var navigation = document.getElementsByClassName('navigation')[0]
     var searchFilter = document.getElementsByClassName('search-filter')[0]
+    var searchBoxElement = document.getElementById('search-box')
 
     // If subfolder was accessed directory via url, load the subfolder's pages
     if (documentTitle && documentTitle.innerText.trim()) {
@@ -142,6 +143,7 @@
             loadPageContent(page, 2).then(function (pageContent) {
                 searchFilter.innerText = page.documentInfo[0] // document title
                 searchFilter.classList.remove('hidden')
+                searchBoxElement.placeholder = 'Search within doc'
                 // Don't compare iframes
                 if (main.innerHTML.trim().replace(/\<iframe.*\<\/iframe\>/g, '') !== pageContent.trim().replace(/\<iframe.*\<\/iframe\>/g, '')) {
                     main.innerHTML = pageContent
