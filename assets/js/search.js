@@ -333,6 +333,13 @@
         }
     }
 
+    clearSearchFilter = function() {
+        searchFilter.classList.add('hidden')
+        searchBoxElement.placeholder = 'Search across documents'
+    }
+
+    searchFilter.onclick = clearSearchFilter
+
     searchBoxElement.onkeyup = function(e) {
         // flash search results on enter
         if (e.keyCode === 13) {

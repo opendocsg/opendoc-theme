@@ -68,10 +68,10 @@
       <div class="search-container">
         <div class="search-box">
           <div class="search-icon-container">
-            <img class="search-icon" src="{{ '/assets/images/search-icon.png' | relative_url }}" width="24"
-              height="20" />
+            <img class="search-icon" src="{{ '/assets/images/search-icon.png' | relative_url }}" width="24" height="20" />
           </div>
           <span class="search-filter {% if page.name == 'index.html' %}hidden{% endif %}">
+            {%- include_cached document-title.txt dir=page.dir info="title" -%}
           </span>
           <input id="search-box" autofocus placeholder="Search across documents" type="text" />
           <label class="clear-button">
