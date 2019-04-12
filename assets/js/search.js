@@ -335,7 +335,7 @@
 
     clearSearchFilter = function() {
         searchFilter.classList.add('hidden')
-        searchBoxElement.placeholder = 'Search across documents'
+        searchBoxElement.placeholder = 'Search opendoc'
     }
 
     searchFilter.onclick = clearSearchFilter
@@ -353,8 +353,7 @@
         if (e.keyCode === 8 ) {
             isBackspaceFirstPress = true
             if (searchBoxElement.value === '' && isBackspacePressedOnEmpty) {
-                searchFilter.classList.add('hidden')
-                searchBoxElement.placeholder = 'Search across documents'
+                clearSearchFilter()
                 isBackspacePressedOnEmpty = false
                 return
             }

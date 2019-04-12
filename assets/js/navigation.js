@@ -141,9 +141,7 @@
             setSelectedAnchor()
             setDocumentTags(page.documentInfo[3]) // document tags
             loadPageContent(page, 2).then(function (pageContent) {
-                searchFilter.innerText = page.documentInfo[0] // document title
-                searchFilter.classList.remove('hidden')
-                searchBoxElement.placeholder = 'Search within doc'
+                setSearchFilter(page)
                 // Don't compare iframes
                 if (main.innerHTML.trim().replace(/\<iframe.*\<\/iframe\>/g, '') !== pageContent.trim().replace(/\<iframe.*\<\/iframe\>/g, '')) {
                     main.innerHTML = pageContent
@@ -164,14 +162,22 @@
         }
     }
 
-    var setDocumentTags = function(tags) {
+    var setSearchFilter = function (page) {
+        if (tod) {
+            searchFilter.innerText = page.documentInfo[0] // document title
+            searchFilter.classList.remove('hidden')
+            searchBoxElement.placeholder = 'Search within doc'
+        }
+    }
+
+    var setDocumentTags = function (tags) {
         documentTags.innerHTML = ''
         if (!tags || tags.length === 0) {
             documentTags.hidden = true
             return
         }
         documentTags.hidden = false
-        tags.forEach(function(tag) {
+        tags.forEach(function (tag) {
             var tagElement = document.createElement('span')
             tagElement.classList.add('tag')
             tagElement.innerText = tag
