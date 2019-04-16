@@ -440,8 +440,8 @@
 
       .left {
         width: 25%;
-        min-width: 25%;
-        padding: $spacing $med-spacing;
+        min-width: 30%;
+        padding: $spacing;
         font-size: 14px;
         font-weight: bold;
         text-transform: uppercase;
@@ -451,7 +451,7 @@
 
       .right {
         border-left: 1px solid $divider-color;
-        padding: $spacing $med-spacing;
+        padding: $spacing;
         overflow: hidden;
 
         .search-header {
