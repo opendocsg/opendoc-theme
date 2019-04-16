@@ -9,6 +9,15 @@ kramdown:
 repository: opendocsg/opendoc-theme
 server_PROD: https://search.opendoc.sg
 server_DEV: http://search-staging.opendoc.sg
+
+subtitle: this is a subtitle
+order:
+  - contribute.md
+  - import-files.md
+document_tags:
+  - tag 1
+  - tag 2
+
 styling_options:
   primary_brand_color: '#990921'
   opendoc_logo_path: /assets/images/logo-full.png
