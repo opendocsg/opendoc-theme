@@ -22,3 +22,18 @@
 # these settings.
 [context.staging] # 'staging' is a branch name
     environment = { JEKYLL_ENV = "development" }
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    # Prevents page from being rendered in iframe
+    # Set to allow-from <uri> if required
+    X-Frame-Options = "deny" 
+    # XSS filter, prevent rendering if detected
+    X-XSS-Protection = "1; mode=block"
+    Content-Security-Policy = "default-src 'self'; img-src *; frame-src *; font-src *; media-src *; style-src *; connect-src 'self' https://*.opendoc.sg"
+    # Dont send referrer headers
+    Referrer-Policy = "no-referrer"
+    # Blocks request if request type does not match
+    X-Content-Type-Options = "nosniff"
+    Feature-Policy = "geolocation 'none'; microphone 'none'; camera 'none'"

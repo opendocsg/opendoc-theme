@@ -21,11 +21,11 @@
   <link rel="alternate" type="application/rss+xml" title="{{ site.title | escape }}"
     href="{{ '/feed.xml' | relative_url }}">
   <!-- Polyfill for corejs functions, promises, array.includes, array.from, etc. -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.0.0/polyfill.min.js"></script>
+  <script src="{{ '/assets/vendor/babel-polyfill.min.js' | relative_url }}"></script>
   <!-- Polyfill for dom functions -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/dom4/2.0.0/dom4.max.js" charset="utf-8"></script>
+  <script src="{{ '/assets/vendor/dom4.js' | relative_url }}" charset="utf-8"></script>
   <!-- Polyfill for fetch API -->
-  <script src="https://unpkg.com/whatwg-fetch@3.0.0/dist/fetch.umd.js"></script>
+  <script src="{{ '/assets/vendor/fetch.umd.js' | relative_url }}"></script>
   <!-- Priority Queue library for promises -->
   <script src="{{ '/assets/js/pqueue.js' | relative_url }}"></script>
   <!-- Helper functions that should be preloaded go here -->
@@ -113,9 +113,9 @@
   </main>
   <div class="site-branding no-print">Powered by Opendoc</div>
 
-  <script src="https://npmcdn.com/headroom.js@0.9.4/dist/headroom.min.js" charset="utf-8"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" charset="utf-8"></script>
-  <!-- <script src="https://unpkg.com/popper.js@1.14.4/dist/umd/popper.min.js"></script> -->
+  <script src="{{ '/assets/vendor/headroom.min.js' | relative_url }}" charset="utf-8"></script>
+  <script src="{{ '/assets/vendor/mark.min.js' | relative_url }}" charset="utf-8"></script>
+  <!-- <script src="{{ '/assets/vendor/popper.min.js' | relative_url }}"></script> -->
   <script src="{{ '/assets/js/ga-tracking.js' | relative_url }}"></script>
   <script src="{{ '/assets/js/toolbar.js' | relative_url }}"></script>
   <script src="{{ '/assets/js/page-index.js' | relative_url }}"></script>
