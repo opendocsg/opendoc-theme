@@ -127,7 +127,7 @@ body {
   box-sizing: border-box;
   align-self: stretch;
   padding: 0 calc(2 * #{$spacing});
-  height: $nav-header-height;
+  height: $doc-header-height;
   background: white;
   transition-duration: $site-nav-collapse-duration;
   transition-timing-function: ease-out;
@@ -150,7 +150,7 @@ body {
     }
 
     &.headroom--unpinned {
-      top: calc(#{$mobile-site-header-height} - #{$nav-header-height});
+      top: calc(#{$mobile-site-header-height} - #{$doc-header-height});
     }
   }
 
@@ -162,7 +162,7 @@ body {
     body.menu-toggled & {
       left: 0;
       transform: none;
-      height: $doc-header-small-height;
+      height: $mobile-doc-header-height;
       padding: 0 $site-padding;
 
       .description-container {
@@ -209,24 +209,6 @@ body {
       color: #9b9b9b;
       text-transform: uppercase;
     }
-    #document-tags {
-      overflow: hidden;
-      max-height: 30px;
-
-      @include mobile-screen {
-        display: none;
-      }
-      
-      .tag {
-        margin-right: $spacing;
-        font-size: 8px;
-        color: $header-text-color;
-        padding: 4px 12px;
-        background-color: $tag-background-color;
-        border-radius: 14px;
-        text-transform: uppercase;
-      }
-    }
   }
 }
 
@@ -238,7 +220,7 @@ body {
   left: 0;
   right: 0;
   top: 0;
-  padding: calc(#{$nav-header-height} + #{$mobile-site-header-height}) calc(2 * #{$spacing})
+  padding: calc(#{$doc-header-height} + #{$mobile-site-header-height}) calc(2 * #{$spacing})
     $spacing;
   height: auto;
   overflow: hidden;
@@ -253,14 +235,14 @@ body {
   // Expand to fill when the menu is closed
   @include desktop-screen {
     left: $site-nav-width;
-    padding: calc(#{$nav-header-height} + #{$site-header-height}) calc(3.25 * #{$large-spacing})
+    padding: calc(#{$doc-header-height} + #{$site-header-height}) calc(3.25 * #{$large-spacing})
       $large-spacing;
     width: calc(100vw - #{$site-nav-width});
     height: auto;
 
     body.menu-toggled & {
       left: 0;
-      padding-top: calc(#{$doc-header-small-height} + #{$site-header-height});
+      padding-top: calc(#{$mobile-doc-header-height} + #{$site-header-height});
       transform: none;
       width: 100vw;
       height: auto;

@@ -45,12 +45,12 @@ $body-full-view-padding: calc((100vw - 864px) / 2);
 
 $site-header-height: 70px;
 $mobile-site-header-height: 60px;
-$nav-header-height: 120px;
+$doc-header-height: 90px;
+$mobile-doc-header-height: 80px;
 $search-box-height: 46px;
 $search-box-width: calc(100% - 2 * #{$site-padding});
 $site-nav-collapse-duration: 0.2s;
 $site-nav-collapse-timing: ease-out;
-$doc-header-small-height: 80px;
 $site-nav-width: 30vw;
 $back-to-docs-width: calc(
   #{$site-padding} + #{$search-box-height}

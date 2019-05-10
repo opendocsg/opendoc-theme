@@ -14,9 +14,6 @@ subtitle: this is a subtitle
 order:
   - contribute.md
   - import-files.md
-document_tags:
-  - tag 1
-  - tag 2
 
 styling_options:
   primary_brand_color: '#990921'
