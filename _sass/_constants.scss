@@ -58,3 +58,6 @@ $back-to-docs-width: calc(
 $max-site-nav-width: 420px;
 $site-nav-shadow-inset: inset -7px 0 13px -5px rgba(0, 0, 0, 0.15);
 $site-nav-shadow-outset: 7px 0 13px 5px rgba(0, 0, 0, 0.15);
+
+$toolbar-button-height: 50px;
+$toolbar-container-height: calc(#{$toolbar-button-height} * 3);

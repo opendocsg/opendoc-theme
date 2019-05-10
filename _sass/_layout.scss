@@ -93,7 +93,6 @@ body {
           display: block;
         }
       }
-
     }
 
     .agency-logo {
@@ -130,7 +129,8 @@ body {
   height: $doc-header-height;
   background: white;
   transition-duration: $site-nav-collapse-duration;
-  transition-timing-function: ease-out;
+  transition-property: height, padding, top, left;
+  transition-timing-function: $site-nav-collapse-timing;
   // to allow mobile menu to be visible outside of doc-header
   overflow: visible;
 
@@ -190,7 +190,6 @@ body {
 
   // Children
   .description-container {
-    
     margin-right: $large-spacing;
 
     #document-title {
@@ -198,7 +197,7 @@ body {
       overflow: hidden;
       line-height: 1.3em;
       // Max two lines
-      max-height: 2.6em; 
+      max-height: 2.6em;
       margin-bottom: 0;
     }
     #document-subtitle {
@@ -223,8 +222,7 @@ body {
   left: 0;
   right: 0;
   top: 0;
-  padding: calc(#{$doc-header-height} + #{$mobile-site-header-height}) calc(2 * #{$spacing})
-    $spacing;
+  padding: calc(#{$doc-header-height} + #{$mobile-site-header-height}) calc(2 * #{$spacing}) $spacing;
   height: auto;
   overflow: hidden;
 
@@ -232,14 +230,14 @@ body {
   // Shift everything right when menu is open
   box-sizing: border-box;
   transition-duration: $site-nav-collapse-duration;
-  transition-timing-function: ease-out;
+  transition-property: left, top;
+  transition-timing-function: $site-nav-collapse-timing;
 
   // On medium screens fill the residual space
   // Expand to fill when the menu is closed
   @include desktop-screen {
     left: $site-nav-width;
-    padding: calc(#{$doc-header-height} + #{$site-header-height}) calc(3.25 * #{$large-spacing})
-      $large-spacing;
+    padding: calc(#{$doc-header-height} + #{$site-header-height}) calc(3.25 * #{$large-spacing}) $large-spacing;
     width: calc(100vw - #{$site-nav-width});
     height: auto;
 
@@ -340,7 +338,7 @@ body {
   left: 0;
   width: calc(100vw - (2 * #{$spacing}));
   transition-duration: $site-nav-collapse-duration;
-  transition-timing-function: ease-out;
+  transition-timing-function: $site-nav-collapse-timing;
 
   @include desktop-screen {
     width: calc(100vw - (3.25 * #{$large-spacing}));

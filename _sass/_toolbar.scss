@@ -1,8 +1,9 @@
 // Button Group
 // ------------
 .toolbar-container {
+  position: fixed;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   border: 1px solid $divider-color;
@@ -10,20 +11,23 @@
   overflow: hidden;
   z-index: 10000;
   flex-shrink: 0;
+  right: $large-spacing;
+  top: calc(50% - (#{$toolbar-container-height} / 2));
+  transition: top 0.3s;
 
   .toolbar-button {
     cursor: pointer;
     background: transparent;
     // Fixed width here to allow popper to position properly in safari
-    width: 50px;
-    height: 50px;
+    width: $toolbar-button-height;
+    height: $toolbar-button-height;
     display: flex;
     justify-content: center;
     align-items: center;
-    border-right: 1px solid $divider-color;
+    border-bottom: 1px solid $divider-color;
 
     &:last-child {
-      border-right: none;
+      border-bottom: none;
     }
 
     .btn-icon {
@@ -78,17 +82,20 @@
     #menu-toggle:checked ~ .btn-icon:not(.hover) {
       display: none;
     }
+  }
 
-    // For mobile menu
-    @include mobile-screen {
+  // For mobile menu
+  @include mobile-screen {
+    right: 0;
+    top: 0;
+    border-radius: 0;
+    border: none;
+
+    .toolbar-button {
+      border: none;
       background: $primary-brand-color;
-      position: fixed;
-      right: 0;
-      top: 0;
       width: $mobile-site-header-height;
       height: $mobile-site-header-height;
-      border: none;
-      border-radius: 0;
 
       &:not(#menu-toggle-btn) {
         display: none;
@@ -121,7 +128,7 @@
 }
 
 @include mobile-screen {
-  body.menu-toggled #menu-toggle-btn{
+  body.menu-toggled #menu-toggle-btn {
     background: $header-text-color;
   }
 }
