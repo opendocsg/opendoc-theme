@@ -162,14 +162,14 @@ body {
     body.menu-toggled & {
       left: 0;
       transform: none;
-      height: $mobile-doc-header-height;
+      height: $toggled-doc-header-height;
       padding: 0 $site-padding;
 
       .description-container {
         display: flex;
         align-items: baseline;
         flex: 1;
-        margin-right: 180px;
+        flex-direction: column;
       }
       .description-title {
         margin-bottom: 0;
@@ -190,6 +190,9 @@ body {
 
   // Children
   .description-container {
+    
+    margin-right: $large-spacing;
+
     #document-title {
       color: $primary-brand-color;
       overflow: hidden;
@@ -242,7 +245,7 @@ body {
 
     body.menu-toggled & {
       left: 0;
-      padding-top: calc(#{$mobile-doc-header-height} + #{$site-header-height});
+      padding-top: calc(#{$toggled-doc-header-height} + #{$site-header-height});
       transform: none;
       width: 100vw;
       height: auto;

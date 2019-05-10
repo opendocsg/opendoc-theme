@@ -139,7 +139,10 @@
             showToc(tocId)
             setSelectedAnchor()
             loadPageContent(page, 2).then(function (pageContent) {
-                setSearchFilter(page)
+                /* 
+                 *  Search filter disabled, uncomment to enable
+                */
+                // setSearchFilter(page)
                 // Don't compare iframes
                 if (main.innerHTML.trim().replace(/\<iframe.*\<\/iframe\>/g, '') !== pageContent.trim().replace(/\<iframe.*\<\/iframe\>/g, '')) {
                     main.innerHTML = pageContent
