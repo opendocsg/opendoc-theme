@@ -93,7 +93,6 @@ body {
           display: block;
         }
       }
-
     }
 
     .agency-logo {
@@ -130,7 +129,8 @@ body {
   height: $doc-header-height;
   background: white;
   transition-duration: $site-nav-collapse-duration;
-  transition-timing-function: ease-out;
+  transition-property: height, padding, top, left;
+  transition-timing-function: $site-nav-collapse-timing;
   // to allow mobile menu to be visible outside of doc-header
   overflow: visible;
 
@@ -155,7 +155,7 @@ body {
   }
 
   @include desktop-screen {
-    padding: 0 calc(3.25 * #{$large-spacing});
+    padding: 0 $desktop-spacing;
     left: $site-nav-width;
     top: $site-header-height;
 
@@ -190,7 +190,6 @@ body {
 
   // Children
   .description-container {
-    
     margin-right: $large-spacing;
 
     #document-title {
@@ -198,7 +197,7 @@ body {
       overflow: hidden;
       line-height: 1.3em;
       // Max two lines
-      max-height: 2.6em; 
+      max-height: 2.6em;
       margin-bottom: 0;
     }
     #document-subtitle {
@@ -223,8 +222,10 @@ body {
   left: 0;
   right: 0;
   top: 0;
-  padding: calc(#{$doc-header-height} + #{$mobile-site-header-height}) calc(2 * #{$spacing})
-    $spacing;
+  padding-top: calc(#{$doc-header-height} + #{$mobile-site-header-height});
+  padding-left: $large-spacing;
+  padding-right: $large-spacing;
+  padding-bottom: $spacing;
   height: auto;
   overflow: hidden;
 
@@ -232,20 +233,25 @@ body {
   // Shift everything right when menu is open
   box-sizing: border-box;
   transition-duration: $site-nav-collapse-duration;
-  transition-timing-function: ease-out;
+  transition-property: left, top;
+  transition-timing-function: $site-nav-collapse-timing;
 
   // On medium screens fill the residual space
   // Expand to fill when the menu is closed
   @include desktop-screen {
     left: $site-nav-width;
-    padding: calc(#{$doc-header-height} + #{$site-header-height}) calc(3.25 * #{$large-spacing})
-      $large-spacing;
-    width: calc(100vw - #{$site-nav-width});
+    padding-top: $doc-header-height + $site-header-height;
+    padding-left: $desktop-spacing;
+    padding-right: 3.25 * $large-spacing + $body-sidebar-right-padding;
+    padding-bottom: $large-spacing;
+    width: 100vw - $site-nav-width;
     height: auto;
 
     body.menu-toggled & {
       left: 0;
-      padding-top: calc(#{$toggled-doc-header-height} + #{$site-header-height});
+      padding-top: $toggled-doc-header-height + $site-header-height;
+      padding-left: $body-full-view-padding;
+      padding-right: calc(#{$body-full-view-padding} + #{$body-sidebar-right-padding});
       transform: none;
       width: 100vw;
       height: auto;
@@ -255,14 +261,8 @@ body {
   @include large-screen {
     left: $max-site-nav-width;
     padding-left: $body-padding;
-    padding-right: $body-padding;
+    padding-right: calc(#{$body-padding} + #{$body-sidebar-right-padding});
     width: calc(100vw - #{$max-site-nav-width});
-
-    body.menu-toggled & {
-      padding-left: $body-full-view-padding;
-      padding-right: $body-full-view-padding;
-      width: 100vw;
-    }
   }
 
   h1 {
@@ -337,20 +337,16 @@ body {
   color: $secondary-text-color;
   opacity: 0.5;
   text-align: right;
-  left: 0;
-  width: calc(100vw - (2 * #{$spacing}));
+  right: $large-spacing;
   transition-duration: $site-nav-collapse-duration;
-  transition-timing-function: ease-out;
+  transition-timing-function: $site-nav-collapse-timing;
 
   @include desktop-screen {
-    width: calc(100vw - (3.25 * #{$large-spacing}));
+    right: $body-sidebar-right-padding + $desktop-spacing;
     font-size: calc(#{$base-font-size} - 4px);
-  }
 
-  @include large-screen {
-    width: calc(100vw - #{$body-padding});
     body.menu-toggled & {
-      width: calc(100vw - #{$body-full-view-padding});
+      right: calc(#{$body-sidebar-right-padding} + #{$body-full-view-padding});
     }
   }
 }

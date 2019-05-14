@@ -18,7 +18,9 @@
   // Mobile has the sidebar hidden by default
   // Tablets and above have it showing by default
   // On larger screens the content stays in place and we move the sidebar in
-  transition: left $site-nav-collapse-duration $site-nav-collapse-timing;
+  transition-duration: $site-nav-collapse-duration;
+  transition-timing-function:  $site-nav-collapse-timing;
+  transition-property: left, width;
   left: -100vw;
   width: 100vw;
   body.menu-toggled & {
@@ -67,6 +69,7 @@
       display: flex;
       justify-content: flex-end;
       align-items: center;
+      user-select: none;
 
       img {
         height: 30px;
@@ -92,7 +95,7 @@
       margin-top: 0;
       min-width: 100%;
       max-width: $max-site-nav-width;
-      transition: $site-nav-collapse-duration;
+      transition: margin-left $site-nav-collapse-duration;
       max-height: calc(100vh - #{$site-header-height} - #{$doc-header-height});
       overflow: auto;
 

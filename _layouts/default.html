@@ -105,8 +105,10 @@
         </div>
       </div>
     </div>
-    {% include_cached toolbar.html %}
   </header>
+
+  {% include_cached toolbar.html %}
+
   <main class="site-main" id="main-content" aria-label="Content">
     {{ content | replace: "!!^", "<i style='margin-left:30px'></i>"}}
   </main>
