@@ -4,7 +4,7 @@ title: Using Markdown
 
 # Using Markdown
 
-Our system takes in Markdown files (with file extension .md) and converts them into elegant webpages. Here are some tips to orientate you with Markdown. 
+Our system takes in Markdown files (with file extension .md) and converts them into elegant webpages. Here are some tips to orientate you with Markdown.
 
 ## Formatting your Text
 **Creating Headers**
@@ -20,7 +20,7 @@ Headers come in different types, from the largest h1 size to the moderate h4 siz
     <iframe width="100%" height="0" src="./iframes/creating-headers-iframe.html" frameborder="0" scrolling="auto" onload="resizeIframe(this)"></iframe>
 </div>
 
-<button name="creating-headers-button" onclick="window.open('https://opendocsg.github.io/editor/#U1YIycgsVgCikoxUhZzEovTU4hKFDEOFjNTElNQiRS5lZRQVZalFlRBlChlGSIqUMc1RyDBGVoCqIjcfKJ5YAlRkAlMEAA==')">Try it out!</button>
+<a href="https://opendocsg.github.io/editor/#U1YIycgsVgCikoxUhZzEovTU4hKFDEOFjNTElNQiRS5lZRQVZalFlRBlChlGSIqUMc1RyDBGVoCqIjcfKJ5YAlRkAlMEAA==" target="_blank"><button name="creating-headers-button">Try it out!</button></a >
 
 **Styling Text**
 
@@ -33,16 +33,13 @@ Add footers easily! [^1]
 ```
 <div class="examples-box">
 	<b>Bold</b> and <i>italicize</i> your text like this.
-	Add footers easily!<sup class="footnote-ref">[1]</sup>
-	<section class="footnotes">
-		<ol class="footnotes-list">
-			<li id="fn1" class="footnote-item"><p>Footnote↩</p>
-			</li>
-		</ol>
-	</section>
 </div>
 
-<button name="styling-text-button" onclick="window.open('https://opendocsg.github.io/editor/#09Jyys9J0dJSSMxLUdDKLEnMyUzOrErVUqjMLy1SKEmtKFHIycxOVSjJyCzW4wIA')">Try it out!</button>
+Add footers easily! [^1]
+
+[^1]: Your footer here.
+
+<a href="https://opendocsg.github.io/editor/#09Jyys9J0dJSSMxLUdDKLEnMyUzOrErVUqjMLy1SKEmtKFHIycxOVSjJyCzW4wIA" target="_blank"><button name="styling-text-button">Try it out!</button></a>
 
 **Indentations**
 
@@ -54,7 +51,7 @@ Use the > symbol at the start of your text to indent it for formatting purposes.
     <div style="margin-left: 40px"> This is an indented text! </div>
 </div>
 
-<button name="indentations-button" onclick="window.open('https://opendocsg.github.io/editor/#88vP083MS0nNK0lNUShJrShR5LJTCMnILFYAosQ8BTQ5AA==')">Try it out!</button>
+<a href="https://opendocsg.github.io/editor/#88vP083MS0nNK0lNUShJrShR5LJTCMnILFYAosQ8BTQ5AA==" target="_blank"><button name="indentations-button">Try it out!</button></a>
 
 ## Organising your Content
 **Using Lists**
@@ -90,7 +87,7 @@ This is a number list:
 	</ol>
 </div>
 
-<button name="using-lists-button" onclick="window.open('https://opendocsg.github.io/editor/#C8nILFYAokSFpNKcnNQShZzM4hIrLgVdBc+S1FwFQzjLiEtBAc7WM0ThGXFxhcDNySvNTUotgppjqAdR48hlBGU5cQEA')">Try it out!</button>
+<a href="https://opendocsg.github.io/editor/#C8nILFYAokSFpNKcnNQShZzM4hIrLgVdBc+S1FwFQzjLiEtBAc7WM0ThGXFxhcDNySvNTUotgppjqAdR48hlBGU5cQEA" target="_blank"><button name="using-lists-button">Try it out!</button></a>
 
 **Using Tables**
 
@@ -110,7 +107,9 @@ As they say, a picture speaks a thousand words. To add a image, you need both th
 	<img src="./images/govtech-logo.gif" alt="Alternative text if image doesn't load"/>
 </div>
 
-<button name="adding-images-button" onclick="window.open('https://opendocsg.github.io/editor/#HcoxCoAwDADAr8RJXZrdzc3BH4hIwRgDtSlNKD5f8Obrtjk51RxdGoHT6yAXyBOZ4FSy3Dskjec+3O7FJkQtlANrC8b4P8NVWY9FqwRrPH4=')">Try it out!</button>
+<a href="https://opendocsg.github.io/editor/#HcoxCoAwDADAr8RJXZrdzc3BH4hIwRgDtSlNKD5f8Obrtjk51RxdGoHT6yAXyBOZ4FSy3Dskjec+3O7FJkQtlANrC8b4P8NVWY9FqwRrPH4=" target="_blank">
+<button name="adding-images-button">Try it out!</button>
+</a>
 
 **Adding Videos (YouTube)**
 
@@ -132,7 +131,9 @@ Videos are a good platform to bring across content effectively to viewers. You c
 	</div>
 </div>
 
-<button name="adding-videos-button" onclick="window.open('https://opendocsg.github.io/editor/#Lc7LDoIwFATQPV/R3D1Uo7hQyoKYuNCVf1B6L7ZJoaQPGv5efCwnmZmcBs3ClJUhCHAzTehUuRgkB21RNGbwciSWDUYtoD7tgGkyLx0FHPY1sOCVAB3jHM6c55yr1aWYeqqUGzmNPSHvOvU83m9XfGzj713vPJIXsGVprcsCZIputnK9MJqUX+dIWI6ERv4bQ7I2KE80tQ3/mT46vtnb4g0=')">Try it out!</button>
+<a href="https://opendocsg.github.io/editor/#Lc7LDoIwFATQPV/R3D1Uo7hQyoKYuNCVf1B6L7ZJoaQPGv5efCwnmZmcBs3ClJUhCHAzTehUuRgkB21RNGbwciSWDUYtoD7tgGkyLx0FHPY1sOCVAB3jHM6c55yr1aWYeqqUGzmNPSHvOvU83m9XfGzj713vPJIXsGVprcsCZIputnK9MJqUX+dIWI6ERv4bQ7I2KE80tQ3/mT46vtnb4g0=" target="_blank">
+	<button name="adding-videos-button">Try it out!</button>
+</a>
 
 **Adding Links**
 
@@ -147,7 +148,9 @@ Send an email to <email@something.com>!
 	Send an email to <a href="mailto:email@something.com">email@something.com</a>!
 </div>
 
-<button name="adding-links-button" onclick="window.open('https://opendocsg.github.io/editor/#iw7JyCyO1cgoKSkottLXLy8v1ytJTc7QS88v0ytO19dUyMnMyy5WKMlXcM8vCwHKKHIFp+alKCTmKaTmJmbmgGRswCyH4vzc1JKMzLx0veT8XDtFLgA=')">Try it out!</button>
+<a href="https://opendocsg.github.io/editor/#iw7JyCyO1cgoKSkottLXLy8v1ytJTc7QS88v0ytO19dUyMnMyy5WKMlXcM8vCwHKKHIFp+alKCTmKaTmJmbmgGRswCyH4vzc1JKMzLx0veT8XDtFLgA=" target="_blank">
+	<button name="adding-links-button">Try it out!</button>
+</a>
 
 **Adding Documents**
 
@@ -160,4 +163,6 @@ Download the <a href="/files/digital-govt-blueprint.pdf" download>Digital Govern
 	Download the <a href="./files/digital-govt-blueprint.pdf" download>Digital Government Blueprint (Summary)</a> here!
 </div>
 
-<button name="adding-documents-button" onclick="window.open('https://opendocsg.github.io/editor/#JcyxDsIgEADQX8GtHQR1Mo6miR/gaEyDcgUM3JHjKPHvNen2pjdRx0TWKQmgHlP0UWxSN1qBMQOKuqYGheNfw73lbPk7PocgUurFmN67FngH7WnV1ZslJqjGbcte2GJdiLOVSGicf811K+ZPQzgdjmdd3DKqAAy7Hw==')">Try it out!</button>
+<a href="https://opendocsg.github.io/editor/#JcyxDsIgEADQX8GtHQR1Mo6miR/gaEyDcgUM3JHjKPHvNen2pjdRx0TWKQmgHlP0UWxSN1qBMQOKuqYGheNfw73lbPk7PocgUurFmN67FngH7WnV1ZslJqjGbcte2GJdiLOVSGicf811K+ZPQzgdjmdd3DKqAAy7Hw==" target="_blank">
+	<button name="adding-documents-button">Try it out!</button>
+</a>
