@@ -20,16 +20,16 @@ $search-box-background-color: #f3f3f3;
 $tag-background-color:    #e0e2e5;
 
 // Spacing
-$base-line-height:        1.75;
-$base-horizontal-padding: 1.0em;
-$base-vertical-padding:   0.5em;
-$block-spacing:           1.5rem;
-$item-spacing:            1.0rem;
-$inline-spacing:          0.2em;
-$base-border-radius:      0.2rem;
+$base-line-height:              1.75;
+$base-horizontal-padding:       1.0em;
+$base-vertical-padding:         0.5em;
+$block-spacing:                 1.5rem;
+$item-spacing:                  1.0rem;
+$inline-spacing:                0.2em;
+$base-border-radius:            0.2rem;
 // Breakpoints, if this breakpoint is changed, be sure to change those in the .js files too
-$desktop-screen-breakpoint:    992px;
-$large-screen-breakpoint:     1400px;
+$desktop-screen-breakpoint:     992px;
+$large-screen-breakpoint:       1400px;
 
 
 // Variables
@@ -38,10 +38,12 @@ $small-spacing: 10px;
 $spacing: 12px;
 $med-spacing: 1.5 * $spacing;
 $large-spacing: 2 * $spacing;
+$desktop-spacing: 3.25 * $large-spacing;
 $site-padding: 27px;
 $max-content-width: 864px;
-$body-padding: calc((100vw - 420px - 864px) / 2);
-$body-full-view-padding: calc((100vw - 864px) / 2);
+$body-padding: calc((100vw - 420px - #{$max-content-width}) / 2);
+$body-full-view-padding: calc((100vw - #{$max-content-width}) / 2);
+$body-sidebar-right-padding: 50px;
 
 $site-header-height: 70px;
 $mobile-site-header-height: 60px;
