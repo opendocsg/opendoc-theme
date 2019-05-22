@@ -35,7 +35,6 @@ const main = () => {
 }
 
 const exportPdfTopLevelDocs = (sitePath) => {
-    //let htmlFilePaths = glob.sync(path.join(sitePath, '*.html'))
     let htmlFilePaths = glob.sync('*.html', { cwd: sitePath })
     htmlFilePaths = htmlFilePaths.filter((filepath) => !printIgnoreFiles.includes(filepath))
     htmlFilePaths = htmlFilePaths.map((filepath) => path.join(sitePath, filepath))
@@ -112,7 +111,7 @@ const createPdf = (htmlFilePaths, outputFolderPath) => {
 }
 
 // Returns a list of the valid document (i.e. folder) paths
-const getDocumentFolders = (sitePath, printIgnore) => {
+const getDocumentFolders = (sitePath, printIgnoreFolders) => {
     return fs.readdirSync(sitePath).filter(function (filePath) {
         return fs.statSync(path.join(sitePath, filePath)).isDirectory() &&
             !printIgnoreFolders.includes(filePath)
