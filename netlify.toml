@@ -6,6 +6,10 @@
     # Default build command.
     command = '''jekyll build && \
                  npm i html-pdf && \
+                 npm i glob && \
+                 npm i jsdom && \
+                 npm i mark-twain && \
+                 npm i js-yaml && \
                  node _site/assets/js/pdf-gen.js '''
     environment = { JEKYLL_ENV = "development" }
 
