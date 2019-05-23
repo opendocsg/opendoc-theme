@@ -91,6 +91,8 @@ const createPdf = (htmlFilePaths, outputFolderPath) => {
             const imgsrc = imgsrcs[i]
             if (imgsrc.src.startsWith('/')) {
                 imgsrc.src = '.' + imgsrc.src
+            } else if (imgsrc.src.startsWith('.')) {
+                imgsrc.src = outputFolderPath + imgsrc.src.substr(1)
             }
         }
 
