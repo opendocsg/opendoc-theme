@@ -8,7 +8,7 @@ kramdown:
   auto_id_stripping: true
 repository: opendocsg/opendoc-theme
 server_PROD: https://search.opendoc.sg
-server_DEV: http://search-staging.opendoc.sg
+server_DEV: https://search-staging.opendoc.sg
 
 subtitle: this is a subtitle
 order:
