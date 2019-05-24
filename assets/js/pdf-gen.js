@@ -23,7 +23,7 @@ const options = {
 // List of top-level folder names which may contain html but are not to be printed
 const printIgnoreFolders = ['assets', 'files', 'iframes', 'images']
 // List of top-level .html files which are not to be printed
-const printIgnoreFiles = ['export.html']
+const printIgnoreFiles = ['export.html', 'index.html']
 
 const main = () => {
     console.log('Base options: ', options.base)
@@ -102,8 +102,7 @@ const createPdf = (htmlFilePaths, outputFolderPath) => {
         if (!addedTitle) {
             try {
                 const oldTitle = dom.window.document.getElementsByClassName('site-header-text')[0]
-                const newTitle = dom.window.document.importNode(oldTitle, true)
-                exportDomBody.insertBefore(newTitle, exportDomMain)
+                exportDomBody.insertBefore(oldTitle, exportDomMain)
                 addedTitle = true
             } catch (error) {
                 console.log('Failed to append Title, skipping: ' + error)
@@ -113,8 +112,7 @@ const createPdf = (htmlFilePaths, outputFolderPath) => {
         if (!addedDocTitle) {
             try {
                 const oldDocTitle = dom.window.document.getElementsByClassName('description-container')[0]
-                const newDocTitle = dom.window.document.importNode(oldDocTitle, true)
-                exportDomBody.insertBefore(newDocTitle, exportDomMain)
+                exportDomBody.insertBefore(oldDocTitle, exportDomMain)
                 addedDocTitle = true
             } catch (error) {
                 console.log('Failed to append Doc Title, skipping: ' + error)
@@ -124,14 +122,11 @@ const createPdf = (htmlFilePaths, outputFolderPath) => {
         // Concat all the id:main-content divs
         try {
             const oldNode = dom.window.document.getElementById('main-content')
-            const newNode = dom.window.document.importNode(oldNode, true)
-            exportDomMain.innerHTML += newNode.innerHTML
+            exportDomMain.innerHTML += oldNode.innerHTML
         } catch (error) {
             console.log('Failed to append Node, skipping: ' + error)
         }
     })
-
-    fs.writeFileSync(path.join(outputFolderPath, 'export.html'), exportDom.serialize())
 
     pdf.create(exportDom.serialize(), options).toFile(path.join(outputFolderPath, 'export.pdf'), (err, res) => {
         if (err) return console.log(err)
