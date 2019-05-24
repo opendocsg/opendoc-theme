@@ -113,6 +113,8 @@ const createPdf = (htmlFilePaths, outputFolderPath) => {
             try {
                 const oldDocTitle = dom.window.document.getElementsByClassName('description-container')[0]
                 exportDomBody.insertBefore(oldDocTitle, exportDomMain)
+                const hr = dom.window.document.createElement('HR')
+                exportDomBody.insertBefore(hr, exportDomMain)
                 addedDocTitle = true
             } catch (error) {
                 console.log('Failed to append Doc Title, skipping: ' + error)
