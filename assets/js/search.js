@@ -305,17 +305,25 @@
         })
     }
 
+    var offlineSearch = function(query) {
+        console.log('Offline search enabled!')
+    }
+
     var onSearchChange = function() {
+        const searchIsOffline = '{{ site.offline_search_only }}' === 'true' ? 
+            true :
+            false
         var query = searchBoxElement.value.trim()
         // Clear highlights
         wordsToHighlight = []
         if (query.length < minQueryLength) {
             searchResults.classList.remove('visible')
             highlightBody()
-        } else {
-            searchResults.classList.add('visible')
-            esSearch(query)
-        }
+            return
+        } 
+
+        searchResults.classList.add('visible')
+        searchIsOffline ? offlineSearch(query) : esSearch(query)
     }
 
     var onSearchChangeDebounced = debounce(onSearchChange, 500, false)
