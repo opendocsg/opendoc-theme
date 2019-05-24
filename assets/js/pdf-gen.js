@@ -3,7 +3,6 @@ const pdf = require('html-pdf')
 const glob = require('glob')
 const path = require('path')
 const jsdom = require('jsdom')
-const MT = require('mark-twain')
 const jsyaml = require('js-yaml')
 const sitePath = __dirname + '/../..'
 const options = {
@@ -11,8 +10,8 @@ const options = {
     width: '420mm',
     base: 'file://' + sitePath + '/',
     border: {
-        right: '60px', // default is 0, units: mm, cm, in, px
-        left: '60px',
+        right: '100px', // default is 0, units: mm, cm, in, px
+        left: '100px',
     },
     header: {
         height: '80px',
@@ -74,6 +73,7 @@ const createPdf = (htmlFilePaths, outputFolderPath) => {
     // docprint.html is our template to build pdf up from.
     const exportHtmlFile = fs.readFileSync(sitePath + '/../_layouts/docprint.html')
     const exportDom = new jsdom.JSDOM(exportHtmlFile)
+    const exportDomBody = exportDom.window.document.body
     const exportDomMain = exportDom.window.document.getElementById('main-content')
     let addedTitle = false
     let addedDocTitle = false
@@ -89,7 +89,7 @@ const createPdf = (htmlFilePaths, outputFolderPath) => {
         // If a <img src=...> link src begins with '/', it is a relative link
         // and needs to be prepended with '.' to make the images show in the pdf
         const imgsrcs = dom.window.document.getElementsByTagName('img')
-        for (let i=0; i<imgsrcs.length; i++) {
+        for (let i = 0; i < imgsrcs.length; i++) {
             const imgsrc = imgsrcs[i]
             if (imgsrc.src.startsWith('/')) {
                 imgsrc.src = '.' + imgsrc.src
@@ -98,21 +98,12 @@ const createPdf = (htmlFilePaths, outputFolderPath) => {
             }
         }
 
-        // Concat all the id:main-content divs
-        try {
-            const oldNode = dom.window.document.getElementById('main-content')
-            const newNode = dom.window.document.importNode(oldNode, true)
-            exportDomMain.appendChild(newNode)
-        } catch (error) {
-            console.log('Failed to append Node, skipping: ' + error)
-        }
-
         // Site titles needs only be added once
         if (!addedTitle) {
             try {
                 const oldTitle = dom.window.document.getElementsByClassName('site-header-text')[0]
                 const newTitle = dom.window.document.importNode(oldTitle, true)
-                exportDom.window.document.getElementsByClassName('site-header')[0].appendChild(newTitle)
+                exportDomBody.insertBefore(newTitle, exportDomMain)
                 addedTitle = true
             } catch (error) {
                 console.log('Failed to append Title, skipping: ' + error)
@@ -123,13 +114,24 @@ const createPdf = (htmlFilePaths, outputFolderPath) => {
             try {
                 const oldDocTitle = dom.window.document.getElementsByClassName('description-container')[0]
                 const newDocTitle = dom.window.document.importNode(oldDocTitle, true)
-                exportDom.window.document.getElementsByClassName('doc-header')[0].appendChild(newDocTitle)
+                exportDomBody.insertBefore(newDocTitle, exportDomMain)
                 addedDocTitle = true
             } catch (error) {
                 console.log('Failed to append Doc Title, skipping: ' + error)
             }
         }
+
+        // Concat all the id:main-content divs
+        try {
+            const oldNode = dom.window.document.getElementById('main-content')
+            const newNode = dom.window.document.importNode(oldNode, true)
+            exportDomMain.innerHTML += newNode.innerHTML
+        } catch (error) {
+            console.log('Failed to append Node, skipping: ' + error)
+        }
     })
+
+    fs.writeFileSync(path.join(outputFolderPath, 'export.html'), exportDom.serialize())
 
     pdf.create(exportDom.serialize(), options).toFile(path.join(outputFolderPath, 'export.pdf'), (err, res) => {
         if (err) return console.log(err)
@@ -167,9 +169,9 @@ const indexFileHasValidOrdering = (indexFilepath) => {
 
 // Mutates the htmlFilepath array to match order provided in order
 const reorderHtmlFilePaths = (htmlFilePaths, order) => {
-    for (let i=0; i<order.length; i++) {
+    for (let i = 0; i < order.length; i++) {
         const name = path.basename(order[i], '.md')
-        for (let j=0; j<htmlFilePaths.length; j++) {
+        for (let j = 0; j < htmlFilePaths.length; j++) {
             if (path.basename(htmlFilePaths[j], '.html') === name) {
                 swap(htmlFilePaths, i, j)
             }
@@ -192,7 +194,7 @@ const mapSectionNameToHtmlFilename = (configYml, sitePath) => {
     const mdFiles = glob.sync(path.join(sitePath, '..', '*.md'))
     const newSectionorder = []
     section_order.forEach((title) => {
-        for (let i=0; i<mdFiles.length; i++) {
+        for (let i = 0; i < mdFiles.length; i++) {
             try {
                 const mdTitle = markdownToJs(mdFiles[i]).meta.title
                 if (title === mdTitle) {
@@ -215,8 +217,8 @@ const swap = (arr, i, j) => {
 
 // converts .md to JS Object
 const markdownToJs = (filepath) => {
-    const configFile = fs.readFileSync(filepath)
-    return MT(configFile.toString())
+    const configString = fs.readFileSync(filepath).toString().replace(/---/g, '')
+    return jsyaml.safeLoad(configString)
 }
 
 const yamlToJs = (filepath) => {
