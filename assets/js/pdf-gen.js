@@ -21,7 +21,7 @@ const options = {
         height: '80px',
     },
 }
-// List of top-level folder names which are not to be printed
+// List of top-level folder names which may contain html but are not to be printed
 const printIgnoreFolders = ['assets', 'files', 'iframes', 'images']
 // List of top-level .html files which are not to be printed
 const printIgnoreFiles = ['export.html']
@@ -75,6 +75,8 @@ const createPdf = (htmlFilePaths, outputFolderPath) => {
     const exportHtmlFile = fs.readFileSync(sitePath + '/../_layouts/docprint.html')
     const exportDom = new jsdom.JSDOM(exportHtmlFile)
     const exportDomMain = exportDom.window.document.getElementById('main-content')
+    let addedTitle = false
+    let addedDocTitle = false
 
     htmlFilePaths.forEach(function (filePath) {
         const file = fs.readFileSync(filePath)
@@ -103,6 +105,29 @@ const createPdf = (htmlFilePaths, outputFolderPath) => {
             exportDomMain.appendChild(newNode)
         } catch (error) {
             console.log('Failed to append Node, skipping: ' + error)
+        }
+
+        // Site titles needs only be added once
+        if (!addedTitle) {
+            try {
+                const oldTitle = dom.window.document.getElementsByClassName('site-header-text')[0]
+                const newTitle = dom.window.document.importNode(oldTitle, true)
+                exportDom.window.document.getElementsByClassName('site-header')[0].appendChild(newTitle)
+                addedTitle = true
+            } catch (error) {
+                console.log('Failed to append Title, skipping: ' + error)
+            }
+        }
+        // Document titles too
+        if (!addedDocTitle) {
+            try {
+                const oldDocTitle = dom.window.document.getElementsByClassName('description-container')[0]
+                const newDocTitle = dom.window.document.importNode(oldDocTitle, true)
+                exportDom.window.document.getElementsByClassName('doc-header')[0].appendChild(newDocTitle)
+                addedDocTitle = true
+            } catch (error) {
+                console.log('Failed to append Doc Title, skipping: ' + error)
+            }
         }
     })
 
