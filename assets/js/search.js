@@ -64,11 +64,137 @@
     var wordsToHighlight =[]
     var sectionIndex = {}
     var minQueryLength = 3
+    var lunrIndex = null
 
+    // Begin Lunr Indexing
+    // =============================================================================
+    var startBuildingLunrIndex = function(cb) {
+        lunrIndex = lunr.Index.load('{{ "/assets/lunrIndex.json" | relative_url }}')
+        //startLunrIndexing().then(function(results) {
+        //    console.log('{{ "/assets/lunrIndex.json" | relative_url }}')
+        //    sectionIndex = results.sectionIndex
+        //    lunrIndex = lunr.Index.load('{{ "/assets/lunrIndex.json" | relative_url }}')
+        //    cb()
+        //})
+    }
     // Search
     // =============================================================================
     // Helper function to translate lunr search results
     // Returns a simple { title, content, link } array
+    var snippetSpace = 40
+    var maxSnippets = 4
+    var maxResults = 10
+    var minQueryLength = 3
+    var translateLunrResults = function (allLunrResults) {
+        var lunrResults = allLunrResults.slice(0, maxResults)
+        return lunrResults.map(function(result) {
+            var matchedDocument = sectionIndex[result.ref]
+            var snippets = []
+            var snippetsRangesByFields = {}
+            // Loop over matching terms
+            var rangesByFields = {}
+            // Group ranges according to field type(text / title)
+            for (var term in result.matchData.metadata) {
+                // To highlight the main body later
+                wordsToHighlight.push(term)
+                var fields = result.matchData.metadata[term]
+                for (var field in fields) {
+                    positions = fields[field].position
+                    rangesByFields[field] = rangesByFields[field] ? rangesByFields[field].concat(positions) : positions
+                }
+            }
+            var snippetCount = 0
+            // Sort according to ascending snippet range
+            for (var field in rangesByFields) {
+                var ranges = rangesByFields[field]
+                    .map(function(a) {
+                        return [a[0] - snippetSpace, a[0] + a[1] + snippetSpace, a[0], a[0] + a[1]]
+                    })
+                    .sort(function(a, b) {
+                        return a[0] - b[0]
+                    })
+                // Merge contiguous ranges
+                var startIndex = ranges[0][0]
+                var endIndex = ranges[0][1]
+                var mergedRanges = []
+                var highlightRanges = []
+                for (rangeIndex in ranges) {
+                    var range = ranges[rangeIndex]
+                    snippetCount++
+                    if (range[0] <= endIndex) {
+                        endIndex = Math.max(range[1], endIndex)
+                        highlightRanges = highlightRanges.concat([range[2], range[3]])
+                    } else {
+                        mergedRanges.push([startIndex].concat(highlightRanges).concat([endIndex]))
+                        startIndex = range[0]
+                        endIndex = range[1]
+                        highlightRanges = [range[2], range[3]]
+                    }
+                    if (snippetCount >= maxSnippets) {
+                        mergedRanges.push([startIndex].concat(highlightRanges).concat([endIndex]))
+                        snippetsRangesByFields[field] = mergedRanges
+                        break
+                    }
+                    if (+rangeIndex === ranges.length - 1) {
+                        if (snippetCount + 1 < maxSnippets) {
+                            snippetCount++
+                        }
+                        mergedRanges.push([startIndex].concat(highlightRanges).concat([endIndex]))
+                        snippetsRangesByFields[field] = mergedRanges
+                        if (snippetCount >= maxSnippets) {
+                            break
+                        }
+                    }
+                }
+            }
+            // Extract snippets and add highlights to search results
+            for (var field in snippetsRangesByFields) {
+                positions = snippetsRangesByFields[field]
+                positions.forEach(function(position) {
+                    matchedText = matchedDocument[field]
+                    snippet = ''
+                    // If start of matched text dont use ellipsis
+                    if (position[0] > 0) {
+                        snippet += '...'
+                    }
+                    snippet += matchedText.substring(position[0], position[1])
+                    for (var i = 1; i <= position.length - 2; i ++ ) {
+                        if (i % 2 == 1) {
+                            snippet += '<mark>'
+                        } else {
+                            snippet += '</mark> '
+                        }
+                        snippet += matchedText.substring(position[i], position[i + 1])
+                    }
+                    snippet += '...'
+                    snippets.push(snippet)
+                })
+            }
+            // Build a simple flat object per lunr result
+            return {
+                title: matchedDocument.title,
+                content: snippets.join(' '),
+                url: matchedDocument.url
+            }
+        })
+    }
+
+    // Displays the search results in HTML
+    // Takes an array of objects with "title" and "content" properties
+    var renderSearchResultsFromLunr = function(searchResults) {
+        var container = document.getElementsByClassName('search-results')[0]
+        container.innerHTML = ''
+        if (!searchResults || searchResults.length === 0) {
+            var error = generateErrorHTML()
+            container.append(error)
+        } else {
+            searchResults.forEach(function(result, i) {
+                var element = generateResultHTML(result, i)
+                container.appendChild(element)
+            })
+        }
+    }
+
     var renderSearchResultsFromServer = function(searchResults) {
         var container = document.getElementsByClassName('search-results')[0]
         container.innerHTML = ''
@@ -305,14 +431,42 @@
         })
     }
 
-    var offlineSearch = function(query) {
-        console.log('Offline search enabled!')
+    var lunrSearch = function(query) {
+        console.log('Lunr search only enabled!')
+        // Add wildcard before and after
+        var queryTerm = '*' + query + '*'
+        var lunrResults = lunrIndex.search(queryTerm)
+        var results = translateLunrResults(lunrResults)
+        highlightBody()
+        renderSearchResultsFromLunr(results)
+    }
+
+    // Main
+    // =======================
+    const searchSetOffline = '{{ site.offline_search_only }}' === 'true' ? 
+        true :
+        false
+    // if searchSetOffline is false, searchOffline may/may not be false
+    let searchIsOffline = null
+
+    if (searchSetOffline) {
+        startBuildingLunrIndex(function() {
+            searchIsOffline = true
+        })
+    } else {
+        fetch('https://www.google.com')
+            .then(function(res) {
+                // ES is working
+                searchIsOffline = false
+            }, function(rej) {
+                // ES is not working - fallback on Lunr search.
+                startBuildingLunrIndex(function() {
+                    searchIsOffline = true
+                })
+            })
     }
 
     var onSearchChange = function() {
-        const searchIsOffline = '{{ site.offline_search_only }}' === 'true' ? 
-            true :
-            false
         var query = searchBoxElement.value.trim()
         // Clear highlights
         wordsToHighlight = []
@@ -321,9 +475,17 @@
             highlightBody()
             return
         } 
-
         searchResults.classList.add('visible')
-        searchIsOffline ? offlineSearch(query) : esSearch(query)
+
+        if (searchSetOffline === true) {
+            console.time('lunr search')
+            lunrSearch(query)
+            console.timeEnd('lunr search')
+        } else {
+            console.time('elastic search')
+            esSearch(query)
+            console.timeEnd('elastic search')
+        }
     }
 
     var onSearchChangeDebounced = debounce(onSearchChange, 500, false)
@@ -368,6 +530,7 @@
         }
     }
 
+
     // Highlighting
     // ============================================================================
     window.highlightBody = function() {
@@ -387,4 +550,5 @@
             }
         }
     }
+
 })()
