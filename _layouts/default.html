@@ -112,7 +112,9 @@
   <main class="site-main" id="main-content" aria-label="Content">
     {{ content | replace: "!!^", "<i style='margin-left:30px'></i>"}}
   </main>
-  <div class="site-branding no-print">Powered by Opendoc</div>
+  <div class="site-branding no-print">
+    <a href="https://www.opendoc.sg">Powered by OpenDoc</a>      
+  </div>
 
   <script src="{{ '/assets/vendor/headroom.min.js' | relative_url }}" charset="utf-8"></script>
   <script src="{{ '/assets/vendor/mark.min.js' | relative_url }}" charset="utf-8"></script>
