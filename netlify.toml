@@ -4,12 +4,11 @@
     base = "/"
 
     # Default build command.
-    command = '''jekyll build && \
-                 npm i html-pdf && \
-                 npm i glob && \
-                 npm i jsdom && \
-                 npm i js-yaml && \
-                 node _site/assets/js/pdf-gen.js '''
+    command = '''
+                jekyll build && \
+                ./_site/assets/startup/build.sh
+              '''
+
     environment = { JEKYLL_ENV = "development" }
 
     # Directory (relative to root of your repo) that contains the deploy-ready 
