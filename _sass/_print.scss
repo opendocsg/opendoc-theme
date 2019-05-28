@@ -1,28 +1,25 @@
 #print-content {
-    /* print styles go here */
-    .doc-header{
-      display: none;
-    }
-    #float-buttons{
-      display: none;
-    }
-    .site-branding{
-      display: none;
-    }
-    .site-main {
-      height: auto;
-      left: 0;
-      top: 0;
-      position: relative;
-      padding-top: 20px;
-    }
-    .description {
-      padding-top: 10px;
-      text-align: center;
-    }
-    .description-logo {
-      max-width: 380px;
-    }
+  /* print styles go here */
+  .site-header-text {
+    color: $primary-brand-color;
+    font-family: $base-font-family;
+    font-size: 40px;
+  }
+
+  #document-title {
+    color: $primary-brand-color;
+    margin-bottom: 30px;
+    font-size: 30px;
+  }
+
+  #main-content {
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    margin-top: -40px;
+    position: relative;
+    font-size: $base-font-size;
+  }
 }
 
 @media print {
