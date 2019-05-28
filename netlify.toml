@@ -7,7 +7,7 @@
     command = '''jekyll build && \
                  npm i html-pdf lunr && \
                  node _site/assets/js/pdf-gen.js && \
-                 cat _site/assets/siteIndex.json | node _site/assets/js/prebuild-lunr-index.js > _site/assets/lunrIndex.json'''
+                 cat _site/assets/siteIndex.json | node _site/assets/js/prebuild-lunr-index.js'''
 
     environment = { JEKYLL_ENV = "development" }
 

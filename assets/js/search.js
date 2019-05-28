@@ -68,9 +68,9 @@
 
     // Begin Lunr Indexing
     // =============================================================================
-    var startBuildingLunrIndex = function(cb) {
-        indexUrl = '{{ "/assets/lunrIndex.json" | relative_url }}'
-        return fetch(indexUrl)
+    var getLunrIndex = function(cb) {
+        var lunrIndexUrl = '{{ "/assets/lunrIndex.json" | relative_url }}'
+        return fetch(lunrIndexUrl)
             .then(function (res) {
                 return res.json()
             }, function(err) {
@@ -83,12 +83,6 @@
             .catch(function(err) {
                 console.log('Lunr index did not load successfully: ' + err)
             })
-
-        //startLunrIndexing().then(function(results) {
-        //    sectionIndex = results.sectionIndex
-        //    lunrIndex = lunr.Index.load('{{ "/assets/lunrIndex.json" | relative_url }}')
-        //    cb()
-        //})
     }
     // Search
     // =============================================================================
@@ -460,22 +454,26 @@
         true :
         false
     // if searchSetOffline is false, searchOffline may/may not be false
+    // depending on network conditions
     let searchIsOffline = null
 
     if (searchSetOffline) {
-        startBuildingLunrIndex(function() {
-            searchIsOffline = true
-        })
+        getLunrIndex()
+            .then(function (res) {
+                searchIsOffline = true
+            })
     } else {
         fetch('https://www.google.com')
-            .then(function(res) {
+            .then(function (res) {
                 // ES is working
                 searchIsOffline = false
-            }, function(rej) {
+            }, function (rej) {
                 // ES is not working - fallback on Lunr search.
-                startBuildingLunrIndex(function() {
-                    searchIsOffline = true
-                })
+                console.log('Elasticsearch unreachable: enabling Lunr search.')
+                getLunrIndex()
+                    .then(function (res) {
+                        searchIsOffline = true
+                    })
             })
     }
 
@@ -495,9 +493,7 @@
             lunrSearch(query)
             console.timeEnd('lunr search')
         } else {
-            console.time('elastic search')
             esSearch(query)
-            console.timeEnd('elastic search')
         }
     }
 
