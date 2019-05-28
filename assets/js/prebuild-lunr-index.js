@@ -21,7 +21,7 @@ stdin.on('end', function () {
             boost: 2
         })
         this.field('text')
-        this.metadataWhitelist = ['position']
+        this.metadataWhitelist = ['position', 'documentTitle']
         this.pipeline.remove(lunr.stemmer)
         documents.forEach((function (_this) {
             return function (section) {
@@ -30,6 +30,7 @@ stdin.on('end', function () {
                     return _this.add({
                         'url': section.url,
                         'title': section.title,
+                        'documentTitle': section.documentTitle,
                         'text': section.text
                     })
                 }

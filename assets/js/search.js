@@ -1,6 +1,6 @@
 ---
 ---
-(function() {
+(function () {
     // Search Box Element
     // =============================================================================
     var siteSearchElement = document.getElementsByClassName('search-box')[0]
@@ -20,7 +20,7 @@
         }
     }
 
-    searchBoxElement.onfocus= function() {
+    searchBoxElement.onfocus = function () {
         searchResults.classList.remove('hidden')
     }
 
@@ -45,14 +45,14 @@
     var elasticSearchIndex = '{{site.github.owner_name}}-{{site.github.repository_name}}'
 
     if (env == 'production') {
-        endpoint = '{{ site.server_PROD | append: '/' }}' + elasticSearchIndex
+        endpoint = '{{ site.server_PROD | append: ' / ' }}' + elasticSearchIndex
     } else {
         //  Allow overriding of search index in dev env
         var configElasticSearchIndex = '{{site.elastic_search_index}}'
         if (configElasticSearchIndex) {
             elasticSearchIndex = configElasticSearchIndex
         }
-        endpoint = '{{ site.server_DEV | append: '/' }}' + elasticSearchIndex
+        endpoint = '{{ site.server_DEV | append: ' / ' }}' + elasticSearchIndex
     }
 
     var search_endpoint = endpoint + '/search'
@@ -61,26 +61,26 @@
     // Global Variables
     // =============================================================================
 
-    var wordsToHighlight =[]
+    var wordsToHighlight = []
     var sectionIndex = {}
     var minQueryLength = 3
     var lunrIndex = null
 
     // Begin Lunr Indexing
     // =============================================================================
-    var getLunrIndex = function(cb) {
+    var getLunrIndex = function (cb) {
         var lunrIndexUrl = '{{ "/assets/lunrIndex.json" | relative_url }}'
         return fetch(lunrIndexUrl)
             .then(function (res) {
                 return res.json()
-            }, function(err) {
+            }, function (err) {
                 console.log('Fetch could not find lunr index: ' + err)
             })
-            .then(function(json) {
+            .then(function (json) {
                 lunrIndex = lunr.Index.load(json.index)
                 sectionIndex = json.sectionIndex
             })
-            .catch(function(err) {
+            .catch(function (err) {
                 console.log('Lunr index did not load successfully: ' + err)
             })
     }
@@ -94,7 +94,7 @@
     var minQueryLength = 3
     var translateLunrResults = function (allLunrResults) {
         var lunrResults = allLunrResults.slice(0, maxResults)
-        return lunrResults.map(function(result) {
+        return lunrResults.map(function (result) {
             var matchedDocument = sectionIndex[result.ref]
             var snippets = []
             var snippetsRangesByFields = {}
@@ -114,10 +114,10 @@
             // Sort according to ascending snippet range
             for (var field in rangesByFields) {
                 var ranges = rangesByFields[field]
-                    .map(function(a) {
+                    .map(function (a) {
                         return [a[0] - snippetSpace, a[0] + a[1] + snippetSpace, a[0], a[0] + a[1]]
                     })
-                    .sort(function(a, b) {
+                    .sort(function (a, b) {
                         return a[0] - b[0]
                     })
                 // Merge contiguous ranges
@@ -157,7 +157,7 @@
             // Extract snippets and add highlights to search results
             for (var field in snippetsRangesByFields) {
                 positions = snippetsRangesByFields[field]
-                positions.forEach(function(position) {
+                positions.forEach(function (position) {
                     matchedText = matchedDocument[field]
                     snippet = ''
                     // If start of matched text dont use ellipsis
@@ -165,7 +165,7 @@
                         snippet += '...'
                     }
                     snippet += matchedText.substring(position[0], position[1])
-                    for (var i = 1; i <= position.length - 2; i ++ ) {
+                    for (var i = 1; i <= position.length - 2; i++) {
                         if (i % 2 == 1) {
                             snippet += '<mark>'
                         } else {
@@ -180,6 +180,7 @@
             // Build a simple flat object per lunr result
             return {
                 title: matchedDocument.title,
+                documentTitle: matchedDocument.documentTitle,
                 content: snippets.join(' '),
                 url: matchedDocument.url
             }
@@ -188,21 +189,21 @@
 
     // Displays the search results in HTML
     // Takes an array of objects with "title" and "content" properties
-    var renderSearchResultsFromLunr = function(searchResults) {
+    var renderSearchResultsFromLunr = function (searchResults) {
         var container = document.getElementsByClassName('search-results')[0]
         container.innerHTML = ''
         if (!searchResults || searchResults.length === 0) {
             var error = generateErrorHTML()
             container.append(error)
         } else {
-            searchResults.forEach(function(result, i) {
+            searchResults.forEach(function (result, i) {
                 var element = generateResultHTML(result, i)
                 container.appendChild(element)
             })
         }
     }
 
-    var renderSearchResultsFromServer = function(searchResults) {
+    var renderSearchResultsFromServer = function (searchResults) {
         var container = document.getElementsByClassName('search-results')[0]
         container.innerHTML = ''
         if (typeof searchResults.hits === 'undefined') {
@@ -210,13 +211,13 @@
             error.classList.add('not-found')
             error.innerHTML = searchResults
             container.appendChild(error)
-        // Check if there are hits and max_score is more than 0 
-        // Max score is checked as well as filter will always return something
+            // Check if there are hits and max_score is more than 0 
+            // Max score is checked as well as filter will always return something
         } else if (searchResults.hits.hits.length === 0 || searchResults.hits['max_score'] === 0) {
             var error = generateErrorHTML()
             container.appendChild(error)
         } else {
-            searchResults.hits.hits.forEach(function(result, i) {
+            searchResults.hits.hits.forEach(function (result, i) {
                 if (result._score) {
                     var formatted = formatResult(result, i)
                     var element = generateResultHTML(formatted)
@@ -227,18 +228,18 @@
         }
     }
 
-    var generateErrorHTML = function() {
+    var generateErrorHTML = function () {
         var error = document.createElement('p')
         error.innerHTML = 'Results matching your query were not found.'
         error.classList.add('not-found')
         return error
     }
 
-    var generateResultHTML = function(result, i) {
+    var generateResultHTML = function (result, i) {
         var element = document.createElement('a')
         element.className = 'search-link nav-link'
         var urlParts = ('{{site.baseurl}}' + result.url).split('/')
-        urlParts = urlParts.filter(function(part) {
+        urlParts = urlParts.filter(function (part) {
             return part !== ''
         })
         element.href = '/' + urlParts.join('/')
@@ -256,7 +257,7 @@
         content.className = 'search-content'
         content.innerHTML = result.content
         elementRight.appendChild(content)
-        element.onmouseup = function() {
+        element.onmouseup = function () {
             return trackSearch(searchBoxElement.value.trim(), i, false)
         }
         element.appendChild(elementLeft)
@@ -264,22 +265,23 @@
         return element
     }
 
-    formatResult = function(result) {
+    formatResult = function (result) {
+        console.log(result)
         var content = null
         var title = result._source.title
         var regex = /<mark>(.*?)<\/mark>/g
-        var joinHighlights = function(str) {
+        var joinHighlights = function (str) {
             if (str) {
                 return str.replace(/<\/mark> <mark>/g, ' ')
             }
         }
         if (result.highlight) {
-            ['title', 'content'].forEach(function(field) {
+            ['title', 'content'].forEach(function (field) {
                 var curr, match, term;
                 if (result.highlight[field]) {
                     var curr = result.highlight[field].join('...')
                     //  trimLeft not supported in IE
-                    var curr = curr.replace(/^\s+/,"")
+                    var curr = curr.replace(/^\s+/, "")
                     var curr = joinHighlights(curr)
                     var match = true
                     while (match) {
@@ -288,7 +290,7 @@
                             var term = match[1].toLowerCase()
                             if ((wordsToHighlight.indexOf(term)) < 0) {
                                 wordsToHighlight.push(term)
-                            } 
+                            }
                         }
                     }
                 }
@@ -310,12 +312,12 @@
         }
     }
 
-    var debounce = function(func, threshold, execAsap) {
+    var debounce = function (func, threshold, execAsap) {
         var timeout = null;
-        return function() {
+        return function () {
             var args = 1 <= arguments.length ? slice.call(arguments, 0) : []
             obj = this
-            var delayed = function() {
+            var delayed = function () {
                 if (!execAsap) {
                     func.apply(obj, args)
                 }
@@ -331,46 +333,46 @@
     }
 
 
-    var createEsQuery = function(queryStr) {
+    var createEsQuery = function (queryStr) {
         var source = ['title', 'url', 'documentTitle']
         var title_automcomplete_q = {
             'match_phrase_prefix': {
                 'title': {
-                'query': queryStr,
-                'max_expansions': 20,
-                'boost': 100,
-                'slop': 10
+                    'query': queryStr,
+                    'max_expansions': 20,
+                    'boost': 100,
+                    'slop': 10
                 }
             }
         }
         var content_automcomplete_q = {
-        'match_phrase_prefix': {
-            'content': {
-            'query': queryStr,
-            'max_expansions': 20,
-            'boost': 60,
-            'slop': 10
+            'match_phrase_prefix': {
+                'content': {
+                    'query': queryStr,
+                    'max_expansions': 20,
+                    'boost': 60,
+                    'slop': 10
+                }
             }
-        }
         }
         var title_keyword_q = {
             'match': {
                 'title': {
-                'query': queryStr,
-                'fuzziness': 'AUTO',
-                'max_expansions': 10,
-                'boost': 20,
-                'analyzer': 'stop'
+                    'query': queryStr,
+                    'fuzziness': 'AUTO',
+                    'max_expansions': 10,
+                    'boost': 20,
+                    'analyzer': 'stop'
                 }
             }
         }
         var content_keyword_q = {
             'match': {
                 'content': {
-                'query': queryStr,
-                'fuzziness': 'AUTO',
-                'max_expansions': 10,
-                'analyzer': 'stop'
+                    'query': queryStr,
+                    'fuzziness': 'AUTO',
+                    'max_expansions': 10,
+                    'analyzer': 'stop'
                 }
             }
         }
@@ -418,7 +420,7 @@
     }
 
     // Call the API
-    esSearch = function(query) {
+    esSearch = function (query) {
         var esQuery = createEsQuery(query)
         fetch(search_endpoint, {
             method: 'POST',
@@ -427,19 +429,18 @@
             },
             body: JSON.stringify(esQuery)
         })
-        .then(checkStatus)
-        .then(parseJSON)
-        .then(function(data) {
-            renderSearchResultsFromServer(data.body)
-        })
-        .catch(function(err) {
-            console.error(err)
-            renderSearchResultsFromServer('Failed to fetch search results')
-        })
+            .then(checkStatus)
+            .then(parseJSON)
+            .then(function (data) {
+                renderSearchResultsFromServer(data.body)
+            })
+            .catch(function (err) {
+                console.error(err)
+                renderSearchResultsFromServer('Failed to fetch search results')
+            })
     }
 
-    var lunrSearch = function(query) {
-        console.log('Lunr search only enabled!')
+    var lunrSearch = function (query) {
         // Add wildcard before and after
         var queryTerm = '*' + query + '*'
         var lunrResults = lunrIndex.search(queryTerm)
@@ -449,35 +450,19 @@
     }
 
     // Main
-    // =======================
-    const searchSetOffline = '{{ site.offline_search_only }}' === 'true' ? 
+    // ============================================================================
+    const searchSetOffline = '{{ site.offline_search_only }}' === 'true' ?
         true :
         false
-    // if searchSetOffline is false, searchOffline may/may not be false
-    // depending on network conditions
-    let searchIsOffline = null
 
     if (searchSetOffline) {
         getLunrIndex()
-            .then(function (res) {
-                searchIsOffline = true
-            })
-    } else {
-        fetch('https://www.google.com')
-            .then(function (res) {
-                // ES is working
-                searchIsOffline = false
-            }, function (rej) {
-                // ES is not working - fallback on Lunr search.
-                console.log('Elasticsearch unreachable: enabling Lunr search.')
-                getLunrIndex()
-                    .then(function (res) {
-                        searchIsOffline = true
-                    })
+            .catch(function(err) {
+                console.log('Lunr index could not be found: ' + err)
             })
     }
 
-    var onSearchChange = function() {
+    var onSearchChange = function () {
         var query = searchBoxElement.value.trim()
         // Clear highlights
         wordsToHighlight = []
@@ -485,13 +470,11 @@
             searchResults.classList.remove('visible')
             highlightBody()
             return
-        } 
+        }
         searchResults.classList.add('visible')
 
         if (searchSetOffline === true) {
-            console.time('lunr search')
             lunrSearch(query)
-            console.timeEnd('lunr search')
         } else {
             esSearch(query)
         }
@@ -502,7 +485,7 @@
     var isBackspaceFirstPress = true
     var isBackspacePressedOnEmpty = false
     // Detect that backspace is not part of longpress
-    searchBoxElement.onkeydown = function(e) {
+    searchBoxElement.onkeydown = function (e) {
         searchResults.classList.remove('hidden')
         if (isBackspaceFirstPress && e.keyCode === 8) {
             isBackspaceFirstPress = false
@@ -512,24 +495,24 @@
         }
     }
 
-    clearSearchFilter = function() {
+    clearSearchFilter = function () {
         searchFilter.classList.add('hidden')
         searchBoxElement.placeholder = 'Search opendoc'
     }
 
     searchFilter.onclick = clearSearchFilter
 
-    searchBoxElement.onkeyup = function(e) {
+    searchBoxElement.onkeyup = function (e) {
         // flash search results on enter
         if (e.keyCode === 13) {
             var container = document.getElementsByClassName('search-results')[0]
             container.style.opacity = 0
-            return setTimeout(function() {
+            return setTimeout(function () {
                 return container.style.opacity = 1
             }, 100)
         }
         // Delete filter on backspace when input is empty and not part of longpress
-        if (e.keyCode === 8 ) {
+        if (e.keyCode === 8) {
             isBackspaceFirstPress = true
             if (searchBoxElement.value === '' && isBackspacePressedOnEmpty) {
                 clearSearchFilter()
@@ -542,7 +525,7 @@
 
     // Highlighting
     // ============================================================================
-    window.highlightBody = function() {
+    window.highlightBody = function () {
         // Check if Mark.js script is already imported
         if (Mark) {
             var instance = new Mark(main)
