@@ -71,13 +71,6 @@
 
     printButton.addEventListener('click', function () {
         trackButton('pdf', null, isMobileView())
-        var url
-        if (window.location.pathname === '/') {
-            url = 'https://' + window.location.hostname + '/export.pdf'
-        } else {
-            url = window.location.href.substring(0, window.location.href.lastIndexOf('/'))
-                  + '/export.pdf'
-        }
-        window.open(url, '_blank')
+        window.open('./export.pdf', '_blank')
     })
 })()
