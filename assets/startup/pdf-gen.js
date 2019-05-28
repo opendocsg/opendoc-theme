@@ -71,7 +71,7 @@ const exportPdfDocFolders = (sitePath, docFolders) => {
 // Concatenates the contents in .html files, and outputs export.pdf in the specified output folder
 const createPdf = (htmlFilePaths, outputFolderPath) => {
     // docprint.html is our template to build pdf up from.
-    const exportHtmlFile = fs.readFileSync(sitePath + '/../_layouts/docprint.html')
+    const exportHtmlFile = fs.readFileSync(__dirname + '/docprint.html')
     const exportDom = new jsdom.JSDOM(exportHtmlFile)
     const exportDomBody = exportDom.window.document.body
     const exportDomMain = exportDom.window.document.getElementById('main-content')
