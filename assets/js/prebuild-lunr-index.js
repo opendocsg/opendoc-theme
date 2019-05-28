@@ -12,16 +12,31 @@ stdin.on('data', function (data) {
 
 stdin.on('end', function () {
   var documents = JSON.parse(buffer.join(''))
-
+  var sectionIndex = {}
   var idx = lunr(function () {
     this.ref('url')
-    this.field('title')
+    this.field('title', {
+        boost: 2
+    })
     this.field('text')
-
-    documents.forEach(function (doc) {
-      this.add(doc)
-    }, this)
+    this.metadataWhitelist = ['position']
+    this.pipeline.remove(lunr.stemmer)
+    documents.forEach((function (_this) {
+        return function (section) {
+            if (section.text.length > 0) {
+                sectionIndex[section.url] = section
+                return _this.add({
+                    'url': section.url,
+                    'title': section.title,
+                    'text': section.text
+                })
+            }
+        }
+    })(this))
   })
 
-  stdout.write(JSON.stringify(idx))
+  stdout.write(JSON.stringify({
+      index: idx,
+      sectionIndex: sectionIndex
+  }))
 })

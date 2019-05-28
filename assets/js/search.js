@@ -69,9 +69,22 @@
     // Begin Lunr Indexing
     // =============================================================================
     var startBuildingLunrIndex = function(cb) {
-        lunrIndex = lunr.Index.load('{{ "/assets/lunrIndex.json" | relative_url }}')
+        indexUrl = '{{ "/assets/lunrIndex.json" | relative_url }}'
+        return fetch(indexUrl)
+            .then(function (res) {
+                return res.json()
+            }, function(err) {
+                console.log('Fetch could not find lunr index: ' + err)
+            })
+            .then(function(json) {
+                lunrIndex = lunr.Index.load(json.index)
+                sectionIndex = json.sectionIndex
+            })
+            .catch(function(err) {
+                console.log('Lunr index did not load successfully: ' + err)
+            })
+
         //startLunrIndexing().then(function(results) {
-        //    console.log('{{ "/assets/lunrIndex.json" | relative_url }}')
         //    sectionIndex = results.sectionIndex
         //    lunrIndex = lunr.Index.load('{{ "/assets/lunrIndex.json" | relative_url }}')
         //    cb()
