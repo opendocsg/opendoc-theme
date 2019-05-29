@@ -107,6 +107,7 @@
         return lunrResults.map(function (result) {
             var matchedDocument = sectionIndex[result.ref]
             var contentSnippets = []
+            var titleSnippets = []
             var snippetsRangesByFields = {}
             // Loop over matching terms
             var rangesByFields = {}
@@ -167,31 +168,33 @@
             // Extract snippets and add highlights to search results
             for (var field in snippetsRangesByFields) {
                 positions = snippetsRangesByFields[field]
-                titleSnippet = matchedDocument.title
                 positions.forEach(function (position) {
                     matchedText = matchedDocument[field]
-                    var contentSnippet = ''
+                    var snippet = ''
                     // If start of matched text dont use ellipsis
                     if (position[0] > 0) {
-                        contentSnippet += '...'
+                        snippet += '...'
                     }
-                    contentSnippet += matchedText.substring(position[0], position[1])
+                    snippet += matchedText.substring(position[0], position[1])
                     for (var i = 1; i <= position.length - 2; i++) {
                         if (i % 2 == 1) {
-                            contentSnippet += '<mark>'
+                            snippet += '<mark>'
                         } else {
-                            contentSnippet += '</mark> '
+                            snippet += '</mark> '
                         }
-                        contentSnippet += matchedText.substring(position[i], position[i + 1])
+                        snippet += matchedText.substring(position[i], position[i + 1])
                     }
-                    contentSnippet += '...'
-                    console.log(contentSnippet)
-                    contentSnippets.push(contentSnippet)
+                    if (field === 'title') {
+                        titleSnippets.push(snippet)
+                    } else {
+                        snippet += '...'
+                        contentSnippets.push(snippet)
+                    }
                 })
             }
             // Build a simple flat object per lunr result
             return {
-                title: titleSnippet,
+                title: titleSnippets.length === 0 ? matchedDocument.title: titleSnippets.join(' '),
                 documentTitle: matchedDocument.documentTitle,
                 content: contentSnippets.join(' '),
                 url: matchedDocument.url
