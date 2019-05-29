@@ -43,10 +43,17 @@
       <!-- <p class="site-last-updated">LAST UPDATED ON {{ site.time | date_to_long_string | upcase }}</p> -->
     </div>
     <div class="site-header-right">
-      <a id="contact-us" href="{{ site.styling_options.feedback_url }}" target="_blank">
-        <span>Contact Us</span>
-        <img class="btn-icon" src="{{ '/assets/images/feedback.svg' | relative_url }}">
-      </a>
+      {% if site.styling_options.feedback_url %}
+        <a id="contact-us" href="{{ site.styling_options.feedback_url }}" target="_blank">
+          <span>Contact Us</span>
+          <img class="btn-icon" src="{{ '/assets/images/feedback.svg' | relative_url }}">
+        </a>
+      {% else %}
+        <a id="contact-us" href="https://form.gov.sg/5cee3d46138e3200109244df" target="_blank">
+          <span>Contact Us</span>
+          <img class="btn-icon" src="{{ '/assets/images/feedback.svg' | relative_url }}">
+        </a>
+      {% endif %}
       <a href="{{ '/'  | relative_url }}">
         <img class="agency-logo" src="{{ site.styling_options.logo_path | relative_url }}">
       </a>
