@@ -106,7 +106,7 @@
         var lunrResults = allLunrResults.slice(0, maxResults)
         return lunrResults.map(function (result) {
             var matchedDocument = sectionIndex[result.ref]
-            var snippets = []
+            var contentSnippets = []
             var snippetsRangesByFields = {}
             // Loop over matching terms
             var rangesByFields = {}
@@ -167,31 +167,33 @@
             // Extract snippets and add highlights to search results
             for (var field in snippetsRangesByFields) {
                 positions = snippetsRangesByFields[field]
+                titleSnippet = matchedDocument.title
                 positions.forEach(function (position) {
                     matchedText = matchedDocument[field]
-                    snippet = ''
+                    var contentSnippet = ''
                     // If start of matched text dont use ellipsis
                     if (position[0] > 0) {
-                        snippet += '...'
+                        contentSnippet += '...'
                     }
-                    snippet += matchedText.substring(position[0], position[1])
+                    contentSnippet += matchedText.substring(position[0], position[1])
                     for (var i = 1; i <= position.length - 2; i++) {
                         if (i % 2 == 1) {
-                            snippet += '<mark>'
+                            contentSnippet += '<mark>'
                         } else {
-                            snippet += '</mark> '
+                            contentSnippet += '</mark> '
                         }
-                        snippet += matchedText.substring(position[i], position[i + 1])
+                        contentSnippet += matchedText.substring(position[i], position[i + 1])
                     }
-                    snippet += '...'
-                    snippets.push(snippet)
+                    contentSnippet += '...'
+                    console.log(contentSnippet)
+                    contentSnippets.push(contentSnippet)
                 })
             }
             // Build a simple flat object per lunr result
             return {
-                title: matchedDocument.title,
+                title: titleSnippet,
                 documentTitle: matchedDocument.documentTitle,
-                content: snippets.join(' '),
+                content: contentSnippets.join(' '),
                 url: matchedDocument.url
             }
         })
@@ -459,7 +461,7 @@
     }
 
     var refineLunrSearchQuery = function(query) {
-        FUZZY_FACTOR = 3 // range: 1 to INF. Lower is fuzzier *relative to term length*.
+        FUZZY_FACTOR = 4 // range: 1 to INF. Lower is fuzzier *relative to term length*.
         var addFuzzyOperator = function(term, fuzziness) {
             return term + '~' + 
                 Math.floor(term.length / Math.max(1, fuzziness)).toString()
