@@ -15,6 +15,7 @@ order:
   - contribute.md
   - import-files.md
 
+google_analytics: 'UA-113717369-5'
 styling_options:
   primary_brand_color: '#990921'
   opendoc_logo_path: /assets/images/logo-full.png

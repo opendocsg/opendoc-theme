@@ -44,7 +44,7 @@
     var env = '{{ jekyll.environment }}'
     var elasticSearchIndex = '{{site.github.owner_name}}-{{site.github.repository_name}}'
 
-    if (env == 'production') {
+    if (env === 'production') {
         endpoint = '{{ site.server_PROD | append: '/' }}' + elasticSearchIndex
     } else {
         //  Allow overriding of search index in dev env
@@ -315,6 +315,9 @@
         } else {
             searchResults.classList.add('visible')
             esSearch(query)
+            if (env === 'production' && ga) {
+                ga('send', 'pageview', '/search?query=' + encodeURIComponent(query))
+            }
         }
     }
 
