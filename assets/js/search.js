@@ -451,11 +451,31 @@
 
     var lunrSearch = function (query) {
         // Add wildcard before and after
-        var queryTerm = '*' + query + '*'
+        var queryTerm = refineLunrSearchQuery(query)
         var lunrResults = lunrIndex.search(queryTerm)
         var results = translateLunrResults(lunrResults)
         highlightBody()
         renderSearchResultsFromLunr(results)
+    }
+
+    var refineLunrSearchQuery = function(query) {
+        FUZZY_FACTOR = 3 // range: 1 to INF. Lower is fuzzier *relative to term length*.
+        var addFuzzyOperator = function(term, fuzziness) {
+            return term + '~' + 
+                Math.floor(term.length / Math.max(1, fuzziness)).toString()
+        }
+        var stringIsLettersOnly = function(str) {
+            return /^[a-zA-Z]+$/.test(str)
+        }
+
+        var terms = query.split(' ')
+        terms = terms.map(function(term) {
+            if (stringIsLettersOnly(term)) {
+                return addFuzzyOperator(term, FUZZY_FACTOR)
+            }           
+        })
+        console.log(terms)
+        return terms.join(' ')
     }
 
 
