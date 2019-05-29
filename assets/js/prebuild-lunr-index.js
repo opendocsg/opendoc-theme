@@ -1,3 +1,5 @@
+// To generate Lunr index that will be served alongside static assets
+
 const lunr = require('lunr'),
     path = require('path'),
     fs = require('fs'),
@@ -5,45 +7,46 @@ const lunr = require('lunr'),
     buffer = [],
     sitePath = __dirname + '/../..'
 
-stdin.resume()
-stdin.setEncoding('utf8')
+const OUT_FILEPATH = path.join(sitePath, 'assets', 'lunrIndex.json')
+const IN_FILEPATH = path.join(sitePath, 'assets', 'siteIndex.json')
 
-stdin.on('data', function (data) {
-    buffer.push(data)
-})
+let siteIndex
+try {
+    siteIndex = fs.readFileSync(IN_FILEPATH)
+} catch {
+    console.log('Could not find siteIndex.json, check IN_FILEPATH.')
+    siteIndex = {}
+}
 
-stdin.on('end', function () {
-    var documents = JSON.parse(buffer.join(''))
-    var sectionIndex = {}
-    var idx = lunr(function () {
-        this.ref('url')
-        this.field('title', {
-            boost: 2
-        })
-        this.field('text')
-        this.metadataWhitelist = ['position', 'documentTitle']
-        this.pipeline.remove(lunr.stemmer)
-        documents.forEach((function (_this) {
-            return function (section) {
-                if (section.text.length > 0) {
-                    sectionIndex[section.url] = section
-                    return _this.add({
-                        'url': section.url,
-                        'title': section.title,
-                        'documentTitle': section.documentTitle,
-                        'text': section.text
-                    })
-                }
-            }
-        })(this))
+const documents = JSON.parse(siteIndex)
+const sectionIndex = {}
+const idx = lunr(function () {
+    this.ref('url')
+    this.field('title', {
+        boost: 2
     })
-
-    filepath = path.join(sitePath, 'assets', 'lunrIndex.json')
-    fs.writeFileSync(filepath,
-        JSON.stringify({
-            index: idx,
-            sectionIndex: sectionIndex
-        })
-    )
-    console.log('Wrote lunr index file to ' + filepath)
+    this.field('text')
+    this.metadataWhitelist = ['position', 'documentTitle']
+    documents.forEach((function (_this) {
+        return function (section) {
+            if (section.text.length > 0) {
+                sectionIndex[section.url] = section
+                return _this.add({
+                    'url': section.url,
+                    'title': section.title,
+                    'documentTitle': section.documentTitle,
+                    'text': section.text
+                })
+            }
+        }
+    })(this))
 })
+
+fs.writeFileSync(OUT_FILEPATH,
+    JSON.stringify({
+        index: idx,
+        sectionIndex: sectionIndex
+    })
+)
+
+console.log('Wrote lunr index file to ' + OUT_FILEPATH)

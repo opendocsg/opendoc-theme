@@ -65,7 +65,6 @@
     var sectionIndex = {}
     var minQueryLength = 3
     var lunrIndex = null
-
     // Begin Lunr Indexing
     // =============================================================================
     var getLunrIndex = function (cb) {
@@ -74,7 +73,7 @@
             .then(function (res) {
                 return res.json()
             }, function (err) {
-                console.log('Fetch could not find lunr index: ' + err)
+                console.log('Unable to retrieve Lunr index: ' + err)
             })
             .then(function (json) {
                 lunrIndex = lunr.Index.load(json.index)
@@ -84,6 +83,17 @@
                 console.log('Lunr index did not load successfully: ' + err)
             })
     }
+
+    // Load Lunr Index if set
+    // ============================================================================
+    const searchSetOffline = '{{ site.offline_search_only }}' === 'true' ?
+        true :
+        false
+
+    if (searchSetOffline) {
+        getLunrIndex()
+    }
+
     // Search
     // =============================================================================
     // Helper function to translate lunr search results
@@ -266,7 +276,6 @@
     }
 
     formatResult = function (result) {
-        console.log(result)
         var content = null
         var title = result._source.title
         var regex = /<mark>(.*?)<\/mark>/g
@@ -449,18 +458,6 @@
         renderSearchResultsFromLunr(results)
     }
 
-    // Main
-    // ============================================================================
-    const searchSetOffline = '{{ site.offline_search_only }}' === 'true' ?
-        true :
-        false
-
-    if (searchSetOffline) {
-        getLunrIndex()
-            .catch(function(err) {
-                console.log('Lunr index could not be found: ' + err)
-            })
-    }
 
     var onSearchChange = function () {
         var query = searchBoxElement.value.trim()
