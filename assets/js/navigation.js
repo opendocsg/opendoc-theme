@@ -134,37 +134,39 @@
         var path = window.location.pathname
         var page = pageIndex[path]
         // Only reflow the main content if necessary
-        if (page) {
-            var tocId = 'toc_' + page.dir.replace(/\s/g, '_').toLowerCase()
-            showToc(tocId)
-            setSelectedAnchor()
-            if (!firstLoad) {
-                loadPageContent(page, 2).then(function (pageContent) {
-                    /* 
-                    *  Search filter disabled, uncomment to enable
-                    */
-                    // setSearchFilter(page)
-                    // Don't compare iframes
-                    if (main.innerHTML.trim().replace(/\<iframe.*\<\/iframe\>/g, '') !== pageContent.trim().replace(/\<iframe.*\<\/iframe\>/g, '')) {
-                        main.innerHTML = pageContent
-                        document.title = page.title
-                        documentTitle.innerText = page.documentInfo[0] // document title
-                        documentSubtitle.innerText = page.documentInfo[1] // document subtitle
-                        docHeader.classList.remove('index')
-                    }
-                    // Make sure it is scrolled to the anchor
-                    scrollToView()
-
-                    // Hide menu if sub link clicked or clicking on search results        
-                    if (window.location.hash.replace('#', '').length > 0 || navigation.classList.contains('hidden')) {
-                        window.dispatchEvent(new Event('link-click'))
-                    }
-                    highlightBody()
-                })
-            }
+        if (!page) {
+            return
         }
+        showToc(page.tocId)
+        setSelectedAnchor()
+        if (firstLoad) {
+            return
+        }
+        loadPageContent(page, 2).then(function (pageContent) {
+            /* 
+            *  Search filter disabled, uncomment to enable
+            */
+            // setSearchFilter(page)
+            // Don't compare iframes
+            if (main.innerHTML.trim().replace(/\<iframe.*\<\/iframe\>/g, '') !== pageContent.trim().replace(/\<iframe.*\<\/iframe\>/g, '')) {
+                main.innerHTML = pageContent
+                document.title = page.title
+                documentTitle.innerText = page.documentInfo[0] // document title
+                documentSubtitle.innerText = page.documentInfo[1] // document subtitle
+                docHeader.classList.remove('index')
+            }
+            // Make sure it is scrolled to the anchor
+            scrollToView()
+
+            // Hide menu if sub link clicked or clicking on search results        
+            if (window.location.hash.replace('#', '').length > 0 || navigation.classList.contains('hidden')) {
+                window.dispatchEvent(new Event('link-click'))
+            }
+            highlightBody()
+        })
     }
 
+    // Search filter disabled, not in use
     function setSearchFilter(page) {
         if (tod) {
             searchFilter.innerText = page.documentInfo[0] // document title
