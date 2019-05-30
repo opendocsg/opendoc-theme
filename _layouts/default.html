@@ -91,7 +91,7 @@
     </div>
     <div class="nav-main">
       {%- if site.fast_build -%}
-      {% include_cached directory.html %}
+      {% include_cached directory-fast.html %}
       {%- else -%}
       {% include_cached directory.html currdir=page.dir %}
       {%- endif -%}
