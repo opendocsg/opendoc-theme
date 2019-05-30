@@ -42,7 +42,7 @@
     })
 
     // Returns whether corresponding toc is found and displays it
-    var showToc = function (tocId) {
+    function showToc(tocId) {
         var correspondingToc = document.getElementById(tocId)
         if (correspondingToc) {
             document.querySelectorAll('.contents').forEach(function (toc) {
@@ -63,7 +63,7 @@
     }
 
     //  Nav bar expansion and selection
-    var setSelectedAnchor = function () {
+    function setSelectedAnchor() {
         var path = window.location.pathname
         var hash = window.location.hash
 
@@ -130,7 +130,7 @@
 
     // Event when path changes
     // =============================================================================
-    var onHashChange = function (event) {
+    function onHashChange(firstLoad) {
         var path = window.location.pathname
         var page = pageIndex[path]
         // Only reflow the main content if necessary
@@ -138,32 +138,34 @@
             var tocId = 'toc_' + page.dir.replace(/\s/g, '_')
             showToc(tocId)
             setSelectedAnchor()
-            loadPageContent(page, 2).then(function (pageContent) {
-                /* 
-                 *  Search filter disabled, uncomment to enable
-                */
-                // setSearchFilter(page)
-                // Don't compare iframes
-                if (main.innerHTML.trim().replace(/\<iframe.*\<\/iframe\>/g, '') !== pageContent.trim().replace(/\<iframe.*\<\/iframe\>/g, '')) {
-                    main.innerHTML = pageContent
-                    document.title = page.title
-                    documentTitle.innerText = page.documentInfo[0] // document title
-                    documentSubtitle.innerText = page.documentInfo[1] // document subtitle
-                    docHeader.classList.remove('index')
-                }
-                // Make sure it is scrolled to the anchor
-                scrollToView()
+            if (!firstLoad) {
+                loadPageContent(page, 2).then(function (pageContent) {
+                    /* 
+                    *  Search filter disabled, uncomment to enable
+                    */
+                    // setSearchFilter(page)
+                    // Don't compare iframes
+                    if (main.innerHTML.trim().replace(/\<iframe.*\<\/iframe\>/g, '') !== pageContent.trim().replace(/\<iframe.*\<\/iframe\>/g, '')) {
+                        main.innerHTML = pageContent
+                        document.title = page.title
+                        documentTitle.innerText = page.documentInfo[0] // document title
+                        documentSubtitle.innerText = page.documentInfo[1] // document subtitle
+                        docHeader.classList.remove('index')
+                    }
+                    // Make sure it is scrolled to the anchor
+                    scrollToView()
 
-                // Hide menu if sub link clicked or clicking on search results        
-                if (window.location.hash.replace('#', '').length > 0 || navigation.classList.contains('hidden')) {
-                    window.dispatchEvent(new Event('link-click'))
-                }
-                highlightBody()
-            })
+                    // Hide menu if sub link clicked or clicking on search results        
+                    if (window.location.hash.replace('#', '').length > 0 || navigation.classList.contains('hidden')) {
+                        window.dispatchEvent(new Event('link-click'))
+                    }
+                    highlightBody()
+                })
+            }
         }
     }
 
-    var setSearchFilter = function (page) {
+    function setSearchFilter(page) {
         if (tod) {
             searchFilter.innerText = page.documentInfo[0] // document title
             searchFilter.classList.remove('hidden')
@@ -171,7 +173,7 @@
         }
     }
 
-    var scrollToView = function () {
+    function scrollToView() {
         var id = window.location.hash.replace('#', '')
         // minus 1 to hide the border on top
         if (id.length > 0) {
@@ -188,12 +190,12 @@
     }
 
     // Dont use onpopstate as it is not supported in IE
-    window.addEventListener('hashchange', onHashChange)
+    window.addEventListener('hashchange', function () {
+        onHashChange()
+    })
 
     // Scroll to view onload
-    window.onload = () => {
-        var tocId = 'toc_' + page.dir.replace(/\s/g, '_')
-        showToc(tocId)
-        setSelectedAnchor()
+    window.onload = function () {
+        onHashChange(true)
     }
 })()
