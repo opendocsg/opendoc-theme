@@ -71,6 +71,6 @@
 
     printButton.addEventListener('click', function () {
         trackButton('pdf', null, isMobileView())
-        window.open('{{ "/export.pdf" | relative_url }}', '_blank')
+        window.open('./export.pdf', '_blank')
     })
 })()

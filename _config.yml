@@ -17,8 +17,9 @@ order:
   - contribute.md
   - import-files.md
 
+google_analytics: 'UA-113717369-5'
 styling_options:
-  primary_brand_color: '#990921'
+  primary_brand_color: '#17335f'
   opendoc_logo_path: /assets/images/logo-full.png
   logo_path: /assets/images/logo-full.png
-  feedback_url: https://form.gov.sg/forms/govtech/5bbdc1959d1bb0000f818d8c
+  feedback_url: null

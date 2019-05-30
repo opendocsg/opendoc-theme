@@ -43,7 +43,11 @@
       <!-- <p class="site-last-updated">LAST UPDATED ON {{ site.time | date_to_long_string | upcase }}</p> -->
     </div>
     <div class="site-header-right">
-      <a id="contact-us" href="{{ site.styling_options.feedback_url }}" target="_blank">
+      {%- assign feedback_url = 'https://form.gov.sg/5cee3d46138e3200109244df' -%}
+      {%- if site.styling_options.feedback_url and site.styling_options.feedback_url != '' -%}
+        {%- assign feedback_url = site.styling_options.feedback_url -%}
+      {%- endif -%}
+      <a id="contact-us" href="{{ feedback_url }}" target="_blank">
         <span>Contact Us</span>
         <img class="btn-icon" src="{{ '/assets/images/feedback.svg' | relative_url }}">
       </a>
@@ -90,11 +94,11 @@
     </div>
   </nav>
 
-  {% if page.name == 'index.html' %}
+  {%- if page.name == 'index.html' -%}
   <header class="doc-header no-print index">
-  {% else %}
+  {%- else -%}
   <header class="doc-header no-print">
-  {% endif %}
+  {%- endif- %}
     <div class=description-container>
       <h2 id="document-title">
         {% include_cached document-title.txt dir=page.dir info="title" %}
@@ -112,7 +116,9 @@
   <main class="site-main" id="main-content" aria-label="Content">
     {{ content | replace: "!!^", "<i style='margin-left:30px'></i>"}}
   </main>
-  <div class="site-branding no-print">Powered by Opendoc</div>
+  <div class="site-branding no-print">
+    Powered by <a href="https://www.opendoc.sg">OpenDoc</a>      
+  </div>
 
   <script src="{{ '/assets/vendor/headroom.min.js' | relative_url }}" charset="utf-8"></script>
   <script src="{{ '/assets/vendor/mark.min.js' | relative_url }}" charset="utf-8"></script>

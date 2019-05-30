@@ -340,11 +340,18 @@ body {
   width: calc(100vw - #{$large-spacing});
   transition-duration: $site-nav-collapse-duration;
   transition-timing-function: $site-nav-collapse-timing;
+  a {
+    font-size: calc(#{$base-font-size} - 6px);
+    color: $primary-brand-color;
+  }
 
   @include desktop-screen {
     width: calc(100vw - #{$body-sidebar-right-padding} - #{$desktop-spacing});
     font-size: calc(#{$base-font-size} - 4px);
 
+    a {
+      font-size: calc(#{$base-font-size} - 4px);
+    }
     body.menu-toggled & {
       width: calc(100vw - #{$body-sidebar-right-padding} - #{$body-full-view-padding});
     }

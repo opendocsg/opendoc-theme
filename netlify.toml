@@ -4,10 +4,11 @@
     base = "/"
 
     # Default build command.
-    command = '''jekyll build && \
-                 npm i html-pdf lunr && \
-                 node _site/assets/js/pdf-gen.js && \
-                 node _site/assets/js/prebuild-lunr-index.js'''
+    command = '''
+                jekyll build && \
+                chmod +x ./_site/assets/startup/build.sh && \
+                ./_site/assets/startup/build.sh
+              '''
 
     environment = { JEKYLL_ENV = "development" }
 
