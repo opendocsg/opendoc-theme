@@ -27,6 +27,8 @@ const idx = lunr(function () {
     })
     this.field('text')
     this.metadataWhitelist = ['position', 'documentTitle']
+    this.pipeline.remove(lunr.stemmer)
+    this.searchPipeline.remove(lunr.stemmer)
     documents.forEach((function (_this) {
         return function (section) {
             if (section.text.length > 0) {

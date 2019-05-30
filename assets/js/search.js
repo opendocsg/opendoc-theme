@@ -67,20 +67,24 @@
     var lunrIndex = null
     // Begin Lunr Indexing
     // =============================================================================
-    var getLunrIndex = function (cb) {
+    var getLunrIndex = function () {
         var lunrIndexUrl = '{{ "/assets/lunrIndex.json" | relative_url }}'
         return fetch(lunrIndexUrl)
             .then(function (res) {
-                return res.json()
+                if (res.status === 200) {
+                    return res.json()
+                }
+                throw new Error('Failed with HTTP code: ' + res.status)
             }, function (err) {
-                console.log('Unable to retrieve Lunr index: ' + err)
+                console.error('Fetch promise to retrieve Lunr Index was rejected: ' + err)
             })
             .then(function (json) {
                 lunrIndex = lunr.Index.load(json.index)
+                lunrIndex.pipeline.remove(lunr.stemmer)
                 sectionIndex = json.sectionIndex
             })
             .catch(function (err) {
-                console.log('Lunr index did not load successfully: ' + err)
+                console.error('Fetch failed to get the Lunr index: ' + err)
             })
     }
 
@@ -478,6 +482,7 @@
             if (stringIsLettersOnly(term)) {
                 return addFuzzyOperator(term, FUZZY_FACTOR)
             }           
+            return term
         })
         console.log(terms)
         return terms.join(' ')
