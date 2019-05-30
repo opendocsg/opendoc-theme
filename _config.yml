@@ -10,6 +10,8 @@ repository: opendocsg/opendoc-theme
 server_PROD: https://search.opendoc.sg
 server_DEV: https://search-staging.opendoc.sg
 
+offline_search_only: true
+
 subtitle: this is a subtitle
 order:
   - contribute.md
