@@ -69,24 +69,25 @@
 
   <nav class="site-nav no-print">
     <div class="nav-header">
-      <div class="search-container">
-        <div class="search-box">
-          <div class="search-icon-container">
-            <img class="search-icon" src="{{ '/assets/images/search-icon.png' | relative_url }}" width="24" height="20" />
-          </div>
-          <span class="search-filter hidden">
-            {%- include_cached document-title.txt dir=page.dir info="title" -%}
-          </span>
-          <input id="search-box" autofocus placeholder="Search opendoc" type="text" />
-          <label class="clear-button">
-            <svg class="clear-icon" viewBox="0 0 18 18" width="18" height="18">
-              <path d="M2.42755 1L17.0331 15.60554l-1.41423 1.4142L1 2.38402"></path>
-              <path d="M1 15.51932L15.51933 1l1.4142 1.4142L2.2978 17.0331"></path>
-            </svg>
-          </label>
+      <div class="search-box">
+        <div class="search-icon-container">
+          <img class="search-icon" src="{{ '/assets/images/search-icon.png' | relative_url }}" width="24" height="20" />
         </div>
-        <div class="search-results">
+        <span class="search-filter hidden">
+          {%- include_cached document-title.txt dir=page.dir info="title" -%}
+        </span>
+        <div class="search-input-container">
+          <p class="search-header">search entire site</p>
+          <input id="search-box" autofocus placeholder="Search titles or keywords" type="text" />
         </div>
+        <label class="clear-button">
+          <svg class="clear-icon" viewBox="0 0 18 18" width="18" height="18">
+            <path d="M2.42755 1L17.0331 15.60554l-1.41423 1.4142L1 2.38402"></path>
+            <path d="M1 15.51932L15.51933 1l1.4142 1.4142L2.2978 17.0331"></path>
+          </svg>
+        </label>
+      </div>
+      <div class="search-results">
       </div>
     </div>
     <div class="nav-main">

@@ -45,8 +45,8 @@ body {
     .site-header-text {
       color: $primary-brand-color;
       margin: 0;
-      font-family: $base-font-family;
-      font-size: 30px;
+      font-family: $header-font-family;
+      font-size: 25px;
     }
 
     .site-last-updated {
@@ -191,13 +191,18 @@ body {
   // Children
   .description-container {
     margin-right: $large-spacing;
+    width: 100%;
+
 
     #document-title {
+      font-size: 20px;
       color: $primary-brand-color;
       overflow: hidden;
-      line-height: 1.3em;
-      // Max two lines
-      max-height: 2.6em;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      // Max two lines (currently, max one line)
+      // line-height: 1.3em;
+      // max-height: 2.6em;
       margin-bottom: 0;
     }
     #document-subtitle {
@@ -205,9 +210,8 @@ body {
       font-size: 11px;
       letter-spacing: 0.6px;
       overflow: hidden;
-      line-height: 1.2em;
-      // Max one line
-      max-height: 1.2em;
+      white-space: nowrap;
+      text-overflow: ellipsis;
       color: #9b9b9b;
       text-transform: uppercase;
     }

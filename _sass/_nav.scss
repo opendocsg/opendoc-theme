@@ -19,7 +19,7 @@
   // Tablets and above have it showing by default
   // On larger screens the content stays in place and we move the sidebar in
   transition-duration: $site-nav-collapse-duration;
-  transition-timing-function:  $site-nav-collapse-timing;
+  transition-timing-function: $site-nav-collapse-timing;
   transition-property: left, width;
   left: -100vw;
   width: 100vw;
@@ -257,7 +257,6 @@
     align-items: center;
     justify-content: center;
     @include desktop-screen {
-      box-shadow: $site-nav-shadow-inset;
       border-bottom: 1px solid $divider-color;
     }
 
@@ -286,48 +285,54 @@
 
     // Children
     .search-box {
-      border-radius: 4px;
-      height: $search-box-height;
+      width: 100%;
+      height: 100%;
       display: flex;
       flex-direction: row;
       align-items: center;
-      border: 2px solid $primary-brand-color;
       font-size: $nav-font-size;
+      box-shadow: $site-nav-shadow-inset;
 
       .search-icon-container {
         background-color: $primary-brand-color;
         height: 100%;
-        flex: 0 0 $search-box-height;
+        width: $back-to-docs-width;
         display: flex;
         align-items: center;
         justify-content: center;
 
         .search-icon {
-          left: 1.3rem;
           display: block;
-          height: 1.3em;
+          height: 30px;
           width: auto;
         }
       }
+
       .clear-button {
         opacity: 0;
-        height: 100%;
+        height: 27px;
+        width: 27px;
         display: flex;
         align-items: center;
         justify-content: center;
-        flex: 0 0 calc( #{$search-box-height} - 10px);
+        margin-right: $large-spacing;
+        background-color: $well-background-color;
+        border-radius: 50%;
 
         .clear-icon {
           display: block;
-          height: 1em;
-          width: 1em;
+          height: 13px;
+          width: 13px;
           opacity: 0.5;
           path {
             fill: $header-text-color;
           }
         }
-        &:hover .clear-icon {
-          opacity: 1;
+        &:hover {
+          background-color: $divider-color;
+          .clear-icon {
+            opacity: 1;
+          }
         }
       }
       &.filled {
@@ -337,34 +342,52 @@
           opacity: 1;
           cursor: pointer;
         }
-        input {
+        .search-input-container input {
           opacity: 1;
         }
       }
-      input {
-        display: block;
-        height: $search-box-height;
-        flex: 1 1 0;
-        min-width: 0;
-        border: none;
-        outline: none;
-        color: black;
-        opacity: 0.5;
+
+      .search-input-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
         margin: 0;
-        margin-left: $small-spacing;
-        padding: 0;
-        // -webkit-font-smoothing: antialiased;
-      }
-      // Do not show the in-built X in IE
-      input::-ms-clear {
-        display: none;
-      }
-      input::placeholder {
-        color: $header-text-color;
-        opacity: 0.5;
-      }
-      input:disabled ~ .search-icon {
-        display: none;
+        padding-left: $large-spacing;
+        padding-right: $small-spacing;
+        flex: 1 1 0;
+        
+        .search-header {
+          font-size: 9px;
+          letter-spacing: 1.1px;
+          color: $header-text-color;
+          opacity: 0.7;
+          margin: 0;
+          margin-bottom: 8px;
+          text-transform: uppercase;
+        }
+
+        input {
+          display: block;
+          min-width: 0;
+          border: none;
+          outline: none;
+          color: black;
+          opacity: 0.5;
+          padding: 0;
+          margin: 0;
+          // -webkit-font-smoothing: antialiased;
+        }
+        // Do not show the in-built X in IE
+        input::-ms-clear {
+          display: none;
+        }
+        input::placeholder {
+          color: $header-text-color;
+          opacity: 0.5;
+        }
+        input:disabled ~ .search-icon {
+          display: none;
+        }
       }
     }
   }
@@ -383,16 +406,13 @@
     }
   }
 
-  .search-container {
-    width: $search-box-width;
-    position: relative;
-  }
-
   // Search Results
   .search-results {
-    width: 100%;
-    position: absolute;
     background: white;
+    position: absolute;
+    left: $back-to-docs-width;
+    top: $doc-header-height;
+    width: calc(100% - $back-to-docs-width);
     height: auto;
     max-height: calc(100vh - #{$doc-header-height} - #{$site-header-height});
     overflow: auto;
@@ -410,7 +430,7 @@
 
     //not-found search results{
     .not-found {
-      margin: $spacing $spacing $spacing $search-box-height;
+      margin: $spacing;
     }
 
     .search-link {
