@@ -25,15 +25,15 @@ const printIgnoreFolders = ['assets', 'files', 'iframes', 'images']
 // List of top-level .html files which are not to be printed
 const printIgnoreFiles = ['export.html', 'index.html']
 
-const main = () => {
+const main = async () => {
     console.log('Base options: ', options.base)
     // creating exports of individual documents
     const docFolders = getDocumentFolders(sitePath, printIgnoreFolders)
-    exportPdfDocFolders(sitePath, docFolders)
-    exportPdfTopLevelDocs(sitePath)
+    await exportPdfDocFolders(sitePath, docFolders)
+    await exportPdfTopLevelDocs(sitePath)
 }
 
-const exportPdfTopLevelDocs = (sitePath) => {
+const exportPdfTopLevelDocs = async (sitePath) => {
     let htmlFilePaths = glob.sync('*.html', { cwd: sitePath })
     htmlFilePaths = htmlFilePaths.filter((filepath) => !printIgnoreFiles.includes(filepath))
     htmlFilePaths = htmlFilePaths.map((filepath) => path.join(sitePath, filepath))
@@ -45,11 +45,11 @@ const exportPdfTopLevelDocs = (sitePath) => {
         const order = mapSectionNameToHtmlFilename(configYml, sitePath)
         htmlFilePaths = reorderHtmlFilePaths(htmlFilePaths, order)
     }
-    createPdf(htmlFilePaths, sitePath)
+    await createPdf(htmlFilePaths, sitePath)
 }
 
-const exportPdfDocFolders = (sitePath, docFolders) => {
-    docFolders.forEach(function (folder) {
+const exportPdfDocFolders = async (sitePath, docFolders) => {
+    for (let folder of docFolders) {
         // find all the folders containing html files
         const folderPath = path.join(sitePath, folder)
         let htmlFilePaths = glob.sync('*.html', { cwd: folderPath })
@@ -64,8 +64,8 @@ const exportPdfDocFolders = (sitePath, docFolders) => {
             const order = configMd.meta.order // names of html files without the .html
             htmlFilePaths = reorderHtmlFilePaths(htmlFilePaths, order)
         }
-        createPdf(htmlFilePaths, folderPath)
-    })
+        await createPdf(htmlFilePaths, folderPath)
+    }
 }
 
 // Concatenates the contents in .html files, and outputs export.pdf in the specified output folder
@@ -130,10 +130,13 @@ const createPdf = (htmlFilePaths, outputFolderPath) => {
         }
     })
 
-    pdf.create(exportDom.serialize(), options).toFile(path.join(outputFolderPath, 'export.pdf'), (err, res) => {
-        if (err) return console.log(err)
-        console.log('Pdf created at: ', res.filename)
-    })
+    return new Promise((resolve, reject) => {
+        pdf.create(exportDom.serialize(), options).toFile(path.join(outputFolderPath, 'export.pdf'), (err, res) => {
+            if (err) return reject(err)
+            console.log('Pdf created at: ', res.filename)
+            resolve()
+        })
+    }) 
 }
 
 // Returns a list of the valid document (i.e. folder) paths
