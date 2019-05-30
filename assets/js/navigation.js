@@ -135,7 +135,7 @@
         var page = pageIndex[path]
         // Only reflow the main content if necessary
         if (page) {
-            var tocId = 'toc_' + page.dir.replace(/\s/g, '_')
+            var tocId = 'toc_' + page.dir.replace(/\s/g, '_').toLowerCase()
             showToc(tocId)
             setSelectedAnchor()
             if (!firstLoad) {
