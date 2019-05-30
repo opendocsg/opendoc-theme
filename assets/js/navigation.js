@@ -191,5 +191,9 @@
     window.addEventListener('hashchange', onHashChange)
 
     // Scroll to view onload
-    window.onload = onHashChange
+    window.onload = () => {
+        var tocId = 'toc_' + page.dir.replace(/\s/g, '_')
+        showToc(tocId)
+        setSelectedAnchor()
+    }
 })()
