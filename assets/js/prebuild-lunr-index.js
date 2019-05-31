@@ -1,6 +1,6 @@
 // To generate Lunr index that will be served alongside static assets
 
-const lunr = require('lunr'),
+const lunr = require('../js/lunr.min.js'),
     path = require('path'),
     fs = require('fs'),
     stdin = process.stdin,
