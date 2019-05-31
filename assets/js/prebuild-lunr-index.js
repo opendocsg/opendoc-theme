@@ -1,10 +1,8 @@
 // To generate Lunr index that will be served alongside static assets
 
-const lunr = require('../js/lunr.min.js'),
+const lunr = require('../js/lunr.min'),
     path = require('path'),
     fs = require('fs'),
-    stdin = process.stdin,
-    buffer = [],
     sitePath = __dirname + '/../..'
 
 const OUT_FILEPATH = path.join(sitePath, 'assets', 'lunrIndex.json')
@@ -13,7 +11,7 @@ const IN_FILEPATH = path.join(sitePath, 'assets', 'siteIndex.json')
 let siteIndex
 try {
     siteIndex = fs.readFileSync(IN_FILEPATH)
-} catch {
+} catch (err) {
     console.log('Could not find siteIndex.json, check IN_FILEPATH.')
     siteIndex = {}
 }

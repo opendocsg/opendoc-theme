@@ -68,15 +68,9 @@
     // Begin Lunr Indexing
     // =============================================================================
     var getLunrIndex = function () {
-        var lunrIndexUrl = '{{ "/assets/lunrIndex.json" | relative_url }}'
-        return fetch(lunrIndexUrl)
+        return fetch('/assets/lunrIndex.json')
             .then(function (res) {
-                if (res.status === 200) {
                     return res.json()
-                }
-                throw new Error('Failed with HTTP code: ' + res.status)
-            }, function (err) {
-                console.error('Fetch promise to retrieve Lunr Index was rejected: ' + err)
             })
             .then(function (json) {
                 lunrIndex = lunr.Index.load(json.index)
@@ -84,7 +78,7 @@
                 sectionIndex = json.sectionIndex
             })
             .catch(function (err) {
-                console.error('Fetch failed to get the Lunr index: ' + err)
+                console.error('Fetch failed to read the Lunr index: ' + err)
             })
     }
 
