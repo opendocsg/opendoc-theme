@@ -22,7 +22,7 @@
 {% comment %}
     Show table of directories only in root path
 {% endcomment %}
-{% if include.currdir == '/' %}
+{% if include.currdir != blank or include.currdir == '/' %}
 <ul class="table-of-directories">
 {% else %}
 <ul class="table-of-directories hidden">
@@ -49,7 +49,7 @@
 
 {% for folder in sorted_folders %}
 <li>
-<a href="{{ folder | relative_url }}" id="dir_{{ folder }}" class="tod-container">
+<a href="{{ folder | relative_url }}" id="dir_{{ folder | downcase }}" class="tod-container">
 <div class="directory-item">
 {% include_cached document-title.txt dir=folder info="title" %}
 </div></a>
@@ -80,12 +80,13 @@ If there is only one folder or documents all at root, dont show back button
 {% comment %}
 If there is only one folder, show expanded content list
 {% endcomment %}
+{% assign toc_id = 'toc_' | append: folder | downcase %}
 {% if folders.size == 1 %}
-<section class="contents lonely" id="toc_{{ folder | replace: ' ', '_' }}">
+<section class="contents lonely" id="{{ toc_id }}">
 {% elsif include_currdir_decode == folder and include.currdir != '/' %}
-<section class="contents" id="toc_{{ folder | replace: ' ', '_' }}">
+<section class="contents" id="{{ toc_id }}">
 {% else %}
-<section class="contents" id="toc_{{ folder | replace: ' ', '_' }}" hidden>
+<section class="contents" id="{{ toc_id }}" hidden>
 {% endif %}    
 {% include_cached toc.html path=folder class="table-of-contents" h_min=1 h_max=2 item_class="nav-branch" anchor_class="nav-link" %}
 </section>
