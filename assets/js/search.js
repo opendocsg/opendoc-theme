@@ -455,10 +455,12 @@
     var lunrSearch = function (query) {
         // Add wildcard before and after
         var queryTerm = refineLunrSearchQuery(query)
-        var lunrResults = lunrIndex.search(queryTerm)
-        var results = translateLunrResults(lunrResults)
-        highlightBody()
-        renderSearchResultsFromLunr(results)
+        if (lunrIndex !== null) {
+            var lunrResults = lunrIndex.search(queryTerm)
+            var results = translateLunrResults(lunrResults)
+            highlightBody()
+            renderSearchResultsFromLunr(results)
+        }
     }
 
     var refineLunrSearchQuery = function(query) {
@@ -478,7 +480,6 @@
             }           
             return term
         })
-        console.log(terms)
         return terms.join(' ')
     }
 
