@@ -52,7 +52,7 @@
         if (configElasticSearchIndex) {
             elasticSearchIndex = configElasticSearchIndex
         }
-        endpoint = '{{ site.server_DEV | append: ' / ' }}' + elasticSearchIndex
+        endpoint = '{{ site.server_DEV | append: '/' }}' + elasticSearchIndex
     }
 
     var search_endpoint = endpoint + '/search'
