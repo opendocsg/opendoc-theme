@@ -94,7 +94,7 @@
       margin-left: 0;
       margin-top: 0;
       min-width: 100%;
-      max-width: $max-site-nav-width;
+      max-width: 100%;
       transition: margin-left $site-nav-collapse-duration;
       max-height: calc(100vh - #{$site-header-height} - #{$doc-header-height});
       overflow: auto;
@@ -127,6 +127,7 @@
           border-bottom: 1px inset $well-background-color;
           padding: $spacing 0;
           font-size: $nav-font-size;
+          padding-right: $small-spacing;
         }
 
         &:hover a {
@@ -316,7 +317,7 @@
         display: none;
         align-items: center;
         justify-content: center;
-        margin-right: $large-spacing;
+        margin-right: $spacing;
         background-color: $well-background-color;
         border-radius: 50%;
 
