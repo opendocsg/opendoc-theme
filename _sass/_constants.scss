@@ -63,3 +63,6 @@ $mobile-site-main-padding-top: $mobile-site-header-height + $doc-header-height;
 
 $toolbar-button-height: 50px;
 $toolbar-container-height: calc(#{$toolbar-button-height} * 3);
+
+$fab-button-size: 50px;
+$fab-transtition-duration: 0.4s;

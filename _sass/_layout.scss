@@ -150,7 +150,7 @@ body {
     }
 
     &.headroom--unpinned {
-      top: $mobile-site-main-padding-top;
+      top: -$doc-header-height;
     }
   }
 
@@ -350,7 +350,7 @@ body {
   }
 
   @include desktop-screen {
-    width: calc(100vw - #{$body-sidebar-right-padding} - #{$desktop-spacing});
+    width: calc(100vw - #{$body-sidebar-right-padding} - #{$body-padding});
     font-size: calc(#{$base-font-size} - 4px);
 
     a {

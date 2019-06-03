@@ -73,4 +73,12 @@
         trackButton('pdf', null, isMobileView())
         window.open('./export.pdf', '_blank')
     })
+
+    // Floating Action Button
+    // -----------------------
+    var floatingActionButton = document.getElementById('fab')
+    floatingActionButton.addEventListener('click', function() {
+        floatingActionButton.classList.toggle('open')
+    });
+
 })()

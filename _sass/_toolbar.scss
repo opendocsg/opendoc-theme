@@ -12,7 +12,7 @@
   z-index: 10000;
   flex-shrink: 0;
   right: $large-spacing;
-  top: calc( #{$site-main-padding-top} + (2 * #{$block-spacing}));
+  top: calc(#{$site-main-padding-top} + (2 * #{$block-spacing}));
   transition: top 0.3s;
 
   .toolbar-button {
@@ -130,6 +130,95 @@
 @include mobile-screen {
   body.menu-toggled #menu-toggle-btn {
     background: $header-text-color;
+  }
+}
+
+// Floating action button
+// ----------------------
+$max-child-actions: 4;
+$transition-duration: 0.4s;
+
+.fab {
+  position: fixed;
+  bottom: $med-spacing;
+  right: $med-spacing;
+  text-align: center;
+  z-index: 1;
+  font-family: Arial, Helvetica, sans-serif;
+
+  .trigger,
+  .action {
+    @include flex-center
+    border-radius: 50%;
+    box-shadow: 4px 4px 4px 2px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+
+    &:active {
+      box-shadow: 2px 2px 4px 2px rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  $trigger-size: 56px;
+  .trigger {
+    position: relative;
+    background: $primary-brand-color;
+    color: #fff;
+    height: $fab-button-size;
+    width: $fab-button-size;
+    z-index: 2;
+  }
+
+  .action {
+    position: absolute;
+    top: 0;
+    margin: 0;
+    background: #fff;
+    opacity: 1;
+    color: #333;
+    height: $fab-button-size;
+    width: $fab-button-size;
+    transition: transform $fab-transtition-duration ease, opacity $fab-transtition-duration ease;
+    transition-delay: opacity $fab-transtition-duration/2 ease;
+  }
+
+  .actions {
+    opacity: 0;
+    transition: opacity $fab-transtition-duration ease;
+  }
+
+  &.open {
+    .actions {
+      $action-space: $fab-button-size + $spacing;
+      opacity: 1;
+
+      @for $i from 1 through $max-child-actions {
+        $distance: $action-space * $i;
+        .action:nth-child(#{$i}) {
+          transform: translateY(-$distance);
+          opacity: 1;
+        }
+      }
+    }
+
+    .tooltip {
+      opacity: 1;
+      transform: translateY(-50%) scale(1);
+      right: $fab-button-size + $spacing;
+      transition-delay: $fab-transtition-duration/2;
+    }
+  }
+
+  .tooltip {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    width: 50vw;
+    transform: translateY(-50%) scale(0);
+    transform-origin: right center 0;
+    text-align: right;
+    transition: all $transition-duration ease;
+    opacity: 0;
+    color: #fff;
   }
 }
 
