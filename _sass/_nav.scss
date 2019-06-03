@@ -297,6 +297,7 @@
         background-color: $primary-brand-color;
         height: 100%;
         width: $back-to-docs-width;
+        min-width: $back-to-docs-width;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -309,10 +310,10 @@
       }
 
       .clear-button {
-        opacity: 0;
         height: 27px;
         width: 27px;
-        display: flex;
+        min-width: 27px;
+        display: none;
         align-items: center;
         justify-content: center;
         margin-right: $large-spacing;
@@ -339,7 +340,7 @@
         background: rgba(255, 255, 255, 0.75);
 
         .clear-button {
-          opacity: 1;
+          display: flex;
           cursor: pointer;
         }
         .search-input-container input {
@@ -355,6 +356,8 @@
         padding-left: $large-spacing;
         padding-right: $small-spacing;
         flex: 1 1 0;
+        min-width: 0;
+        overflow: visible;
 
         .search-header {
           font-size: 9px;
@@ -439,20 +442,17 @@
     .search-link {
       border-bottom: 1px solid $divider-color;
       display: flex;
-      color: $secondary-text-color;
       padding: $med-spacing;
       cursor: pointer;
       user-select: none;
       font-size: $base-font-size;
 
       &.selected {
-        color: $primary-text-color;
         background-color: $well-background-color;
       }
 
       &:hover {
         text-decoration: none;
-        color: $primary-text-color;
         background-color: $well-background-color;
       }
 
@@ -467,16 +467,19 @@
       .search-title {
         font-size: 14px;
         font-weight: bold;
+        margin-bottom: $spacing;
+        color: $header-text-color;
       }
 
       .search-subtitle {
-        font-weight: bold;
-        font-size: 12px;
+        font-size: 13px;
         margin-bottom: 5px;
+        color: $header-text-color;
       }
 
       .search-content {
         font-size: 13px;
+        color: $secondary-text-color;
       }
     }
   }
