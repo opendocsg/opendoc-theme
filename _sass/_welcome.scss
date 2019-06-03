@@ -5,13 +5,24 @@
   flex-direction: column;
   width: 70%;
   margin-left: 15%;
+  padding-top: 5vh;
+  @include mobile-screen {
+    padding-top: 7vh;
+  }
+
+  .welcome-text {
+    font-size: 24px;
+    color: $header-text-color;
+    width: auto;
+    text-align: center;
+    @include mobile-screen {
+      font-size: 20px;
+    }
+  }
 
   .welcome-image {
     width: auto;
     max-height: 30vh;
-    @include mobile-screen {
-      margin-top: 7vh;
-    }
   }
 
   .welcome-button {

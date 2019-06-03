@@ -150,7 +150,7 @@ body {
     }
 
     &.headroom--unpinned {
-      top: calc(#{$mobile-site-header-height} - #{$doc-header-height});
+      top: $mobile-site-main-padding-top;
     }
   }
 
@@ -226,7 +226,7 @@ body {
   left: 0;
   right: 0;
   top: 0;
-  padding-top: calc(#{$doc-header-height} + #{$mobile-site-header-height});
+  padding-top: $mobile-site-main-padding-top;
   padding-left: $large-spacing;
   padding-right: $large-spacing;
   padding-bottom: $spacing;
@@ -244,7 +244,7 @@ body {
   // Expand to fill when the menu is closed
   @include desktop-screen {
     left: $site-nav-width;
-    padding-top: $doc-header-height + $site-header-height;
+    padding-top: $site-main-padding-top;
     padding-left: $desktop-spacing;
     padding-right: $desktop-spacing + $body-sidebar-right-padding;
     padding-bottom: $large-spacing;

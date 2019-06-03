@@ -48,7 +48,7 @@ $body-sidebar-right-padding: 50px;
 $site-header-height: 70px;
 $mobile-site-header-height: 60px;
 $doc-header-height: 80px;
-$toggled-doc-header-height: 90px;
+$toggled-doc-header-height: 80px;
 $search-box-height: 46px;
 // $search-box-width: calc(100% - 2 * #{$site-padding});
 $site-nav-collapse-duration: 0.2s;
@@ -58,6 +58,8 @@ $back-to-docs-width: $doc-header-height;
 $max-site-nav-width: 420px;
 $site-nav-shadow-inset: inset -7px 0 13px -5px rgba(0, 0, 0, 0.15);
 $site-nav-shadow-outset: 7px 0 13px 5px rgba(0, 0, 0, 0.15);
+$site-main-padding-top: $site-header-height + $doc-header-height;
+$mobile-site-main-padding-top: $mobile-site-header-height + $doc-header-height;
 
 $toolbar-button-height: 50px;
 $toolbar-container-height: calc(#{$toolbar-button-height} * 3);

@@ -12,7 +12,7 @@
   z-index: 10000;
   flex-shrink: 0;
   right: $large-spacing;
-  top: calc(50% - (#{$toolbar-container-height} / 2));
+  top: calc( #{$site-main-padding-top} + (2 * #{$block-spacing}));
   transition: top 0.3s;
 
   .toolbar-button {

@@ -70,6 +70,7 @@
       justify-content: flex-end;
       align-items: center;
       user-select: none;
+      overflow: hidden;
 
       img {
         height: 30px;
@@ -96,11 +97,11 @@
       min-width: 100%;
       max-width: 100%;
       transition: margin-left $site-nav-collapse-duration;
-      max-height: calc(100vh - #{$site-header-height} - #{$doc-header-height});
+      max-height: calc(100vh - #{$site-main-padding-top});
       overflow: auto;
 
       @include mobile-screen {
-        max-height: calc(100vh - #{$mobile-site-header-height} - #{$doc-header-height});
+        max-height: calc(100vh - #{$mobile-site-main-padding-top});
       }
 
       &.hidden {
@@ -136,6 +137,13 @@
             color: $primary-text-color;
           }
         }
+
+        &:last-child {
+          margin-bottom: $large-spacing;
+          .directory-item {
+            border-bottom: none;
+          }
+        }
       }
     }
   }
@@ -147,11 +155,11 @@
     ul.table-of-contents {
       margin: 0;
       padding: 0;
-      max-height: calc(100vh - #{$doc-header-height} - #{$site-header-height});
+      max-height: calc(100vh - #{$site-main-padding-top});
       overflow: auto;
 
       @include mobile-screen {
-        max-height: calc(100vh - #{$doc-header-height} - #{$mobile-site-header-height});
+        max-height: calc(100vh - #{$mobile-site-main-padding-top});
       }
     }
 
@@ -252,7 +260,7 @@
   }
 
   .nav-header {
-    height: calc(#{$doc-header-height} - 1px);
+    height: $doc-header-height - 1px;
     background-color: $search-box-background-color;
     display: flex;
     align-items: center;
@@ -418,14 +426,13 @@
     top: $doc-header-height;
     width: calc(100% - #{$back-to-docs-width} - 2px); // account for border width
     height: auto;
-    max-height: calc(100vh - #{$doc-header-height} - #{$site-header-height});
+    max-height: calc(100vh - #{$site-main-padding-top});
     overflow: auto;
     z-index: 12;
     box-shadow: -20px 5px 20px 5px rgba(0, 0, 0, 0.15);
     display: none;
     border: 1px solid $divider-color;
     border-top: none;
-    padding-bottom: 100px;
 
     &.visible {
       display: block;
@@ -459,6 +466,7 @@
 
       &:last-child {
         border-bottom: none;
+        margin-bottom: $large-spacing;
       }
 
       p {
