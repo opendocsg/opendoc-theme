@@ -67,7 +67,7 @@
     var lunrIndex = null
     // Begin Lunr Indexing
     // =============================================================================
-    var getLunrIndex = function () {
+    function getLunrIndex() {
         return fetch('/assets/lunrIndex.json')
             .then(function (res) {
                     return res.json()
@@ -84,9 +84,7 @@
 
     // Load Lunr Index if set
     // ============================================================================
-    const searchSetOffline = '{{ site.offline_search_only }}' === 'true' ?
-        true :
-        false
+    var searchSetOffline = {{ site.offline_search_only }} || false
 
     if (searchSetOffline) {
         getLunrIndex()
@@ -99,7 +97,6 @@
     var snippetSpace = 40
     var maxSnippets = 4
     var maxResults = 10
-    var minQueryLength = 3
     var translateLunrResults = function (allLunrResults) {
         var lunrResults = allLunrResults.slice(0, maxResults)
         return lunrResults.map(function (result) {
@@ -178,7 +175,7 @@
                         if (i % 2 == 1) {
                             snippet += '<mark>'
                         } else {
-                            snippet += '</mark> '
+                            snippet += '</mark>'
                         }
                         snippet += matchedText.substring(position[i], position[i + 1])
                     }
@@ -190,11 +187,16 @@
                     }
                 })
             }
+            var joinHighlights = function (str) {
+                if (str) {
+                    return str.replace(/<\/mark> <mark>/g, ' ')
+                }
+            }
             // Build a simple flat object per lunr result
             return {
-                title: titleSnippets.length === 0 ? matchedDocument.title: titleSnippets.join(' '),
-                documentTitle: matchedDocument.documentTitle,
-                content: contentSnippets.join(' '),
+                title: joinHighlights(titleSnippets.length === 0 ? matchedDocument.title: titleSnippets.join(' ')),
+                documentTitle: joinHighlights(matchedDocument.documentTitle),
+                content: joinHighlights(contentSnippets.join(' ')),
                 url: matchedDocument.url
             }
         })
@@ -281,6 +283,8 @@
     formatResult = function (result) {
         var content = null
         var title = result._source.title
+        var url = result._source.url;
+        var documentTitle = result._source.documentTitle;
         var regex = /<mark>(.*?)<\/mark>/g
         var joinHighlights = function (str) {
             if (str) {
@@ -314,8 +318,6 @@
                 title = joinHighlights(result.highlight.title[0])
             }
         }
-        var url = result._source.url;
-        var documentTitle = result._source.documentTitle;
         return {
             url: url,
             content: content ? '...' + content + '...' : '',
@@ -495,7 +497,7 @@
         }
         searchResults.classList.add('visible')
 
-        if (searchSetOffline === true) {
+        if (searchSetOffline) {
             lunrSearch(query)
         } else {
             esSearch(query)
