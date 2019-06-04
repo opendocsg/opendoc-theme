@@ -9,6 +9,7 @@
     var navigation = document.getElementsByClassName('navigation')[0]
     var searchFilter = document.getElementsByClassName('search-filter')[0]
     var searchBoxElement = document.getElementById('search-box')
+    var indexDiv = document.getElementById('index-div')
 
     // If subfolder was accessed directory via url, load the subfolder's pages
     if (documentTitle && documentTitle.innerText.trim()) {
@@ -153,7 +154,7 @@
                 document.title = page.title
                 documentTitle.innerText = page.documentInfo[0] // document title
                 documentSubtitle.innerText = page.documentInfo[1] // document subtitle
-                docHeader.classList.remove('index')
+                indexDiv.classList.remove('index')
             }
             // Make sure it is scrolled to the anchor
             scrollToView()

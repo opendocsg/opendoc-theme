@@ -11,6 +11,12 @@
   @media (max-width: 991.999px) { @content; }
 }
 
+@mixin flex-center() {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 // Typography Defaults
 // -------------------
 body {

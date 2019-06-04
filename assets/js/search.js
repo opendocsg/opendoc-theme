@@ -109,25 +109,23 @@
             return part !== ''
         })
         element.href = '/' + urlParts.join('/')
-        var elementLeft = document.createElement('div')
-        elementLeft.className = 'left'
-        // Document title
-        elementLeft.innerHTML = result.documentTitle || '{{ site.title }}'
-        var elementRight = document.createElement('div')
-        elementRight.className = 'right'
-        var header = document.createElement('p')
-        header.className = 'search-header'
-        header.innerHTML = result.title
-        elementRight.appendChild(header)
-        var content = document.createElement('p')
-        content.className = 'search-content'
-        content.innerHTML = result.content
-        elementRight.appendChild(content)
+        var searchResult = document.createElement('div')
+        var searchTitle = document.createElement('p')
+        searchTitle.className = 'search-title'
+        searchTitle.innerHTML = result.searchTitle || '{{ site.title }}'
+        searchResult.appendChild(searchTitle)
+        var searchSubtitle = document.createElement('p')
+        searchSubtitle.className = 'search-subtitle'
+        searchSubtitle.innerHTML = result.title
+        searchResult.appendChild(searchSubtitle)
+        var searchContent = document.createElement('p')
+        searchContent.className = 'search-content'
+        searchContent.innerHTML = result.content
+        searchResult.appendChild(searchContent)
         element.onmouseup = function() {
             return trackSearch(searchBoxElement.value.trim(), i, false)
         }
-        element.appendChild(elementLeft)
-        element.appendChild(elementRight)
+        element.appendChild(searchResult)
         return element
     }
 
