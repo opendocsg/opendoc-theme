@@ -112,7 +112,7 @@
         var searchResult = document.createElement('div')
         var searchTitle = document.createElement('p')
         searchTitle.className = 'search-title'
-        searchTitle.innerHTML = result.searchTitle || '{{ site.title }}'
+        searchTitle.innerHTML = result.documentTitle || '{{ site.title }}'
         searchResult.appendChild(searchTitle)
         var searchSubtitle = document.createElement('p')
         searchSubtitle.className = 'search-subtitle'
@@ -313,8 +313,8 @@
         } else {
             searchResults.classList.add('visible')
             esSearch(query)
-            if (env === 'production' && ga) {
-                ga('send', 'pageview', '/search?query=' + encodeURIComponent(query))
+            if (env === 'production' && window.ga) {
+                window.ga('send', 'pageview', '/search?query=' + encodeURIComponent(query))
             }
         }
     }
