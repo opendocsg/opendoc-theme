@@ -43,41 +43,62 @@
     // Feedback button
     // --------------------------
     var contactUsButton = document.getElementById('contact-us')
-    contactUsButton.addEventListener('click', function() {
+    contactUsButton.addEventListener('click', function () {
         trackButton('feedback', null, isMobileView())
     })
 
     // Edit button
     // --------------------------
-    var editButton = document.getElementById('edit-btn')
-    editButton.addEventListener('click', function() { 
-        var repoUrl = '{{ site.github.repository_url }}' + '/blob/master'
-        var page = pageIndex[window.location.pathname]
-        var pageUrl = page ? page['nobase_url'] : null
-        var pageName = page ? page.name : null
-        if (pageUrl && pageName) {
-            console.log('opening:', pageUrl)
-            var markdownUrl = pageUrl.split('/')
-            markdownUrl[markdownUrl.length - 1] = pageName
-            markdownUrl = markdownUrl.join('/')
-            repoUrl += markdownUrl
-        }
-        window.open(repoUrl, '_blank')
-    });
+    var editButtons = document.querySelectorAll('.edit-btn')
+    editButtons.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            var repoUrl = '{{ site.github.repository_url }}' + '/blob/master'
+            var page = pageIndex[window.location.pathname]
+            var pageUrl = page ? page['nobase_url'] : null
+            var pageName = page ? page.name : null
+            if (pageUrl && pageName) {
+                console.log('opening:', pageUrl)
+                var markdownUrl = pageUrl.split('/')
+                markdownUrl[markdownUrl.length - 1] = pageName
+                markdownUrl = markdownUrl.join('/')
+                repoUrl += markdownUrl
+            }
+            window.open(repoUrl, '_blank')
+        })
+    })
 
     // Print button
     // --------------------------
-    var printButton = document.getElementById('print-btn')
+    var printButtons = document.querySelectorAll('.print-btn')
 
-    printButton.addEventListener('click', function () {
-        trackButton('pdf', null, isMobileView())
-        window.open('./export.pdf', '_blank')
+    printButtons.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            trackButton('pdf', null, isMobileView())
+            window.open('./export.pdf', '_blank')
+        })
+    })
+
+    // Share button 
+    // -------------------------
+    var shareButtons = document.querySelectorAll('.share-btn')
+    shareButtons.forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            if (navigator.share) {
+                navigator.share({
+                    title: {{ site.title | jsonify }},
+                    text: document.title,
+                    url: window.location.href
+                }).then()
+            } else {
+                alert(navigator.share)
+            }
+        })
     })
 
     // Floating Action Button
     // -----------------------
     var floatingActionButton = document.getElementById('fab')
-    floatingActionButton.addEventListener('click', function() {
+    floatingActionButton.addEventListener('click', function () {
         floatingActionButton.classList.toggle('open')
     });
 

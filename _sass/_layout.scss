@@ -113,6 +113,12 @@ body {
   }
 }
 
+.index .doc-header {
+  @include desktop-screen {
+    display: none;
+  }
+}
+
 // Document Header
 // -----------
 .doc-header {
@@ -133,16 +139,6 @@ body {
   transition-timing-function: $site-nav-collapse-timing;
   // to allow mobile menu to be visible outside of doc-header
   overflow: visible;
-
-  &.index {
-    @include desktop-screen {
-      display: none;
-    }
-  }
-
-  &:not(.index) #site-title {
-    display: none;
-  }
 
   @include mobile-screen {
     &.headroom--pinned {

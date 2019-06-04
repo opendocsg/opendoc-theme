@@ -100,10 +100,11 @@
   </nav>
 
   {%- if page.name == 'index.html' -%}
-  <header class="doc-header no-print index">
+  <div id="index-div" class="index">
   {%- else -%}
-  <header class="doc-header no-print">
+  <div>
   {%- endif- %}
+  <header class="doc-header no-print">
     <div class=description-container>
       <h2 id="document-title">
         {% include_cached document-title.txt dir=page.dir info="title" %}
@@ -117,6 +118,7 @@
   </header>
 
   {% include_cached toolbar.html %}
+  </div>
 
   <main class="site-main" id="main-content" aria-label="Content">
     {{ content | replace: "!!^", "<i style='margin-left:30px'></i>"}}
@@ -127,7 +129,7 @@
 
   <script src="{{ '/assets/vendor/headroom.min.js' | relative_url }}" charset="utf-8"></script>
   <script src="{{ '/assets/vendor/mark.min.js' | relative_url }}" charset="utf-8"></script>
-  <!-- <script src="{{ '/assets/vendor/popper.min.js' | relative_url }}"></script> -->
+  <script src="{{ '/assets/vendor/web-share-shim.bundle.min.js' | relative_url }}"></script>
   <script src="{{ '/assets/js/ga-tracking.js' | relative_url }}"></script>
   <script src="{{ '/assets/js/toolbar.js' | relative_url }}"></script>
   <script src="{{ '/assets/js/page-index.js' | relative_url }}"></script>

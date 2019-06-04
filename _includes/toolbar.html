@@ -6,28 +6,33 @@
         <img class="mobile-btn-icon " src="{{ '/assets/images/menu.svg' | relative_url }}">
         <img class="mobile-btn-icon close" src="{{ '/assets/images/x-mobile.svg' | relative_url }}">
     </label>
-
-    <div class="toolbar-button" id="print-btn">
+    <div class="toolbar-button print-btn">
         <img class="btn-icon" src="{{ '/assets/images/pdf.svg' | relative_url }}">
         <img class="btn-icon hover" src="{{ '/assets/images/pdf-hover.svg' | relative_url }}">
     </div>
-    <div class="toolbar-button" id="edit-btn">
-        <img class="btn-icon" src="{{ '/assets/images/edit.svg' | relative_url }}">
-        <img class="btn-icon hover" src="{{ '/assets/images/edit-hover.svg' | relative_url }}">
+    <div class="toolbar-button edit-btn">
+        <img class="btn-icon" src="{{ '/assets/images/github.svg' | relative_url }}">
+        <img class="btn-icon hover" src="{{ '/assets/images/github-hover.svg' | relative_url }}">
     </div>
 </div>
-<div class="fab" id="fab">
-    <div class="trigger"><img class="btn-icon" src="{{ '/assets/images/vertical-dots.svg' | relative_url }}"></div>
+
+<div class="fab no-print" id="fab">
+    <div class="trigger">
+        <img class="btn-icon" src="{{ '/assets/images/vertical-dots.svg' | relative_url }}">
+        <img class="btn-icon close" src="{{ '/assets/images/x-mobile.svg' | relative_url }}">
+    </div>
     <div class="actions">
-        <div class="action">a
-            <div class="tooltip">The tooltip</div>
+        <div class="action share-btn">
+            <img class="btn-icon" src="{{ '/assets/images/share.svg' | relative_url }}">
+            <div class="tooltip">Share</div>
         </div>
-        <div class="action">b
-            <div class="tooltip">Another tooltip</div>
+        <div class="action print-btn">
+            <img class="btn-icon" src="{{ '/assets/images/pdf.svg' | relative_url }}">
+            <div class="tooltip">Save as PDF</div>
         </div>
-        <div class="action">c
-            <div class="tooltip">Again another tooltip</div>
+        <div class="action edit-btn">
+            <img class="btn-icon" src="{{ '/assets/images/github.svg' | relative_url }}">
+            <div class="tooltip">Edit on Github</div>
         </div>
-        <div class="action">d</div>
     </div>
 </div>
