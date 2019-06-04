@@ -19,7 +19,7 @@
   // Tablets and above have it showing by default
   // On larger screens the content stays in place and we move the sidebar in
   transition-duration: $site-nav-collapse-duration;
-  transition-timing-function:  $site-nav-collapse-timing;
+  transition-timing-function: $site-nav-collapse-timing;
   transition-property: left, width;
   left: -100vw;
   width: 100vw;
@@ -70,6 +70,7 @@
       justify-content: flex-end;
       align-items: center;
       user-select: none;
+      overflow: hidden;
 
       img {
         height: 30px;
@@ -94,13 +95,13 @@
       margin-left: 0;
       margin-top: 0;
       min-width: 100%;
-      max-width: $max-site-nav-width;
+      max-width: 100%;
       transition: margin-left $site-nav-collapse-duration;
-      max-height: calc(100vh - #{$site-header-height} - #{$doc-header-height});
+      max-height: calc(100vh - #{$site-main-padding-top});
       overflow: auto;
 
       @include mobile-screen {
-        max-height: calc(100vh - #{$mobile-site-header-height} - #{$doc-header-height});
+        max-height: calc(100vh - #{$mobile-site-main-padding-top});
       }
 
       &.hidden {
@@ -127,12 +128,20 @@
           border-bottom: 1px inset $well-background-color;
           padding: $spacing 0;
           font-size: $nav-font-size;
+          padding-right: $small-spacing;
         }
 
         &:hover a {
           background-color: $well-background-color;
           .directory-item {
             color: $primary-text-color;
+          }
+        }
+
+        &:last-child {
+          margin-bottom: $large-spacing;
+          .directory-item {
+            border-bottom: none;
           }
         }
       }
@@ -146,11 +155,11 @@
     ul.table-of-contents {
       margin: 0;
       padding: 0;
-      max-height: calc(100vh - #{$doc-header-height} - #{$site-header-height});
+      max-height: calc(100vh - #{$site-main-padding-top});
       overflow: auto;
 
       @include mobile-screen {
-        max-height: calc(100vh - #{$doc-header-height} - #{$mobile-site-header-height});
+        max-height: calc(100vh - #{$mobile-site-main-padding-top});
       }
     }
 
@@ -251,13 +260,12 @@
   }
 
   .nav-header {
-    height: calc(#{$doc-header-height} - 1px);
+    height: $doc-header-height - 1px;
     background-color: $search-box-background-color;
     display: flex;
     align-items: center;
     justify-content: center;
     @include desktop-screen {
-      box-shadow: $site-nav-shadow-inset;
       border-bottom: 1px solid $divider-color;
     }
 
@@ -286,85 +294,112 @@
 
     // Children
     .search-box {
-      border-radius: 4px;
-      height: $search-box-height;
+      width: 100%;
+      height: 100%;
       display: flex;
       flex-direction: row;
       align-items: center;
-      border: 2px solid $primary-brand-color;
       font-size: $nav-font-size;
+      box-shadow: $site-nav-shadow-inset;
 
       .search-icon-container {
         background-color: $primary-brand-color;
         height: 100%;
-        flex: 0 0 $search-box-height;
+        width: $back-to-docs-width;
+        min-width: $back-to-docs-width;
         display: flex;
         align-items: center;
         justify-content: center;
 
         .search-icon {
-          left: 1.3rem;
           display: block;
-          height: 1.3em;
+          height: 30px;
           width: auto;
         }
       }
+
       .clear-button {
-        opacity: 0;
-        height: 100%;
-        display: flex;
+        height: 27px;
+        width: 27px;
+        min-width: 27px;
+        display: none;
         align-items: center;
         justify-content: center;
-        flex: 0 0 calc( #{$search-box-height} - 10px);
+        margin-right: $spacing;
+        background-color: $well-background-color;
+        border-radius: 50%;
 
         .clear-icon {
           display: block;
-          height: 1em;
-          width: 1em;
+          height: 13px;
+          width: 13px;
           opacity: 0.5;
           path {
             fill: $header-text-color;
           }
         }
-        &:hover .clear-icon {
-          opacity: 1;
+        &:hover {
+          background-color: $divider-color;
+          .clear-icon {
+            opacity: 1;
+          }
         }
       }
       &.filled {
         background: rgba(255, 255, 255, 0.75);
 
         .clear-button {
-          opacity: 1;
+          display: flex;
           cursor: pointer;
         }
-        input {
+        .search-input-container input {
           opacity: 1;
         }
       }
-      input {
-        display: block;
-        height: $search-box-height;
+
+      .search-input-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        margin: 0;
+        padding-left: $large-spacing;
+        padding-right: $small-spacing;
         flex: 1 1 0;
         min-width: 0;
-        border: none;
-        outline: none;
-        color: black;
-        opacity: 0.5;
-        margin: 0;
-        margin-left: $small-spacing;
-        padding: 0;
-        // -webkit-font-smoothing: antialiased;
-      }
-      // Do not show the in-built X in IE
-      input::-ms-clear {
-        display: none;
-      }
-      input::placeholder {
-        color: $header-text-color;
-        opacity: 0.5;
-      }
-      input:disabled ~ .search-icon {
-        display: none;
+        overflow: visible;
+
+        .search-header {
+          font-size: 9px;
+          letter-spacing: 1.1px;
+          color: $header-text-color;
+          opacity: 0.7;
+          margin: 0;
+          margin-bottom: 8px;
+          text-transform: uppercase;
+        }
+
+        input {
+          display: block;
+          min-width: 0;
+          border: none;
+          outline: none;
+          color: black;
+          opacity: 0.5;
+          padding: 0;
+          margin: 0;
+          // -webkit-font-smoothing: antialiased;
+        }
+        // Do not show the in-built X in IE
+        input::-ms-clear {
+          display: none;
+        }
+        input::placeholder {
+          color: $header-text-color;
+          opacity: 0.5;
+        }
+        input:disabled ~ .search-icon {
+          display: none;
+        }
       }
     }
   }
@@ -383,22 +418,25 @@
     }
   }
 
-  .search-container {
-    width: $search-box-width;
-    position: relative;
-  }
-
   // Search Results
   .search-results {
-    width: 100%;
-    position: absolute;
     background: white;
+    position: absolute;
+    left: $back-to-docs-width;
+    top: $doc-header-height;
+    width: calc(100% - #{$back-to-docs-width} - 2px); // account for border width
     height: auto;
-    max-height: calc(100vh - #{$doc-header-height} - #{$site-header-height});
+    max-height: calc(100vh - #{$site-main-padding-top});
     overflow: auto;
-    z-index: 10;
-    box-shadow: 0 5px 20px 0 rgba(155, 155, 155, 0.3);
+    z-index: 12;
+    box-shadow: -5px 6px 10px 3px rgba(0, 0, 0, 0.15);
     display: none;
+    border: 1px solid $divider-color;
+    border-top: none;
+
+    @include mobile-screen {
+      max-height: calc(100vh - #{$mobile-site-main-padding-top});
+    }
 
     &.visible {
       display: block;
@@ -410,62 +448,51 @@
 
     //not-found search results{
     .not-found {
-      margin: $spacing $spacing $spacing $search-box-height;
+      margin: $spacing;
     }
 
     .search-link {
       border-bottom: 1px solid $divider-color;
       display: flex;
-      color: $secondary-text-color;
-
+      padding: $med-spacing;
       cursor: pointer;
       user-select: none;
       font-size: $base-font-size;
 
       &.selected {
-        color: $primary-text-color;
         background-color: $well-background-color;
       }
 
       &:hover {
         text-decoration: none;
-        color: $primary-text-color;
         background-color: $well-background-color;
       }
 
       &:last-child {
         border-bottom: none;
+        margin-bottom: $large-spacing * 2;
       }
 
       p {
         margin: 0;
       }
 
-      .left {
-        width: 25%;
-        min-width: 30%;
-        padding: $spacing;
+      .search-title {
         font-size: 14px;
         font-weight: bold;
-        text-transform: uppercase;
-        word-wrap: break-word;
-        display: block;
+        margin-bottom: $spacing;
+        color: $header-text-color;
       }
 
-      .right {
-        border-left: 1px solid $divider-color;
-        padding: $spacing;
-        overflow: hidden;
+      .search-subtitle {
+        font-size: 13px;
+        margin-bottom: 5px;
+        color: $header-text-color;
+      }
 
-        .search-header {
-          font-weight: bold;
-          font-size: 14px;
-          margin-bottom: 5px;
-        }
-
-        .search-content {
-          font-size: 13px;
-        }
+      .search-content {
+        font-size: 13px;
+        color: $secondary-text-color;
       }
     }
   }

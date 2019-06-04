@@ -45,8 +45,8 @@ body {
     .site-header-text {
       color: $primary-brand-color;
       margin: 0;
-      font-family: $base-font-family;
-      font-size: 30px;
+      font-family: $header-font-family;
+      font-size: 25px;
     }
 
     .site-last-updated {
@@ -113,6 +113,12 @@ body {
   }
 }
 
+.index .doc-header {
+  @include desktop-screen {
+    display: none;
+  }
+}
+
 // Document Header
 // -----------
 .doc-header {
@@ -134,23 +140,13 @@ body {
   // to allow mobile menu to be visible outside of doc-header
   overflow: visible;
 
-  &.index {
-    @include desktop-screen {
-      display: none;
-    }
-  }
-
-  &:not(.index) #site-title {
-    display: none;
-  }
-
   @include mobile-screen {
     &.headroom--pinned {
       top: $mobile-site-header-height;
     }
 
     &.headroom--unpinned {
-      top: calc(#{$mobile-site-header-height} - #{$doc-header-height});
+      top: -$doc-header-height;
     }
   }
 
@@ -191,13 +187,18 @@ body {
   // Children
   .description-container {
     margin-right: $large-spacing;
+    width: 100%;
+
 
     #document-title {
+      font-size: 20px;
       color: $primary-brand-color;
       overflow: hidden;
-      line-height: 1.3em;
-      // Max two lines
-      max-height: 2.6em;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      // Max two lines (currently, max one line)
+      // line-height: 1.3em;
+      // max-height: 2.6em;
       margin-bottom: 0;
     }
     #document-subtitle {
@@ -205,9 +206,8 @@ body {
       font-size: 11px;
       letter-spacing: 0.6px;
       overflow: hidden;
-      line-height: 1.2em;
-      // Max one line
-      max-height: 1.2em;
+      white-space: nowrap;
+      text-overflow: ellipsis;
       color: #9b9b9b;
       text-transform: uppercase;
     }
@@ -222,7 +222,7 @@ body {
   left: 0;
   right: 0;
   top: 0;
-  padding-top: calc(#{$doc-header-height} + #{$mobile-site-header-height});
+  padding-top: $mobile-site-main-padding-top;
   padding-left: $large-spacing;
   padding-right: $large-spacing;
   padding-bottom: $spacing;
@@ -240,7 +240,7 @@ body {
   // Expand to fill when the menu is closed
   @include desktop-screen {
     left: $site-nav-width;
-    padding-top: $doc-header-height + $site-header-height;
+    padding-top: $site-main-padding-top;
     padding-left: $desktop-spacing;
     padding-right: $desktop-spacing + $body-sidebar-right-padding;
     padding-bottom: $large-spacing;
@@ -346,7 +346,7 @@ body {
   }
 
   @include desktop-screen {
-    width: calc(100vw - #{$body-sidebar-right-padding} - #{$desktop-spacing});
+    width: calc(100vw - #{$body-sidebar-right-padding} - #{$body-padding});
     font-size: calc(#{$base-font-size} - 4px);
 
     a {
