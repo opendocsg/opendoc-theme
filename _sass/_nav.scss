@@ -429,10 +429,14 @@
     max-height: calc(100vh - #{$site-main-padding-top});
     overflow: auto;
     z-index: 12;
-    box-shadow: -20px 5px 20px 5px rgba(0, 0, 0, 0.15);
+    box-shadow: -5px 6px 10px 3px rgba(0, 0, 0, 0.15);
     display: none;
     border: 1px solid $divider-color;
     border-top: none;
+
+    @include mobile-screen {
+      max-height: calc(100vh - #{$mobile-site-main-padding-top});
+    }
 
     &.visible {
       display: block;
@@ -466,7 +470,7 @@
 
       &:last-child {
         border-bottom: none;
-        margin-bottom: $large-spacing;
+        margin-bottom: $large-spacing * 2;
       }
 
       p {
