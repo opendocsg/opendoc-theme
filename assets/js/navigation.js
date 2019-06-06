@@ -37,9 +37,14 @@
                 loadDocumentContent(directoryTitle, 1)
             }
         }, true)
+
+        /*
+         Uncomment this to preload all pages in the background
+         -----------------------------------------------------
+         */
         // Load pages in background based on directory order
-        var directoryTitle = directory.innerText.trim()
-        loadDocumentContent(directoryTitle, 0)
+        // var directoryTitle = directory.innerText.trim()
+        // loadDocumentContent(directoryTitle, 0)
     })
 
     // Returns whether corresponding toc is found and displays it
