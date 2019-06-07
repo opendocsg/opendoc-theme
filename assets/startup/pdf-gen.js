@@ -1,6 +1,7 @@
 ---
 ---
 const fs = require('fs')
+const pAll = require('p-all')
 const axios = require('axios')
 const glob = require('glob')
 const path = require('path')
@@ -18,6 +19,7 @@ const api_key_PDF_GEN = process.env.api_key_PDF_GEN
 if (api_key_PDF_GEN === undefined) {
     console.error('AWS Lambda API key not present: Unable to access Lambda function to generate PDFs.')
 }
+const CONCURRENCY = 20
 
 const main = async () => {
     // creating exports of individual documents
@@ -42,7 +44,7 @@ const exportPdfTopLevelDocs = async (sitePath) => {
 }
 
 const exportPdfDocFolders = (sitePath, docFolders) => {
-    const promises = []
+    const actions = []
     for (let folder of docFolders) {
         console.log('Initializing PDF generation...')
         // find all the folders containing html files
@@ -59,14 +61,9 @@ const exportPdfDocFolders = (sitePath, docFolders) => {
             const order = configMd.meta.order // names of html files without the .html
             htmlFilePaths = reorderHtmlFilePaths(htmlFilePaths, order)
         }
-        promises.push(createPdf(htmlFilePaths, folderPath))
+        actions.push((() => createPdf(htmlFilePaths, folderPath)))
     }
-    return Promise.all(promises)
-        .then((res) => {
-            console.log('All PDFs generated successfully.')
-        }, (err) => {
-            console.log('At least one PDF did not generate successfully.')
-        })
+    return pAll(actions, { concurrency: CONCURRENCY })
 }
 
 // Concatenates the contents in .html files, and outputs export.pdf in the specified output folder
