@@ -159,13 +159,12 @@ const createPdf = (htmlFilePaths, outputFolderPath) => {
         })
     }).catch((err) => {
         if (err.response) {
-            console.log('Axios response error:' + err.response.data)
+            console.log('Axios response error at ' + outputFolderPath + ':' + err.response.data)
         } else if (err.request) {
-            console.log('Axios request error:' + err.request.data)
+            console.log('Axios request error at ' + outputFolderPath + ':' + err.request.data)
         } else {
-            console.log('Axios Error: ' + err)
+            console.log('Axios Error at ' + outputFolderPath + ': ' + err)
         }
-        console.log(' at:' + outputPdfPath + '.')
     })
 }
 
