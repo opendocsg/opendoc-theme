@@ -12,10 +12,10 @@
 {%- assign page_header = page_header[1] | split: '</h1' -%}
 {%- assign page_header = page_header[0] -%}
 {%- assign header_section = '<h1' | append: split_content.first  | strip_html | newline_to_br | strip_newlines | replace: '<br />', ' ' | replace: '\', '' | strip | smartify | normalize_whitespace -%}
-
 {%- capture item -%}
 {
 "title": "{{ page_header}}",
+"documentTitle": "{%- include_cached document-title.txt dir=page.dir info="title" -%}",
 "url": "{{page_url | relative_url }}",
 "text": "{{ header_section }}"
 }
@@ -41,6 +41,7 @@
 {%- capture item -%}
 {
 "title": "{{ section_header | smartify }}",
+"documentTitle": "{%- include_cached document-title.txt dir=page.dir info="title" -%}",
 "url": "{{ section_url | relative_url }}",
 "text": "{{ full_section }}"
 }

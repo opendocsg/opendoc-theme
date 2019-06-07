@@ -9,6 +9,7 @@
     var navigation = document.getElementsByClassName('navigation')[0]
     var searchFilter = document.getElementsByClassName('search-filter')[0]
     var searchBoxElement = document.getElementById('search-box')
+    var indexDiv = document.getElementById('index-div')
 
     // If subfolder was accessed directory via url, load the subfolder's pages
     if (documentTitle && documentTitle.innerText.trim()) {
@@ -36,9 +37,14 @@
                 loadDocumentContent(directoryTitle, 1)
             }
         }, true)
+
+        /*
+         Uncomment this to preload all pages in the background
+         -----------------------------------------------------
+         */
         // Load pages in background based on directory order
-        var directoryTitle = directory.innerText.trim()
-        loadDocumentContent(directoryTitle, 0)
+        // var directoryTitle = directory.innerText.trim()
+        // loadDocumentContent(directoryTitle, 0)
     })
 
     // Returns whether corresponding toc is found and displays it
@@ -153,7 +159,7 @@
                 document.title = page.title
                 documentTitle.innerText = page.documentInfo[0] // document title
                 documentSubtitle.innerText = page.documentInfo[1] // document subtitle
-                docHeader.classList.remove('index')
+                indexDiv.classList.remove('index')
             }
             // Make sure it is scrolled to the anchor
             scrollToView()
