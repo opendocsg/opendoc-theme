@@ -1,7 +1,7 @@
 #!/bin/bash
 
-echo 'Generating PDFs'
+echo 'Started script to generate PDFs'
 echo 'Installing node dependencies'
-npm i html-pdf glob jsdom js-yaml
+npm i glob jsdom js-yaml
 node _site/assets/startup/pdf-gen.js
-echo 'Generating PDFs Complete'
+echo 'End script'
