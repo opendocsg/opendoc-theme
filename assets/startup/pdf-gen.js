@@ -1,5 +1,7 @@
+---
+---
 const fs = require('fs')
-const pdf = require('html-pdf')
+const axios = require('axios')
 const glob = require('glob')
 const path = require('path')
 const jsdom = require('jsdom')
@@ -25,6 +27,7 @@ const printIgnoreFolders = ['assets', 'files', 'iframes', 'images']
 // List of top-level .html files which are not to be printed
 const printIgnoreFiles = ['export.html', 'index.html']
 
+const server_PDF_GEN = '{{ site.server_PDF_GEN }}'
 const main = async () => {
     console.log('Base options: ', options.base)
     // creating exports of individual documents
@@ -80,7 +83,9 @@ const createPdf = (htmlFilePaths, outputFolderPath) => {
 
     htmlFilePaths.forEach(function (filePath) {
         const file = fs.readFileSync(filePath)
-        const dom = new jsdom.JSDOM(file)
+        const dom = new jsdom.JSDOM(file, {
+            resources: 'usable'
+        })
 
         // html-pdf can't deal with these
         removeTagsFromDom(dom, 'script')
@@ -129,14 +134,39 @@ const createPdf = (htmlFilePaths, outputFolderPath) => {
             console.log('Failed to append Node, skipping: ' + error)
         }
     })
-
-    return new Promise((resolve, reject) => {
-        pdf.create(exportDom.serialize(), options).toFile(path.join(outputFolderPath, 'export.pdf'), (err, res) => {
-            if (err) return reject(err)
-            console.log('Pdf created at: ', res.filename)
-            resolve()
+    return axios({
+        method: 'POST',
+        url: server_PDF_GEN,
+        responseType: 'arraybuffer',
+        headers: {
+            'x-api-key': process.env.api_key_PDF_GEN,
+            'content-type': 'application/json',
+        },
+        data: {
+            'serializedDom': exportDom.serialize()
+        }
+    }).then((res) => {
+        if (res.status !== 200) {
+            throw new Error('Request did not succeed with 200.')
+        }
+        return res.data
+    }).then((body) => {
+        const buf = Buffer.from(body, 'base64')
+        fs.writeFile(path.join(outputFolderPath, 'export.pdf'), buf,(err) => {
+            if (err) {
+                return console.error('Error writing out pdf.')
+            }
+            console.log('Pdf created at: ', outputFolderPath)
         })
-    }) 
+    }).catch((err) => {
+        if (err.response) {
+            console.log('Axios response error:' + err.response.data)
+        } else if (err.request) {
+            console.log('Axios request error:' + err.request.data)
+        } else {
+            console.log('Axios Error: ' + err)
+        }
+    })
 }
 
 // Returns a list of the valid document (i.e. folder) paths
