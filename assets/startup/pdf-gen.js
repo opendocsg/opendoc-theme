@@ -7,33 +7,23 @@ const path = require('path')
 const jsdom = require('jsdom')
 const jsyaml = require('js-yaml')
 const sitePath = __dirname + '/../..'
-const options = {
-    height: '594mm',        // allowed units: mm, cm, in, px
-    width: '420mm',
-    base: 'file://' + sitePath + '/',
-    border: {
-        right: '100px', // default is 0, units: mm, cm, in, px
-        left: '100px',
-    },
-    header: {
-        height: '80px',
-    },
-    footer: {
-        height: '80px',
-    },
-}
+
 // List of top-level folder names which may contain html but are not to be printed
 const printIgnoreFolders = ['assets', 'files', 'iframes', 'images']
 // List of top-level .html files which are not to be printed
 const printIgnoreFiles = ['export.html', 'index.html']
 
 const server_PDF_GEN = '{{ site.server_PDF_GEN }}'
+const api_key_PDF_GEN = process.env.api_key_PDF_GEN
+if (api_key_PDF_GEN === undefined) {
+    console.error('AWS Lambda API key not present: Unable to access Lambda function to generate PDFs.')
+}
+
 const main = async () => {
-    console.log('Base options: ', options.base)
     // creating exports of individual documents
     const docFolders = getDocumentFolders(sitePath, printIgnoreFolders)
-    await exportPdfDocFolders(sitePath, docFolders)
     await exportPdfTopLevelDocs(sitePath)
+    await exportPdfDocFolders(sitePath, docFolders)
 }
 
 const exportPdfTopLevelDocs = async (sitePath) => {
@@ -51,8 +41,10 @@ const exportPdfTopLevelDocs = async (sitePath) => {
     await createPdf(htmlFilePaths, sitePath)
 }
 
-const exportPdfDocFolders = async (sitePath, docFolders) => {
+const exportPdfDocFolders = (sitePath, docFolders) => {
+    const promises = []
     for (let folder of docFolders) {
+        console.log('Initializing PDF generation...')
         // find all the folders containing html files
         const folderPath = path.join(sitePath, folder)
         let htmlFilePaths = glob.sync('*.html', { cwd: folderPath })
@@ -67,8 +59,14 @@ const exportPdfDocFolders = async (sitePath, docFolders) => {
             const order = configMd.meta.order // names of html files without the .html
             htmlFilePaths = reorderHtmlFilePaths(htmlFilePaths, order)
         }
-        await createPdf(htmlFilePaths, folderPath)
+        promises.push(createPdf(htmlFilePaths, folderPath))
     }
+    return Promise.all(promises)
+        .then((res) => {
+            console.log('All PDFs generated successfully.')
+        }, (err) => {
+            console.log('At least one PDF did not generate successfully.')
+        })
 }
 
 // Concatenates the contents in .html files, and outputs export.pdf in the specified output folder
@@ -139,7 +137,7 @@ const createPdf = (htmlFilePaths, outputFolderPath) => {
         url: server_PDF_GEN,
         responseType: 'arraybuffer',
         headers: {
-            'x-api-key': process.env.api_key_PDF_GEN,
+            'x-api-key': api_key_PDF_GEN,
             'content-type': 'application/json',
         },
         data: {
@@ -152,11 +150,12 @@ const createPdf = (htmlFilePaths, outputFolderPath) => {
         return res.data
     }).then((body) => {
         const buf = Buffer.from(body, 'base64')
-        fs.writeFile(path.join(outputFolderPath, 'export.pdf'), buf,(err) => {
+        const outputPdfPath = path.join(outputFolderPath, 'export.pdf')
+        fs.writeFile(outputPdfPath, buf,(err) => {
             if (err) {
                 return console.error('Error writing out pdf.')
             }
-            console.log('Pdf created at: ', outputFolderPath)
+            console.log('Pdf created at: ', outputPdfPath)
         })
     }).catch((err) => {
         if (err.response) {
@@ -166,6 +165,7 @@ const createPdf = (htmlFilePaths, outputFolderPath) => {
         } else {
             console.log('Axios Error: ' + err)
         }
+        console.log(' at:' + outputPdfPath + '.')
     })
 }
 
