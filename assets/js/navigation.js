@@ -43,8 +43,8 @@
          -----------------------------------------------------
          */
         // Load pages in background based on directory order
-        // var directoryTitle = directory.innerText.trim()
-        // loadDocumentContent(directoryTitle, 0)
+        var directoryTitle = directory.innerText.trim()
+        loadDocumentContent(directoryTitle, 0)
     })
 
     // Returns whether corresponding toc is found and displays it
@@ -159,7 +159,9 @@
                 document.title = page.title
                 documentTitle.innerText = page.documentInfo[0] // document title
                 documentSubtitle.innerText = page.documentInfo[1] // document subtitle
-                indexDiv.classList.remove('index')
+                if (indexDiv) {
+                    indexDiv.classList.remove('index')
+                }
             }
             // Make sure it is scrolled to the anchor
             scrollToView()
