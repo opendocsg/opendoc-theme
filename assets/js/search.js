@@ -84,7 +84,7 @@
 
     // Load Lunr Index if set
     // ============================================================================
-    var searchSetOffline = {{ site.offline_search_only }} || false
+    var searchSetOffline = "{{ site.offline_search_only }}" === "true" || false
 
     if (searchSetOffline) {
         getLunrIndex()
