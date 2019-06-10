@@ -65,21 +65,14 @@
     var sectionIndex = {}
     var minQueryLength = 3
     var lunrIndex = null
+
     // Begin Lunr Indexing
     // =============================================================================
     function getLunrIndex() {
-        return fetch('/assets/lunrIndex.json')
-            .then(function (res) {
-                    return res.json()
-            })
-            .then(function (json) {
-                lunrIndex = lunr.Index.load(json.index)
-                lunrIndex.pipeline.remove(lunr.stemmer)
-                sectionIndex = json.sectionIndex
-            })
-            .catch(function (err) {
-                console.error('Fetch failed to read the Lunr index: ' + err)
-            })
+        startBuildingLunrIndex(function(results) {
+            lunrIndex = lunr.Index.load(results.index)
+            sectionIndex = results.sectionIndex
+        })
     }
 
     // Load Lunr Index if set
