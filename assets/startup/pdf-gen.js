@@ -1,6 +1,7 @@
 ---
 ---
 const fs = require('fs')
+const pdf = require('html-pdf')
 const pAll = require('p-all')
 const axios = require('axios')
 const glob = require('glob')
@@ -9,6 +10,22 @@ const jsdom = require('jsdom')
 const jsyaml = require('js-yaml')
 const sitePath = __dirname + '/../..'
 
+const localPdfOptions = {
+    height: '594mm',        // allowed units: mm, cm, in, px
+    width: '420mm',
+    base: 'file://' + sitePath + '/',
+    border: {
+        right: '100px', // default is 0, units: mm, cm, in, px
+        left: '100px',
+    },
+    header: {
+        height: '80px',
+    },
+    footer: {
+        height: '80px',
+    },
+}
+
 // List of top-level folder names which may contain html but are not to be printed
 const printIgnoreFolders = ['assets', 'files', 'iframes', 'images']
 // List of top-level .html files which are not to be printed
@@ -16,9 +33,6 @@ const printIgnoreFiles = ['export.html', 'index.html']
 
 const server_PDF_GEN = '{{ site.server_PDF_GEN }}'
 const api_key_PDF_GEN = process.env.api_key_PDF_GEN
-if (api_key_PDF_GEN === undefined) {
-    console.error('AWS Lambda API key not present: Unable to access Lambda function to generate PDFs.')
-}
 const CONCURRENCY = 20
 
 const main = async () => {
@@ -129,40 +143,52 @@ const createPdf = (htmlFilePaths, outputFolderPath) => {
             console.log('Failed to append Node, skipping: ' + error)
         }
     })
-    return axios({
-        method: 'POST',
-        url: server_PDF_GEN,
-        responseType: 'arraybuffer',
-        headers: {
-            'x-api-key': api_key_PDF_GEN,
-            'content-type': 'application/json',
-        },
-        data: {
-            'serializedDom': exportDom.serialize()
-        }
-    }).then((res) => {
-        if (res.status !== 200) {
-            throw new Error('Request did not succeed with 200.')
-        }
-        return res.data
-    }).then((body) => {
-        const buf = Buffer.from(body, 'base64')
-        const outputPdfPath = path.join(outputFolderPath, 'export.pdf')
-        fs.writeFile(outputPdfPath, buf,(err) => {
-            if (err) {
-                return console.error('Error writing out pdf.')
-            }
-            console.log('Pdf created at: ', outputPdfPath)
+
+    if (api_key_PDF_GEN === undefined) {
+        console.log('AWS Lambda API key not present: Generating PDFs locally instead.')
+        return new Promise((resolve, reject) => {
+            pdf.create(exportDom.serialize(), localPdfOptions).toFile(path.join(outputFolderPath, 'export.pdf'), (err, res) => {
+                if (err) return reject(err)
+                console.log('Pdf created at: ', res.filename)
+                resolve()
+            })
         })
-    }).catch((err) => {
-        if (err.response) {
-            console.log('Axios response error at ' + outputFolderPath + ':' + err.response.data)
-        } else if (err.request) {
-            console.log('Axios request error at ' + outputFolderPath + ':' + err.request.data)
-        } else {
-            console.log('Axios Error at ' + outputFolderPath + ': ' + err)
-        }
-    })
+    } else {
+        return axios({
+            method: 'POST',
+            url: server_PDF_GEN,
+            responseType: 'arraybuffer',
+            headers: {
+                'x-api-key': api_key_PDF_GEN,
+                'content-type': 'application/json',
+            },
+            data: {
+                'serializedDom': exportDom.serialize()
+            }
+        }).then((res) => {
+            if (res.status !== 200) {
+                throw new Error('Request did not succeed with 200.')
+            }
+            return res.data
+        }).then((body) => {
+            const buf = Buffer.from(body, 'base64')
+            const outputPdfPath = path.join(outputFolderPath, 'export.pdf')
+            fs.writeFile(outputPdfPath, buf, (err) => {
+                if (err) {
+                    return console.error('Error writing out pdf.')
+                }
+                console.log('Pdf created at: ', outputPdfPath)
+            })
+        }).catch((err) => {
+            if (err.response) {
+                console.log('Axios response error at ' + outputFolderPath + ':' + err.response.data)
+            } else if (err.request) {
+                console.log('Axios request error at ' + outputFolderPath + ':' + err.request.data)
+            } else {
+                console.log('Axios Error at ' + outputFolderPath + ': ' + err)
+            }
+        })
+    }
 }
 
 // Returns a list of the valid document (i.e. folder) paths

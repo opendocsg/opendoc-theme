@@ -4,7 +4,7 @@
 
 echo 'Started script to generate PDFs'
 echo 'Installing node dependencies'
-npm i axios glob jsdom js-yaml p-all
+npm i axios glob jsdom js-yaml p-all html-pdf
 node _site/assets/startup/pdf-gen.js
 if [ "{{ site.offline_search_only }}" == "true" ]; then
     node _site/assets/startup/prebuild-lunr-index.js
