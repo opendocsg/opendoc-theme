@@ -154,6 +154,7 @@ const createPdf = (htmlFilePaths, outputFolderPath) => {
             })
         })
     } else {
+        // Code for this API lives at https://github.com/opendocsg/pdf-lambda
         return axios({
             method: 'POST',
             url: server_PDF_GEN,
