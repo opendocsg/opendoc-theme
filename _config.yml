@@ -14,7 +14,6 @@ fast_build: true
 offline_search_only: false
 
 
-fast_build: true
 subtitle: this is a subtitle
 order:
   - contribute.md
