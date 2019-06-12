@@ -186,16 +186,17 @@
     function scrollToView() {
         var id = window.location.hash.replace('#', '')
         // minus 1 to hide the border on top
-        if (id.length > 0) {
-            var anchor = document.getElementById(id)
+        if (id.length <= 0) {
+            return
         }
-        if (anchor) {
-            var topOffset = siteHeader.offsetHeight
-            if (!isMobileView()) {
-                topOffset += docHeader.clientHeight
-            }
-            var top = anchor.offsetTop - topOffset
-            window.scrollTo(0, top)
+        var anchor = document.getElementById(id)
+        if (!anchor) {
+            return
+        }
+        if (!isMobileView()) {
+            window.scrollTo(0, anchor.offsetTop)
+        } else {
+            window.scrollTo(0, anchor.offsetTop - siteHeader.offsetHeight)
         }
     }
 
