@@ -240,7 +240,7 @@ body {
   // Expand to fill when the menu is closed
   @include desktop-screen {
     left: $site-nav-width;
-    padding-top: $site-main-padding-top;
+    padding-top: 0;
     padding-left: $desktop-spacing;
     padding-right: $desktop-spacing + $body-sidebar-right-padding;
     padding-bottom: $large-spacing;
@@ -266,28 +266,28 @@ body {
   }
 
   h1 {
-    padding-top: calc(1.6 * #{$block-spacing});
-    border-top: 1px solid $divider-color;
+    padding-top: calc(3 * #{$block-spacing});
+    margin-top: calc(-2.0 * #{$block-spacing});
   }
   h2 {
-    padding-top: calc(1.4 * #{$block-spacing});
-    border-top: 1px solid $divider-color;
+    padding-top: calc(2.8 * #{$block-spacing});
+    margin-top: calc(-2.0 * #{$block-spacing});
   }
   h3 {
-    padding-top: calc(1.2 * #{$block-spacing});
-    border-top: 1px solid $divider-color;
+    padding-top: calc(2.6 * #{$block-spacing});
+    margin-top: calc(-2.0 * #{$block-spacing});
   }
   h4 {
-    padding-top: calc(1 * #{$block-spacing});
-    border-top: 1px solid $divider-color;
+    padding-top: calc(2.4 * #{$block-spacing});
+    margin-top: calc(-2.0 * #{$block-spacing});
   }
   h5 {
-    padding-top: calc(0.8 * #{$block-spacing});
-    border-top: 1px solid $divider-color;
+    padding-top: calc(2.2 * #{$block-spacing});
+    margin-top: calc(-2.0 * #{$block-spacing});
   }
   h6 {
-    padding-top: calc(0.6 * #{$block-spacing});
-    border-top: 1px solid $divider-color;
+    padding-top: calc(2.2 * #{$block-spacing});
+      margin-top: calc(-2.0 * #{$block-spacing});
   }
   h1,
   h2,
@@ -303,28 +303,27 @@ body {
   @include desktop-screen {
     // Hack to get browser hash scrolling to work nicely with a fixed header
     h1 {
-      padding-top: calc(2 * #{$block-spacing});
-      border-top: 1px solid $divider-color;
+      padding-top: calc(7 * #{$block-spacing});
     }
     h2 {
-      padding-top: calc(1.8 * #{$block-spacing});
-      border-top: 1px solid $divider-color;
+      padding-top: calc(7 * #{$block-spacing});
+      margin-top: calc(-5.2 * #{$block-spacing});
     }
     h3 {
-      padding-top: calc(1.6 * #{$block-spacing});
-      border-top: 1px solid $divider-color;
+      padding-top: calc(7 * #{$block-spacing});
+      margin-top: calc(-5.4 * #{$block-spacing});
     }
     h4 {
-      padding-top: calc(1.4 * #{$block-spacing});
-      border-top: 1px solid $divider-color;
+      padding-top: calc(7 * #{$block-spacing});
+      margin-top: calc(-5.6 * #{$block-spacing});
     }
     h5 {
-      padding-top: calc(1.2 * #{$block-spacing});
-      border-top: 1px solid $divider-color;
+      padding-top: calc(7 * #{$block-spacing});
+      margin-top: calc(-5.8 * #{$block-spacing});
     }
     h6 {
-      padding-top: calc(1 * #{$block-spacing});
-      border-top: 1px solid $divider-color;
+      padding-top: calc(7 * #{$block-spacing});
+      margin-top: calc(-6 * #{$block-spacing});
     }
   }
 }
