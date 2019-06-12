@@ -3,13 +3,14 @@
 const fs = require('fs')
 const pdf = require('html-pdf')
 const pAll = require('p-all')
-const axios = require('axios')
+const https = require('https')
 const glob = require('glob')
 const path = require('path')
 const jsdom = require('jsdom')
 const jsyaml = require('js-yaml')
 const sitePath = __dirname + '/../..'
 
+// These options are only applied when PDFs are built locally
 const localPdfOptions = {
     height: '594mm',        // allowed units: mm, cm, in, px
     width: '420mm',
@@ -31,9 +32,10 @@ const printIgnoreFolders = ['assets', 'files', 'iframes', 'images']
 // List of top-level .html files which are not to be printed
 const printIgnoreFiles = ['export.html', 'index.html']
 
+// AWS Lambda settings to generate PDFs
 const server_PDF_GEN = '{{ site.server_PDF_GEN }}'
 const api_key_PDF_GEN = process.env.api_key_PDF_GEN
-const CONCURRENCY = 20
+const CONCURRENCY = 20  // Tuned for Netlify build server
 
 const main = async () => {
     // creating exports of individual documents
@@ -93,7 +95,7 @@ const createPdf = (htmlFilePaths, outputFolderPath) => {
     htmlFilePaths.forEach(function (filePath) {
         const file = fs.readFileSync(filePath)
         const dom = new jsdom.JSDOM(file, {
-            resources: 'usable'
+            resources: 'usable' // to get JSDOM to load stylesheets
         })
 
         // html-pdf can't deal with these
@@ -101,7 +103,8 @@ const createPdf = (htmlFilePaths, outputFolderPath) => {
         removeTagsFromDom(dom, 'iframe')
 
         // If a <img src=...> link src begins with '/', it is a relative link
-        // and needs to be prepended with '.' to make the images show in the pdf
+        // and needs to be prepended with '.' to show up in the pdf. Does not
+        // work for Lambda functions as the images are not available server side.
         const imgsrcs = dom.window.document.getElementsByTagName('img')
         for (let i = 0; i < imgsrcs.length; i++) {
             const imgsrc = imgsrcs[i]
@@ -155,39 +158,46 @@ const createPdf = (htmlFilePaths, outputFolderPath) => {
         })
     } else {
         // Code for this API lives at https://github.com/opendocsg/pdf-lambda
-        return axios({
+        const requestOptions = {
             method: 'POST',
-            url: server_PDF_GEN,
             responseType: 'arraybuffer',
             headers: {
                 'x-api-key': api_key_PDF_GEN,
                 'content-type': 'application/json',
             },
-            data: {
-                'serializedDom': exportDom.serialize()
-            }
-        }).then((res) => {
-            if (res.status !== 200) {
-                throw new Error('Request did not succeed with 200.')
-            }
-            return res.data
-        }).then((body) => {
-            const buf = Buffer.from(body, 'base64')
-            const outputPdfPath = path.join(outputFolderPath, 'export.pdf')
-            fs.writeFile(outputPdfPath, buf, (err) => {
-                if (err) {
-                    return console.error('Error writing out pdf.')
+        }
+        return new Promise(function(resolve, reject) {
+            const request = https.request(server_PDF_GEN, requestOptions, function(res) {
+                if (res.statusCode < 200 || res.statusCode >= 300) {
+                    return reject('Error: Request status code ' + res.statusCode)
                 }
-                console.log('Pdf created at: ', outputPdfPath)
+                const chunks = []
+                res.on('data', function(d) {
+                    chunks.push(d)
+                })
+                res.on('end', function() {
+                    const buf = Buffer.concat(chunks)
+                    resolve(buf)
+                })
             })
-        }).catch((err) => {
-            if (err.response) {
-                console.log('Axios response error at ' + outputFolderPath + ':' + err.response.data)
-            } else if (err.request) {
-                console.log('Axios request error at ' + outputFolderPath + ':' + err.request.data)
-            } else {
-                console.log('Axios Error at ' + outputFolderPath + ': ' + err)
-            }
+            request.on('error', (err) => {
+                return reject('Error: Request encountered error: ' + err)
+            })
+            // POST request body
+            request.write(JSON.stringify({
+                'serializedDom': exportDom.serialize()
+            }))
+            request.end()
+        }).then((buffer) => {
+            const outputPdfPath = path.join(outputFolderPath, 'export.pdf')
+            fs.writeFile(outputPdfPath, buffer, function(err) {
+                if (err) {
+                    return console.log('Error: Writing out PDF: ' + err)
+                }
+                console.log('PDF created at: ', outputPdfPath)
+            })
+        }).catch((error) => {
+            console.log('Error: Request Promise error: ' + error)
         })
     }
 }
