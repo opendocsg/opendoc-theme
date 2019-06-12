@@ -34,7 +34,7 @@ const printIgnoreFiles = ['export.html', 'index.html']
 
 // AWS Lambda settings to generate PDFs
 const server_PDF_GEN = '{{ site.server_PDF_GEN }}'
-const api_key_PDF_GEN = process.env.api_key_PDF_GEN
+const api_key_PDF_GEN = process.env.PDF_GEN_API_KEY
 const CONCURRENCY = 20  // Tuned for Netlify build server
 
 const main = async () => {
