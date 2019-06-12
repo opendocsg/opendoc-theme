@@ -227,7 +227,7 @@ body {
   left: 0;
   right: 0;
   top: 0;
-  padding-top: $mobile-site-main-padding-top;
+  padding-top: 0;
   padding-left: $large-spacing;
   padding-right: $large-spacing;
   padding-bottom: $spacing;
@@ -271,28 +271,22 @@ body {
   }
 
   h1 {
-    padding-top: calc(3 * #{$block-spacing});
-    margin-top: calc(-2.0 * #{$block-spacing});
+    padding-top: calc(3 * #{$mobile-site-header-height});
   }
   h2 {
     padding-top: calc(2.8 * #{$block-spacing});
-    margin-top: calc(-2.0 * #{$block-spacing});
   }
   h3 {
     padding-top: calc(2.6 * #{$block-spacing});
-    margin-top: calc(-2.0 * #{$block-spacing});
   }
   h4 {
     padding-top: calc(2.4 * #{$block-spacing});
-    margin-top: calc(-2.0 * #{$block-spacing});
   }
   h5 {
     padding-top: calc(2.2 * #{$block-spacing});
-    margin-top: calc(-2.0 * #{$block-spacing});
   }
   h6 {
     padding-top: calc(2.2 * #{$block-spacing});
-      margin-top: calc(-2.0 * #{$block-spacing});
   }
   h1,
   h2,
@@ -304,31 +298,34 @@ body {
       margin-top: 0;
       border-top: 0px;
     }
+    margin-top: calc(-1 * #{$mobile-site-header-height});
   }
   @include desktop-screen {
-    // Hack to get browser hash scrolling to work nicely with a fixed header
     h1 {
       padding-top: calc(7 * #{$block-spacing});
     }
     h2 {
-      padding-top: calc(7 * #{$block-spacing});
-      margin-top: calc(-5.2 * #{$block-spacing});
+      padding-top: calc(6.8 * #{$block-spacing});
     }
     h3 {
-      padding-top: calc(7 * #{$block-spacing});
-      margin-top: calc(-5.4 * #{$block-spacing});
+      padding-top: calc(6.6 * #{$block-spacing});
     }
     h4 {
-      padding-top: calc(7 * #{$block-spacing});
-      margin-top: calc(-5.6 * #{$block-spacing});
+      padding-top: calc(6.4 * #{$block-spacing});
     }
     h5 {
-      padding-top: calc(7 * #{$block-spacing});
-      margin-top: calc(-5.8 * #{$block-spacing});
+      padding-top: calc(6.2 * #{$block-spacing});
     }
     h6 {
-      padding-top: calc(7 * #{$block-spacing});
-      margin-top: calc(-6 * #{$block-spacing});
+      padding-top: calc(6.0 * #{$block-spacing});
+    }
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      margin-top: calc(-1 * #{$site-main-padding-top});
     }
   }
 }
