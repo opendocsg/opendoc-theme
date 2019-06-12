@@ -9,7 +9,7 @@
   border: 1px solid $divider-color;
   border-radius: 4px;
   overflow: hidden;
-  z-index: 10000;
+  z-index: $toolbar-z-index;
   flex-shrink: 0;
   right: $large-spacing;
   top: calc(#{$site-main-padding-top} + (2 * #{$block-spacing}));
@@ -142,7 +142,7 @@ $transition-duration: 0.4s;
   bottom: $med-spacing;
   right: $med-spacing;
   text-align: center;
-  z-index: 1;
+  z-index: $fab-z-index;
   font-family: Arial, Helvetica, sans-serif;
 
   @include desktop-screen {
@@ -162,16 +162,27 @@ $transition-duration: 0.4s;
     }
   }
 
-  $trigger-size: 56px;
   .trigger {
     position: relative;
     background: $primary-brand-color;
     height: $fab-button-size;
     width: $fab-button-size;
-    z-index: 2;
+    z-index: $fab-trigger-z-index;
     img.close {
       display: none;
     }
+  }
+
+  .overlay {
+    position: fixed;
+    height: $fab-button-size;
+    width: $fab-button-size;
+    background: black;
+    opacity: 0;
+    border-radius: 50%;
+    transition: all $fab-transtition-duration ease-out;
+    right: $med-spacing;
+    bottom: $med-spacing;
   }
 
   .action {
@@ -209,6 +220,14 @@ $transition-duration: 0.4s;
       }
     }
 
+    .overlay {
+      opacity: 0.8;
+      height: calc(100vw + 100vh);
+      width: calc(100vw + 100vh);
+      bottom: -50vh;
+      right: -50vw;
+    }
+
     .trigger {
       img.close {
         display: flex;
@@ -223,7 +242,6 @@ $transition-duration: 0.4s;
       transform: translateY(-50%) scale(1);
       right: $fab-button-size + $spacing;
       transition-delay: $fab-transtition-duration/2;
-      background-color: rgba(39, 46, 54, 0.8);
     }
   }
 
@@ -234,6 +252,7 @@ $transition-duration: 0.4s;
     padding: 4px 8px;
     font-size: 11px;
     color: $divider-color;
+    background-color: rgba(39, 46, 54, 0.8);
     transform: translateY(-50%) scale(0);
     transform-origin: right center 0;
     text-align: right;
@@ -243,6 +262,7 @@ $transition-duration: 0.4s;
     width: auto;
     border-radius: 5px;
     font-family: $base-font-family;
+    border: 1px solid $divider-color;
   }
 }
 
