@@ -5,9 +5,10 @@
   flex-direction: column;
   width: 70%;
   margin-left: 15%;
-  padding-top: 5vh;
+  padding-top: 3vh;
+  margin-top: $site-doc-header-height;
   @include mobile-screen {
-    padding-top: 6vh;
+    margin-top: $mobile-site-doc-header-height;
   }
 
   .welcome-text {
