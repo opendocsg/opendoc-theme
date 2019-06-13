@@ -120,11 +120,6 @@
             event.preventDefault()
             event.stopPropagation()
             if (anchor.hash.length > 0) {
-                if ((window.location.pathname + window.location.hash).endsWith(anchor.hash)) {
-                    // If clicked on the same anchor, just scroll to view
-                    scrollToView()
-                    return
-                }
                 window.location = anchor.hash
             } else {
                 window.location = '#'
@@ -163,8 +158,6 @@
                     indexDiv.classList.remove('index')
                 }
             }
-            // Make sure it is scrolled to the anchor
-            scrollToView()
 
             // Hide menu if sub link clicked or clicking on search results        
             if (window.location.hash.replace('#', '').length > 0 || navigation.classList.contains('hidden')) {
@@ -180,22 +173,6 @@
             searchFilter.innerText = page.documentInfo[0] // document title
             searchFilter.classList.remove('hidden')
             searchBoxElement.placeholder = 'Search within doc'
-        }
-    }
-
-    function scrollToView() {
-        var id = window.location.hash.replace('#', '')
-        // minus 1 to hide the border on top
-        if (id.length > 0) {
-            var anchor = document.getElementById(id)
-        }
-        if (anchor) {
-            var topOffset = siteHeader.offsetHeight
-            if (!isMobileView()) {
-                topOffset += docHeader.clientHeight
-            }
-            var top = anchor.offsetTop - topOffset
-            window.scrollTo(0, top)
         }
     }
 

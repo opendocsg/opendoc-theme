@@ -98,11 +98,11 @@
       min-width: 100%;
       max-width: 100%;
       transition: margin-left $site-nav-collapse-duration;
-      max-height: calc(100vh - #{$site-main-padding-top});
+      max-height: calc(100vh - #{$site-doc-header-height});
       overflow: auto;
 
       @include mobile-screen {
-        max-height: calc(100vh - #{$mobile-site-main-padding-top});
+        max-height: calc(100vh - #{$mobile-site-doc-header-height});
       }
 
       &.hidden {
@@ -156,11 +156,11 @@
     ul.table-of-contents {
       margin: 0;
       padding: 0;
-      max-height: calc(100vh - #{$site-main-padding-top});
+      max-height: calc(100vh - #{$site-doc-header-height});
       overflow: auto;
 
       @include mobile-screen {
-        max-height: calc(100vh - #{$mobile-site-main-padding-top});
+        max-height: calc(100vh - #{$mobile-site-doc-header-height});
       }
     }
 
@@ -428,7 +428,7 @@
     top: $doc-header-height;
     width: calc(100% - #{$back-to-docs-width} - 2px); // account for border width
     height: auto;
-    max-height: calc(100vh - #{$site-main-padding-top});
+    max-height: calc(100vh - #{$site-doc-header-height});
     overflow: auto;
     z-index: $search-results-z-index;
     box-shadow: -5px 6px 10px 3px rgba(0, 0, 0, 0.15);
@@ -437,7 +437,7 @@
     border-top: none;
 
     @include mobile-screen {
-      max-height: calc(100vh - #{$mobile-site-main-padding-top});
+      max-height: calc(100vh - #{$mobile-site-doc-header-height});
     }
 
     &.visible {
