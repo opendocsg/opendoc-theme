@@ -12,7 +12,6 @@ server_DEV: https://search-staging.opendoc.sg
 fast_build: true
 offline_search_only: false
 
-offline_search_only: false
 
 subtitle: this is a subtitle
 order:
