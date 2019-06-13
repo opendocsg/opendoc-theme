@@ -313,7 +313,7 @@ const checkPdfGenVarsPresent = () => {
         console.log('Env var PDF_GEN_API_SERVER for AWS Lambda not present: Generating PDFs locally instead.')
         return false
     }
-    console.log('Env vars detected: Generating PDFs on AWS Lambda')
+    console.log(`Env vars detected: Generating PDFs on AWS Lambda with concurrency of ${CONCURRENCY}`)
     return true
 }
 
