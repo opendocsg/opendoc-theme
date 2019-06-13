@@ -35,7 +35,7 @@ const printIgnoreFiles = ['export.html', 'index.html']
 // AWS Lambda settings to generate PDFs
 const server_PDF_GEN = '{{ site.server_PDF_GEN }}'
 const api_key_PDF_GEN = process.env.PDF_GEN_API_KEY
-const CONCURRENCY = 20  // Tuned for Netlify build server
+const CONCURRENCY = 50  // Tuned for Netlify build server
 
 const main = async () => {
     // creating exports of individual documents
@@ -62,7 +62,6 @@ const exportPdfTopLevelDocs = async (sitePath) => {
 const exportPdfDocFolders = (sitePath, docFolders) => {
     const actions = []
     for (let folder of docFolders) {
-        console.log('Initializing PDF generation...')
         // find all the folders containing html files
         const folderPath = path.join(sitePath, folder)
         let htmlFilePaths = glob.sync('*.html', { cwd: folderPath })
@@ -84,6 +83,7 @@ const exportPdfDocFolders = (sitePath, docFolders) => {
 
 // Concatenates the contents in .html files, and outputs export.pdf in the specified output folder
 const createPdf = (htmlFilePaths, outputFolderPath) => {
+    console.log('Starting createpdf for ' + outputFolderPath)
     // docprint.html is our template to build pdf up from.
     const exportHtmlFile = fs.readFileSync(__dirname + '/docprint.html')
     const exportDom = new jsdom.JSDOM(exportHtmlFile)
@@ -145,6 +145,7 @@ const createPdf = (htmlFilePaths, outputFolderPath) => {
         } catch (error) {
             console.log('Failed to append Node, skipping: ' + error)
         }
+        dom.window.close()
     })
 
     if (api_key_PDF_GEN === undefined) {
@@ -155,6 +156,7 @@ const createPdf = (htmlFilePaths, outputFolderPath) => {
                 console.log('Pdf created at: ', res.filename)
                 resolve()
             })
+            exportDom.window.close()
         })
     } else {
         // Code for this API lives at https://github.com/opendocsg/pdf-lambda
@@ -188,6 +190,7 @@ const createPdf = (htmlFilePaths, outputFolderPath) => {
                 'serializedDom': exportDom.serialize()
             }))
             request.end()
+            exportDom.window.close()
         }).then((buffer) => {
             const outputPdfPath = path.join(outputFolderPath, 'export.pdf')
             fs.writeFile(outputPdfPath, buffer, function(err) {
