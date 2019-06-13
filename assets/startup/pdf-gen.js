@@ -13,18 +13,18 @@ const sitePath = __dirname + '/../..'
 // Env vars to generate PDFs on AWS Lambda
 let pdfGenVarsPresent = true
 let pdf
-let CONCURRENCY
+let PDF_GEN_CONCURRENCY
 
 if (process.env.PDF_GEN_API_KEY === undefined || process.env.PDF_GEN_API_SERVER === undefined) {
     console.log('Env var PDF_GEN_API_KEY or PDF_GEN_API_SERVER for AWS Lambda not present: Generating PDFs locally instead.')
     pdf = require('html-pdf')
     pdfGenVarsPresent = false
-    CONCURRENCY = 1 // When generating locally make it synchronous
+    PDF_GEN_CONCURRENCY = 1 // When generating locally make it synchronous
 } else {
-    CONCURRENCY = process.env.CONCURRENCY !== undefined ?
-        parseInt(process.env.CONCURRENCY) :
+    PDF_GEN_CONCURRENCY = process.env.PDF_GEN_CONCURRENCY !== undefined ?
+        parseInt(process.env.PDF_GEN_CONCURRENCY) :
         100 // Tuned for Netlify
-    console.log(`Env vars detected: Generating PDFs on AWS Lambda with concurrency of ${CONCURRENCY}`)
+    console.log(`Env vars detected: Generating PDFs on AWS Lambda with concurrency of ${PDF_GEN_CONCURRENCY}`)
 }
 
 // These options are only applied when PDFs are built locally
@@ -102,7 +102,7 @@ const exportPdfDocFolders = (sitePath, docFolders) => {
         }
         actions.push((() => createPdf(htmlFilePaths, folderPath)))
     }
-    return pAll(actions, { concurrency: CONCURRENCY })
+    return pAll(actions, { concurrency: PDF_GEN_CONCURRENCY })
 }
 
 
