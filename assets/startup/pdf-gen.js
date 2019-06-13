@@ -23,7 +23,7 @@ if (process.env.PDF_GEN_API_KEY === undefined || process.env.PDF_GEN_API_SERVER 
 } else {
     PDF_GEN_CONCURRENCY = process.env.PDF_GEN_CONCURRENCY !== undefined ?
         parseInt(process.env.PDF_GEN_CONCURRENCY) :
-        100 // Tuned for Netlify
+        50 // Tuned for Netlify
     console.log(`Env vars detected: Generating PDFs on AWS Lambda with concurrency of ${PDF_GEN_CONCURRENCY}`)
 }
 
