@@ -325,19 +325,6 @@ const swap = (arr, i, j) => {
     arr[j] = temp
 }
 
-const checkPdfGenVarsPresent = () => {
-    if (process.env.PDF_GEN_API_KEY === undefined) {
-        console.log('Env var PDF_GEN_API_KEY for AWS Lambda not present: Generating PDFs locally instead.')
-        return false
-    }
-    if (process.env.PDF_GEN_API_SERVER === undefined) {
-        console.log('Env var PDF_GEN_API_SERVER for AWS Lambda not present: Generating PDFs locally instead.')
-        return false
-    }
-    console.log(`Env vars detected: Generating PDFs on AWS Lambda with concurrency of ${CONCURRENCY}`)
-    return true
-}
-
 // converts .md to JS Object
 const markdownToJs = (filepath) => {
     const configString = fs.readFileSync(filepath).toString().replace(/---/g, '')
