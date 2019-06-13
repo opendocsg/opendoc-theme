@@ -21,7 +21,7 @@
             hideHeader()
         }
     })
-    window.addEventListener('DOMContentLoaded', function() {
+    window.addEventListener('load', function() {
         if (isMobileView()) {
             hideHeader()
         }

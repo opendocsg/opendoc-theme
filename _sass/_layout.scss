@@ -271,61 +271,55 @@ body {
   }
 
   h1 {
-    padding-top: calc(3 * #{$mobile-site-header-height});
+    padding-top: calc(1.6 * #{$block-spacing} + #{$mobile-site-doc-header-height});
   }
   h2 {
-    padding-top: calc(2.8 * #{$block-spacing});
+    padding-top: calc(1.4 * #{$block-spacing} + #{$mobile-site-header-height});
   }
   h3 {
-    padding-top: calc(2.6 * #{$block-spacing});
+    padding-top: calc(1.2 * #{$block-spacing} + #{$mobile-site-header-height});
   }
   h4 {
-    padding-top: calc(2.4 * #{$block-spacing});
+    padding-top: calc(1 * #{$block-spacing} + #{$mobile-site-header-height});
   }
   h5 {
-    padding-top: calc(2.2 * #{$block-spacing});
+    padding-top: calc(0.8 * #{$block-spacing} + #{$mobile-site-header-height});
   }
   h6 {
-    padding-top: calc(2.2 * #{$block-spacing});
+    padding-top: calc(0.6 * #{$block-spacing} + #{$mobile-site-header-height});
   }
-  h1,
   h2,
   h3,
   h4,
   h5,
   h6 {
-    &:first-child {
-      margin-top: 0;
-      border-top: 0px;
-    }
-    margin-top: calc(-1 * #{$mobile-site-header-height});
+    margin-top: -$mobile-site-header-height;
   }
   @include desktop-screen {
     h1 {
-      padding-top: calc(7 * #{$block-spacing});
+      padding-top: calc(2 * #{$block-spacing} + #{$site-doc-header-height});
     }
     h2 {
-      padding-top: calc(6.8 * #{$block-spacing});
+      padding-top: calc(1.8 * #{$block-spacing} + #{$site-doc-header-height});
     }
     h3 {
-      padding-top: calc(6.6 * #{$block-spacing});
+      padding-top: calc(1.6 * #{$block-spacing} + #{$site-doc-header-height});
     }
     h4 {
-      padding-top: calc(6.4 * #{$block-spacing});
+      padding-top: calc(1.4 * #{$block-spacing} + #{$site-doc-header-height});
     }
     h5 {
-      padding-top: calc(6.2 * #{$block-spacing});
+      padding-top: calc(1.2 * #{$block-spacing} + #{$site-doc-header-height});
     }
     h6 {
-      padding-top: calc(6.0 * #{$block-spacing});
+      padding-top: calc(1 * #{$block-spacing} + #{$site-doc-header-height});
     }
-    h1,
     h2,
     h3,
     h4,
     h5,
     h6 {
-      margin-top: calc(-1 * #{$site-main-padding-top});
+      margin-top: calc(-1 * #{$site-doc-header-height});
     }
   }
 }
