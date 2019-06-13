@@ -33,9 +33,6 @@ const printIgnoreFolders = ['assets', 'files', 'iframes', 'images']
 // List of top-level .html files which are not to be printed
 const printIgnoreFiles = ['export.html', 'index.html']
 
-// AWS Lambda settings to generate PDFs
-const server_PDF_GEN = '{{ site.server_PDF_GEN }}'
-const api_key_PDF_GEN = process.env.PDF_GEN_API_KEY
 const CONCURRENCY = 50  // Tuned for Netlify build server
 
 // Tracking statistics
@@ -46,6 +43,9 @@ let numTotalPdfs = 0
 const TIMER = 'Time to create PDFs'
 
 const main = async () => {
+    // Env vars to generate PDFs on AWS Lambda
+    pdfGenVarsPresent = checkPdfGenVarsPresent()
+
     // creating exports of individual documents
     console.time(TIMER)
     const docFolders = getDocumentFolders(sitePath, printIgnoreFolders)
@@ -162,15 +162,15 @@ const createPdf = (htmlFilePaths, outputFolderPath) => {
         dom.window.close()
     })
 
-    if (api_key_PDF_GEN === undefined) {
-        console.log('AWS Lambda API key not present: Generating PDFs locally instead.')
+    if (!pdfGenVarsPresent) {
         return new Promise((resolve, reject) => {
             pdf.create(exportDom.serialize(), localPdfOptions).toFile(path.join(outputFolderPath, 'export.pdf'), (err, res) => {
-                if (error) {
+                if (err) {
                     numPdfsError++
-                    console.log(`Error: while creating PDFs locally: ${error}(${numPdfsError}/${numTotalPdfs})`)
-                    reject(error)
+                    console.log(`Error: while creating PDFs locally: ${err}(${numPdfsError}/${numTotalPdfs})`)
+                    return reject(err)
                 }
+                numPdfsSuccess++
                 console.log('PDF created at: ', res.filename)
                 resolve()
             })
@@ -182,12 +182,12 @@ const createPdf = (htmlFilePaths, outputFolderPath) => {
             method: 'POST',
             responseType: 'arraybuffer',
             headers: {
-                'x-api-key': api_key_PDF_GEN,
+                'x-api-key': process.env.PDF_GEN_API_KEY,
                 'content-type': 'application/json',
             },
         }
         return new Promise(function(resolve, reject) {
-            const request = https.request(server_PDF_GEN, requestOptions, function(res) {
+            const request = https.request(process.env.PDF_GEN_API_SERVER, requestOptions, function(res) {
                 if (res.statusCode < 200 || res.statusCode >= 300) {
                     return reject('Error: Request status code ' + res.statusCode)
                 }
@@ -299,6 +299,19 @@ const swap = (arr, i, j) => {
     const temp = arr[i]
     arr[i] = arr[j]
     arr[j] = temp
+}
+
+const checkPdfGenVarsPresent = () => {
+    if (process.env.PDF_GEN_API_KEY === undefined) {
+        console.log('Env var PDF_GEN_API_KEY for AWS Lambda not present: Generating PDFs locally instead.')
+        return false
+    }
+    if (process.env.PDF_GEN_API_SERVER === undefined) {
+        console.log('Env var PDF_GEN_API_SERVER for AWS Lambda not present: Generating PDFs locally instead.')
+        return false
+    }
+    console.log('Env vars detected: Generating PDFs on AWS Lambda')
+    return true
 }
 
 // converts .md to JS Object
