@@ -33,7 +33,10 @@ const printIgnoreFolders = ['assets', 'files', 'iframes', 'images']
 // List of top-level .html files which are not to be printed
 const printIgnoreFiles = ['export.html', 'index.html']
 
-const CONCURRENCY = 50  // Tuned for Netlify build server
+// Tuned for Netlify build server
+const CONCURRENCY = process.env.CONCURRENCY !== undefined ?
+    parseInt(process.env.CONCURRENCY) :
+    100
 
 // Tracking statistics
 let numPdfsStarted = 0
