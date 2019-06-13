@@ -288,11 +288,15 @@ body {
   h6 {
     padding-top: calc(0.6 * #{$block-spacing} + #{$mobile-site-header-height});
   }
+  a {
+    padding-top: $mobile-site-header-height;
+  }
   h2,
   h3,
   h4,
   h5,
-  h6 {
+  h6,
+  a {
     margin-top: -$mobile-site-header-height;
   }
   @include desktop-screen {
@@ -314,11 +318,15 @@ body {
     h6 {
       padding-top: calc(1 * #{$block-spacing} + #{$site-doc-header-height});
     }
+    a {
+      padding-top: $site-doc-header-height;
+    }
     h2,
     h3,
     h4,
     h5,
-    h6 {
+    h6,
+    a {
       margin-top: calc(-1 * #{$site-doc-header-height});
     }
   }
