@@ -46,7 +46,6 @@ let numTotalPdfs = 0
 const main = async () => {
     // creating exports of individual documents
     const docFolders = getDocumentFolders(sitePath, printIgnoreFolders)
-    numTotalPdfs = docFolders.length + 1
     await exportPdfTopLevelDocs(sitePath)
     await exportPdfDocFolders(sitePath, docFolders)
 }
@@ -57,6 +56,7 @@ const exportPdfTopLevelDocs = async (sitePath) => {
     htmlFilePaths = htmlFilePaths.map((filepath) => path.join(sitePath, filepath))
     // Remove folders without HTML files (don't want empty pdfs)
     if (htmlFilePaths.length === 0) return
+    numTotalPdfs++
     const configFilepath = path.join(sitePath, '..', '_config.yml')
     if (configFileHasValidOrdering(configFilepath)) {
         const configYml = yamlToJs(configFilepath)
@@ -76,7 +76,7 @@ const exportPdfDocFolders = (sitePath, docFolders) => {
 
         // Remove folders without HTML files (don't want empty pdfs)
         if (htmlFilePaths.length === 0) return
-
+        numTotalPdfs++
         const indexFilepath = path.join(sitePath, '..', folder, 'index.md')
         if (indexFileHasValidOrdering(indexFilepath)) {
             const configMd = markdownToJs(indexFilepath)
@@ -92,7 +92,7 @@ const exportPdfDocFolders = (sitePath, docFolders) => {
 // Concatenates the contents in .html files, and outputs export.pdf in the specified output folder
 const createPdf = (htmlFilePaths, outputFolderPath) => {
     numPdfsStarted++
-    console.log(`Starting createpdf for ${outputFolderPath}(${numPdfsStarted}/${numTotalPdfs})`)
+    console.log(`Starting createpdf for ${outputFolderPath} (${numPdfsStarted}/${numTotalPdfs})`)
     // docprint.html is our template to build pdf up from.
     const exportHtmlFile = fs.readFileSync(__dirname + '/docprint.html')
     const exportDom = new jsdom.JSDOM(exportHtmlFile)
@@ -207,7 +207,7 @@ const createPdf = (htmlFilePaths, outputFolderPath) => {
                     return console.log('Error: Writing out PDF: ' + err)
                 }
                 numPdfsCompleted++
-                console.log(`PDF created at: ${outputPdfPath}(${numPdfsCompleted}/${numTotalPdfs})`)
+                console.log(`PDF created at: ${outputPdfPath} (${numPdfsCompleted}/${numTotalPdfs})`)
             })
         }).catch((error) => {
             numPdfsError++
