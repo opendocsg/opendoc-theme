@@ -1,6 +1,7 @@
 ---
 ---
 const fs = require('fs')
+const fsp = require('fs').promises
 const pdf = require('html-pdf')
 const pAll = require('p-all')
 const https = require('https')
@@ -37,17 +38,21 @@ const server_PDF_GEN = '{{ site.server_PDF_GEN }}'
 const api_key_PDF_GEN = process.env.PDF_GEN_API_KEY
 const CONCURRENCY = 50  // Tuned for Netlify build server
 
-// PDF statistics
+// Tracking statistics
 let numPdfsStarted = 0
 let numPdfsError = 0
-let numPdfsCompleted = 0
+let numPdfsSuccess = 0
 let numTotalPdfs = 0
+const TIMER = 'Time to create PDFs'
 
 const main = async () => {
     // creating exports of individual documents
+    console.time(TIMER)
     const docFolders = getDocumentFolders(sitePath, printIgnoreFolders)
     await exportPdfTopLevelDocs(sitePath)
     await exportPdfDocFolders(sitePath, docFolders)
+    console.log(`PDFs created with success:${numPdfsSuccess} error:${numPdfsError} total:${numTotalPdfs}`)
+    console.timeEnd(TIMER)
 }
 
 const exportPdfTopLevelDocs = async (sitePath) => {
@@ -161,8 +166,12 @@ const createPdf = (htmlFilePaths, outputFolderPath) => {
         console.log('AWS Lambda API key not present: Generating PDFs locally instead.')
         return new Promise((resolve, reject) => {
             pdf.create(exportDom.serialize(), localPdfOptions).toFile(path.join(outputFolderPath, 'export.pdf'), (err, res) => {
-                if (err) return reject(err)
-                console.log('Pdf created at: ', res.filename)
+                if (error) {
+                    numPdfsError++
+                    console.log(`Error: while creating PDFs locally: ${error}(${numPdfsError}/${numTotalPdfs})`)
+                    reject(error)
+                }
+                console.log('PDF created at: ', res.filename)
                 resolve()
             })
             exportDom.window.close()
@@ -202,13 +211,13 @@ const createPdf = (htmlFilePaths, outputFolderPath) => {
             exportDom.window.close()
         }).then((buffer) => {
             const outputPdfPath = path.join(outputFolderPath, 'export.pdf')
-            fs.writeFile(outputPdfPath, buffer, function(err) {
-                if (err) {
-                    return console.log('Error: Writing out PDF: ' + err)
-                }
-                numPdfsCompleted++
-                console.log(`PDF created at: ${outputPdfPath} (${numPdfsCompleted}/${numTotalPdfs})`)
-            })
+            return fsp.writeFile(outputPdfPath, buffer)
+                .then(() => {
+                    numPdfsSuccess++
+                    console.log(`PDF created at: ${outputPdfPath} (${numPdfsSuccess}/${numTotalPdfs})`)
+                }).catch((err) => {
+                    console.log('Error: Writing out PDF: ' + err)
+                })
         }).catch((error) => {
             numPdfsError++
             console.log(`Error: Request Promise error: ${error}(${numPdfsError}/${numTotalPdfs})`)
