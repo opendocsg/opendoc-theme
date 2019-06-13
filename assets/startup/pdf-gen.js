@@ -2,7 +2,6 @@
 ---
 const fs = require('fs')
 const fsp = require('fs').promises
-const pdf = require('html-pdf')
 const pAll = require('p-all')
 const https = require('https')
 const glob = require('glob')
@@ -10,6 +9,23 @@ const path = require('path')
 const jsdom = require('jsdom')
 const jsyaml = require('js-yaml')
 const sitePath = __dirname + '/../..'
+
+// Env vars to generate PDFs on AWS Lambda
+let pdfGenVarsPresent = true
+let pdf
+let CONCURRENCY
+
+if (process.env.PDF_GEN_API_KEY === undefined || process.env.PDF_GEN_API_SERVER === undefined) {
+    console.log('Env var PDF_GEN_API_KEY or PDF_GEN_API_SERVER for AWS Lambda not present: Generating PDFs locally instead.')
+    pdf = require('html-pdf')
+    pdfGenVarsPresent = false
+    CONCURRENCY = 1 // When generating locally make it synchronous
+} else {
+    CONCURRENCY = process.env.CONCURRENCY !== undefined ?
+        parseInt(process.env.CONCURRENCY) :
+        100 // Tuned for Netlify
+    console.log(`Env vars detected: Generating PDFs on AWS Lambda with concurrency of ${CONCURRENCY}`)
+}
 
 // These options are only applied when PDFs are built locally
 const localPdfOptions = {
@@ -33,11 +49,6 @@ const printIgnoreFolders = ['assets', 'files', 'iframes', 'images']
 // List of top-level .html files which are not to be printed
 const printIgnoreFiles = ['export.html', 'index.html']
 
-// Tuned for Netlify build server
-const CONCURRENCY = process.env.CONCURRENCY !== undefined ?
-    parseInt(process.env.CONCURRENCY) :
-    100
-
 // Tracking statistics
 let numPdfsStarted = 0
 let numPdfsError = 0
@@ -46,8 +57,6 @@ let numTotalPdfs = 0
 const TIMER = 'Time to create PDFs'
 
 const main = async () => {
-    // Env vars to generate PDFs on AWS Lambda
-    pdfGenVarsPresent = checkPdfGenVarsPresent()
 
     // creating exports of individual documents
     console.time(TIMER)
@@ -99,8 +108,7 @@ const exportPdfDocFolders = (sitePath, docFolders) => {
 
 // Concatenates the contents in .html files, and outputs export.pdf in the specified output folder
 const createPdf = (htmlFilePaths, outputFolderPath) => {
-    numPdfsStarted++
-    console.log(`Starting createpdf for ${outputFolderPath} (${numPdfsStarted}/${numTotalPdfs})`)
+    logStartedPdf(outputFolderPath)
     // docprint.html is our template to build pdf up from.
     const exportHtmlFile = fs.readFileSync(__dirname + '/docprint.html')
     const exportDom = new jsdom.JSDOM(exportHtmlFile)
@@ -169,12 +177,10 @@ const createPdf = (htmlFilePaths, outputFolderPath) => {
         return new Promise((resolve, reject) => {
             pdf.create(exportDom.serialize(), localPdfOptions).toFile(path.join(outputFolderPath, 'export.pdf'), (err, res) => {
                 if (err) {
-                    numPdfsError++
-                    console.log(`Error: while creating PDFs locally: ${err}(${numPdfsError}/${numTotalPdfs})`)
-                    return reject(err)
+                    logErrorPdf('Creating PDFs locally', err)
+                    return reject()
                 }
-                numPdfsSuccess++
-                console.log('PDF created at: ', res.filename)
+                logSuccessPdf(res.filename)
                 resolve()
             })
             exportDom.window.close()
@@ -192,7 +198,8 @@ const createPdf = (htmlFilePaths, outputFolderPath) => {
         return new Promise(function(resolve, reject) {
             const request = https.request(process.env.PDF_GEN_API_SERVER, requestOptions, function(res) {
                 if (res.statusCode < 200 || res.statusCode >= 300) {
-                    return reject('Error: Request status code ' + res.statusCode)
+                    logErrorPdf('Request status code', res.statusCode)
+                    reject()
                 }
                 const chunks = []
                 res.on('data', function(d) {
@@ -204,7 +211,8 @@ const createPdf = (htmlFilePaths, outputFolderPath) => {
                 })
             })
             request.on('error', (err) => {
-                return reject('Error: Request encountered error: ' + err)
+                logErrorPdf('Request encountered error', err)
+                reject()
             })
             // POST request body
             request.write(JSON.stringify({
@@ -216,16 +224,29 @@ const createPdf = (htmlFilePaths, outputFolderPath) => {
             const outputPdfPath = path.join(outputFolderPath, 'export.pdf')
             return fsp.writeFile(outputPdfPath, buffer)
                 .then(() => {
-                    numPdfsSuccess++
-                    console.log(`PDF created at: ${outputPdfPath} (${numPdfsSuccess}/${numTotalPdfs})`)
+                    logSuccessPdf(outputPdfPath)
                 }).catch((err) => {
-                    console.log('Error: Writing out PDF: ' + err)
+                    logErrorPdf('Writing out file', err)
                 })
         }).catch((error) => {
-            numPdfsError++
-            console.log(`Error: Request Promise error: ${error}(${numPdfsError}/${numTotalPdfs})`)
+            logErrorPdf('Request promise', error)
         })
     }
+}
+
+const logStartedPdf = (outputFolderPath) => {
+    numPdfsStarted++
+    console.log(`createpdf started for:${outputFolderPath} (${numPdfsStarted}/${numTotalPdfs})`)
+}
+
+const logErrorPdf = (origin, error) => {
+    numPdfsError++
+    console.log(`createpdf error for: ${origin}: ${error}(${numPdfsError}/${numTotalPdfs})`)
+}
+
+const logSuccessPdf = (outputPdfPath) => {
+    numPdfsSuccess++
+    console.log(`createpdf success for:${outputPdfPath} (${numPdfsSuccess}/${numTotalPdfs})`)
 }
 
 // Returns a list of the valid document (i.e. folder) paths
