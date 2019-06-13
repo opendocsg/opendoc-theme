@@ -37,9 +37,16 @@ const server_PDF_GEN = '{{ site.server_PDF_GEN }}'
 const api_key_PDF_GEN = process.env.PDF_GEN_API_KEY
 const CONCURRENCY = 50  // Tuned for Netlify build server
 
+// PDF statistics
+let numPdfsStarted = 0
+let numPdfsError = 0
+let numPdfsCompleted = 0
+let numTotalPdfs = 0
+
 const main = async () => {
     // creating exports of individual documents
     const docFolders = getDocumentFolders(sitePath, printIgnoreFolders)
+    numTotalPdfs = docFolders.length + 1
     await exportPdfTopLevelDocs(sitePath)
     await exportPdfDocFolders(sitePath, docFolders)
 }
@@ -81,9 +88,11 @@ const exportPdfDocFolders = (sitePath, docFolders) => {
     return pAll(actions, { concurrency: CONCURRENCY })
 }
 
+
 // Concatenates the contents in .html files, and outputs export.pdf in the specified output folder
 const createPdf = (htmlFilePaths, outputFolderPath) => {
-    console.log('Starting createpdf for ' + outputFolderPath)
+    numPdfsStarted++
+    console.log(`Starting createpdf for ${outputFolderPath}(${numPdfsStarted}/${numTotalPdfs})`)
     // docprint.html is our template to build pdf up from.
     const exportHtmlFile = fs.readFileSync(__dirname + '/docprint.html')
     const exportDom = new jsdom.JSDOM(exportHtmlFile)
@@ -197,10 +206,12 @@ const createPdf = (htmlFilePaths, outputFolderPath) => {
                 if (err) {
                     return console.log('Error: Writing out PDF: ' + err)
                 }
-                console.log('PDF created at: ', outputPdfPath)
+                numPdfsCompleted++
+                console.log(`PDF created at: ${outputPdfPath}(${numPdfsCompleted}/${numTotalPdfs})`)
             })
         }).catch((error) => {
-            console.log('Error: Request Promise error: ' + error)
+            numPdfsError++
+            console.log(`Error: Request Promise error: ${error}(${numPdfsError}/${numTotalPdfs})`)
         })
     }
 }
