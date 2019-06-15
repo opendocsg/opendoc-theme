@@ -12,7 +12,7 @@ Our system takes in Markdown files (with file extension .md) and converts them i
 Headers come in different types, from the largest h1 size to the moderate h4 size. Create headers by adding the # symbol at the front of your text.
 ```
 # This is the largest h1 header!
-## This is the very large h2 header!
+## This is the very large h2 header!!!
 ### This is the large h3 header!
 #### This is the moderate h4 header!
 ```

@@ -158,6 +158,7 @@
                     indexDiv.classList.remove('index')
                 }
             }
+            document.querySelector(window.location.hash).scrollIntoView(true)
 
             // Hide menu if sub link clicked or clicking on search results        
             if (window.location.hash.replace('#', '').length > 0 || navigation.classList.contains('hidden')) {
