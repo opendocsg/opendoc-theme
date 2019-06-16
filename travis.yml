@@ -1,0 +1,73 @@
+# default environment
+# has rvm 2.4.1 , bundle 2.0 and phantomjs https://docs.travis-ci.com/user/reference/trusty/#headless-browser-testing-tools
+dist: trusty
+
+branches:
+  only:
+      - master
+      - staging
+
+jobs:
+    include:
+        - stage: Build and deploy
+            language: ruby
+            rvm: 2.4.1
+            cache: bundler
+            install: bundle install
+            # verbose flag to prevent timeout of 10 minutes
+            script: bundle exec jekyll build --verbose
+            before_deploy: pip install --user awscli
+            deploy:
+                - provider: script
+                  script: ~/.local/bin/aws s3 sync _site s3://MASTER_BUCKET_NAME --region=ap-southeast-1 --delete      
+                  skip_cleanup: true
+                  on:
+                    branch: master
+                - provider: script
+                  script: ~/.local/bin/aws s3 sync _site s3://STAGING_BUCKET_NAME --region=ap-southeast-1 --delete      
+                  skip_cleanup: true
+                  on:
+                    branch: staging
+
+       - stage: Additional build and deploy
+            language: node_js
+            node_js: node
+            cache: npm
+            before_install: 
+                - mkdir _site
+                - pip install --user awscli
+            install:
+                - script: ~/.local/bin/aws s3 sync s3://MASTER_BUCKET_NAME --region=ap-southeast-1 _site      
+                  on:
+                    branch: master
+                - script: ~/.local/bin/aws s3 _site s3://STAGING_BUCKET_NAME --region=ap-southeast-1 _site       
+                  on:
+                    branch: staging # probably WRONG
+            before_script:
+                - chmod +x ./_site/assets/startup/build.sh
+            script: ./_site/assets/startup/build.sh
+            deploy:
+                - provider: script
+                  script: ~/.local/bin/aws s3 sync _site s3://MASTER_BUCKET_NAME --region=ap-southeast-1 --delete      
+                  skip_cleanup: true
+                  on:
+                    branch: master
+                - provider: script
+                  script: ~/.local/bin/aws s3 sync _site s3://STAGING_BUCKET_NAME --region=ap-southeast-1 --delete      
+                  skip_cleanup: true
+                  on:
+                    branch: staging
+
+
+            
+
+
+
+
+
+
+
+
+
+
+
