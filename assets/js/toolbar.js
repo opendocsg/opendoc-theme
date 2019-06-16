@@ -20,7 +20,6 @@
         document.body.classList.remove('menu-toggled')
     }
     menuToggle.addEventListener('change', function () {
-        trackButton('sidebar', menuToggle.checked, isMobileView())
         if (menuToggle.checked) {
             showMenu()
         } else {
@@ -38,13 +37,6 @@
         if (isMobileView()) {
             hideMenu()
         }
-    })
-
-    // Feedback button
-    // --------------------------
-    var contactUsButton = document.getElementById('contact-us')
-    contactUsButton.addEventListener('click', function () {
-        trackButton('feedback', null, isMobileView())
     })
 
     // Edit button
@@ -73,7 +65,6 @@
 
     printButtons.forEach(function (btn) {
         btn.addEventListener('click', function () {
-            trackButton('pdf', null, isMobileView())
             window.open('./export.pdf', '_blank')
         })
     })

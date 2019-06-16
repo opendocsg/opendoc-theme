@@ -272,7 +272,7 @@
         searchContent.innerHTML = result.content
         searchResult.appendChild(searchContent)
         element.onmouseup = function() {
-            return trackSearch(searchBoxElement.value.trim(), i, false)
+            // To log which result user click, add track code here
         }
         element.appendChild(searchResult)
         return element
