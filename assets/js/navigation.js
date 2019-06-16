@@ -158,6 +158,7 @@
                     indexDiv.classList.remove('index')
                 }
             }
+            scrollAnchorIntoView()
 
             // Hide menu if sub link clicked or clicking on search results        
             if (window.location.hash.replace('#', '').length > 0 || navigation.classList.contains('hidden')) {
@@ -165,6 +166,17 @@
             }
             highlightBody()
         })
+    }
+
+    function scrollAnchorIntoView() {
+        if (window.location.hash) {
+            var anchorEl = document.querySelector(window.location.hash)
+            if (anchorEl) {
+                // When page is rendered by assigning to innerHTML, it does not scroll to anchor.
+                // scrollIntoView(true) aligns anchor to top of page
+                anchorEl.scrollIntoView(true)
+            }
+        }
     }
 
     // Search filter disabled, not in use
