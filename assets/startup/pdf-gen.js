@@ -1,11 +1,34 @@
+---
+---
 const fs = require('fs')
-const pdf = require('html-pdf')
+const fsp = require('fs').promises
+const pAll = require('p-all')
+const https = require('https')
 const glob = require('glob')
 const path = require('path')
 const jsdom = require('jsdom')
 const jsyaml = require('js-yaml')
 const sitePath = __dirname + '/../..'
-const options = {
+
+// Env vars to generate PDFs on AWS Lambda
+let pdfGenVarsPresent = true
+let pdf
+let PDF_GEN_CONCURRENCY
+
+if (process.env.PDF_GEN_API_KEY === undefined || process.env.PDF_GEN_API_SERVER === undefined) {
+    console.log('Env var PDF_GEN_API_KEY or PDF_GEN_API_SERVER for AWS Lambda not present: Generating PDFs locally instead.')
+    pdf = require('html-pdf')
+    pdfGenVarsPresent = false
+    PDF_GEN_CONCURRENCY = 1 // When generating locally make it synchronous
+} else {
+    PDF_GEN_CONCURRENCY = process.env.PDF_GEN_CONCURRENCY !== undefined ?
+        parseInt(process.env.PDF_GEN_CONCURRENCY) :
+        50 // Tuned for Netlify
+    console.log(`Env vars detected: Generating PDFs on AWS Lambda with concurrency of ${PDF_GEN_CONCURRENCY}`)
+}
+
+// These options are only applied when PDFs are built locally
+const localPdfOptions = {
     height: '594mm',        // allowed units: mm, cm, in, px
     width: '420mm',
     base: 'file://' + sitePath + '/',
@@ -20,17 +43,28 @@ const options = {
         height: '80px',
     },
 }
+
 // List of top-level folder names which may contain html but are not to be printed
 const printIgnoreFolders = ['assets', 'files', 'iframes', 'images']
 // List of top-level .html files which are not to be printed
 const printIgnoreFiles = ['export.html', 'index.html']
 
+// Tracking statistics
+let numPdfsStarted = 0
+let numPdfsError = 0
+let numPdfsSuccess = 0
+let numTotalPdfs = 0
+const TIMER = 'Time to create PDFs'
+
 const main = async () => {
-    console.log('Base options: ', options.base)
+
     // creating exports of individual documents
+    console.time(TIMER)
     const docFolders = getDocumentFolders(sitePath, printIgnoreFolders)
-    await exportPdfDocFolders(sitePath, docFolders)
     await exportPdfTopLevelDocs(sitePath)
+    await exportPdfDocFolders(sitePath, docFolders)
+    console.log(`PDFs created with success:${numPdfsSuccess} error:${numPdfsError} total:${numTotalPdfs}`)
+    console.timeEnd(TIMER)
 }
 
 const exportPdfTopLevelDocs = async (sitePath) => {
@@ -39,6 +73,7 @@ const exportPdfTopLevelDocs = async (sitePath) => {
     htmlFilePaths = htmlFilePaths.map((filepath) => path.join(sitePath, filepath))
     // Remove folders without HTML files (don't want empty pdfs)
     if (htmlFilePaths.length === 0) return
+    numTotalPdfs++
     const configFilepath = path.join(sitePath, '..', '_config.yml')
     if (configFileHasValidOrdering(configFilepath)) {
         const configYml = yamlToJs(configFilepath)
@@ -48,7 +83,8 @@ const exportPdfTopLevelDocs = async (sitePath) => {
     await createPdf(htmlFilePaths, sitePath)
 }
 
-const exportPdfDocFolders = async (sitePath, docFolders) => {
+const exportPdfDocFolders = (sitePath, docFolders) => {
+    const actions = []
     for (let folder of docFolders) {
         // find all the folders containing html files
         const folderPath = path.join(sitePath, folder)
@@ -57,19 +93,22 @@ const exportPdfDocFolders = async (sitePath, docFolders) => {
 
         // Remove folders without HTML files (don't want empty pdfs)
         if (htmlFilePaths.length === 0) return
-
+        numTotalPdfs++
         const indexFilepath = path.join(sitePath, '..', folder, 'index.md')
         if (indexFileHasValidOrdering(indexFilepath)) {
             const configMd = markdownToJs(indexFilepath)
             const order = configMd.meta.order // names of html files without the .html
             htmlFilePaths = reorderHtmlFilePaths(htmlFilePaths, order)
         }
-        await createPdf(htmlFilePaths, folderPath)
+        actions.push((() => createPdf(htmlFilePaths, folderPath)))
     }
+    return pAll(actions, { concurrency: PDF_GEN_CONCURRENCY })
 }
+
 
 // Concatenates the contents in .html files, and outputs export.pdf in the specified output folder
 const createPdf = (htmlFilePaths, outputFolderPath) => {
+    logStartedPdf(outputFolderPath)
     // docprint.html is our template to build pdf up from.
     const exportHtmlFile = fs.readFileSync(__dirname + '/docprint.html')
     const exportDom = new jsdom.JSDOM(exportHtmlFile)
@@ -80,14 +119,17 @@ const createPdf = (htmlFilePaths, outputFolderPath) => {
 
     htmlFilePaths.forEach(function (filePath) {
         const file = fs.readFileSync(filePath)
-        const dom = new jsdom.JSDOM(file)
+        const dom = new jsdom.JSDOM(file, {
+            resources: 'usable' // to get JSDOM to load stylesheets
+        })
 
         // html-pdf can't deal with these
         removeTagsFromDom(dom, 'script')
         removeTagsFromDom(dom, 'iframe')
 
         // If a <img src=...> link src begins with '/', it is a relative link
-        // and needs to be prepended with '.' to make the images show in the pdf
+        // and needs to be prepended with '.' to show up in the pdf. Does not
+        // work for Lambda functions as the images are not available server side.
         const imgsrcs = dom.window.document.getElementsByTagName('img')
         for (let i = 0; i < imgsrcs.length; i++) {
             const imgsrc = imgsrcs[i]
@@ -128,15 +170,83 @@ const createPdf = (htmlFilePaths, outputFolderPath) => {
         } catch (error) {
             console.log('Failed to append Node, skipping: ' + error)
         }
+        dom.window.close()
     })
 
-    return new Promise((resolve, reject) => {
-        pdf.create(exportDom.serialize(), options).toFile(path.join(outputFolderPath, 'export.pdf'), (err, res) => {
-            if (err) return reject(err)
-            console.log('Pdf created at: ', res.filename)
-            resolve()
+    if (!pdfGenVarsPresent) {
+        return new Promise((resolve, reject) => {
+            pdf.create(exportDom.serialize(), localPdfOptions).toFile(path.join(outputFolderPath, 'export.pdf'), (err, res) => {
+                if (err) {
+                    logErrorPdf('Creating PDFs locally', err)
+                    return reject()
+                }
+                logSuccessPdf(res.filename)
+                resolve()
+            })
+            exportDom.window.close()
         })
-    }) 
+    } else {
+        // Code for this API lives at https://github.com/opendocsg/pdf-lambda
+        const requestOptions = {
+            method: 'POST',
+            responseType: 'arraybuffer',
+            headers: {
+                'x-api-key': process.env.PDF_GEN_API_KEY,
+                'content-type': 'application/json',
+            },
+        }
+        return new Promise(function(resolve, reject) {
+            const request = https.request(process.env.PDF_GEN_API_SERVER, requestOptions, function(res) {
+                if (res.statusCode < 200 || res.statusCode >= 300) {
+                    logErrorPdf('Request status code', res.statusCode)
+                    reject()
+                }
+                const chunks = []
+                res.on('data', function(d) {
+                    chunks.push(d)
+                })
+                res.on('end', function() {
+                    const buf = Buffer.concat(chunks)
+                    resolve(buf)
+                })
+            })
+            request.on('error', (err) => {
+                logErrorPdf('Request encountered error', err)
+                reject()
+            })
+            // POST request body
+            request.write(JSON.stringify({
+                'serializedDom': exportDom.serialize()
+            }))
+            request.end()
+            exportDom.window.close()
+        }).then((buffer) => {
+            const outputPdfPath = path.join(outputFolderPath, 'export.pdf')
+            return fsp.writeFile(outputPdfPath, buffer)
+                .then(() => {
+                    logSuccessPdf(outputPdfPath)
+                }).catch((err) => {
+                    logErrorPdf('Writing out file', err)
+                })
+        }).catch((error) => {
+            logErrorPdf('Request promise', error)
+        })
+    }
+}
+
+const logStartedPdf = (outputFolderPath) => {
+    numPdfsStarted++
+    console.log(`createpdf started for:${outputFolderPath} (${numPdfsStarted}/${numTotalPdfs})`)
+}
+
+const logErrorPdf = (origin, error) => {
+    numPdfsError++
+    console.log(`createpdf error for: ${origin}: ${error}(${numPdfsError}/${numTotalPdfs})`)
+}
+
+const logSuccessPdf = (outputPdfPath) => {
+    numPdfsSuccess++
+    console.log(`createpdf success for:${outputPdfPath} (${numPdfsSuccess}/${numTotalPdfs})`)
 }
 
 // Returns a list of the valid document (i.e. folder) paths

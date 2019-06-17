@@ -1,36 +1,35 @@
 // Variables
 // ============================================================================
 // Fonts
-$base-font-family:        'Noto Sans', sans-serif;
-$header-font-family:      'Noto Serif', serif;
-$base-font-size:          18px;
-$mobile-font-size:        15px;
-$nav-font-size:           15px;
-$base-font-weight:        400;
-$mono-font-family:        'Fira Mono', monospace;
+$base-font-family: "Noto Sans", sans-serif;
+$header-font-family: "Noto Serif", serif;
+$base-font-size: 17px;
+$mobile-font-size: 15px;
+$nav-font-size: 15px;
+$base-font-weight: 400;
+$mono-font-family: "Fira Mono", monospace;
 // Colors
-$primary-text-color:      #444;
-$secondary-text-color:    #999;
-$header-text-color:       #454f5b;
-$selected-text-color:     #000;
-$divider-color:           #d8d8d8;
-$base-background-color:   #FFF;
-$well-background-color:   #eeeeee;
+$primary-text-color: #444;
+$secondary-text-color: #999;
+$header-text-color: #454f5b;
+$selected-text-color: #000;
+$divider-color: #d8d8d8;
+$base-background-color: #fff;
+$well-background-color: #eeeeee;
 $search-box-background-color: #f3f3f3;
-$tag-background-color:    #e0e2e5;
+$tag-background-color: #e0e2e5;
 
 // Spacing
-$base-line-height:              1.75;
-$base-horizontal-padding:       1.0em;
-$base-vertical-padding:         0.5em;
-$block-spacing:                 1.5rem;
-$item-spacing:                  1.0rem;
-$inline-spacing:                0.2em;
-$base-border-radius:            0.2rem;
+$base-line-height: 2;
+$base-horizontal-padding: 1em;
+$base-vertical-padding: 0.5em;
+$block-spacing: 1.5rem;
+$item-spacing: 1rem;
+$inline-spacing: 0.2em;
+$base-border-radius: 0.2rem;
 // Breakpoints, if this breakpoint is changed, be sure to change those in the .js files too
-$desktop-screen-breakpoint:     992px;
-$large-screen-breakpoint:       1400px;
-
+$desktop-screen-breakpoint: 992px;
+$large-screen-breakpoint: 1400px;
 
 // Variables
 // ============================================================================
@@ -58,11 +57,23 @@ $back-to-docs-width: $doc-header-height;
 $max-site-nav-width: 420px;
 $site-nav-shadow-inset: inset -7px 0 13px -5px rgba(0, 0, 0, 0.15);
 $site-nav-shadow-outset: 7px 0 13px 5px rgba(0, 0, 0, 0.15);
-$site-main-padding-top: $site-header-height + $doc-header-height;
-$mobile-site-main-padding-top: $mobile-site-header-height + $doc-header-height;
+$site-doc-header-height: $site-header-height + $doc-header-height;
+$mobile-site-doc-header-height: $mobile-site-header-height + $doc-header-height;
 
 $toolbar-button-height: 50px;
 $toolbar-container-height: calc(#{$toolbar-button-height} * 3);
 
 $fab-button-size: 50px;
 $fab-transtition-duration: 0.2s;
+
+// z-index
+// ============================================================================
+$site-main-z-index: 0;
+$desktop-navigation-z-index: 1;
+$doc-header-z-index: 2;
+$fab-z-index: 3;
+$fab-trigger-z-index: 3;
+$mobile-navigation-z-index: 5;
+$site-header-z-index: 10;
+$search-results-z-index: 12;
+$toolbar-z-index: 12;

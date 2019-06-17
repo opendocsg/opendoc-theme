@@ -120,11 +120,6 @@
             event.preventDefault()
             event.stopPropagation()
             if (anchor.hash.length > 0) {
-                if ((window.location.pathname + window.location.hash).endsWith(anchor.hash)) {
-                    // If clicked on the same anchor, just scroll to view
-                    scrollToView()
-                    return
-                }
                 window.location = anchor.hash
             } else {
                 window.location = '#'
@@ -163,8 +158,7 @@
                     indexDiv.classList.remove('index')
                 }
             }
-            // Make sure it is scrolled to the anchor
-            scrollToView()
+            scrollAnchorIntoView()
 
             // Hide menu if sub link clicked or clicking on search results        
             if (window.location.hash.replace('#', '').length > 0 || navigation.classList.contains('hidden')) {
@@ -174,28 +168,23 @@
         })
     }
 
+    function scrollAnchorIntoView() {
+        if (window.location.hash) {
+            var anchorEl = document.querySelector(window.location.hash)
+            if (anchorEl) {
+                // When page is rendered by assigning to innerHTML, it does not scroll to anchor.
+                // scrollIntoView(true) aligns anchor to top of page
+                anchorEl.scrollIntoView(true)
+            }
+        }
+    }
+
     // Search filter disabled, not in use
     function setSearchFilter(page) {
         if (tod) {
             searchFilter.innerText = page.documentInfo[0] // document title
             searchFilter.classList.remove('hidden')
             searchBoxElement.placeholder = 'Search within doc'
-        }
-    }
-
-    function scrollToView() {
-        var id = window.location.hash.replace('#', '')
-        // minus 1 to hide the border on top
-        if (id.length > 0) {
-            var anchor = document.getElementById(id)
-        }
-        if (anchor) {
-            var topOffset = siteHeader.offsetHeight
-            if (!isMobileView()) {
-                topOffset += docHeader.clientHeight
-            }
-            var top = anchor.offsetTop - topOffset
-            window.scrollTo(0, top)
         }
     }
 

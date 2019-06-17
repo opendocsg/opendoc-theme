@@ -4,7 +4,7 @@
   // Position
   position: fixed;
   top: $mobile-site-header-height;
-  z-index: 5;
+  z-index: $mobile-navigation-z-index;
 
   // Sidebar content could be too long for the page
   // The scrolling should be limited to the chapter selection area
@@ -28,7 +28,7 @@
     box-shadow: $site-nav-shadow-outset;
   }
   @include desktop-screen {
-    z-index: 1;
+    z-index: $desktop-navigation-z-index;
     width: $site-nav-width;
     max-width: $max-site-nav-width;
     top: $site-header-height;
@@ -52,6 +52,7 @@
     min-height: calc(100vh - #{$doc-header-height});
     width: $back-to-docs-width;
     border-right: $divider-color 1px solid;
+    white-space: nowrap;
     cursor: pointer;
 
     p {
@@ -97,11 +98,11 @@
       min-width: 100%;
       max-width: 100%;
       transition: margin-left $site-nav-collapse-duration;
-      max-height: calc(100vh - #{$site-main-padding-top});
+      max-height: calc(100vh - #{$site-doc-header-height});
       overflow: auto;
 
       @include mobile-screen {
-        max-height: calc(100vh - #{$mobile-site-main-padding-top});
+        max-height: calc(100vh - #{$mobile-site-doc-header-height});
       }
 
       &.hidden {
@@ -155,11 +156,11 @@
     ul.table-of-contents {
       margin: 0;
       padding: 0;
-      max-height: calc(100vh - #{$site-main-padding-top});
+      max-height: calc(100vh - #{$site-doc-header-height});
       overflow: auto;
 
       @include mobile-screen {
-        max-height: calc(100vh - #{$mobile-site-main-padding-top});
+        max-height: calc(100vh - #{$mobile-site-doc-header-height});
       }
     }
 
@@ -236,6 +237,7 @@
 
       &:last-child {
         border-bottom: 1px solid $well-background-color;
+        margin-bottom: 0;
 
         .nav-link {
           border-bottom: none;
@@ -245,6 +247,7 @@
 
     &:last-child {
       border-bottom: none;
+      margin-bottom: $large-spacing;
     }
 
     // Expanded main links
@@ -406,8 +409,7 @@
 
   .nav-main {
     height: calc(100% - #{$doc-header-height});
-    overflow-y: auto;
-    overflow-x: hidden;
+    overflow: hidden; // preven double scroll bar
     background-color: $base-background-color;
     overscroll-behavior: contain;
 
@@ -426,16 +428,16 @@
     top: $doc-header-height;
     width: calc(100% - #{$back-to-docs-width} - 2px); // account for border width
     height: auto;
-    max-height: calc(100vh - #{$site-main-padding-top});
+    max-height: calc(100vh - #{$site-doc-header-height});
     overflow: auto;
-    z-index: 12;
+    z-index: $search-results-z-index;
     box-shadow: -5px 6px 10px 3px rgba(0, 0, 0, 0.15);
     display: none;
     border: 1px solid $divider-color;
     border-top: none;
 
     @include mobile-screen {
-      max-height: calc(100vh - #{$mobile-site-main-padding-top});
+      max-height: calc(100vh - #{$mobile-site-doc-header-height});
     }
 
     &.visible {

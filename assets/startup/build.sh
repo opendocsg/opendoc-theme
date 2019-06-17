@@ -1,8 +1,12 @@
 ---
 ---
 #!/bin/bash
-echo 'Generating PDFs'
+
+echo 'Started script to generate PDFs'
 echo 'Installing node dependencies'
-npm i html-pdf glob jsdom js-yaml
+npm i glob jsdom js-yaml p-all
+if [[ (-z "${PDF_GEN_API_SERVER}") || (-z "${PDF_GEN_API_KEY}") ]]; then
+  npm i html-pdf
+fi
 node _site/assets/startup/pdf-gen.js
-echo 'Generating PDFs Complete'
+echo 'End script'

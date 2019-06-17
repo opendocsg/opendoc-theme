@@ -7,12 +7,18 @@ body {
   mark {
     font-weight: bold;
   }
+  @include mobile-screen {
+    &.menu-toggled {
+      // Prevents scrolling main body when scrolling nav
+      overflow: hidden;
+    }
+  }
 }
 
 .site-header {
   // site-header should be beneath mobile-menu
   box-sizing: border-box;
-  z-index: 10;
+  z-index: $site-header-z-index;
   height: $site-header-height;
   background: white;
   position: fixed;
@@ -123,7 +129,7 @@ body {
 // -----------
 .doc-header {
   position: fixed;
-  z-index: 2;
+  z-index: $doc-header-z-index;
   top: $mobile-site-header-height;
   left: 0;
   right: 0;
@@ -189,7 +195,6 @@ body {
     margin-right: $large-spacing;
     width: 100%;
 
-
     #document-title {
       font-size: 20px;
       color: $primary-brand-color;
@@ -218,11 +223,11 @@ body {
 //----------
 .site-main {
   position: relative;
-  z-index: 0;
+  z-index: $site-main-z-index;
   left: 0;
   right: 0;
   top: 0;
-  padding-top: $mobile-site-main-padding-top;
+  padding-top: 0;
   padding-left: $large-spacing;
   padding-right: $large-spacing;
   padding-bottom: $spacing;
@@ -240,7 +245,7 @@ body {
   // Expand to fill when the menu is closed
   @include desktop-screen {
     left: $site-nav-width;
-    padding-top: $site-main-padding-top;
+    padding-top: 0;
     padding-left: $desktop-spacing;
     padding-right: $desktop-spacing + $body-sidebar-right-padding;
     padding-bottom: $large-spacing;
@@ -266,65 +271,63 @@ body {
   }
 
   h1 {
-    padding-top: calc(1.6 * #{$block-spacing});
-    border-top: 1px solid $divider-color;
+    padding-top: calc(1.6 * #{$block-spacing} + #{$mobile-site-doc-header-height});
   }
   h2 {
-    padding-top: calc(1.4 * #{$block-spacing});
-    border-top: 1px solid $divider-color;
+    padding-top: calc(1.4 * #{$block-spacing} + #{$mobile-site-header-height});
   }
   h3 {
-    padding-top: calc(1.2 * #{$block-spacing});
-    border-top: 1px solid $divider-color;
+    padding-top: calc(1.2 * #{$block-spacing} + #{$mobile-site-header-height});
   }
   h4 {
-    padding-top: calc(1 * #{$block-spacing});
-    border-top: 1px solid $divider-color;
+    padding-top: calc(1 * #{$block-spacing} + #{$mobile-site-header-height});
   }
   h5 {
-    padding-top: calc(0.8 * #{$block-spacing});
-    border-top: 1px solid $divider-color;
+    padding-top: calc(0.8 * #{$block-spacing} + #{$mobile-site-header-height});
   }
   h6 {
-    padding-top: calc(0.6 * #{$block-spacing});
-    border-top: 1px solid $divider-color;
+    padding-top: calc(0.6 * #{$block-spacing} + #{$mobile-site-header-height});
   }
-  h1,
+  a {
+    padding-top: $mobile-site-header-height;
+  }
   h2,
   h3,
   h4,
   h5,
-  h6 {
-    &:first-child {
-      margin-top: 0;
-      border-top: 0px;
-    }
+  h6,
+  a {
+    margin-top: -$mobile-site-header-height;
   }
   @include desktop-screen {
-    // Hack to get browser hash scrolling to work nicely with a fixed header
     h1 {
-      padding-top: calc(2 * #{$block-spacing});
-      border-top: 1px solid $divider-color;
+      padding-top: calc(2 * #{$block-spacing} + #{$site-doc-header-height});
     }
     h2 {
-      padding-top: calc(1.8 * #{$block-spacing});
-      border-top: 1px solid $divider-color;
+      padding-top: calc(1.8 * #{$block-spacing} + #{$site-doc-header-height});
     }
     h3 {
-      padding-top: calc(1.6 * #{$block-spacing});
-      border-top: 1px solid $divider-color;
+      padding-top: calc(1.6 * #{$block-spacing} + #{$site-doc-header-height});
     }
     h4 {
-      padding-top: calc(1.4 * #{$block-spacing});
-      border-top: 1px solid $divider-color;
+      padding-top: calc(1.4 * #{$block-spacing} + #{$site-doc-header-height});
     }
     h5 {
-      padding-top: calc(1.2 * #{$block-spacing});
-      border-top: 1px solid $divider-color;
+      padding-top: calc(1.2 * #{$block-spacing} + #{$site-doc-header-height});
     }
     h6 {
-      padding-top: calc(1 * #{$block-spacing});
-      border-top: 1px solid $divider-color;
+      padding-top: calc(1 * #{$block-spacing} + #{$site-doc-header-height});
+    }
+    a {
+      padding-top: $site-doc-header-height;
+    }
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    a {
+      margin-top: calc(-1 * #{$site-doc-header-height});
     }
   }
 }
