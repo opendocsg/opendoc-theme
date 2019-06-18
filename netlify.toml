@@ -34,7 +34,7 @@
     X-Frame-Options = "sameorigin" 
     # XSS filter, prevent rendering if detected
     X-XSS-Protection = "1; mode=block"
-    Content-Security-Policy = "default-src 'self'; img-src *; frame-src *; font-src *; media-src *; style-src * 'unsafe-inline'; connect-src 'self' https://*.opendoc.sg; script-src 'self'  'sha256-cZeHu5WczV7gma7unmZ5l6WP54Plm4jzl1MUr4q2lrY='"
+    Content-Security-Policy = "default-src 'self'; img-src *; frame-src *; font-src *; media-src *; style-src * 'unsafe-inline'; connect-src 'self' https://*.cloudfront.net https://fonts.gstatic.com https://fonts.googleapis.com ; script-src 'self'  'sha256-cZeHu5WczV7gma7unmZ5l6WP54Plm4jzl1MUr4q2lrY='"
     # Dont send referrer headers
     Referrer-Policy = "no-referrer"
     # Blocks request if request type does not match

@@ -9,6 +9,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta property="og:image" content="{{ '/assets/images/logo-full.png' | relative_url }}">
 
+  <!-- ServiceWorker must be registered before network requests are fired in order to cache them -->
+  <script src="{{ '/assets/js/register-sw.js' | relative_url }}"></script>
   <link rel="icon" href="{{ '/assets/images/favicon.ico' | relative_url }}">
   <link href="https://fonts.googleapis.com/css?family=Fira+Sans:400,600" rel="stylesheet" type="text/css">
   <link href="https://fonts.googleapis.com/css?family=Noto+Serif:400,700" rel="stylesheet" type="text/css">
@@ -129,7 +131,6 @@
   <script src="{{ '/assets/vendor/headroom.min.js' | relative_url }}" charset="utf-8"></script>
   <script src="{{ '/assets/vendor/mark.min.js' | relative_url }}" charset="utf-8"></script>
   <script src="{{ '/assets/vendor/web-share-shim.bundle.min.js' | relative_url }}"></script>
-  <script src="{{ '/assets/js/register-sw.js' | relative_url }}"></script>
   <script src="{{ '/assets/js/toolbar.js' | relative_url }}"></script>
   <script src="{{ '/assets/js/page-index.js' | relative_url }}"></script>
   <script src="{{ '/assets/js/pre-loader.js' | relative_url }}"></script>
