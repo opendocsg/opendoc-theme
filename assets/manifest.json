@@ -1,7 +1,8 @@
 ---
 ---
 {
-    "name": "{{ site.title }}",
+    "name": "Opendoc {{ site.title }}",
+    "short_name": "{{ site.title }}",
     "icons": [
         {
             "src": "/assets/images/react-icon-192.png",

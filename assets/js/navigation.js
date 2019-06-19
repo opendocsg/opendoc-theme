@@ -43,8 +43,8 @@
          -----------------------------------------------------
          */
         // Load pages in background based on directory order
-        // var directoryTitle = directory.innerText.trim()
-        // loadDocumentContent(directoryTitle, 0)
+        //var directoryTitle = directory.innerText.trim()
+        //loadDocumentContent(directoryTitle, 0)
     })
 
     // Returns whether corresponding toc is found and displays it
