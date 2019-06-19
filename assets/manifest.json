@@ -1,0 +1,22 @@
+---
+---
+{
+    "name": "{{ site.title }}",
+    "icons": [
+        {
+            "src": "/assets/images/react-icon-192.png",
+            "type": "image/png",
+            "sizes": "192x192"
+        },
+        {
+            "src": "/assets/images/react-icon-512.png",
+            "type": "image/png",
+            "sizes": "512x512"
+        }
+    ],
+    "start_url": "/",
+    "background_color": "{{ site.styling_options.primary_brand_color }}",
+    "display": "standalone",
+    "scope": "/",
+    "theme_color": "{{ site.styling_options.primary_brand_color }}"
+}
