@@ -81,6 +81,14 @@
     }
   }
 
+  @mixin hover-state-bg {
+    background-color: $nav-background-hover-color;
+  }
+
+  @mixin hover-state-text {
+    color: $header-text-color;
+  }
+
   .navigation {
     display: flex;
     flex-direction: row;
@@ -117,26 +125,24 @@
 
         .tod-container {
           flex: 1;
-          padding-left: $back-to-docs-width;
+          padding-left: $site-padding;
           &:hover {
-            color: $primary-text-color;
+            @include hover-state-bg;
             text-decoration: none;
+            .directory-item {
+              @include hover-state-text;
+            }
           }
         }
 
+        // TOD directory item
         .directory-item {
-          color: $secondary-text-color;
-          border-bottom: 1px inset $well-background-color;
-          padding: $spacing 0;
+          color: $nav-text-color;
+          border-bottom: 1px inset $border-color;
+          padding: $med-spacing 0;
           font-size: $nav-font-size;
           padding-right: $small-spacing;
-        }
-
-        &:hover a {
-          background-color: $well-background-color;
-          .directory-item {
-            color: $primary-text-color;
-          }
+          line-height: 1.5;
         }
 
         &:last-child {
@@ -145,6 +151,7 @@
             border-bottom: none;
           }
         }
+
       }
     }
   }
@@ -177,11 +184,12 @@
   .contents.lonely {
     .nav-branch {
       .nav-link {
-        padding-left: calc(1.5 * #{$large-spacing});
+        padding-left: $site-padding;
       }
       & .nav-branch {
-        margin-left: calc(1.5 * #{$large-spacing});
-        padding-left: $search-box-height;
+        margin-left: $site-padding;
+        // Align expanded sublinks to logo
+        padding-left: calc(#{$back-to-docs-width} - #{$site-padding} - 1px);
       }
     }
   }
@@ -194,20 +202,21 @@
     .nav-link {
       font-size: $nav-font-size;
       padding-left: $large-spacing;
-      color: $secondary-text-color;
+      color: $nav-text-color;
       display: block;
 
       &:hover {
-        text-decoration: none;
-        color: $primary-text-color;
-        background-color: $well-background-color;
+        @include hover-state-text;
+        @include hover-state-bg;
       }
 
+      // TOC directory item
       .directory-item {
         border-bottom: 1px solid $well-background-color;
         padding: $spacing $large-spacing $spacing 0;
         display: inline-block;
         width: calc(100% - #{$large-spacing});
+        line-height: 1.5;
       }
     }
 
@@ -223,6 +232,7 @@
 
         &:hover,
         &.selected {
+          font-weight: normal;
           color: $primary-brand-color;
         }
 
@@ -273,7 +283,7 @@
     }
 
     .search-filter {
-      border-radius: 4px;
+      border-radius: $base-border-radius;
       background: $header-text-color;
       color: white;
       font-size: 9px;
@@ -328,7 +338,7 @@
         display: none;
         align-items: center;
         justify-content: center;
-        margin-right: $spacing;
+        margin-right: $med-spacing;
         background-color: $well-background-color;
         border-radius: 50%;
 
@@ -377,7 +387,7 @@
           color: $header-text-color;
           opacity: 0.7;
           margin: 0;
-          margin-bottom: 8px;
+          margin-bottom: 2px;
           text-transform: uppercase;
         }
 
@@ -442,10 +452,6 @@
 
     &.visible {
       display: block;
-    }
-
-    &.hidden {
-      display: none !important;
     }
 
     //not-found search results{

@@ -4,7 +4,9 @@
 $base-font-family: "Noto Sans", sans-serif;
 $header-font-family: "Noto Serif", serif;
 $base-font-size: 17px;
+$button-font-size: 16px;
 $mobile-font-size: 15px;
+$mobile-button-font-size: 14px;
 $nav-font-size: 15px;
 $base-font-weight: 400;
 $mono-font-family: "Fira Mono", monospace;
@@ -15,9 +17,11 @@ $header-text-color: #454f5b;
 $selected-text-color: #000;
 $divider-color: #d8d8d8;
 $base-background-color: #fff;
+$border-color: #edeced;
 $well-background-color: #eeeeee;
 $search-box-background-color: #f3f3f3;
-$tag-background-color: #e0e2e5;
+$nav-text-color: #a3a9ad;
+$nav-background-hover-color: rgba($primary-brand-color, 0.1);
 
 // Spacing
 $base-line-height: 2;
@@ -44,12 +48,10 @@ $body-padding: calc((100vw - 420px - #{$max-content-width}) / 2);
 $body-full-view-padding: calc((100vw - #{$max-content-width}) / 2);
 $body-sidebar-right-padding: 50px;
 
-$site-header-height: 70px;
+$site-header-height: 80px;
 $mobile-site-header-height: 60px;
 $doc-header-height: 80px;
 $toggled-doc-header-height: 80px;
-$search-box-height: 46px;
-// $search-box-width: calc(100% - 2 * #{$site-padding});
 $site-nav-collapse-duration: 0.2s;
 $site-nav-collapse-timing: ease-out;
 $site-nav-width: 30vw;
