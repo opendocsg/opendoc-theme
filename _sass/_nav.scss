@@ -3,7 +3,7 @@
 .site-nav {
   // Position
   position: fixed;
-  top: $mobile-site-header-height;
+  top: 0;
   z-index: $mobile-navigation-z-index;
 
   // Sidebar content could be too long for the page
@@ -278,8 +278,10 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    width: calc(100% - #{$site-header-height});
     @include desktop-screen {
       border-bottom: 1px solid $divider-color;
+      width: 100%;
     }
 
     .search-filter {
@@ -447,7 +449,7 @@
     border-top: none;
 
     @include mobile-screen {
-      max-height: calc(100vh - #{$mobile-site-doc-header-height});
+      max-height: calc(100vh - #{$mobile-site-header-height});
     }
 
     &.visible {

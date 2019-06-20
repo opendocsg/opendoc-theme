@@ -49,13 +49,13 @@ $body-full-view-padding: calc((100vw - #{$max-content-width}) / 2);
 $body-sidebar-right-padding: 50px;
 
 $site-header-height: 80px;
-$mobile-site-header-height: 60px;
+$mobile-site-header-height: 80px;
 $doc-header-height: 80px;
 $toggled-doc-header-height: 80px;
 $site-nav-collapse-duration: 0.2s;
 $site-nav-collapse-timing: ease-out;
 $site-nav-width: 30vw;
-$back-to-docs-width: $doc-header-height;
+$back-to-docs-width: $doc-header-height - 1px;
 $max-site-nav-width: 420px;
 $site-nav-shadow-inset: inset -7px 0 13px -5px rgba(0, 0, 0, 0.15);
 $site-nav-shadow-outset: 7px 0 13px 5px rgba(0, 0, 0, 0.15);
