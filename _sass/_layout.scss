@@ -80,24 +80,12 @@ body {
       letter-spacing: 1px;
       text-transform: uppercase;
 
-      .btn-icon {
-        display: none;
-      }
-
       span {
         text-decoration: none;
       }
 
       @include mobile-screen {
-        margin-right: 0;
-
-        span {
-          display: none;
-        }
-
-        .btn-icon {
-          display: block;
-        }
+        display: none;
       }
     }
 
@@ -107,8 +95,9 @@ body {
     }
 
     @include mobile-screen {
-      flex-direction: row-reverse;
-      justify-content: space-between;
+      // Uncomment if u wanna put another button in the mobile header
+      // flex-direction: row-reverse;
+      // justify-content: space-between;
       width: 100%;
 
       .agency-logo {

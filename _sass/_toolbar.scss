@@ -175,14 +175,12 @@ $transition-duration: 0.4s;
 
   .overlay {
     position: fixed;
-    height: $fab-button-size;
-    width: $fab-button-size;
     background: black;
     opacity: 0;
-    border-radius: 50%;
-    transition: all $fab-transtition-duration ease-out;
-    right: $med-spacing;
-    bottom: $med-spacing;
+    top: 0;
+    left: 0;
+    height: 0;
+    width: 0;
   }
 
   .action {
@@ -222,10 +220,8 @@ $transition-duration: 0.4s;
 
     .overlay {
       opacity: 0.8;
-      height: calc(100vw + 100vh);
-      width: calc(100vw + 100vh);
-      bottom: -50vh;
-      right: -50vw;
+      height: 100vh;
+      width: 100vw;
     }
 
     .trigger {
