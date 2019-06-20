@@ -6,9 +6,8 @@
   width: 70%;
   margin-left: 15%;
   padding-top: 3vh;
-  margin-top: $site-doc-header-height;
   @include mobile-screen {
-    margin-top: $mobile-site-doc-header-height;
+    padding-top: 7vh;
   }
 
   .welcome-text {
@@ -16,9 +15,6 @@
     color: $header-text-color;
     width: auto;
     text-align: center;
-    @include mobile-screen {
-      font-size: 20px;
-    }
   }
 
   .welcome-image {
@@ -36,6 +32,10 @@
     margin-left: 5%;
     .welcome-button {
       display: block;
+    }
+    .welcome-text {
+      font-size: 20px;
+      display: none;
     }
   }
 }

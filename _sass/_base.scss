@@ -217,10 +217,17 @@ input[type="button"] {
   // Appearance
   background-color: $primary-brand-color;
   border-radius: $base-border-radius;
+
   color: white;
   cursor: pointer;
   outline: none;
   text-decoration: none;
+  text-transform: uppercase;
+  font-size: $button-font-size;
+
+  @include mobile-screen {
+    font-size: $mobile-button-font-size;
+  }
 }
 button:hover,
 input[type="submit"]:hover,

@@ -23,4 +23,5 @@ styling_options:
   primary_brand_color: '#17335f'
   opendoc_logo_path: /assets/images/logo-full.png
   logo_path: /assets/images/logo-full.png
+  logo_url: https://opendoc.sg
   feedback_url: null

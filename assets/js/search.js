@@ -21,12 +21,14 @@
     }
 
     searchBoxElement.onfocus = function () {
-        searchResults.classList.remove('hidden')
+        if (siteSearchElement.classList.contains('filled')) {
+            searchResults.classList.add('visible')
+        }
     }
 
     document.body.addEventListener('click', function (event) {
         if (event.target.id !== 'search-box') {
-            searchResults.classList.add('hidden')
+            searchResults.classList.remove('visible')
         }
     })
 
@@ -272,7 +274,7 @@
         searchContent.innerHTML = result.content
         searchResult.appendChild(searchContent)
         element.onmouseup = function() {
-            // To log which result user click, add track code here
+            searchResults.classList.remove('visible')
         }
         element.appendChild(searchResult)
         return element
