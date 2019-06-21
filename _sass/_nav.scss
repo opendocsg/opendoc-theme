@@ -151,7 +151,6 @@
             border-bottom: none;
           }
         }
-
       }
     }
   }
@@ -197,7 +196,19 @@
   .nav-branch {
     position: relative;
     display: flex;
-    flex-direction: row;
+
+    // Hide margin bottom for last child
+    &:last-child {
+      border-bottom: none;
+      margin-bottom: $large-spacing;
+    }
+
+    // Show sublinks if only page
+    &:only-child {
+      .nav-branch {
+        display: block;
+      }
+    }
 
     .nav-link {
       font-size: $nav-font-size;
@@ -253,11 +264,6 @@
           border-bottom: none;
         }
       }
-    }
-
-    &:last-child {
-      border-bottom: none;
-      margin-bottom: $large-spacing;
     }
 
     // Expanded main links
