@@ -149,11 +149,14 @@ $transition-duration: 0.4s;
     display: none;
   }
 
+  .back-to-top,
   .trigger,
   .action {
     @include flex-center();
     user-select: none;
     border-radius: 50%;
+    height: $fab-button-size;
+    width: $fab-button-size;
     box-shadow: 4px 4px 4px 2px rgba(0, 0, 0, 0.05);
     cursor: pointer;
 
@@ -165,12 +168,16 @@ $transition-duration: 0.4s;
   .trigger {
     position: relative;
     background: $primary-brand-color;
-    height: $fab-button-size;
-    width: $fab-button-size;
     z-index: $fab-trigger-z-index;
     img.close {
       display: none;
     }
+  }
+
+  .back-to-top {
+    z-index: $fab-trigger-z-index;
+    background: $dark-button-color;
+    margin-bottom: $med-spacing;
   }
 
   .overlay {

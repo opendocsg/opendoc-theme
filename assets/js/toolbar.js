@@ -88,8 +88,9 @@
 
     // Floating Action Button
     // -----------------------
+    var floatingActionButtonTrigger = document.getElementById('fab-trigger')
     var floatingActionButton = document.getElementById('fab')
-    floatingActionButton.addEventListener('click', function () {
+    floatingActionButtonTrigger.addEventListener('click', function () {
         floatingActionButton.classList.toggle('open')
     });
 
