@@ -94,11 +94,25 @@
 
 
 
-    var backToDocButton = document.getElementById('back-to-top')
-    backToDocButton.addEventListener('click', function() {
+    var backToTopButton = document.getElementById('back-to-top')
+    backToTopButton.addEventListener('click', function() {
         // jump.js
         Jump(-(window.pageYOffset || document.documentElement.scrollTop), {
             duration: 300
         })
     })
+
+    // show/hide back-to-top button on scroll and on load
+    function scrollListener() {
+        var scrollTop = window.pageYOffset || document.documentElement.scrollTop
+        if (scrollTop > (window.innerHeight * 2)) {
+            backToTopButton.classList.remove('hidden')
+        } else {
+            backToTopButton.classList.add('hidden')
+        }
+    }
+
+    scrollListener()
+
+    window.addEventListener("scroll", scrollListener)
 })()

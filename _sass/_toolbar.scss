@@ -179,6 +179,13 @@ $transition-duration: 0.4s;
     z-index: $fab-trigger-z-index;
     background: $dark-button-color;
     bottom: $fab-button-size + $med-spacing;
+    visibility: visible;
+    opacity: 1;
+    transition: opacity $fab-transtition-duration ease-in;
+    &.hidden {
+      visibility: hidden;
+      opacity: 0;
+    }
   }
 
   .overlay {
