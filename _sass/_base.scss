@@ -224,6 +224,7 @@ input[type="button"] {
   text-decoration: none;
   text-transform: uppercase;
   font-size: $button-font-size;
+  letter-spacing: 1.6px;
 
   @include mobile-screen {
     font-size: $mobile-button-font-size;
