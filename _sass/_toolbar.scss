@@ -175,9 +175,10 @@ $transition-duration: 0.4s;
   }
 
   .back-to-top {
+    position: absolute;
     z-index: $fab-trigger-z-index;
     background: $dark-button-color;
-    margin-bottom: $med-spacing;
+    bottom: $fab-button-size + $med-spacing;
   }
 
   .overlay {
@@ -211,7 +212,7 @@ $transition-duration: 0.4s;
 
   &.open {
     .actions {
-      $action-space: $fab-button-size + $spacing;
+      $action-space: $fab-button-size + $med-spacing;
       opacity: 1;
 
       @for $i from 1 through $max-child-actions {
@@ -229,6 +230,10 @@ $transition-duration: 0.4s;
       opacity: 0.8;
       height: 100vh;
       width: 100vw;
+    }
+
+    .back-to-top {
+      display: none;
     }
 
     .trigger {

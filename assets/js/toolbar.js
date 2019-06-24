@@ -80,8 +80,6 @@
                     text: document.title,
                     url: window.location.href
                 }).then()
-            } else {
-                alert(navigator.share)
             }
         })
     })
@@ -94,4 +92,13 @@
         floatingActionButton.classList.toggle('open')
     });
 
+
+
+    var backToDocButton = document.getElementById('back-to-top')
+    backToDocButton.addEventListener('click', function() {
+        // jump.js
+        Jump(-(window.pageYOffset || document.documentElement.scrollTop), {
+            duration: 300
+        })
+    })
 })()

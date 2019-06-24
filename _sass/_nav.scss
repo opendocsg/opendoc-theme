@@ -20,11 +20,11 @@
   // On larger screens the content stays in place and we move the sidebar in
   transition-duration: $site-nav-collapse-duration;
   transition-timing-function: $site-nav-collapse-timing;
-  transition-property: left, width;
-  left: -100vw;
+  transition-property: right, left, width;
+  right: -100vw;
   width: 100vw;
   body.menu-toggled & {
-    left: 0;
+    right: 0;
     box-shadow: $site-nav-shadow-outset;
   }
   @include desktop-screen {
@@ -166,7 +166,7 @@
       overflow: auto;
 
       @include mobile-screen {
-        max-height: calc(100vh - #{$mobile-site-doc-header-height});
+        max-height: calc(100vh - #{$mobile-site-header-height});
       }
     }
 
@@ -279,7 +279,7 @@
   }
 
   .nav-header {
-    height: $doc-header-height - 1px;
+    height: $doc-header-height;
     background-color: $search-box-background-color;
     display: flex;
     align-items: center;
