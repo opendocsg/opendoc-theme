@@ -94,15 +94,27 @@ body {
       max-height: 44px;
     }
 
+    .search-btn {
+      display: none;
+    }
+
     @include mobile-screen {
       // Uncomment if u wanna put another button in the mobile header
       // flex-direction: row-reverse;
       // justify-content: space-between;
       width: 100%;
+      justify-content: space-between;
 
       .agency-logo {
         max-width: 150px;
         max-height: 30px;
+      }
+
+      .search-btn {
+        display: flex;
+        width: 38px;
+        height: 38px;
+        cursor: pointer;
       }
     }
   }

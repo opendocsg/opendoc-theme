@@ -40,7 +40,6 @@
           {{ site.title }}
         </h1>
       </a>
-      <!-- <p class="site-last-updated">LAST UPDATED ON {{ site.time | date_to_long_string | upcase }}</p> -->
     </div>
     <div class="site-header-right">
       {%- assign feedback_url = 'https://form.gov.sg/5cee3d46138e3200109244df' -%}
@@ -53,23 +52,16 @@
       <a href="{{ site.styling_options.logo_url }}">
         <img class="agency-logo" src="{{ site.styling_options.logo_path | relative_url }}">
       </a>
+      <a class="search-btn" target="_blank">
+        <img class="search-logo" src="{{ '/assets/images/search.png' | relative_url }}">        
+      </a>
     </div>
   </div>
-  <!-- 
-  <div id="banner">
-    <div class="popper__arrow" x-arrow=""></div>
-    <span>
-      Hello, this document uses OpenDoc, which is in beta testing. Help us improve by giving us some feedback here.
-    </span>
-    <div id="close-banner">
-      <img src="{{ '/assets/images/x-mobile.svg' | relative_url }}">
-    </div>
-  </div> -->
 
   <nav class="site-nav no-print">
     <div class="nav-header">
       <div class="search-box">
-        <div class="search-icon-container">
+        <div class="search-icon-container search-btn">
           <img class="search-icon" src="{{ '/assets/images/search-icon.png' | relative_url }}" width="24" height="20" />
         </div>
         <span class="search-filter hidden">

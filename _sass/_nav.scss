@@ -11,8 +11,8 @@
   overflow: hidden;
   display: flex;
   box-sizing: border-box;
-  height: 100%;
-  background-color: $base-background-color;
+  // hide this background div
+  height: 0; 
   flex-direction: column;
 
   // Mobile has the sidebar hidden by default
@@ -20,14 +20,10 @@
   // On larger screens the content stays in place and we move the sidebar in
   transition-duration: $site-nav-collapse-duration;
   transition-timing-function: $site-nav-collapse-timing;
-  transition-property: right, left, width;
-  right: -100vw;
+  transition-property: left, width;
   width: 100vw;
-  body.menu-toggled & {
-    right: 0;
-    box-shadow: $site-nav-shadow-outset;
-  }
   @include desktop-screen {
+    height: 100%;
     z-index: $desktop-navigation-z-index;
     width: $site-nav-width;
     max-width: $max-site-nav-width;
@@ -35,7 +31,6 @@
     left: 0;
     body.menu-toggled & {
       left: -#{$site-nav-width};
-      right: unset;
       box-shadow: none;
     }
   }
@@ -43,7 +38,6 @@
   @include large-screen {
     body.menu-toggled & {
       left: -#{$max-site-nav-width};
-      right: unset;
       box-shadow: none;
     }
   }
@@ -285,9 +279,25 @@
     align-items: center;
     justify-content: center;
     width: calc(100% - #{$site-header-height});
+
+    // Splitting up header and main
+    position: fixed;
+    left: 100vw;
+    transition-duration: $site-nav-collapse-duration;
+    transition-timing-function: $site-nav-collapse-timing;
+    transition-property: left;
+
+    @include mobile-screen {
+      body.search-toggled &,
+      body.menu-toggled & {
+        left: 0;
+      }
+    }
+
     @include desktop-screen {
       border-bottom: 1px solid $divider-color;
       width: 100%;
+      position: static;
     }
 
     .search-filter {
@@ -331,6 +341,10 @@
         display: flex;
         align-items: center;
         justify-content: center;
+
+        @include mobile-screen {
+          cursor: pointer;
+        }
 
         .search-icon {
           display: block;
@@ -431,7 +445,22 @@
     background-color: $base-background-color;
     overscroll-behavior: contain;
 
+    // Splitting up header and main
+    position: fixed;
+    bottom: 0;
+    left: 100vw;
+    transition-duration: $site-nav-collapse-duration;
+    transition-timing-function: $site-nav-collapse-timing;
+    transition-property: left;
+
+    @include mobile-screen {
+      body.menu-toggled & {
+        left: 0;
+      }
+    }
+
     @include desktop-screen {
+      position: static;
       height: calc(100% - #{$doc-header-height});
       border-right: 1px solid $divider-color;
       box-shadow: $site-nav-shadow-inset;
