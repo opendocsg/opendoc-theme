@@ -92,7 +92,10 @@
         floatingActionButton.classList.toggle('open')
     });
 
-
+    var fabOverlay = document.getElementById('fab-overlay')
+    fabOverlay.addEventListener('click', function() {
+        floatingActionButton.classList.remove('open')
+    })    
 
     var backToTopButton = document.getElementById('back-to-top')
     backToTopButton.addEventListener('click', function() {
