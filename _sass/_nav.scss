@@ -12,7 +12,7 @@
   display: flex;
   box-sizing: border-box;
   // hide this background div
-  height: 0; 
+  height: 0;
   flex-direction: column;
 
   // Mobile has the sidebar hidden by default
@@ -71,6 +71,14 @@
         height: 30px;
         padding-left: 40px;
         padding-right: $large-spacing;
+      }
+    }
+
+    @include mobile-screen {
+      width: $mobile-back-to-docs-width;
+      p {
+        height: $mobile-back-to-docs-width;
+        line-height: $mobile-back-to-docs-width;
       }
     }
   }
@@ -273,12 +281,12 @@
   }
 
   .nav-header {
-    height: $doc-header-height;
+    height: $mobile-site-header-height;
     background-color: $search-box-background-color;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: calc(100% - #{$site-header-height});
+    width: calc(100% - #{$mobile-site-header-height});
 
     // Splitting up header and main
     position: fixed;
@@ -286,18 +294,18 @@
     transition-duration: $site-nav-collapse-duration;
     transition-timing-function: $site-nav-collapse-timing;
     transition-property: left;
+    z-index: 1;
 
-    @include mobile-screen {
-      body.search-toggled &,
-      body.menu-toggled & {
-        left: 0;
-      }
+    body.search-toggled &,
+    body.menu-toggled & {
+      left: 0;
     }
 
     @include desktop-screen {
       border-bottom: 1px solid $divider-color;
       width: 100%;
       position: static;
+      height: $doc-header-height;
     }
 
     .search-filter {
@@ -344,6 +352,12 @@
 
         @include mobile-screen {
           cursor: pointer;
+          width: $mobile-back-to-docs-width;
+          min-width: $mobile-back-to-docs-width;
+
+          body.menu-toggled & {
+            cursor: default;
+          }
         }
 
         .search-icon {
@@ -411,6 +425,8 @@
           margin: 0;
           margin-bottom: 2px;
           text-transform: uppercase;
+
+          @include desktop-only();
         }
 
         input {
@@ -440,7 +456,7 @@
   }
 
   .nav-main {
-    height: calc(100% - #{$doc-header-height});
+    height: calc(100% - #{$mobile-site-header-height});
     overflow: hidden; // preven double scroll bar
     background-color: $base-background-color;
     overscroll-behavior: contain;
@@ -485,6 +501,9 @@
 
     @include mobile-screen {
       max-height: calc(100vh - #{$mobile-site-header-height});
+      top: $mobile-site-header-height;
+      left: $mobile-back-to-docs-width;
+      width: calc(100% - #{$mobile-back-to-docs-width} - 2px); // account for border width
     }
 
     &.visible {

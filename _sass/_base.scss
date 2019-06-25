@@ -11,6 +11,14 @@
   @media (max-width: 991.999px) { @content; }
 }
 
+@mixin mobile-only() {
+  @include desktop-screen { display: none }
+}
+
+@mixin desktop-only() {
+  @include mobile-screen { display: none }
+}
+
 @mixin flex-center() {
   display: flex;
   justify-content: center;
