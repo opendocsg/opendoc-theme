@@ -208,6 +208,7 @@
     // Takes an array of objects with "title" and "content" properties
     var renderSearchResultsFromLunr = function (searchResults) {
         var container = document.getElementsByClassName('search-results')[0]
+        container.scrollTop = 0
         container.innerHTML = ''
         if (!searchResults || searchResults.length === 0) {
             var error = generateErrorHTML()
@@ -222,6 +223,7 @@
 
     var renderSearchResultsFromServer = function (searchResults) {
         var container = document.getElementsByClassName('search-results')[0]
+        container.scrollTop = 0
         container.innerHTML = ''
         if (typeof searchResults.hits === 'undefined') {
             var error = document.createElement('p')
