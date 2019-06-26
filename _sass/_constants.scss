@@ -11,7 +11,7 @@ $nav-font-size: 15px;
 $base-font-weight: 400;
 $mono-font-family: "Fira Mono", monospace;
 // Colors
-$primary-text-color: #444;
+$primary-text-color: #454f5b;
 $secondary-text-color: #999;
 $header-text-color: #454f5b;
 $selected-text-color: #000;
@@ -23,8 +23,9 @@ $search-box-background-color: #f3f3f3;
 $nav-text-color: #a3a9ad;
 $nav-background-hover-color: rgba($primary-brand-color, 0.1);
 $dark-button-color: #272e36;
-
+$highlight-color: #FFF59D;
 // Spacing
+// 1em -> 14px
 $base-line-height: 2;
 $base-horizontal-padding: 1em;
 $base-vertical-padding: 0.5em;
@@ -50,13 +51,15 @@ $body-full-view-padding: calc((100vw - #{$max-content-width}) / 2);
 $body-sidebar-right-padding: 50px;
 
 $site-header-height: 80px;
-$mobile-site-header-height: 80px;
+$mobile-site-header-height: 60px;
 $doc-header-height: 80px;
 $toggled-doc-header-height: 80px;
 $site-nav-collapse-duration: 0.2s;
 $site-nav-collapse-timing: ease-out;
 $site-nav-width: 30vw;
 $back-to-docs-width: $doc-header-height - 1px;
+$mobile-back-to-docs-width: $mobile-site-header-height - 1px;
+
 $max-site-nav-width: 420px;
 $site-nav-shadow-inset: inset -7px 0 13px -5px rgba(0, 0, 0, 0.15);
 $site-nav-shadow-outset: 7px 0 13px 5px rgba(0, 0, 0, 0.15);

@@ -40,7 +40,6 @@
           {{ site.title }}
         </h1>
       </a>
-      <!-- <p class="site-last-updated">LAST UPDATED ON {{ site.time | date_to_long_string | upcase }}</p> -->
     </div>
     <div class="site-header-right">
       {%- assign feedback_url = 'https://form.gov.sg/5cee3d46138e3200109244df' -%}
@@ -53,31 +52,31 @@
       <a href="{{ site.styling_options.logo_url }}">
         <img class="agency-logo" src="{{ site.styling_options.logo_path | relative_url }}">
       </a>
+      <div class="flex">
+        <a class="top-mobile-btn" href="{{ '/' | relative_url }}">
+          <img src="{{ '/assets/images/home.svg' | relative_url }}">        
+        </a>
+        <a class="search-btn top-mobile-btn">
+          <img src="{{ '/assets/images/search-icon-dark.svg' | relative_url }}">        
+        </a>
+      </div>
     </div>
   </div>
-  <!-- 
-  <div id="banner">
-    <div class="popper__arrow" x-arrow=""></div>
-    <span>
-      Hello, this document uses OpenDoc, which is in beta testing. Help us improve by giving us some feedback here.
-    </span>
-    <div id="close-banner">
-      <img src="{{ '/assets/images/x-mobile.svg' | relative_url }}">
-    </div>
-  </div> -->
 
   <nav class="site-nav no-print">
-    <div class="nav-header">
+    <div class="nav-header no-print">
       <div class="search-box">
-        <div class="search-icon-container">
-          <img class="search-icon" src="{{ '/assets/images/search-icon.png' | relative_url }}" width="24" height="20" />
+        <div class="search-icon-container search-btn">
+          <img class="search-icon mobile" src="{{ '/assets/images/search-icon-dark.svg' | relative_url }}"/>
+          <img class="search-icon" src="{{ '/assets/images/search-icon-white.svg' | relative_url }}"/>
+          <img class="close-icon" src="{{ '/assets/images/close.svg' | relative_url }}"/>
         </div>
         <span class="search-filter hidden">
           {%- include_cached document-title.txt dir=page.dir info="title" -%}
         </span>
         <div class="search-input-container">
           <p class="search-header">search entire site</p>
-          <input id="search-box" autofocus placeholder="Search titles or keywords" type="text" />
+          <input id="search-box" placeholder="Search titles or keywords" type="text" />
         </div>
         <label class="clear-button">
           <svg class="clear-icon" viewBox="0 0 18 18" width="18" height="18">
@@ -89,7 +88,7 @@
       <div class="search-results">
       </div>
     </div>
-    <div class="nav-main">
+    <div class="nav-main no-print">
       {%- if site.fast_build -%}
       {% include_cached directory.html %}
       {%- else -%}
@@ -128,7 +127,7 @@
     {%- endif- %}
   </main>
   <div class="site-branding no-print">
-    Powered by <a href="https://opendoc.sg">OpenDoc</a>      
+    Powered by <a href="https://opendoc.sg"><img src="{{ '/assets/images/opendoc-logo-full.svg' | relative_url }}"></a>      
   </div>
 
   <script src="{{ '/assets/vendor/jump.min.js' | relative_url }}" charset="utf-8"></script>

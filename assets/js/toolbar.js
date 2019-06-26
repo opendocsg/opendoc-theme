@@ -18,6 +18,7 @@
     var hideMenu = function hideMenu() {
         menuToggle.checked = false
         document.body.classList.remove('menu-toggled')
+        document.body.classList.remove('search-toggled')
     }
     menuToggle.addEventListener('change', function () {
         if (menuToggle.checked) {
@@ -118,4 +119,13 @@
     scrollListener()
 
     window.addEventListener("scroll", scrollListener)
+
+    //  Search Button for mobile 
+    // --------------------------
+    var searchButtons = document.querySelectorAll('.search-btn')
+    searchButtons.forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            document.body.classList.toggle('search-toggled')
+        })
+    })
 })()
