@@ -350,20 +350,40 @@
         align-items: center;
         justify-content: center;
 
+        .search-icon,
+        .close-icon {
+          height: 24px;
+          width: auto;
+          display: none;
+          @include mobile-only();
+        }
+
+        .search-icon:not(.mobile) {
+          height: 30px;
+          @include desktop-only();
+        }
+
         @include mobile-screen {
           cursor: pointer;
           width: $mobile-site-header-height;
           min-width: $mobile-site-header-height;
+          background-color: transparent;
 
           body.menu-toggled & {
             cursor: default;
+            .close-icon {
+              display: none;
+            }
           }
-        }
 
-        .search-icon {
-          display: block;
-          height: 30px;
-          width: auto;
+          body.search-toggled:not(.menu-toggled) & {
+            .close-icon {
+              display: block;
+            }
+            .search-icon {
+              display: none;
+            }
+          }
         }
       }
 
@@ -394,9 +414,12 @@
           }
         }
       }
+      &.focused {
+        background: white;
+      }
+
       &.filled {
         background: rgba(255, 255, 255, 0.75);
-
         .clear-button {
           display: flex;
           cursor: pointer;
@@ -417,6 +440,10 @@
         min-width: 0;
         overflow: visible;
 
+        @include mobile-screen {
+          padding-left: 0;
+        }
+
         .search-header {
           font-size: 9px;
           letter-spacing: 1.1px;
@@ -434,7 +461,7 @@
           min-width: 0;
           border: none;
           outline: none;
-          color: black;
+          color: $primary-text-color;
           opacity: 0.5;
           padding: 0;
           margin: 0;
@@ -457,7 +484,7 @@
 
   .nav-main {
     height: calc(100% - #{$mobile-site-header-height});
-    overflow: hidden; // preven double scroll bar
+    overflow: auto; // prevent double scroll bar
     background-color: $base-background-color;
     overscroll-behavior: contain;
 
@@ -470,6 +497,7 @@
     transition-property: left;
 
     @include mobile-screen {
+      width: 100%;
       body.menu-toggled & {
         left: 0;
       }
@@ -502,8 +530,8 @@
     @include mobile-screen {
       max-height: calc(100vh - #{$mobile-site-header-height});
       top: $mobile-site-header-height;
-      left: $mobile-back-to-docs-width;
-      width: calc(100% - #{$mobile-back-to-docs-width} - 2px); // account for border width
+      left: 0;
+      width: 100vw;
     }
 
     &.visible {

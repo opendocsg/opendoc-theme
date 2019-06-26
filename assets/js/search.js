@@ -21,9 +21,14 @@
     }
 
     searchBoxElement.onfocus = function () {
+        siteSearchElement.classList.add('focused')
         if (siteSearchElement.classList.contains('filled')) {
             searchResults.classList.add('visible')
         }
+    }
+
+    searchBoxElement.onblur = function() {
+        siteSearchElement.classList.remove('focused')
     }
 
     document.body.addEventListener('click', function (event) {

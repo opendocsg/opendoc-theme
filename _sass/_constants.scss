@@ -11,7 +11,7 @@ $nav-font-size: 15px;
 $base-font-weight: 400;
 $mono-font-family: "Fira Mono", monospace;
 // Colors
-$primary-text-color: #444;
+$primary-text-color: #454f5b;
 $secondary-text-color: #999;
 $header-text-color: #454f5b;
 $selected-text-color: #000;
@@ -23,8 +23,9 @@ $search-box-background-color: #f3f3f3;
 $nav-text-color: #a3a9ad;
 $nav-background-hover-color: rgba($primary-brand-color, 0.1);
 $dark-button-color: #272e36;
-
+$highlight-color: #FFF59D;
 // Spacing
+// 1em -> 14px
 $base-line-height: 2;
 $base-horizontal-padding: 1em;
 $base-vertical-padding: 0.5em;

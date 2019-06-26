@@ -6,6 +6,7 @@ body {
 
   mark {
     font-weight: bold;
+    background-color: $highlight-color;
   }
   @include mobile-screen {
     &.menu-toggled {
@@ -39,7 +40,7 @@ body {
   }
 
   @include mobile-screen {
-    padding: 0 $large-spacing;
+    padding: 0 $spacing 0 $large-spacing;
     height: $mobile-site-header-height;
     right: $mobile-site-header-height;
   }
@@ -94,7 +95,7 @@ body {
       max-height: 44px;
     }
 
-    .search-btn {
+    .top-mobile-btn {
       display: none;
     }
 
@@ -110,11 +111,14 @@ body {
         max-height: 30px;
       }
 
-      .search-btn {
-        display: flex;
-        width: 35px;
-        height: 35px;
+      .top-mobile-btn {
+        @include flex-center();
+        width: $mobile-site-header-height;
+        height: $mobile-site-header-height;
         cursor: pointer;
+        img {
+          height: 24px;
+        }
       }
     }
   }
@@ -291,7 +295,7 @@ body {
   }
   a {
     text-decoration: underline;
-    // This css part looks complicated but is required to prevent highlighting 
+    // This css part looks complicated but is required to prevent highlighting
     // text with inline links to include padding-top
     &[href*="#"]:before {
       display: inline;
@@ -347,29 +351,27 @@ body {
   position: relative;
   padding-top: $large-spacing;
   padding-bottom: $large-spacing;
-  font-size: calc(#{$base-font-size} - 6px);
+  font-size: calc(#{$base-font-size} - 5px);
   color: $secondary-text-color;
-  opacity: 0.5;
   text-align: center;
   transition-duration: $site-nav-collapse-duration;
   transition-timing-function: $site-nav-collapse-timing;
-  a {
-    font-size: calc(#{$base-font-size} - 6px);
-    color: $primary-brand-color;
-    text-decoration: none;
+  a img {
+    height: 16px;
+    margin-bottom: -3px;
+    cursor: pointer;
   }
 
   @include desktop-screen {
     padding-left: $site-nav-width;
     padding-right: $body-sidebar-right-padding;
-    font-size: calc(#{$base-font-size} - 4px);
-
-    a {
-      font-size: calc(#{$base-font-size} - 4px);
+    font-size: calc(#{$base-font-size} - 3px);
+    a img {
+      height: 18px;
     }
-    body.menu-toggled & {
-      padding-left: 0;
-    }
+  }
+  body.menu-toggled & {
+    padding-left: 0;
   }
 }
 

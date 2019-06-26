@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="20px" height="22px" viewBox="0 0 20 22" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 55.2 (78181) - https://sketchapp.com -->
+    <title>home</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <g id="MobileTopNavC" transform="translate(-199.000000, -29.000000)" stroke="#454F5B" stroke-width="1.5">
+            <g id="home" transform="translate(200.000000, 30.000000)">
+                <path d="M0,7 L9,0 L18,7 L18,18 C18,19.1045695 17.1045695,20 16,20 L2,20 C0.8954305,20 0,19.1045695 0,18 L0,7 Z" id="Path"></path>
+                <polyline id="Path" opacity="0.25" points="6 20 6 10 12 10 12 20"></polyline>
+            </g>
+        </g>
+    </g>
+</svg>
