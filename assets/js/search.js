@@ -529,7 +529,6 @@
 
     clearSearchFilter = function () {
         searchFilter.classList.add('hidden')
-        searchBoxElement.placeholder = 'Search opendoc'
     }
 
     searchFilter.onclick = clearSearchFilter

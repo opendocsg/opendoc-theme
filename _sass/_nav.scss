@@ -8,7 +8,7 @@
 
   // Sidebar content could be too long for the page
   // The scrolling should be limited to the chapter selection area
-  overflow: hidden;
+  overflow: visible;
   display: flex;
   box-sizing: border-box;
   // hide this background div
@@ -484,7 +484,7 @@
 
   .nav-main {
     height: calc(100% - #{$mobile-site-header-height});
-    overflow: auto; // prevent double scroll bar
+    overflow: hidden; // prevent double scroll bar
     background-color: $base-background-color;
     overscroll-behavior: contain;
 
