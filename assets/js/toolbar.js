@@ -123,9 +123,13 @@
     //  Search Button for mobile 
     // --------------------------
     var searchButtons = document.querySelectorAll('.search-btn')
+    var searchBoxElement = document.getElementById('search-box')
     searchButtons.forEach(function(btn) {
         btn.addEventListener('click', function() {
             document.body.classList.toggle('search-toggled')
+            if (document.body.classList.contains('search-toggled')) {
+                searchBoxElement.focus()
+            }
         })
     })
 })()
