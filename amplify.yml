@@ -1,0 +1,40 @@
+version: 0.1
+frontend:
+  phases:
+    preBuild:
+      commands:
+        - bundle install
+    build:
+      commands:
+        - if [ "${AWS_BRANCH}" = "master" ]; then JEKYLL_ENV=production bundle exec jekyll build; fi
+        - if [ "${AWS_BRANCH}" != "master" ]; then JEKYLL_ENV=development bundle exec jekyll build; fi    
+    postBuild:
+      commands:
+        - chmod +x ./_site/assets/startup/build.sh
+        - ./_site/assets/startup/build.sh
+      
+  artifacts:
+    baseDirectory: _site
+    files:
+      - '**/*'
+  cache:
+    paths: 
+      - node_modules
+
+  customHeaders:
+      - pattern: '**/*'
+        headers:
+        - key: 'X-Frame-Options'
+          value: 'SAMEORIGIN'
+        - key: 'X-XSS-Protection'
+          value: '1; mode=block'
+        - key: 'X-Content-Type-Options'
+          value: 'nosniff'
+        - key: 'Content-Security-Policy'
+          value: "default-src 'self'; img-src *; frame-src *; font-src *; media-src *; style-src * 'unsafe-inline'; connect-src 'self' https://*.opendoc.sg; script-src 'self' 'sha256-cZeHu5WczV7gma7unmZ5l6WP54Plm4jzl1MUr4q2lrY='"
+        - key: 'Referrer-Policy'
+          value: 'no-referrer'
+        - key: 'Feature-Policy'
+          value: "geolocation 'none'; microphone 'none'; camera 'none'"
+
+

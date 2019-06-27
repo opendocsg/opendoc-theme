@@ -21,7 +21,6 @@ order:
 google_analytics: 'UA-113717369-5'
 styling_options:
   primary_brand_color: '#17335f'
-  opendoc_logo_path: /assets/images/opendoc-logo-full.svg
   logo_path: /assets/images/opendoc-logo-full.svg
   logo_url: https://opendoc.sg
   feedback_url: null
