@@ -170,7 +170,9 @@
 
     function scrollAnchorIntoView() {
         if (window.location.hash) {
-            var anchorEl = document.querySelector(window.location.hash)
+            // Dont use querySelector because it needs special handling for ids that start with numbers
+            // ref: https://stackoverflow.com/questions/20306204/using-queryselector-with-ids-that-are-numbers
+            var anchorEl = document.getElementById(window.location.hash)
             if (anchorEl) {
                 // When page is rendered by assigning to innerHTML, it does not scroll to anchor.
                 // scrollIntoView(true) aligns anchor to top of page

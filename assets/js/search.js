@@ -33,7 +33,6 @@
 
     document.body.addEventListener('click', function (event) {
         var target = event.target
-        console.log(event)
         if (target.id !== 'search-box' && !target.classList.contains('search-btn') && !target.parentNode.classList.contains('search-btn')) {
             searchResults.classList.remove('visible')
         }

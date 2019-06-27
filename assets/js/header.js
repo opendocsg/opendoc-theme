@@ -1,7 +1,8 @@
 (function () {
     var header = document.querySelector('header')
     var headroom = new Headroom(header, {
-        tolerance: 2
+        tolerance: 30,
+        offset : 50 
     })
     headroom.init()
 
