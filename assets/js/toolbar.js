@@ -18,7 +18,6 @@
     var hideMenu = function hideMenu() {
         menuToggle.checked = false
         document.body.classList.remove('menu-toggled')
-        document.body.classList.remove('search-toggled')
     }
     menuToggle.addEventListener('change', function () {
         if (menuToggle.checked) {

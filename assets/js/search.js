@@ -32,7 +32,9 @@
     }
 
     document.body.addEventListener('click', function (event) {
-        if (event.target.id !== 'search-box') {
+        var target = event.target
+        console.log(event)
+        if (target.id !== 'search-box' && !target.classList.contains('search-btn') && !target.parentNode.classList.contains('search-btn')) {
             searchResults.classList.remove('visible')
         }
     })
