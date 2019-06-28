@@ -3,7 +3,7 @@ frontend:
   phases:
     preBuild:
       commands:
-        - yum install -y fontconfig
+        - yum install -y urw-fonts
         - bundle install
     build:
       commands:
