@@ -49,17 +49,15 @@
       <a id="contact-us" href="{{ feedback_url }}" target="_blank">
         <span>Contact Us</span>
       </a>
-      <a href="{{ site.styling_options.logo_url }}">
+      <a href="{{ site.styling_options.logo_url }}" class="desktop">
         <img class="agency-logo" src="{{ site.styling_options.logo_path | relative_url }}">
       </a>
-      <div class="flex">
-        <a class="top-mobile-btn" href="{{ '/' | relative_url }}">
-          <img src="{{ '/assets/images/home.svg' | relative_url }}">        
-        </a>
-        <a class="search-btn top-mobile-btn">
-          <img src="{{ '/assets/images/search-icon-dark.svg' | relative_url }}">        
-        </a>
-      </div>
+      <a href="{{ '/' | relative_url }}" class="mobile">
+        <img class="agency-logo" src="{{ site.styling_options.logo_path | relative_url }}">
+      </a>
+      <a class="search-btn top-mobile-btn">
+        <img src="{{ '/assets/images/search-icon-dark.svg' | relative_url }}">        
+      </a>
     </div>
   </div>
 

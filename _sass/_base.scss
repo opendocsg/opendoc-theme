@@ -371,3 +371,10 @@ a {
 .flex {
   display: flex;
 }
+
+.desktop {
+  @include desktop-only();
+}
+.mobile {
+  @include mobile-only();
+}

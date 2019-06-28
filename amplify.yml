@@ -3,11 +3,14 @@ frontend:
   phases:
     preBuild:
       commands:
+        - yum install -y fontconfig
         - bundle install
     build:
       commands:
         - if [ "${AWS_BRANCH}" = "master" ]; then JEKYLL_ENV=production bundle exec jekyll build; fi
         - if [ "${AWS_BRANCH}" != "master" ]; then JEKYLL_ENV=development bundle exec jekyll build; fi    
+        - bundle show nokogiri
+        - rpm -ql fontconfig
     postBuild:
       commands:
         - chmod +x ./_site/assets/startup/build.sh

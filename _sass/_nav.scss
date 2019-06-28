@@ -47,6 +47,7 @@
     width: $back-to-docs-width;
     border-right: $divider-color 1px solid;
     white-space: nowrap;
+    box-sizing: border-box;
     cursor: pointer;
 
     p {

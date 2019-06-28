@@ -3,6 +3,7 @@
 body {
   -webkit-overflow-scrolling: touch;
   overflow-x: hidden;
+  box-sizing: border-box;
 
   mark {
     font-weight: bold;
