@@ -26,8 +26,6 @@ frontend:
   cache:
     paths: 
       - node_modules
-      - /usr/local/rvm/gems/
-      - /etc/fonts
 
   customHeaders:
       - pattern: '**/*'
