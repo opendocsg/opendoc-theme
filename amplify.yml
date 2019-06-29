@@ -4,7 +4,6 @@ frontend:
     preBuild:
       commands:
         - yum install -y urw-fonts
-        - mv NotoSans-unhinted
         - mkdir -p ~/.fonts
         - cp NotoSans-unhinted/*.ttf ~/.fonts
         - fc-cache -f -v
