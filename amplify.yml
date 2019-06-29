@@ -7,7 +7,7 @@ frontend:
         - mkdir -p ~/.fonts
         - ls
         - pwd
-        - cp .assets/NotoSans-unhinted/*.ttf ~/.fonts
+        - cp ./assets/NotoSans-unhinted/*.ttf ~/.fonts
         - fc-cache -f -v
         - bundle install
     build:
