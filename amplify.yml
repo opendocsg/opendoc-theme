@@ -5,7 +5,9 @@ frontend:
       commands:
         - yum install -y urw-fonts
         - mkdir -p ~/.fonts
-        - cp NotoSans-unhinted/*.ttf ~/.fonts
+        - ls
+        - pwd
+        - cp ./NotoSans-unhinted/*.ttf ~/.fonts
         - fc-cache -f -v
         - bundle install
     build:
