@@ -4,6 +4,8 @@ frontend:
     preBuild:
       commands:
         - yum install -y urw-fonts
+        - git clone https://github.com/opendocsg/opendoc-fonts.git ~/.fonts
+        - fc-cache -f -v
         - bundle install
     build:
       commands:
