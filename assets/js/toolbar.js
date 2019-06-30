@@ -44,16 +44,12 @@
     var editButtons = document.querySelectorAll('.edit-btn')
     editButtons.forEach(function (btn) {
         btn.addEventListener('click', function () {
-            var repoUrl = '{{ site.github.repository_url }}' + '/blob/master'
+            var repoUrl = '{{ site.github.repository_url }}' + '/blob/master/'
             var page = pageIndex[window.location.pathname]
-            var pageUrl = page ? page['nobase_url'] : null
-            var pageName = page ? page.name : null
-            if (pageUrl && pageName) {
+            var pageUrl = page ? page.escapedPath : null
+            if (pageUrl) {
                 console.log('opening:', pageUrl)
-                var markdownUrl = pageUrl.split('/')
-                markdownUrl[markdownUrl.length - 1] = pageName
-                markdownUrl = markdownUrl.join('/')
-                repoUrl += markdownUrl
+                repoUrl += pageUrl
             }
             window.open(repoUrl, '_blank')
         })
