@@ -199,6 +199,7 @@ pre {
 
 pre > code {
   display: block;
+  font-family: $mono-font-family;
   padding: $base-vertical-padding $base-horizontal-padding;
   margin: 0;
 }
