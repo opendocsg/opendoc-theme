@@ -17,18 +17,12 @@
 {%- endfor -%}
 {%- assign document_info = '' | split: ',' -%}
 
-{%- assign default_subtitle = site.time | date_to_long_string | prepend: 'LAST UPDATED: ' | upcase -%}
-
 {%- if include.dir == '/' -%}
 {%- comment -%}
     If root folder, take info from config
 {%- endcomment -%}
 {%- assign document_info = document_info | push: site.title -%}
-{%- if site.subtitle == '' or site.subtitle == nil -%}
-    {%- assign document_info = document_info | push: default_subtitle -%}
-{%- else -%}
-    {%- assign document_info = document_info | push: site.subtitle -%}
-{%- endif -%}
+{%- assign document_info = document_info | push: site.subtitle -%}
 {%- assign document_info = document_info | push: site.order -%}
 {%- else -%}
 
@@ -42,11 +36,7 @@
 {%- else -%}
 {%- assign document_info = document_info | push: page_info.title -%}
 {%- endif -%}
-{%- if page_info.subtitle == '' or page_info.subtitle == nil -%}
-    {%- assign document_info = document_info | push: default_subtitle -%}
-{%- else -%}
-    {%- assign document_info = document_info | push: page_info.subtitle -%}
-{%- endif -%}
+{%- assign document_info = document_info | push: page_info.subtitle -%}
 {%- assign document_info = document_info | push: page_info.order -%}
 {%- endif -%}
 

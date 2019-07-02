@@ -48,7 +48,7 @@ body {
 
   .site-header-left {
     display: flex;
-    align-items: center;
+    align-items: baseline;
 
     .site-header-text {
       color: $primary-brand-color;
@@ -59,8 +59,9 @@ body {
 
     .site-last-updated {
       margin: 0;
-      color: $secondary-text-color;
-      font-size: 12px;
+      font-size: 11px;
+      letter-spacing: 0.6px;
+      color: $subheader-text-color;
       margin-left: $large-spacing;
     }
 
