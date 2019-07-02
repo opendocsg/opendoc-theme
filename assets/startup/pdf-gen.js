@@ -1,5 +1,3 @@
----
----
 const fs = require('fs')
 const fsp = require('fs').promises
 const pAll = require('p-all')
@@ -77,8 +75,7 @@ const exportPdfTopLevelDocs = async (sitePath) => {
     const configFilepath = path.join(sitePath, '..', '_config.yml')
     if (configFileHasValidOrdering(configFilepath)) {
         const configYml = yamlToJs(configFilepath)
-        const order = mapSectionNameToHtmlFilename(configYml, sitePath)
-        htmlFilePaths = reorderHtmlFilePaths(htmlFilePaths, order)
+        htmlFilePaths = reorderHtmlFilePaths(htmlFilePaths, configYml.order)
     }
     await createPdf(htmlFilePaths, sitePath)
 }
@@ -98,14 +95,13 @@ const exportPdfDocFolders = (sitePath, docFolders) => {
         const indexFilepath = path.join(sitePath, '..', folder, 'index.md')
         if (indexFileHasValidOrdering(indexFilepath)) {
             const configMd = markdownToJs(indexFilepath)
-            const order = configMd.meta.order // names of html files without the .html
+            const order = configMd.order
             htmlFilePaths = reorderHtmlFilePaths(htmlFilePaths, order)
         }
         actions.push((() => createPdf(htmlFilePaths, folderPath)))
     }
     return pAll(actions, { concurrency: PDF_GEN_CONCURRENCY })
 }
-
 
 // Concatenates the contents in .html files, and outputs export.pdf in the specified output folder
 const createPdf = (htmlFilePaths, outputFolderPath) => {
@@ -262,7 +258,7 @@ const getDocumentFolders = (sitePath, printIgnoreFolders) => {
 const configFileHasValidOrdering = (configFilepath) => {
     try {
         const configYml = yamlToJs(configFilepath)
-        return 'section_order' in configYml
+        return 'order' in configYml
     } catch (error) {
         return false
     }
@@ -272,7 +268,7 @@ const configFileHasValidOrdering = (configFilepath) => {
 const indexFileHasValidOrdering = (indexFilepath) => {
     try {
         const configMd = markdownToJs(indexFilepath)
-        return 'order' in configMd['meta']
+        return 'order' in configMd
     } catch (error) {
         return false
     }
@@ -280,15 +276,16 @@ const indexFileHasValidOrdering = (indexFilepath) => {
 
 // Mutates the htmlFilepath array to match order provided in order
 const reorderHtmlFilePaths = (htmlFilePaths, order) => {
+    const orderedHtmlFilePaths = []
     for (let i = 0; i < order.length; i++) {
         const name = path.basename(order[i], '.md')
-        for (let j = 0; j < htmlFilePaths.length; j++) {
-            if (path.basename(htmlFilePaths[j], '.html') === name) {
-                swap(htmlFilePaths, i, j)
+        htmlFilePaths.some((filePath) => {
+            if (path.basename(filePath, '.html') === name) {
+                orderedHtmlFilePaths.push(filePath)
             }
-        }
+        })
     }
-    return htmlFilePaths
+    return orderedHtmlFilePaths
 }
 
 // Removes <tag></tag> from dom and everything in between them
@@ -297,33 +294,6 @@ const removeTagsFromDom = (dom, tagname) => {
     for (let i = tags.length - 1; i >= 0; i--) {
         tags[i].parentNode.removeChild(tags[i])
     }
-}
-
-// Section names correspond to titles at the top of .md files in source folder
-const mapSectionNameToHtmlFilename = (configYml, sitePath) => {
-    const section_order = configYml.section_order
-    const mdFiles = glob.sync(path.join(sitePath, '..', '*.md'))
-    const newSectionorder = []
-    section_order.forEach((title) => {
-        for (let i = 0; i < mdFiles.length; i++) {
-            try {
-                const mdTitle = markdownToJs(mdFiles[i]).meta.title
-                if (title === mdTitle) {
-                    newSectionorder.push(mdFiles[i])
-                }
-            } catch (error) {
-                continue // did not contain field
-            }
-        }
-    })
-    return newSectionorder
-}
-
-// Mutates array by swapping items at index i and j
-const swap = (arr, i, j) => {
-    const temp = arr[i]
-    arr[i] = arr[j]
-    arr[j] = temp
 }
 
 // converts .md to JS Object
