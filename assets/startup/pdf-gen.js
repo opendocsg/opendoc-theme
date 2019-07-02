@@ -1,5 +1,3 @@
----
----
 const fs = require('fs')
 const fsp = require('fs').promises
 const pAll = require('p-all')
@@ -104,7 +102,6 @@ const exportPdfDocFolders = (sitePath, docFolders) => {
     }
     return pAll(actions, { concurrency: PDF_GEN_CONCURRENCY })
 }
-
 
 // Concatenates the contents in .html files, and outputs export.pdf in the specified output folder
 const createPdf = (htmlFilePaths, outputFolderPath) => {
@@ -279,15 +276,16 @@ const indexFileHasValidOrdering = (indexFilepath) => {
 
 // Mutates the htmlFilepath array to match order provided in order
 const reorderHtmlFilePaths = (htmlFilePaths, order) => {
+    const orderedHtmlFilePaths = []
     for (let i = 0; i < order.length; i++) {
         const name = path.basename(order[i], '.md')
-        for (let j = 0; j < htmlFilePaths.length; j++) {
-            if (path.basename(htmlFilePaths[j], '.html') === name) {
-                swap(htmlFilePaths, i, j)
+        htmlFilePaths.some((filePath) => {
+            if (path.basename(filePath, '.html') === name) {
+                orderedHtmlFilePaths.push(filePath)
             }
-        }
+        })
     }
-    return htmlFilePaths.slice(0, order.length)
+    return orderedHtmlFilePaths
 }
 
 // Removes <tag></tag> from dom and everything in between them
@@ -296,13 +294,6 @@ const removeTagsFromDom = (dom, tagname) => {
     for (let i = tags.length - 1; i >= 0; i--) {
         tags[i].parentNode.removeChild(tags[i])
     }
-}
-
-// Mutates array by swapping items at index i and j
-const swap = (arr, i, j) => {
-    const temp = arr[i]
-    arr[i] = arr[j]
-    arr[j] = temp
 }
 
 // converts .md to JS Object
