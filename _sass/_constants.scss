@@ -11,9 +11,10 @@ $nav-font-size: 15px;
 $base-font-weight: 400;
 $mono-font-family: "Fira Mono", monospace;
 // Colors
-$primary-text-color: #454f5b;
+$slate-gray: #454f5b;
+$primary-text-color: $slate-gray;
 $secondary-text-color: #999;
-$header-text-color: #454f5b;
+$header-text-color: $slate-gray;
 $selected-text-color: #000;
 $divider-color: #d8d8d8;
 $base-background-color: #fff;
