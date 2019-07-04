@@ -76,7 +76,7 @@
     // Begin Lunr Indexing
     // =============================================================================
     function getLunrIndex() {
-        return fetch('/assets/lunrIndex.json')
+        return fetch('{{ site.baseurl }}' + '/assets/lunrIndex.json')
             .then(function (res) {
                     return res.json()
             })
