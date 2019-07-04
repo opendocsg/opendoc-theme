@@ -4,8 +4,7 @@ Welcome to your new Jekyll theme! In this directory, you'll find the files you n
 
 # Deployment
 - Update version number on `opendoc-theme.gemspec`
-- Run `gem build opendoc-theme.gemspec`
-- Add tag with new version number to commit
+- Add tag with new version number to commit e.g. `2.0.2`
 - Push to origin
 
 ## Installation
