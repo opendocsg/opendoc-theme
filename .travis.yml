@@ -1,12 +1,10 @@
 install: true
 
-branches:
-  only:
-    - master
-
 script:
-  - sleep 60
-  - curl --user $CBT_USER:$CBT_AUTHKEY -d "url=https://docs.opendoc.sg&browser_list_name=desktop&delay=1&hide_fixed_elements=true&check_url=true" https://crossbrowsertesting.com/api/v3/screenshots/
-  - curl --user $CBT_USER:$CBT_AUTHKEY -d "url=https://docs.opendoc.sg&browser_list_name=desktop&delay=1&hide_fixed_elements=true&check_url=true&login=search" https://crossbrowsertesting.com/api/v3/screenshots/
-  - curl --user $CBT_USER:$CBT_AUTHKEY -d "url=https://docs.opendoc.sg&browser_list_name=desktop&delay=1&hide_fixed_elements=true&check_url=true&login=navigation" https://crossbrowsertesting.com/api/v3/screenshots/
-  - curl --user $CBT_USER:$CBT_AUTHKEY -d "url=https://docs.opendoc.sg&browser_list_name=desktop&delay=1&hide_fixed_elements=true&check_url=true&login=sidebar" https://crossbrowsertesting.com/api/v3/screenshots/
+  - echo "Deploying ruby gem"
+
+deploy:
+  provider: rubygems
+  api_key: "$RUBYGEMS_API_KEY"
+  on:
+    tags: true
