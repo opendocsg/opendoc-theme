@@ -1,5 +1,8 @@
 install: true
 
+script:
+  - echo "Deploying ruby gem"
+
 deploy:
   provider: rubygems
   api_key: "$RUBYGEMS_API_KEY"
