@@ -81,7 +81,7 @@ If there is only one folder or documents all at root, dont show back button
 If there is only one folder, show expanded content list
 {% endcomment %}
 {% assign toc_id = 'toc_' | append: folder | downcase %}
-{% if folders.size == 1 %}
+{% if sorted_folders.size == 1 %}
 <section class="contents lonely" id="{{ toc_id }}">
 {% elsif include_currdir_decode == folder and include.currdir != '/' %}
 <section class="contents" id="{{ toc_id }}">
