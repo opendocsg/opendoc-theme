@@ -61,7 +61,13 @@
 
     printButtons.forEach(function (btn) {
         btn.addEventListener('click', function () {
-            window.open('./export.pdf', '_blank')
+            var repoUrl = '{{ site.PDF_storage_URL }}'
+            var page = pageIndex[window.location.pathname]
+            var documentTitle = page.dir !== '/' ? page.dir : '/root/'
+            if (documentTitle) {
+                repoUrl += documentTitle.substring(0, documentTitle.length-1) + '.pdf'
+            }
+            window.open(repoUrl, '_blank')
         })
     })
 

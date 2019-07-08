@@ -1,5 +1,8 @@
+---
+---
 const fs = require('fs')
 const fsp = require('fs').promises
+const crypto = require('crypto')
 const pAll = require('p-all')
 const https = require('https')
 const glob = require('glob')
@@ -8,21 +11,22 @@ const jsdom = require('jsdom')
 const jsyaml = require('js-yaml')
 const sitePath = __dirname + '/../..'
 
-// Env vars to generate PDFs on AWS Lambda
-let pdfGenVarsPresent = true
+let generatingPDFlocally = false
 let pdf
-let PDF_GEN_CONCURRENCY
+let PDF_GEN_CONCURRENCY = 1
+const PDF_FOLDER = path.join(sitePath, 'assets', 'pdfs')
 
 if (process.env.PDF_GEN_API_KEY === undefined || process.env.PDF_GEN_API_SERVER === undefined) {
-    console.log('Env var PDF_GEN_API_KEY or PDF_GEN_API_SERVER for AWS Lambda not present: Generating PDFs locally instead.')
+    console.log('Environment variables PDF_GEN_API_KEY or PDF_GEN_API_SERVER for AWS Lambda not present')
+    console.log('Generating PDFs and storing locally instead.')
     pdf = require('html-pdf')
-    pdfGenVarsPresent = false
-    PDF_GEN_CONCURRENCY = 1 // When generating locally make it synchronous
+    generatingPDFlocally = true
 } else {
     PDF_GEN_CONCURRENCY = process.env.PDF_GEN_CONCURRENCY !== undefined ?
         parseInt(process.env.PDF_GEN_CONCURRENCY) :
         50 // Tuned for Netlify
-    console.log(`Env vars detected: Generating PDFs on AWS Lambda with concurrency of ${PDF_GEN_CONCURRENCY}`)
+    console.log('Env vars detected')
+    console.log(`Generating PDFs on AWS Lambda with concurrency of ${PDF_GEN_CONCURRENCY}`)
 }
 
 // These options are only applied when PDFs are built locally
@@ -46,20 +50,23 @@ const localPdfOptions = {
 const printIgnoreFolders = ['assets', 'files', 'iframes', 'images']
 // List of top-level .html files which are not to be printed
 const printIgnoreFiles = ['export.html', 'index.html']
+// CSS to be applied to the PDFs, this will be inserted in <head>
+const PATH_TO_CSS = path.join(sitePath, 'assets', 'styles', 'main.css')
+const SERIALIZED_HTML_HASH_HEADER = 'x-amz-meta-html-hash'
 
 // Tracking statistics
 let numPdfsStarted = 0
+let numPdfsUnchanged = 0
 let numPdfsError = 0
 let numPdfsSuccess = 0
 let numTotalPdfs = 0
 const TIMER = 'Time to create PDFs'
 
 const main = async () => {
-
     // creating exports of individual documents
     console.time(TIMER)
     const docFolders = getDocumentFolders(sitePath, printIgnoreFolders)
-    await exportPdfTopLevelDocs(sitePath)
+    //await exportPdfTopLevelDocs(sitePath)
     await exportPdfDocFolders(sitePath, docFolders)
     console.log(`PDFs created with success:${numPdfsSuccess} error:${numPdfsError} total:${numTotalPdfs}`)
     console.timeEnd(TIMER)
@@ -98,16 +105,17 @@ const exportPdfDocFolders = (sitePath, docFolders) => {
             const order = configMd.order
             htmlFilePaths = reorderHtmlFilePaths(htmlFilePaths, order)
         }
-        actions.push((() => createPdf(htmlFilePaths, folderPath)))
+        actions.push((() => createPdf(htmlFilePaths, folderPath, folder)))
     }
     return pAll(actions, { concurrency: PDF_GEN_CONCURRENCY })
 }
 
 // Concatenates the contents in .html files, and outputs export.pdf in the specified output folder
-const createPdf = (htmlFilePaths, outputFolderPath) => {
+const createPdf = (htmlFilePaths, outputFolderPath, documentName) => {
     logStartedPdf(outputFolderPath)
     // docprint.html is our template to build pdf up from.
     const exportHtmlFile = fs.readFileSync(__dirname + '/docprint.html')
+    const cssFile = fs.readFileSync(PATH_TO_CSS)
     const exportDom = new jsdom.JSDOM(exportHtmlFile)
     const exportDomBody = exportDom.window.document.body
     const exportDomMain = exportDom.window.document.getElementById('main-content')
@@ -169,10 +177,12 @@ const createPdf = (htmlFilePaths, outputFolderPath) => {
         }
         dom.window.close()
     })
-
-    if (!pdfGenVarsPresent) {
+    exportDom.window.document.head.innerHTML += '<style>' + cssFile + '</style>'
+    if (generatingPDFlocally) {
+        // Generate and store locally
         return new Promise((resolve, reject) => {
-            pdf.create(exportDom.serialize(), localPdfOptions).toFile(path.join(outputFolderPath, 'export.pdf'), (err, res) => {
+            const url = path.join(PDF_FOLDER, encodeURIComponent(documentName) + '.pdf')
+            pdf.create(exportDom.serialize(), localPdfOptions).toFile(url, (err, res) => {
                 if (err) {
                     logErrorPdf('Creating PDFs locally', err)
                     return reject()
@@ -184,56 +194,86 @@ const createPdf = (htmlFilePaths, outputFolderPath) => {
         })
     } else {
         // Code for this API lives at https://github.com/opendocsg/pdf-lambda
-        const requestOptions = {
-            method: 'POST',
-            responseType: 'arraybuffer',
-            headers: {
-                'x-api-key': process.env.PDF_GEN_API_KEY,
-                'content-type': 'application/json',
-            },
-        }
-        return new Promise(function(resolve, reject) {
-            const request = https.request(process.env.PDF_GEN_API_SERVER, requestOptions, function(res) {
-                if (res.statusCode < 200 || res.statusCode >= 300) {
-                    logErrorPdf('Request status code', res.statusCode)
-                    reject()
+        const serializedHtmlHash = crypto.createHash('md5').update(exportDom.serialize()).digest('base64')
+        const pdfName = `${documentName}.pdf`
+        const pdfStorageUrl = new URL('{{ site.PDF_storage_URL }}')
+        const bucketName = pdfStorageUrl.hostname.split('.')[0]
+        const pdfFolderName = pdfStorageUrl.pathname.split('/')[1]
+        return new Promise(function (resolve, reject) {
+            // Promise resolves if PDF is present and hash matches. Else reject.
+            const pdfS3Url = pdfStorageUrl.toString() + '/' + pdfName
+            const options = {
+                method: 'HEAD'
+            }
+            const pdfExistsRequest = https.request(pdfS3Url, options, function (res) {
+                console.log(res.statusCode)
+                if (res.statusCode === 404) {
+                    return reject('PDF not present')
                 }
-                const chunks = []
-                res.on('data', function(d) {
-                    chunks.push(d)
-                })
-                res.on('end', function() {
-                    const buf = Buffer.concat(chunks)
-                    resolve(buf)
-                })
+                if (!(SERIALIZED_HTML_HASH_HEADER in res.headers)) {
+                    return reject('HTML hash header not present')
+                }
+                if (res.headers[SERIALIZED_HTML_HASH_HEADER] !== serializedHtmlHash) {
+                    return reject('PDF hash does not match')
+                }
+                logUnchangedPdf(pdfName)
+                resolve()
             })
-            request.on('error', (err) => {
+            pdfExistsRequest.on('error', function (err) {
                 logErrorPdf('Request encountered error', err)
-                reject()
+                return reject()
             })
-            // POST request body
-            request.write(JSON.stringify({
-                'serializedDom': exportDom.serialize()
-            }))
-            request.end()
-            exportDom.window.close()
-        }).then((buffer) => {
-            const outputPdfPath = path.join(outputFolderPath, 'export.pdf')
-            return fsp.writeFile(outputPdfPath, buffer)
-                .then(() => {
-                    logSuccessPdf(outputPdfPath)
-                }).catch((err) => {
-                    logErrorPdf('Writing out file', err)
+            pdfExistsRequest.end()
+        }).then(() => {},
+            function (rejected) {
+                // Rejected: send to lambda function to create PDF
+                const options = {
+                    method: 'POST',
+                    headers: {
+                        'x-api-key': process.env.PDF_GEN_API_KEY,
+                        'content-type': 'application/json',
+                    }
+                }
+
+                const pdfCreationBody = {
+                    'serializedHTML': exportDom.serialize(),
+                    'serializedHTMLName': pdfFolderName + '/' + pdfName,
+                    'serializedHTMLHash': serializedHtmlHash,
+                    'bucketName': bucketName
+                }
+                return new Promise(function (resolve, reject) {
+                    const pdfCreationRequest = https.request(process.env.PDF_GEN_API_SERVER, options, function (res) {
+                        if (res.statusCode < 200 || res.statusCode >= 300) {
+                            logErrorPdf('Request status code', res.statusCode)
+                            return reject()
+                        }
+                        logSuccessPdf(pdfName)
+                        return resolve()
+                    })
+                    pdfCreationRequest.on('error', function(err) {
+                        logErrorPdf('Request encountered error:', err)
+                        return reject()
+                    })
+                    pdfCreationRequest.write(JSON.stringify(pdfCreationBody))
+                    pdfCreationRequest.end()
+                }).catch((error) => {
+                    logErrorPdf('Request promise ', error)
+                }).finally(() => {
+                    exportDom.window.close()
                 })
-        }).catch((error) => {
-            logErrorPdf('Request promise', error)
-        })
+
+            })
     }
 }
 
 const logStartedPdf = (outputFolderPath) => {
     numPdfsStarted++
     console.log(`createpdf started for:${outputFolderPath} (${numPdfsStarted}/${numTotalPdfs})`)
+}
+
+const logUnchangedPdf = (outputFolderPath) => {
+    numPdfsUnchanged++
+    console.log(`createpdf unchanged for:${outputFolderPath} (${numPdfsUnchanged}/${numTotalPdfs})`)
 }
 
 const logErrorPdf = (origin, error) => {
