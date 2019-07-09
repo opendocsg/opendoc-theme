@@ -61,9 +61,10 @@
 
     printButtons.forEach(function (btn) {
         btn.addEventListener('click', function () {
+            var replacedRepoName = '{{ site.repository }}'.replace(/\//g, '-')
             var pdfUrl = '{{ site.offline }}' === 'true' ?
-                '{{ "/assets/pdfs/" | relative_url }}' :
-                'https://opendoc-theme-pdf.s3-ap-southeast-1.amazonaws.com'
+                '{{ "/assets/pdfs" | relative_url }}' :
+                'https://opendoc-theme-pdf.s3-ap-southeast-1.amazonaws.com/' + replacedRepoName
             var page = pageIndex[window.location.pathname]
             // documentTitle refers to the name of the document folder
             // If page.dir is slash, that indicates the root directory

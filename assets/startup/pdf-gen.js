@@ -14,7 +14,7 @@ let generatingPdfLocally = '{{ site.offline }}' === 'true' || false
 const S3StorageUrl = new URL('https://opendoc-theme-pdf.s3-ap-southeast-1.amazonaws.com')
 
 const localPdfFolder = path.join(sitePath, 'assets', 'pdfs') // local folder for pdfs
-const S3PdfFolder = '{{ site.repository }}'.replace(/\//g, '-') // S3 folder; replace slashes to avoid creating sub-folders
+const S3PdfFolder = '{{ site.github.repository }}'.replace(/\//g, '-') // S3 folder; replace slashes to avoid creating sub-folders
 
 const bucketName = S3StorageUrl.hostname.split('.')[0]
 
