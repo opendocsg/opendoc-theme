@@ -14,6 +14,9 @@ let generatingPDFlocally = false
 let pdf
 let PDF_GEN_CONCURRENCY = 1
 const PDF_FOLDER = path.join(sitePath, 'assets', 'pdfs') // Storage location only if generated locally
+const PDF_STORAGE_URL = new URL('https://opendoc-theme-pdf.s3-ap-southeast-1.amazonaws.com')
+const bucketName = PDF_STORAGE_URL.hostname.split('.')[0]
+const pdfFolderName = '{{ site.repository }}'.replace(/\//g, '-') // Replace slashes to avoid creating sub-folders
 
 if (process.env.PDF_GEN_API_KEY === undefined || process.env.PDF_GEN_API_SERVER === undefined) {
     generatingPDFlocally = true
@@ -25,10 +28,6 @@ if (process.env.PDF_GEN_API_KEY === undefined || process.env.PDF_GEN_API_SERVER 
         parseInt(process.env.PDF_GEN_CONCURRENCY) :
         50 // Tuned for Netlify
     console.log(`Generating PDFs on AWS Lambda with concurrency of ${PDF_GEN_CONCURRENCY}`)
-
-    pdfStorageUrl = new URL('{{ site.PDF_storage_URL }}')
-    bucketName = pdfStorageUrl.hostname.split('.')[0]
-    pdfFolderName = pdfStorageUrl.pathname.split('/')[1]
     console.log(`PDFs will be placed in bucket: ${bucketName} in folder ${pdfFolderName}`)
 }
 
@@ -55,6 +54,7 @@ const printIgnoreFolders = ['assets', 'files', 'iframes', 'images']
 const printIgnoreFiles = ['export.html', 'index.html']
 // CSS to be applied to the PDFs, this will be inserted in <head>
 const PATH_TO_CSS = path.join(sitePath, 'assets', 'styles', 'main.css')
+// Hash is stored as S3 metadata and served as custom header whenever the pdf is requested
 const SERIALIZED_HTML_HASH_HEADER = 'x-amz-meta-html-hash'
 
 
@@ -186,6 +186,7 @@ const createPdf = (htmlFilePaths, outputFolderPath, documentName) => {
         }
         dom.window.close()
     })
+    const serializedHtmlHash = crypto.createHash('md5').update(exportDom.serialize()).digest('base64')
     exportDom.window.document.head.innerHTML += '<style>' + cssFile + '</style>'
     if (generatingPDFlocally) {
         // Generate and store locally
@@ -203,11 +204,10 @@ const createPdf = (htmlFilePaths, outputFolderPath, documentName) => {
         })
     } else {
         // Code for this API lives at https://github.com/opendocsg/pdf-lambda
-        const serializedHtmlHash = crypto.createHash('md5').update(exportDom.serialize()).digest('base64')
         const pdfName = `${documentName}.pdf`
         return new Promise(function (resolve, reject) {
             // Promise resolves if PDF is present and hash matches. Else reject.
-            const pdfS3Url = pdfStorageUrl.toString() + '/' + pdfName
+            const pdfS3Url = PDF_STORAGE_URL.toString() + '/' + pdfName
             const options = {
                 method: 'HEAD'
             }

@@ -61,13 +61,16 @@
 
     printButtons.forEach(function (btn) {
         btn.addEventListener('click', function () {
-            var repoUrl = '{{ site.PDF_storage_URL }}'
+            var S3Url = 'https://opendoc-theme-pdf.s3-ap-southeast-1.amazonaws.com'
             var page = pageIndex[window.location.pathname]
+            // documentTitle refers to the name of the document folder
+            // If page.dir is slash, that indicates the root directory
+            // PDF at root dir is named export.pdf
             var documentTitle = page.dir !== '/' ? page.dir : '/export/'
             if (documentTitle) {
-                repoUrl += documentTitle.substring(0, documentTitle.length-1) + '.pdf'
+                S3Url += documentTitle.substring(0, documentTitle.length-1) + '.pdf'
             }
-            window.open(repoUrl, '_blank')
+            window.open(S3Url, '_blank')
         })
     })
 
