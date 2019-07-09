@@ -1,7 +1,6 @@
 ---
 ---
 const fs = require('fs')
-const fsp = require('fs').promises
 const crypto = require('crypto')
 const pAll = require('p-all')
 const https = require('https')
@@ -14,19 +13,23 @@ const sitePath = __dirname + '/../..'
 let generatingPDFlocally = false
 let pdf
 let PDF_GEN_CONCURRENCY = 1
-const PDF_FOLDER = path.join(sitePath, 'assets', 'pdfs')
+const PDF_FOLDER = path.join(sitePath, 'assets', 'pdfs') // Storage location only if generated locally
 
 if (process.env.PDF_GEN_API_KEY === undefined || process.env.PDF_GEN_API_SERVER === undefined) {
+    generatingPDFlocally = true
+    pdf = require('html-pdf')
     console.log('Environment variables PDF_GEN_API_KEY or PDF_GEN_API_SERVER for AWS Lambda not present')
     console.log('Generating PDFs and storing locally instead.')
-    pdf = require('html-pdf')
-    generatingPDFlocally = true
 } else {
     PDF_GEN_CONCURRENCY = process.env.PDF_GEN_CONCURRENCY !== undefined ?
         parseInt(process.env.PDF_GEN_CONCURRENCY) :
         50 // Tuned for Netlify
-    console.log('Env vars detected')
     console.log(`Generating PDFs on AWS Lambda with concurrency of ${PDF_GEN_CONCURRENCY}`)
+
+    pdfStorageUrl = new URL('{{ site.PDF_storage_URL }}')
+    bucketName = pdfStorageUrl.hostname.split('.')[0]
+    pdfFolderName = pdfStorageUrl.pathname.split('/')[1]
+    console.log(`PDFs will be placed in bucket: ${bucketName} in folder ${pdfFolderName}`)
 }
 
 // These options are only applied when PDFs are built locally
@@ -53,6 +56,7 @@ const printIgnoreFiles = ['export.html', 'index.html']
 // CSS to be applied to the PDFs, this will be inserted in <head>
 const PATH_TO_CSS = path.join(sitePath, 'assets', 'styles', 'main.css')
 const SERIALIZED_HTML_HASH_HEADER = 'x-amz-meta-html-hash'
+
 
 // Tracking statistics
 let numPdfsStarted = 0
@@ -201,9 +205,6 @@ const createPdf = (htmlFilePaths, outputFolderPath, documentName) => {
         // Code for this API lives at https://github.com/opendocsg/pdf-lambda
         const serializedHtmlHash = crypto.createHash('md5').update(exportDom.serialize()).digest('base64')
         const pdfName = `${documentName}.pdf`
-        const pdfStorageUrl = new URL('{{ site.PDF_storage_URL }}')
-        const bucketName = pdfStorageUrl.hostname.split('.')[0]
-        const pdfFolderName = pdfStorageUrl.pathname.split('/')[1]
         return new Promise(function (resolve, reject) {
             // Promise resolves if PDF is present and hash matches. Else reject.
             const pdfS3Url = pdfStorageUrl.toString() + '/' + pdfName
