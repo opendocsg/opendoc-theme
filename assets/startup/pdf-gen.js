@@ -66,9 +66,9 @@ const main = async () => {
     // creating exports of individual documents
     console.time(TIMER)
     const docFolders = getDocumentFolders(sitePath, printIgnoreFolders)
-    //await exportPdfTopLevelDocs(sitePath)
+    await exportPdfTopLevelDocs(sitePath)
     await exportPdfDocFolders(sitePath, docFolders)
-    console.log(`PDFs created with success:${numPdfsSuccess} error:${numPdfsError} total:${numTotalPdfs}`)
+    console.log(`PDFs created with success:${numPdfsSuccess} unchanged:${numPdfsUnchanged} error:${numPdfsError} total:${numTotalPdfs}`)
     console.timeEnd(TIMER)
 }
 
@@ -84,7 +84,7 @@ const exportPdfTopLevelDocs = async (sitePath) => {
         const configYml = yamlToJs(configFilepath)
         htmlFilePaths = reorderHtmlFilePaths(htmlFilePaths, configYml.order)
     }
-    await createPdf(htmlFilePaths, sitePath)
+    await createPdf(htmlFilePaths, sitePath, 'export')
 }
 
 const exportPdfDocFolders = (sitePath, docFolders) => {
@@ -211,7 +211,6 @@ const createPdf = (htmlFilePaths, outputFolderPath, documentName) => {
                 method: 'HEAD'
             }
             const pdfExistsRequest = https.request(pdfS3Url, options, function (res) {
-                console.log(res.statusCode)
                 if (res.statusCode === 404) {
                     return reject('PDF not present')
                 }
@@ -225,7 +224,7 @@ const createPdf = (htmlFilePaths, outputFolderPath, documentName) => {
                 resolve()
             })
             pdfExistsRequest.on('error', function (err) {
-                logErrorPdf(`pdfExistsRequest encountered error for ${pdfName}: `, err)
+                console.log(`pdfExistsRequest encountered error for ${pdfName}:, ${err}`)
                 return reject()
             })
             pdfExistsRequest.end()
@@ -262,7 +261,7 @@ const createPdf = (htmlFilePaths, outputFolderPath, documentName) => {
                     pdfCreationRequest.write(JSON.stringify(pdfCreationBody))
                     pdfCreationRequest.end()
                 }).catch((error) => {
-                    logErrorPdf('Request promise ', error)
+                    logErrorPdf(`pdfCreation promise error for ${pdfName}`, error)
                 }).finally(() => {
                     exportDom.window.close()
                 })

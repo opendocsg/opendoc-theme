@@ -63,7 +63,7 @@
         btn.addEventListener('click', function () {
             var repoUrl = '{{ site.PDF_storage_URL }}'
             var page = pageIndex[window.location.pathname]
-            var documentTitle = page.dir !== '/' ? page.dir : '/root/'
+            var documentTitle = page.dir !== '/' ? page.dir : '/export/'
             if (documentTitle) {
                 repoUrl += documentTitle.substring(0, documentTitle.length-1) + '.pdf'
             }
