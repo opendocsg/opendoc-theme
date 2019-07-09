@@ -10,25 +10,36 @@ const jsdom = require('jsdom')
 const jsyaml = require('js-yaml')
 const sitePath = __dirname + '/../..'
 
-let generatingPDFlocally = false
-let pdf
-let PDF_GEN_CONCURRENCY = 1
-const PDF_FOLDER = path.join(sitePath, 'assets', 'pdfs') // Storage location only if generated locally
-const PDF_STORAGE_URL = new URL('https://opendoc-theme-pdf.s3-ap-southeast-1.amazonaws.com')
-const bucketName = PDF_STORAGE_URL.hostname.split('.')[0]
-const pdfFolderName = '{{ site.repository }}'.replace(/\//g, '-') // Replace slashes to avoid creating sub-folders
+let generatingPdfLocally = '{{ site.offline }}' === 'true' || false
+const S3StorageUrl = new URL('https://opendoc-theme-pdf.s3-ap-southeast-1.amazonaws.com')
 
-if (process.env.PDF_GEN_API_KEY === undefined || process.env.PDF_GEN_API_SERVER === undefined) {
-    generatingPDFlocally = true
+const localPdfFolder = path.join(sitePath, 'assets', 'pdfs') // local folder for pdfs
+const S3PdfFolder = '{{ site.repository }}'.replace(/\//g, '-') // S3 folder; replace slashes to avoid creating sub-folders
+
+const bucketName = S3StorageUrl.hostname.split('.')[0]
+
+// CSS to be applied to the PDFs, this will be inserted in <head>
+const pathToCss = path.join(sitePath, 'assets', 'styles', 'main.css')
+
+// Hash is stored as S3 metadata and served as custom header whenever the pdf is requested
+const serializedHtmlHashHeader = 'x-amz-meta-html-hash'
+
+let pdf
+let pdfGenConcurrency = 1
+if (generatingPdfLocally) {
     pdf = require('html-pdf')
-    console.log('Environment variables PDF_GEN_API_KEY or PDF_GEN_API_SERVER for AWS Lambda not present')
     console.log('Generating PDFs and storing locally instead.')
 } else {
-    PDF_GEN_CONCURRENCY = process.env.PDF_GEN_CONCURRENCY !== undefined ?
+    if (process.env.PDF_GEN_API_KEY === undefined || 
+        process.env.PDF_GEN_API_SERVER === undefined) {
+            console.log('Environment variables PDF_GEN_API_KEY or PDF_GEN_API_SERVER for AWS Lambda not present')
+            return
+        }
+    pdfGenConcurrency = process.env.PDF_GEN_CONCURRENCY !== undefined ?
         parseInt(process.env.PDF_GEN_CONCURRENCY) :
         50 // Tuned for Netlify
-    console.log(`Generating PDFs on AWS Lambda with concurrency of ${PDF_GEN_CONCURRENCY}`)
-    console.log(`PDFs will be placed in bucket: ${bucketName} in folder ${pdfFolderName}`)
+    console.log(`Generating PDFs on AWS Lambda with concurrency of ${pdfGenConcurrency}`)
+    console.log(`PDFs will be placed in bucket: ${bucketName} in folder ${S3PdfFolder}`)
 }
 
 // These options are only applied when PDFs are built locally
@@ -52,11 +63,6 @@ const localPdfOptions = {
 const printIgnoreFolders = ['assets', 'files', 'iframes', 'images']
 // List of top-level .html files which are not to be printed
 const printIgnoreFiles = ['export.html', 'index.html']
-// CSS to be applied to the PDFs, this will be inserted in <head>
-const PATH_TO_CSS = path.join(sitePath, 'assets', 'styles', 'main.css')
-// Hash is stored as S3 metadata and served as custom header whenever the pdf is requested
-const SERIALIZED_HTML_HASH_HEADER = 'x-amz-meta-html-hash'
-
 
 // Tracking statistics
 let numPdfsStarted = 0
@@ -111,7 +117,7 @@ const exportPdfDocFolders = (sitePath, docFolders) => {
         }
         actions.push((() => createPdf(htmlFilePaths, folderPath, folder)))
     }
-    return pAll(actions, { concurrency: PDF_GEN_CONCURRENCY })
+    return pAll(actions, { concurrency: pdfGenConcurrency })
 }
 
 // Concatenates the contents in .html files, and outputs export.pdf in the specified output folder
@@ -121,9 +127,9 @@ const createPdf = (htmlFilePaths, outputFolderPath, documentName) => {
     const exportHtmlFile = fs.readFileSync(__dirname + '/docprint.html')
     let cssFile = ''
     try {
-        cssFile = fs.readFileSync(PATH_TO_CSS)
+        cssFile = fs.readFileSync(pathToCss)
     } catch(err) {
-        console.log('Failed to read CSS file at ' + PATH_TO_CSS +', CSS will not be applied')
+        console.log('Failed to read CSS file at ' + pathToCss +', CSS will not be applied')
     }
     const exportDom = new jsdom.JSDOM(exportHtmlFile)
     const exportDomBody = exportDom.window.document.body
@@ -188,10 +194,10 @@ const createPdf = (htmlFilePaths, outputFolderPath, documentName) => {
     })
     const serializedHtmlHash = crypto.createHash('md5').update(exportDom.serialize()).digest('base64')
     exportDom.window.document.head.innerHTML += '<style>' + cssFile + '</style>'
-    if (generatingPDFlocally) {
+    if (generatingPdfLocally) {
         // Generate and store locally
         return new Promise((resolve, reject) => {
-            const url = path.join(PDF_FOLDER, encodeURIComponent(documentName) + '.pdf')
+            const url = path.join(localPdfFolder, encodeURIComponent(documentName) + '.pdf')
             pdf.create(exportDom.serialize(), localPdfOptions).toFile(url, (err, res) => {
                 if (err) {
                     logErrorPdf('Creating PDFs locally', err)
@@ -207,7 +213,7 @@ const createPdf = (htmlFilePaths, outputFolderPath, documentName) => {
         const pdfName = `${documentName}.pdf`
         return new Promise(function (resolve, reject) {
             // Promise resolves if PDF is present and hash matches. Else reject.
-            const pdfS3Url = PDF_STORAGE_URL.toString() + '/' + pdfName
+            const pdfS3Url = S3StorageUrl.toString() + '/' + pdfName
             const options = {
                 method: 'HEAD'
             }
@@ -215,10 +221,10 @@ const createPdf = (htmlFilePaths, outputFolderPath, documentName) => {
                 if (res.statusCode === 404) {
                     return reject('PDF not present')
                 }
-                if (!(SERIALIZED_HTML_HASH_HEADER in res.headers)) {
+                if (!(serializedHtmlHashHeader in res.headers)) {
                     return reject('HTML hash header not present')
                 }
-                if (res.headers[SERIALIZED_HTML_HASH_HEADER] !== serializedHtmlHash) {
+                if (res.headers[serializedHtmlHashHeader] !== serializedHtmlHash) {
                     return reject('PDF hash does not match')
                 }
                 logUnchangedPdf(pdfName)
@@ -242,7 +248,7 @@ const createPdf = (htmlFilePaths, outputFolderPath, documentName) => {
 
                 const pdfCreationBody = {
                     'serializedHTML': exportDom.serialize(),
-                    'serializedHTMLName': pdfFolderName + '/' + pdfName,
+                    'serializedHTMLName': S3PdfFolder + '/' + pdfName,
                     'serializedHTMLHash': serializedHtmlHash,
                     'bucketName': bucketName
                 }

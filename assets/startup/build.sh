@@ -9,7 +9,7 @@ if [[ (-z "${PDF_GEN_API_SERVER}") || (-z "${PDF_GEN_API_KEY}") ]]; then
   npm i html-pdf
 fi
 node _site/assets/startup/pdf-gen.js
-if [ "{{ site.offline_search_only }}" == "true" ]; then
+if [ "{{ site.offline }}" == "true" ]; then
     node _site/assets/startup/prebuild-lunr-index.js
     echo 'Generating Lunr Index complete'
 else
