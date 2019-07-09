@@ -115,7 +115,12 @@ const createPdf = (htmlFilePaths, outputFolderPath, documentName) => {
     logStartedPdf(outputFolderPath)
     // docprint.html is our template to build pdf up from.
     const exportHtmlFile = fs.readFileSync(__dirname + '/docprint.html')
-    const cssFile = fs.readFileSync(PATH_TO_CSS)
+    let cssFile = ''
+    try {
+        cssFile = fs.readFileSync(PATH_TO_CSS)
+    } catch(err) {
+        console.log('Failed to read CSS file at ' + PATH_TO_CSS +', CSS will not be applied')
+    }
     const exportDom = new jsdom.JSDOM(exportHtmlFile)
     const exportDomBody = exportDom.window.document.body
     const exportDomMain = exportDom.window.document.getElementById('main-content')
@@ -220,7 +225,7 @@ const createPdf = (htmlFilePaths, outputFolderPath, documentName) => {
                 resolve()
             })
             pdfExistsRequest.on('error', function (err) {
-                logErrorPdf('Request encountered error', err)
+                logErrorPdf(`pdfExistsRequest encountered error for ${pdfName}: `, err)
                 return reject()
             })
             pdfExistsRequest.end()
@@ -244,14 +249,14 @@ const createPdf = (htmlFilePaths, outputFolderPath, documentName) => {
                 return new Promise(function (resolve, reject) {
                     const pdfCreationRequest = https.request(process.env.PDF_GEN_API_SERVER, options, function (res) {
                         if (res.statusCode < 200 || res.statusCode >= 300) {
-                            logErrorPdf('Request status code', res.statusCode)
+                            logErrorPdf(`pdfCreationRequest status code for ${pdfName}: `, res.statusCode)
                             return reject()
                         }
                         logSuccessPdf(pdfName)
                         return resolve()
                     })
                     pdfCreationRequest.on('error', function(err) {
-                        logErrorPdf('Request encountered error:', err)
+                        logErrorPdf(`pdfCreationRequest encountered error for ${pdfName}:`, err)
                         return reject()
                     })
                     pdfCreationRequest.write(JSON.stringify(pdfCreationBody))
