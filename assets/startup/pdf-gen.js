@@ -6,6 +6,7 @@ const pAll = require('p-all')
 const https = require('https')
 const glob = require('glob')
 const path = require('path')
+const URL = require('url').URL;
 const jsdom = require('jsdom')
 const jsyaml = require('js-yaml')
 const sitePath = __dirname + '/../..'
