@@ -14,7 +14,8 @@ let generatingPdfLocally = '{{ site.offline }}' === 'true' || false
 const S3StorageUrl = new URL('https://opendoc-theme-pdf.s3-ap-southeast-1.amazonaws.com')
 
 const localPdfFolder = path.join(sitePath, 'assets', 'pdfs') // local folder for pdfs
-const S3PdfFolder = '{{ site.github.repository }}'.replace(/\//g, '-') // S3 folder; replace slashes to avoid creating sub-folders
+ // S3 folder; replace slashes and spaces to avoid creating sub-folders
+const S3PdfFolder = '{{ site.title | default: "default" }}'.replace(/\//g, '-').replace(/\s+/g, '-')
 
 const bucketName = S3StorageUrl.hostname.split('.')[0]
 
@@ -38,8 +39,8 @@ if (generatingPdfLocally) {
     pdfGenConcurrency = process.env.PDF_GEN_CONCURRENCY !== undefined ?
         parseInt(process.env.PDF_GEN_CONCURRENCY) :
         50 // Tuned for Netlify
-    console.log(`Generating PDFs on AWS Lambda with concurrency of ${pdfGenConcurrency}`)
-    console.log(`PDFs will be placed in bucket: ${bucketName} in folder ${S3PdfFolder}`)
+    console.log(`Generating PDFs on AWS Lambda with concurrency of ${pdfGenConcurrency}.`)
+    console.log(`PDFs will be placed in bucket: ${bucketName} in folder ${S3PdfFolder}.`)
 }
 
 // These options are only applied when PDFs are built locally
@@ -213,7 +214,7 @@ const createPdf = (htmlFilePaths, outputFolderPath, documentName) => {
         const pdfName = `${documentName}.pdf`
         return new Promise(function (resolve, reject) {
             // Promise resolves if PDF is present and hash matches. Else reject.
-            const pdfS3Url = S3StorageUrl.toString() + '/' + pdfName
+            const pdfS3Url = S3StorageUrl.toString() + S3PdfFolder + '/' + pdfName
             const options = {
                 method: 'HEAD'
             }
@@ -227,7 +228,7 @@ const createPdf = (htmlFilePaths, outputFolderPath, documentName) => {
                 if (res.headers[serializedHtmlHashHeader] !== serializedHtmlHash) {
                     return reject('PDF hash does not match')
                 }
-                logUnchangedPdf(pdfName)
+                logUnchangedPdf(pdfName, pdfS3Url)
                 resolve()
             })
             pdfExistsRequest.on('error', function (err) {
@@ -282,9 +283,9 @@ const logStartedPdf = (outputFolderPath) => {
     console.log(`createpdf started for:${outputFolderPath} (${numPdfsStarted}/${numTotalPdfs})`)
 }
 
-const logUnchangedPdf = (outputFolderPath) => {
+const logUnchangedPdf = (outputFolderPath, pdfUrl) => {
     numPdfsUnchanged++
-    console.log(`createpdf unchanged for:${outputFolderPath} (${numPdfsUnchanged}/${numTotalPdfs})`)
+    console.log(`createpdf unchanged for:${outputFolderPath} at ${pdfUrl} (${numPdfsUnchanged}/${numTotalPdfs})`)
 }
 
 const logErrorPdf = (origin, error) => {

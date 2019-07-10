@@ -61,7 +61,8 @@
 
     printButtons.forEach(function (btn) {
         btn.addEventListener('click', function () {
-            var replacedRepoName = '{{ site.repository }}'.replace(/\//g, '-')
+            // S3 folder; replace slashes to avoid creating sub-folders
+            var replacedRepoName = '{{ site.title | default: "default" }}'.replace(/\//g, '-').replace(/\s+/g, '-')
             var pdfUrl = '{{ site.offline }}' === 'true' ?
                 '{{ "/assets/pdfs" | relative_url }}' :
                 'https://opendoc-theme-pdf.s3-ap-southeast-1.amazonaws.com/' + replacedRepoName
