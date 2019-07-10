@@ -198,7 +198,7 @@ const createPdf = (htmlFilePaths, outputFolderPath, documentName) => {
     if (generatingPdfLocally) {
         // Generate and store locally
         return new Promise((resolve, reject) => {
-            const url = path.join(localPdfFolder, encodeURIComponent(documentName) + '.pdf')
+            const url = path.join(localPdfFolder, documentName + '.pdf')
             pdf.create(exportDom.serialize(), localPdfOptions).toFile(url, (err, res) => {
                 if (err) {
                     logErrorPdf('Creating PDFs locally', err)
