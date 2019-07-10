@@ -137,7 +137,7 @@ c.     An elongated contusion mark of 1cm in width and 5cm in length over his ri
 
 26     The accused is untraced for any previous offence.
 
-## The Prosecution’s Submission's [^1] on Sentence [^1]
+## The Prosecution’s Submission's on Sentence [^1]
 
 27     The Prosecution is seeking a sentence of at least 20 months’ imprisonment for the accused for the following reasons:-
 
