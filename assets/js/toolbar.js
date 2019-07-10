@@ -61,7 +61,7 @@
 
     printButtons.forEach(function (btn) {
         btn.addEventListener('click', function () {
-            // S3 folder; replace slashes to avoid creating sub-folders
+            // S3 folder name; replace slashes and spaces to avoid creating sub-folders
             var replacedRepoName = '{{ site.title | default: "default" }}'.replace(/\//g, '-').replace(/\s+/g, '-')
             var pdfUrl = '{{ site.offline }}' === 'true' ?
                 '{{ "/assets/pdfs" | relative_url }}' :
