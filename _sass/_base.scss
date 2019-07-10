@@ -145,6 +145,13 @@ pre {
   margin-bottom: $block-spacing;
 }
 
+blockquote {
+  margin-inline-end: 0;
+  @include mobile-screen() {
+    margin-inline-start: 20px;
+  }
+}
+
 // Lists
 // -----
 dl {
