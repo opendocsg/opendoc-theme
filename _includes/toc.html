@@ -86,6 +86,12 @@ Output:
 
             {% capture _hAttrToStrip %}{{ _workspace[0] | split: '>' | first }}>{% endcapture %}
             {% assign header = _workspace[0] | replace: _hAttrToStrip, '' %}
+            {% comment %}
+                Strips out footnotes links then strips out all other html tags
+                This naively assumes that all footnote links are appended at the end of the header
+            {% endcomment %}
+            {% assign header = header | split: '<sup' | first %}
+            {% assign header = header | strip_html | strip %}
 
             {% assign space = '' %}
             {% for i in (1..indentAmount) %}
