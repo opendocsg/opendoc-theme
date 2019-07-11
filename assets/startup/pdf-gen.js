@@ -197,6 +197,7 @@ const createPdf = (htmlFilePaths, outputFolderPath, documentName) => {
     const serializedHtmlHash = crypto.createHash('md5').update(exportDom.serialize()).digest('base64')
     exportDom.window.document.head.innerHTML += '<style>' + cssFile + '</style>'
     if (generatingPdfLocally) {
+        exportDomBody.className += ' print-content-large'
         // Generate and store locally
         return new Promise((resolve, reject) => {
             const url = path.join(localPdfFolder, documentName + '.pdf')
@@ -211,6 +212,8 @@ const createPdf = (htmlFilePaths, outputFolderPath, documentName) => {
             exportDom.window.close()
         })
     } else {
+        // Apply small font sizes because puppeteer tends to print big
+        exportDomBody.className += ' print-content-small'
         // Code for this API lives at https://github.com/opendocsg/pdf-lambda
         const pdfName = `${documentName}.pdf`
         return new Promise(function (resolve, reject) {
