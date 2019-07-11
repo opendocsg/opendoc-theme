@@ -1,5 +1,4 @@
-#print-content {
-  /* print styles go here */
+.print-content {
   .site-header-text {
     color: $primary-brand-color;
     font-family: $header-font-family;
@@ -18,6 +17,34 @@
     padding-top: 0;
     margin-top: -40px;
     position: relative;
+    font-size: $base-font-size;
+  }
+}
+
+.print-content-small {
+  .site-header-text {
+    font-size: 25px;
+  }
+
+  #document-title {
+    font-size: 20px;
+  }
+
+  #main-content {
+    font-size: 13px;
+  }
+}
+
+.print-content-large {
+  .site-header-text {
+    font-size: 40px;
+  }
+
+  #document-title {
+    font-size: 30px;
+  }
+
+  #main-content {
     font-size: $base-font-size;
   }
 }
