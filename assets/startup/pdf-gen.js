@@ -148,19 +148,7 @@ const createPdf = (htmlFilePaths, outputFolderPath, documentName) => {
         // html-pdf can't deal with these
         removeTagsFromDom(dom, 'script')
         removeTagsFromDom(dom, 'iframe')
-
-        // If a <img src=...> link src begins with '/', it is a relative link
-        // and needs to be prepended with '.' to show up in the pdf. Does not
-        // work for Lambda functions as the images are not available server side.
-        const imgsrcs = dom.window.document.getElementsByTagName('img')
-        for (let i = 0; i < imgsrcs.length; i++) {
-            const imgsrc = imgsrcs[i]
-            if (imgsrc.src.startsWith('/')) {
-                imgsrc.src = '.' + imgsrc.src
-            } else if (imgsrc.src.startsWith('.')) {
-                imgsrc.src = outputFolderPath + imgsrc.src.substr(1)
-            }
-        }
+        inlineImages(dom, outputFolderPath)
 
         // Site titles needs only be added once
         if (!addedTitle) {
@@ -300,6 +288,38 @@ const logErrorPdf = (origin, error) => {
 const logSuccessPdf = (outputPdfPath) => {
     numPdfsSuccess++
     console.log(`createpdf success for:${outputPdfPath} (${numPdfsSuccess}/${numTotalPdfs})`)
+}
+
+const imageType = {
+    '.png':'image/png',
+    '.jpg':'image/jpeg',
+    '.jpeg':'image/jpeg',
+    '.bmp':'image/bmp',
+    '.webp':'image/webp',
+}
+
+// Load images and inline them
+const inlineImages = (dom, outputFolderPath) => {
+    const imgs = dom.window.document.getElementsByTagName('img')
+    for (let i = 0; i < imgs.length; i++) {
+        const img = imgs[i]
+        if (!img.src.startsWith('http')) {
+            // Convert all file paths into absolute file paths
+            const imgPath = img.src.startsWith('/') ? 
+                path.join(__dirname, '..', '..', img.src).toString() :
+                path.join(outputFolderPath, img.src).toString()
+            if (fs.existsSync(imgPath)) {
+                const imgRaw = fs.readFileSync(imgPath)
+                if (path.extname(imgPath) === '.svg') { // don't encode svgs in base64, simply insert them
+                    img.src = 'data:image/svg+xml;utf8,' + imgRaw.toString('utf-8')
+                } else {
+                    const dataType = imageType[path.extname(imgPath)] || 'image/png'
+                    const uri = 'data:' + dataType + ';base64,' + imgRaw.toString('base64')
+                    img.src = uri
+                }
+            }
+        }
+    }
 }
 
 // Returns a list of the valid document (i.e. folder) paths
