@@ -184,6 +184,7 @@ const createPdf = (htmlFilePaths, outputFolderPath, documentName) => {
     })
     const serializedHtmlHash = crypto.createHash('md5').update(exportDom.serialize()).digest('base64')
     exportDom.window.document.head.innerHTML += '<style>' + cssFile + '</style>'
+    console.log('createpdf hash for:' + outputFolderPath + ': ' + serializedHtmlHash)
     if (generatingPdfLocally) {
         exportDomBody.className += ' print-content-large'
         // Generate and store locally
