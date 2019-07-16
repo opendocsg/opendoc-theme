@@ -35,7 +35,7 @@ if (generatingPdfLocally) {
     if (process.env.PDF_LAMBDA_KEY === undefined || 
         process.env.PDF_LAMBDA_SERVER === undefined) {
             console.log('Environment variables PDF_LAMBDA_KEY or PDF_LAMBDA_SERVER for AWS Lambda not present')
-            return
+            process.exit(1)
         }
     pdfGenConcurrency = process.env.PDF_GEN_CONCURRENCY !== undefined ?
         parseInt(process.env.PDF_GEN_CONCURRENCY) :
