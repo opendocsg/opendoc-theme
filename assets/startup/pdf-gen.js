@@ -32,9 +32,9 @@ if (generatingPdfLocally) {
     pdf = require('html-pdf')
     console.log('Generating PDFs and storing locally instead.')
 } else {
-    if (process.env.PDF_GEN_API_KEY === undefined || 
-        process.env.PDF_GEN_API_SERVER === undefined) {
-            console.log('Environment variables PDF_GEN_API_KEY or PDF_GEN_API_SERVER for AWS Lambda not present')
+    if (process.env.PDF_LAMBDA_KEY === undefined || 
+        process.env.PDF_LAMBDA_SERVER === undefined) {
+            console.log('Environment variables PDF_LAMBDA_KEY or PDF_LAMBDA_SERVER for AWS Lambda not present')
             return
         }
     pdfGenConcurrency = process.env.PDF_GEN_CONCURRENCY !== undefined ?
@@ -235,7 +235,7 @@ const createPdf = (htmlFilePaths, outputFolderPath, documentName) => {
                 const options = {
                     method: 'POST',
                     headers: {
-                        'x-api-key': process.env.PDF_GEN_API_KEY,
+                        'x-api-key': process.env.PDF_LAMBDA_KEY,
                         'content-type': 'application/json',
                     }
                 }
@@ -247,7 +247,7 @@ const createPdf = (htmlFilePaths, outputFolderPath, documentName) => {
                     'bucketName': bucketName
                 }
                 return new Promise(function (resolve, reject) {
-                    const pdfCreationRequest = https.request(process.env.PDF_GEN_API_SERVER, options, function (res) {
+                    const pdfCreationRequest = https.request(process.env.PDF_LAMBDA_SERVER, options, function (res) {
                         if (res.statusCode < 200 || res.statusCode >= 300) {
                             logErrorPdf(`pdfCreationRequest status code for ${pdfName}: `, res.statusCode)
                             return reject()
