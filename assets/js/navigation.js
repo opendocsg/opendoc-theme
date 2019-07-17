@@ -3,6 +3,9 @@
 (function () {
     fetch('{{ "/assets/directory.html" | relative_url }}')
         .then((res) => {
+            if (!res.ok) {
+                throw new Error('Fetching the directory was not successful')
+            }
             return res.text()
         }).then((text) => {
             navigationElement = document.getElementsByClassName('nav-main')[0]
@@ -204,9 +207,10 @@
                 onHashChange()
             })
 
-            // Scroll to view onload
-            window.onload = function () {
-                onHashChange(true)
-            }
+            // Trigger scroll to view after the navigation bar has loaded
+            onHashChange(true)
+        }).catch((err) => {
+            navigationElement = document.getElementsByClassName('nav-main')[0]
+            navigationElement.innerHTML += 'An error occured while loading the navigation bar: ' + err
         })
     })()
