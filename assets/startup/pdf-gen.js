@@ -109,7 +109,7 @@ const exportPdfDocFolders = (sitePath, docFolders) => {
         htmlFilePaths = htmlFilePaths.map((filepath) => path.join(folderPath, filepath))
 
         // Remove folders without HTML files (don't want empty pdfs)
-        if (htmlFilePaths.length === 0) return
+        if (htmlFilePaths.length === 0) continue
         numTotalPdfs++
         const indexFilepath = path.join(sitePath, '..', folder, 'index.md')
         if (indexFileHasValidOrdering(indexFilepath)) {
