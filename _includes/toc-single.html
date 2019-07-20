@@ -1,0 +1,77 @@
+{% comment %}
+Adapted from: https://github.com/allejo/jekyll-toc
+Usage:
+    {% include toc-single.html page=page class="inline_toc" h_min=2 h_max=3 %}
+
+Optional Parameters:
+    * page         (obj) :   ''      - the page for the toc to be generated
+    * h_min        (int)    :   1    - the minimum TOC header level to use; any header lower than this value will be ignored
+    * h_max        (int)    :   6    - the maximum TOC header level to use; any header greater than this value will be ignored
+    * item_class   (string) :   ''   - add custom class(es) for each list item; has support for '%level%' placeholder, which is the current heading level
+    * anchor_class (string) :   ''   - add custom class(es) for each anchor element
+
+Output:
+    An ordered or unordered list representing the table of contents of a markdown block. This snippet will only
+    generate the table of contents and will NOT output the markdown given to it
+{% endcomment %}
+{% capture tocWorkspace %}
+    {% capture my_toc %}{% endcapture %}
+    {% assign minHeader = include.h_min | default: 1 %}
+    {% assign maxHeader = include.h_max | default: 2 %}
+    {% assign class = include.class | default: 'table-of-contents' %}
+    {% assign itemClass = include.item_class | default: 'nav-branch' %}
+    {% assign anchorClass = include.anchor_class | default: 'nav-link' %}
+    {% assign page = include.page %}
+    {% assign firstHeader = true %}
+    {% assign nodes = page.content | markdownify | split: '<h' %}
+    {% for node in nodes %}
+        {% if node == "" %}
+            {% continue %}
+        {% endif %}
+
+        {% assign headerLevel = node | replace: '"', '' | slice: 0, 1 | times: 1 %}
+
+        {% if headerLevel < minHeader or headerLevel > maxHeader %}
+            {% continue %}
+        {% endif %}
+
+        {% if firstHeader %}
+            {% assign firstHeader = false %}
+            {% assign minHeader = headerLevel %}
+        {% endif %}
+
+        {% assign indentAmount = headerLevel | minus: minHeader | add: 1 %}
+        {% assign _workspace = node | split: '</h' %}
+
+        {% assign _idWorkspace = _workspace[0] | split: 'id="' %}
+        {% assign _idWorkspace = _idWorkspace[1] | split: '"' %}
+        {% assign html_id = _idWorkspace[0] %}
+
+        {% capture _hAttrToStrip %}{{ _workspace[0] | split: '>' | first }}>{% endcapture %}
+        {% assign header = _workspace[0] | replace: _hAttrToStrip, '' %}
+        {% comment %}
+            Strips out footnotes links then strips out all other html tags
+            This naively assumes that all footnote links are appended at the end of the header
+        {% endcomment %}
+        {% assign header = header | split: '<sup' | first %}
+        {% assign header = header | strip_html | strip %}
+
+        {% assign space = '' %}
+        {% for i in (1..indentAmount) %}
+            {% assign space = space | prepend: '    ' %}
+        {% endfor %}
+
+        {% capture listItemClass %}{:.{{ itemClass | replace: '%level%', headerLevel }}}{% endcapture %}
+
+        {% capture my_toc %}{{ my_toc }}
+{{ space }} -  {{ listItemClass }}<a href="{% if page.url %}{{ page.url | relative_url }}#{% endif %}{% if headerLevel > minHeader %}{{ html_id }}{% endif %}" class="{{ anchorClass }}"><span class="directory-item"> {{ header }} </span></a>{% endcapture %}
+    {% endfor %}
+{% capture my_toc %}{:.{{ class }}}
+{{ my_toc | lstrip }}{% endcapture %}
+{% endcapture %}{% assign tocWorkspace = '' %}
+<section class="navigation">
+<section class="contents lonely">
+{{ my_toc | markdownify | strip }}
+</section>
+</section>
+

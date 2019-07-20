@@ -1,3 +1,18 @@
+---
+title: Innovative Corp Pte Ltd v Ow Chun Ming and another
+subtitle: "[2019] SGHC 121 / Decision Date: 13\_May\_2019"
+tags:
+  - Companies
+  - Directors
+  - Duties
+  - Breach of fiduciary duties
+  - Trusts
+  - Accessory liability
+  - Knowing receipt
+  - Dishonest assistance
+layout: single
+---
+
 # Innovative Corp Pte Ltd _v_ Ow Chun Ming and another  
 
 <table id="info-table"><tbody><tr class="info-row"><td class="txt-label" style="padding: 4px 0px; white-space: nowrap" valign="top">Case Number</td><td class="txt-body">Suit No 410 of 2016</td></tr><tr class="info-row"><td class="txt-label" style="padding: 4px 0px; white-space: nowrap" valign="top">Decision Date</td><td class="txt-body">13 May 2019</td></tr><tr class="info-row"><td class="txt-label" style="padding: 4px 0px; white-space: nowrap" valign="top">Tribunal/Court</td><td class="txt-body">High Court</td></tr><tr class="info-row"><td class="txt-label" style="padding: 4px 0px; white-space: nowrap" valign="top">Coram</td><td class="txt-body">Ang Cheng Hock JC</td></tr><tr class="info-row"><td class="txt-label" style="padding: 4px 0px; white-space: nowrap" valign="top">Counsel Name(s)</td><td class="txt-body">Raman Gopalan (Withers KhattarWong LLP) and Chew Teck Lim (Chew Teck Lim) for the plaintiff; Lim Kheng Yan Molly SC, Wong Si Hui Eunice and Lim Haan Hui (Wong Tan &amp; Molly Lim LLC) for the defendants.</td></tr><tr class="info-row"><td class="txt-label" style="padding: 4px 0px; white-space: nowrap" valign="top">Parties</td><td class="txt-body">Innovative Corporation Pte Ltd — Ow Chun Ming — Clydesbuilt (Holland Link) Pte. Ltd.</td></tr></tbody></table>

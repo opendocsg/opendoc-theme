@@ -1,3 +1,13 @@
+---
+title: Shanker Maghalingam v Public Prosecutor
+subtitle: "[2019] SGHC 120 / Decision Date: 9\_May\_2019"
+tags:
+  - Criminal Procedure and Sentencing
+  - Bail
+layout: single
+---
+
+
 # Shanker Maghalingam _v_ Public Prosecutor  
 
 <table id="info-table"><tbody><tr class="info-row"><td class="txt-label" style="padding: 4px 0px; white-space: nowrap" valign="top">Case Number</td><td class="txt-body">Criminal Motion No 11 of 2019</td></tr><tr class="info-row"><td class="txt-label" style="padding: 4px 0px; white-space: nowrap" valign="top">Decision Date</td><td class="txt-body">09 May 2019</td></tr><tr class="info-row"><td class="txt-label" style="padding: 4px 0px; white-space: nowrap" valign="top">Tribunal/Court</td><td class="txt-body">High Court</td></tr><tr class="info-row"><td class="txt-label" style="padding: 4px 0px; white-space: nowrap" valign="top">Coram</td><td class="txt-body">Tay Yong Kwang JA</td></tr><tr class="info-row"><td class="txt-label" style="padding: 4px 0px; white-space: nowrap" valign="top">Counsel Name(s)</td><td class="txt-body">Amardeep Singh (Edmond Pereira Law Corporation) for the applicant; Dwayne Lum (Attorney-Generals' Chambers) for the respondent.</td></tr><tr class="info-row"><td class="txt-label" style="padding: 4px 0px; white-space: nowrap" valign="top">Parties</td><td class="txt-body">Shanker Maghalingam — Public Prosecutor</td></tr></tbody></table>

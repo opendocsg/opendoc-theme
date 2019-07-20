@@ -7,7 +7,6 @@
     var searchBoxElement = document.getElementById('search-box')
     var clearButton = document.getElementsByClassName('clear-button')[0]
     var main = document.getElementsByTagName('main')[0]
-    var searchFilter = document.getElementsByClassName('search-filter')[0]
     var searchResults = document.getElementsByClassName('search-results')[0]
 
     searchBoxElement.oninput = function (event) {
@@ -237,7 +236,6 @@
             error.innerHTML = searchResults
             container.appendChild(error)
             // Check if there are hits and max_score is more than 0 
-            // Max score is checked as well as filter will always return something
         } else if (searchResults.hits.hits.length === 0 || searchResults.hits['max_score'] === 0) {
             var error = generateErrorHTML()
             container.appendChild(error)
@@ -405,20 +403,6 @@
             }
         }
 
-        // If document filter is present
-        var page = pageIndex[window.location.pathname]
-        if (!searchFilter.classList.contains('hidden') && page && page.documentInfo[0]) {
-            // documentId is the alphanumeric and lowercase version of document title
-            // used as a keyword filter to search within the document
-            var documentId = page.documentInfo[0].replace(/[^\w]/g, '').toLowerCase()
-            var filter_by_document = {
-                'term': {
-                    'documentId': documentId
-                }
-            }
-            bool_q.bool.filter = filter_by_document
-        }
-
         var highlight = {}
         highlight.require_field_match = false
         highlight.fields = {}
@@ -530,12 +514,6 @@
         }
     }
 
-    clearSearchFilter = function () {
-        searchFilter.classList.add('hidden')
-    }
-
-    searchFilter.onclick = clearSearchFilter
-
     searchBoxElement.onkeyup = function (e) {
         // flash search results on enter
         if (e.keyCode === 13) {
@@ -544,15 +522,6 @@
             return setTimeout(function () {
                 return container.style.opacity = 1
             }, 100)
-        }
-        // Delete filter on backspace when input is empty and not part of longpress
-        if (e.keyCode === 8) {
-            isBackspaceFirstPress = true
-            if (searchBoxElement.value === '' && isBackspacePressedOnEmpty) {
-                clearSearchFilter()
-                isBackspacePressedOnEmpty = false
-                return
-            }
         }
     }
 

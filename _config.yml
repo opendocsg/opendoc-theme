@@ -13,12 +13,6 @@ server_DEV: https://search-staging.opendoc.sg
 fast_build: true
 offline: false
 
-
-subtitle: this is a subtitle
-order:
-  - contribute.md
-  - import-files.md
-
 google_analytics: 'UA-113717369-5'
 styling_options:
   primary_brand_color: '#17335f'

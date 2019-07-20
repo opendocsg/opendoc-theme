@@ -2,12 +2,9 @@
     var main = document.getElementsByTagName('main')[0]
     var tod = document.getElementsByClassName('table-of-directories')[0]
     var backButton = document.getElementsByClassName('back-to-documents')[0]
-    var docHeader = document.getElementsByTagName('header')[0]
-    var siteHeader = document.getElementsByClassName('site-header')[0]
     var documentTitle = document.getElementById('document-title')
     var documentSubtitle = document.getElementById('document-subtitle')
     var navigation = document.getElementsByClassName('navigation')[0]
-    var searchFilter = document.getElementsByClassName('search-filter')[0]
     var searchBoxElement = document.getElementById('search-box')
     var indexDiv = document.getElementById('index-div')
 
@@ -178,15 +175,6 @@
                 // scrollIntoView(true) aligns anchor to top of page
                 anchorEl.scrollIntoView(true)
             }
-        }
-    }
-
-    // Search filter disabled, not in use
-    function setSearchFilter(page) {
-        if (tod) {
-            searchFilter.innerText = page.documentInfo[0] // document title
-            searchFilter.classList.remove('hidden')
-            searchBoxElement.placeholder = 'Search within doc'
         }
     }
 

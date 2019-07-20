@@ -72,9 +72,6 @@
           <img class="search-icon" src="{{ '/assets/images/search-icon-white.svg' | relative_url }}"/>
           <img class="close-icon" src="{{ '/assets/images/close.svg' | relative_url }}"/>
         </div>
-        <span class="search-filter hidden">
-          {%- include_cached document-title.txt dir=page.dir info="title" -%}
-        </span>
         <div class="search-input-container">
           <p class="search-header">search entire site</p>
           <input id="search-box" placeholder="Search titles or keywords" type="text" />
@@ -90,38 +87,28 @@
       </div>
     </div>
     <div class="nav-main no-print">
-      {% include_cached directory.html currdir=page.dir %}
+      {% include toc-single.html page=page %}
     </div>
   </nav>
 
-  {%- if page.name == 'index.html' -%}
-  <div id="index-div" class="index">
-  {%- else -%}
   <div id="index-div">
-  {%- endif- %}
-  <header class="doc-header no-print">
-    <div class=description-container>
-      <h2 id="document-title">
-        {% include_cached document-title.txt dir=page.dir info="title" %}
-      </h2>
-      <div>
-        <div id="document-subtitle">
-          {% include_cached document-title.txt dir=page.dir info="subtitle" %}
+    <header class="doc-header no-print">
+        <div class=description-container>
+        <h2 id="document-title">
+            {{ page.title }}
+        </h2>
+        <div>
+            <div id="document-subtitle">
+                {{ page.subtitle }}
+            </div>
         </div>
-      </div>
-    </div>
-  </header>
-
-  {% include_cached toolbar.html %}
+        </div>
+    </header>
+    {% include_cached toolbar.html %}
   </div>
 
   <main class="site-main" id="main-content" aria-label="Content">
-    {%- assign stripped_content = content | strip -%}
-    {%- if page.name != 'index.html' and stripped_content.size > 0 -%}
     {{ content | replace: "!!^", "<i style='margin-left:30px'></i>"}}
-    {%- else -%}
-    {% include_cached welcome.html %}
-    {%- endif- %}
   </main>
   <div class="site-branding no-print">
     Powered by <a href="https://opendoc.sg"><img src="{{ '/assets/images/opendoc-logo-full.svg' | relative_url }}"></a>      
@@ -132,9 +119,6 @@
   <script src="{{ '/assets/vendor/mark.min.js' | relative_url }}" charset="utf-8"></script>
   <script src="{{ '/assets/vendor/web-share-shim.bundle.min.js' | relative_url }}"></script>
   <script src="{{ '/assets/js/toolbar.js' | relative_url }}"></script>
-  <script src="{{ '/assets/js/page-index.js' | relative_url }}"></script>
-  <script src="{{ '/assets/js/pre-loader.js' | relative_url }}"></script>
-  <script src="{{ '/assets/js/lunr.min.js' | relative_url }}"></script>
   <script src="{{ '/assets/js/search.js' | relative_url }}"></script>
   <script src="{{ '/assets/js/header.js' | relative_url }}"></script>
   <script src="{{ '/assets/js/navigation.js' | relative_url }}"></script>
