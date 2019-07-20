@@ -61,7 +61,20 @@
 
     printButtons.forEach(function (btn) {
         btn.addEventListener('click', function () {
-            window.open('./export.pdf', '_blank')
+            // S3 folder name; replace slashes to avoid creating sub-folders
+            var replacedRepoName = '{{ site.repository }}'.replace(/\//g, '-')
+            var pdfUrl = '{{ site.offline }}' === 'true' ?
+                '{{ "/assets/pdfs" | relative_url }}' :
+                'https://opendoc-theme-pdf.s3-ap-southeast-1.amazonaws.com/' + replacedRepoName
+            var page = pageIndex[window.location.pathname]
+            // documentTitle refers to the name of the document folder
+            // If page.dir is slash, that indicates the root directory
+            // PDF at root dir is named export.pdf
+            var documentTitle = page.dir !== '/' ? page.dir : '/export/'
+            if (documentTitle) {
+                pdfUrl += documentTitle.substring(0, documentTitle.length-1) + '.pdf'
+            }
+            window.open(pdfUrl, '_blank')
         })
     })
 
