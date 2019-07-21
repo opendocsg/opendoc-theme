@@ -219,6 +219,12 @@
       color: $nav-text-color;
       display: block;
 
+      &.selected {
+        color: $primary-brand-color;
+        font-weight: bold;
+        letter-spacing: -0.45px;
+      }
+
       &:hover {
         @include hover-state-text;
         @include hover-state-bg;

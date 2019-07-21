@@ -5,13 +5,8 @@
     var documentTitle = document.getElementById('document-title')
     var documentSubtitle = document.getElementById('document-subtitle')
     var navigation = document.getElementsByClassName('navigation')[0]
-    var searchBoxElement = document.getElementById('search-box')
     var indexDiv = document.getElementById('index-div')
 
-    // If subfolder was accessed directory via url, load the subfolder's pages
-    if (documentTitle && documentTitle.innerText.trim()) {
-        loadDocumentContent(documentTitle.innerText, 1)
-    }
 
     // Directory navigation
     var allDirectories = document.querySelectorAll('a.tod-container')
@@ -90,79 +85,16 @@
                 window.dispatchEvent(new Event('link-click'))
             }
         }
-        if (hash.length > 0) {
-            selectedAnchors = document.querySelectorAll('a.nav-link[href$="' + path + hash + '"]')
-            if (selectedAnchors.length > 0) {
-                selectedAnchors.forEach(function (anchor) {
-                    anchor.classList.add('selected')
-                })
-            }
+        if (hash === '') {
+            hash = '#'
         }
-    }
-
-    // HTML5 History
-    // =============================================================================
-    // Setup HTML 5 history for single page goodness
-
-    document.body.addEventListener('click', function (event) {
-        // Check if its within an anchor tag any any point
-        // Traverse up its click tree and see if it affects any of them
-        // If it does not find anything it just terminates as a null
-        var anchor = event.target
-        while (anchor && anchor.tagName !== 'A') {
-            anchor = anchor.parentNode
+        console.log(hash)
+        selectedAnchors = document.querySelectorAll('a.nav-link[href$="' + path + hash + '"]')
+        if (selectedAnchors.length > 0) {
+            selectedAnchors.forEach(function (anchor) {
+                anchor.classList.add('selected')
+            })
         }
-        if (anchor && (anchor.host === '' || anchor.host === window.location.host) && anchor.classList.contains('nav-link') && !anchor.hasAttribute('download')) {
-            // Prevent page load
-            event.preventDefault()
-            event.stopPropagation()
-            if (anchor.hash.length > 0) {
-                window.location = anchor.hash
-            } else {
-                window.location = '#'
-            }
-            // This does not trigger hashchange for IE but is needed to replace the url
-            history.pushState(null, null, anchor.href)
-        }
-    }, true)
-
-    // Event when path changes
-    // =============================================================================
-    function onHashChange(firstLoad) {
-        var path = window.location.pathname
-        var page = pageIndex[path]
-        // Only reflow the main content if necessary
-        if (!page) {
-            return
-        }
-        showToc(page.tocId)
-        setSelectedAnchor()
-        if (firstLoad) {
-            return
-        }
-        loadPageContent(page, 2).then(function (pageContent) {
-            /* 
-            *  Search filter disabled, uncomment to enable
-            */
-            // setSearchFilter(page)
-            // Don't compare iframes
-            if (main.innerHTML.trim().replace(/\<iframe.*\<\/iframe\>/g, '') !== pageContent.trim().replace(/\<iframe.*\<\/iframe\>/g, '')) {
-                main.innerHTML = pageContent
-                document.title = page.title
-                documentTitle.innerText = page.documentInfo[0] // document title
-                documentSubtitle.innerText = page.documentInfo[1] // document subtitle
-                if (indexDiv) {
-                    indexDiv.classList.remove('index')
-                }
-            }
-            scrollAnchorIntoView()
-
-            // Hide menu if sub link clicked or clicking on search results        
-            if (window.location.hash.replace('#', '').length > 0 || navigation.classList.contains('hidden')) {
-                window.dispatchEvent(new Event('link-click'))
-            }
-            highlightBody()
-        })
     }
 
     function scrollAnchorIntoView() {
@@ -180,11 +112,10 @@
 
     // Dont use onpopstate as it is not supported in IE
     window.addEventListener('hashchange', function () {
-        onHashChange()
+        setSelectedAnchor()
     })
 
-    // Scroll to view onload
     window.onload = function () {
-        onHashChange(true)
+        setSelectedAnchor()
     }
 })()

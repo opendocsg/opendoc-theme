@@ -91,7 +91,11 @@
     </div>
   </nav>
 
+  {%- if page.name == 'index.html' -%}
+  <div id="index-div" class="index">
+  {%- else -%}
   <div id="index-div">
+  {%- endif -%}
     <header class="doc-header no-print">
         <div class=description-container>
         <h2 id="document-title">
@@ -118,6 +122,7 @@
   <script src="{{ '/assets/vendor/headroom.min.js' | relative_url }}" charset="utf-8"></script>
   <script src="{{ '/assets/vendor/mark.min.js' | relative_url }}" charset="utf-8"></script>
   <script src="{{ '/assets/vendor/web-share-shim.bundle.min.js' | relative_url }}"></script>
+  <script src="{{ '/assets/js/pre-loader.js' | relative_url }}"></script>
   <script src="{{ '/assets/js/toolbar.js' | relative_url }}"></script>
   <script src="{{ '/assets/js/search.js' | relative_url }}"></script>
   <script src="{{ '/assets/js/header.js' | relative_url }}"></script>

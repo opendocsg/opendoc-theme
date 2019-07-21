@@ -10,8 +10,13 @@ repository: opendocsg/opendoc-theme
 server_PROD: https://search.opendoc.sg
 server_DEV: https://search-staging.opendoc.sg
 
+exclude:
+  - README.md
+  - node_modules
+
 fast_build: true
 offline: false
+
 
 google_analytics: 'UA-113717369-5'
 styling_options:
