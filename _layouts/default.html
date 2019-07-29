@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>{{ page.title }}</title>
+  <title>{{ page.title | default: site.title }}</title>
   <meta name="description" content="{{ content | strip_html | truncate: 100, '' }}">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta property="og:image" content="{{ 'site.styling_options.logo_path' | relative_url }}">
@@ -59,7 +59,7 @@
         <img class="agency-logo" src="{{ site.styling_options.logo_path | relative_url }}">
       </a>
       <a class="search-btn top-mobile-btn">
-        <img src="{{ '/assets/images/search-icon-dark.svg' | relative_url }}">        
+        <img src="{{ '/assets/images/search-icon-dark.svg' | relative_url }}">
       </a>
     </div>
   </div>
@@ -128,7 +128,7 @@
     {%- endif- %}
   </main>
   <div class="site-branding no-print">
-    Powered by <a href="https://opendoc.sg"><img src="{{ '/assets/images/opendoc-logo-full.svg' | relative_url }}"></a>      
+    Powered by <a href="https://opendoc.sg"><img src="{{ '/assets/images/opendoc-logo-full.svg' | relative_url }}"></a>
   </div>
 
   <script src="{{ '/assets/vendor/jump.min.js' | relative_url }}" charset="utf-8"></script>
