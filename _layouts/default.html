@@ -30,6 +30,7 @@
   {%- if jekyll.environment == 'production' and site.google_analytics -%}
   <script src="{{ '/assets/js/google_analytics.js' | relative_url }}"></script>
   {%- endif -%}
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css" />
 </head>
 
 <body>
@@ -131,6 +132,7 @@
     Powered by <a href="https://opendoc.sg"><img src="{{ '/assets/images/opendoc-logo-full.svg' | relative_url }}"></a>
   </div>
 
+  <script src="{{ '/assets/vendor/docsearch.min.js' | relative_url }}" charset="utf-8"></script>
   <script src="{{ '/assets/vendor/jump.min.js' | relative_url }}" charset="utf-8"></script>
   <script src="{{ '/assets/vendor/headroom.min.js' | relative_url }}" charset="utf-8"></script>
   <script src="{{ '/assets/vendor/mark.min.js' | relative_url }}" charset="utf-8"></script>
