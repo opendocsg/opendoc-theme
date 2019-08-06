@@ -10,7 +10,23 @@ if [ "{{ site.offline }}" == "true" ]; then
     echo 'Generating lunr index complete'
     npm i html-pdf
 else
-    echo 'Skipping lunr index'
+    if [ "${AWS_BRANCH}" = "master" ]; then
+      echo "Building prod elasticsearch index for $APP_NAME";
+      aws lambda invoke --function-name es-lambda-prod-es --invocation-type Event \
+        --payload "{\"index\":\"opendocsg-$APP_NAME\", \"repoName\":\"$APP_NAME\"}" /dev/null;
+    fi
+
+    if [ "${AWS_BRANCH}" = "staging" ]; then
+      echo "Building staging elasticsearch index for $APP_NAME";
+      aws lambda invoke --function-name es-lambda-staging-es --invocation-type Event \
+        --payload "{\"index\":\"opendocsg-$APP_NAME\", \"repoName\":\"$APP_NAME\", \"branch\": \"staging\"}" /dev/null;
+    fi
+
+    if [ "${AWS_BRANCH}" = "${CUSTOM_BRANCH}" ]; then
+      echo "Building $CUSTOM_BRANCH into staging elasticsearch index for $APP_NAME";
+      aws lambda invoke --function-name es-lambda-staging-es --invocation-type Event \
+        --payload "{\"index\":\"opendocsg-$APP_NAME\", \"repoName\":\"$APP_NAME\", \"branch\": \"$CUSTOM_BRANCH\"}" /dev/null;
+    fi
 fi
 node _site/assets/startup/pdf-gen.js
 echo 'End script'
