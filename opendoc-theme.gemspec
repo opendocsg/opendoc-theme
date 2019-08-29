@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |spec|
   spec.name          = "opendoc-theme"
-  spec.version       = "2.0.7"
+  spec.version       = "2.0.8"
   spec.authors       = ["Opendoc"]
   spec.email         = ["admin@opendoc.sg"]
 
