@@ -10,22 +10,29 @@ if [ "{{ site.offline }}" == "true" ]; then
     echo 'Generating lunr index complete'
     npm i html-pdf
 else
-    if [ "${AWS_BRANCH}" = "master" ]; then
-      echo "Building prod elasticsearch index for $APP_NAME";
-      aws lambda invoke --function-name es-lambda-prod-es --invocation-type Event \
-        --payload "{\"index\":\"opendocsg-$APP_NAME\", \"repoName\":\"$APP_NAME\"}" /dev/null;
-    fi
+    if ! [ -x "$(command -v aws)" ]; 
+    then
+      echo 'Warning: aws is not installed. Please setup github webhooks for elasticsearch indexing'
+    else
+      APP_NAME="{{ site.repository | replace: '/', '-' }}"
+      echo "APP_NAME = $APP_NAME"
+      if [ "${AWS_BRANCH}" = "master" ]; then
+        echo "Building prod elasticsearch index for $APP_NAME";
+        aws lambda invoke --function-name es-lambda-prod-es --invocation-type Event \
+          --payload "{\"index\":\"opendocsg-$APP_NAME\", \"repoName\":\"$APP_NAME\"}" /dev/null;
+      fi
 
-    if [ "${AWS_BRANCH}" = "staging" ]; then
-      echo "Building staging elasticsearch index for $APP_NAME";
-      aws lambda invoke --function-name es-lambda-staging-es --invocation-type Event \
-        --payload "{\"index\":\"opendocsg-$APP_NAME\", \"repoName\":\"$APP_NAME\", \"branch\": \"staging\"}" /dev/null;
-    fi
+      if [ "${AWS_BRANCH}" = "staging" ]; then
+        echo "Building staging elasticsearch index for $APP_NAME";
+        aws lambda invoke --function-name es-lambda-staging-es --invocation-type Event \
+          --payload "{\"index\":\"opendocsg-$APP_NAME\", \"repoName\":\"$APP_NAME\", \"branch\": \"staging\"}" /dev/null;
+      fi
 
-    if [ "${AWS_BRANCH}" = "${CUSTOM_BRANCH}" ]; then
-      echo "Building $CUSTOM_BRANCH into staging elasticsearch index for $APP_NAME";
-      aws lambda invoke --function-name es-lambda-staging-es --invocation-type Event \
-        --payload "{\"index\":\"opendocsg-$APP_NAME\", \"repoName\":\"$APP_NAME\", \"branch\": \"$CUSTOM_BRANCH\"}" /dev/null;
+      if [ ! -z "${CUSTOM_BRANCH}" ] && [ "${AWS_BRANCH}" = "${CUSTOM_BRANCH}" ]; then
+        echo "Building $CUSTOM_BRANCH into staging elasticsearch index for $APP_NAME";
+        aws lambda invoke --function-name es-lambda-staging-es --invocation-type Event \
+          --payload "{\"index\":\"opendocsg-$APP_NAME\", \"repoName\":\"$APP_NAME\", \"branch\": \"$CUSTOM_BRANCH\"}" /dev/null;
+      fi
     fi
 fi
 node _site/assets/startup/pdf-gen.js
