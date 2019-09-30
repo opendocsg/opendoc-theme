@@ -11,12 +11,13 @@ const jsdom = require('jsdom')
 const jsyaml = require('js-yaml')
 const sitePath = __dirname + '/../..'
 
-let generatingPdfLocally = '{{ site.offline }}' === 'true' || false
+const isProd = '{{ jekyll.environment }}' === 'production'
+const generatingPdfLocally = '{{ site.offline }}' === 'true' || false
 const S3StorageUrl = new URL('https://opendoc-theme-pdf.s3-ap-southeast-1.amazonaws.com')
 
 const localPdfFolder = path.join(sitePath, 'assets', 'pdfs') // local folder for pdfs
  // S3 folder; replace slashes to avoid creating sub-folders
-const S3PdfFolder = '{{ site.repository }}'.replace(/\//g, '-')
+const S3PdfFolder = '{{ site.repository }}'.replace(/\//g, '-') + (isProd ? '' : '-staging')
 
 const bucketName = S3StorageUrl.hostname.split('.')[0]
 

@@ -58,11 +58,12 @@
     // Print button
     // --------------------------
     var printButtons = document.querySelectorAll('.print-btn')
+    var isProd = '{{ jekyll.environment }}' === 'production'
 
     printButtons.forEach(function (btn) {
         btn.addEventListener('click', function () {
             // S3 folder name; replace slashes to avoid creating sub-folders
-            var replacedRepoName = '{{ site.repository }}'.replace(/\//g, '-')
+            var replacedRepoName = '{{ site.repository }}'.replace(/\//g, '-') + (isProd ? '' : '-staging')
             var pdfUrl = '{{ site.offline }}' === 'true' ?
                 '{{ "/assets/pdfs" | relative_url }}' :
                 'https://opendoc-theme-pdf.s3-ap-southeast-1.amazonaws.com/' + replacedRepoName
