@@ -271,7 +271,7 @@
         var searchResult = document.createElement('div')
         var searchTitle = document.createElement('p')
         searchTitle.className = 'search-title'
-        searchTitle.innerHTML = result.documentTitle || '{{ site.title }}'
+        searchTitle.innerHTML = result.documentTitle || {{ site.title | jsonify }}
         searchResult.appendChild(searchTitle)
         var searchSubtitle = document.createElement('p')
         searchSubtitle.className = 'search-subtitle'
