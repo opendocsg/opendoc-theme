@@ -15,6 +15,8 @@ const isProd = '{{ jekyll.environment }}' === 'production'
 const generatingPdfLocally = '{{ site.offline }}' === 'true' || false
 const S3StorageUrl = new URL('https://opendoc-theme-pdf.s3-ap-southeast-1.amazonaws.com')
 
+// For dealing with imagess when baseurl is set, remove leading slashes, if any, for standardization
+const baseUrl = '{{ site.baseurl }}'.replace('/', '')
 const localPdfFolder = path.join(sitePath, 'assets', 'pdfs') // local folder for pdfs
  // S3 folder; replace slashes to avoid creating sub-folders
 const S3PdfFolder = '{{ site.repository }}'.replace(/\//g, '-') + (isProd ? '' : '-staging')
@@ -305,11 +307,21 @@ const inlineImages = (dom, outputFolderPath) => {
     const imgs = dom.window.document.getElementsByTagName('img')
     for (let i = 0; i < imgs.length; i++) {
         const img = imgs[i]
-        if (!img.src.startsWith('http')) {
+        const originalImagePath = img.src
+        if (!originalImagePath.startsWith('http://') && !originalImagePath.startsWith('https://')) {
             // Convert all file paths into absolute file paths
-            const imgPath = img.src.startsWith('/') ? 
-                path.join(__dirname, '..', '..', img.src).toString() :
-                path.join(outputFolderPath, img.src).toString()
+            let imgPath
+            if (originalImagePath.startsWith('/')) {
+                // If baseurl is set, remove baseurl for images to be found
+                if (baseUrl.length > 0) {
+                    imgPath = path.join(__dirname, '..', '..', originalImagePath.replace('/' + baseUrl, ''))
+                } else {
+                    imgPath = path.join(__dirname, '..', '..', originalImagePath)
+                }
+            } else {
+                // relative path
+                imgPath = path.join(outputFolderPath, originalImagePath).toString()
+            }
             if (fs.existsSync(imgPath)) {
                 const imgRaw = fs.readFileSync(imgPath)
                 if (path.extname(imgPath) === '.svg') { // don't encode svgs in base64, simply insert them
