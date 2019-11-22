@@ -47,13 +47,17 @@
             <img class="btn-icon" src="{{ '/assets/images/share.svg' | relative_url }}">
             <div class="tooltip">Share</div>
         </div>
-        <div class="action print-btn">
-            <img class="btn-icon" src="{{ '/assets/images/pdf.svg' | relative_url }}">
-            <div class="tooltip">Save as PDF</div>
-        </div>
-        <div class="action edit-btn">
-            <img class="btn-icon" src="{{ '/assets/images/github.svg' | relative_url }}">
-            <div class="tooltip">View on Github</div>
-        </div>
+        {%- if site.toolbar_display.pdf -%}
+            <div class="action print-btn">
+                <img class="btn-icon" src="{{ '/assets/images/pdf.svg' | relative_url }}">
+                <div class="tooltip">Save as PDF</div>
+            </div>
+        {%- endif -%}
+        {%- if site.toolbar_display.github -%}
+            <div class="action edit-btn">
+                <img class="btn-icon" src="{{ '/assets/images/github.svg' | relative_url }}">
+                <div class="tooltip">View on Github</div>
+            </div>
+        {%- endif -%}
     </div>
 </div>
