@@ -1,22 +1,28 @@
 <div class="toolbar-container no-print">
-    <label for="menu-toggle" class="toolbar-button" id="menu-toggle-btn">
-        <input type="checkbox" id="menu-toggle" hidden>
-        <img class="btn-icon" src="{{ '/assets/images/sidebar.svg' | relative_url }}">
-        <img class="btn-icon hover" src="{{ '/assets/images/sidebar-hover.svg' | relative_url }}">
-        <img class="mobile-btn-icon " src="{{ '/assets/images/menu.svg' | relative_url }}">
-        <img class="mobile-btn-icon close" src="{{ '/assets/images/x-mobile.svg' | relative_url }}">
-        <div class="tooltip">Toggle Sidebar</div>
-    </label>
-    <div class="toolbar-button print-btn">
-        <img class="btn-icon" src="{{ '/assets/images/pdf.svg' | relative_url }}">
-        <img class="btn-icon hover" src="{{ '/assets/images/pdf-hover.svg' | relative_url }}">
-        <div class="tooltip">Save as PDF</div>
-    </div>
-    <div class="toolbar-button edit-btn">
-        <img class="btn-icon" src="{{ '/assets/images/github.svg' | relative_url }}">
-        <img class="btn-icon hover" src="{{ '/assets/images/github-hover.svg' | relative_url }}">
-        <div class="tooltip">View on Github</div>
-    </div>
+    {%- if site.toolbar_display.sidebar -%}
+        <label for="menu-toggle" class="toolbar-button" id="menu-toggle-btn">
+            <input type="checkbox" id="menu-toggle" hidden>
+            <img class="btn-icon" src="{{ '/assets/images/sidebar.svg' | relative_url }}">
+            <img class="btn-icon hover" src="{{ '/assets/images/sidebar-hover.svg' | relative_url }}">
+            <img class="mobile-btn-icon " src="{{ '/assets/images/menu.svg' | relative_url }}">
+            <img class="mobile-btn-icon close" src="{{ '/assets/images/x-mobile.svg' | relative_url }}">
+            <div class="tooltip">Toggle Sidebar</div>
+        </label>
+    {%- endif -%}
+    {%- if site.toolbar_display.pdf -%}
+        <div class="toolbar-button print-btn">
+            <img class="btn-icon" src="{{ '/assets/images/pdf.svg' | relative_url }}">
+            <img class="btn-icon hover" src="{{ '/assets/images/pdf-hover.svg' | relative_url }}">
+            <div class="tooltip">Save as PDF</div>
+        </div>
+    {%- endif -%}
+    {%- if site.toolbar_display.github -%}
+        <div class="toolbar-button edit-btn">
+            <img class="btn-icon" src="{{ '/assets/images/github.svg' | relative_url }}">
+            <img class="btn-icon hover" src="{{ '/assets/images/github-hover.svg' | relative_url }}">
+            <div class="tooltip">View on Github</div>
+        </div>
+    {%- endif -%}
 </div>
 
 <div class="fab no-print" id="fab">
