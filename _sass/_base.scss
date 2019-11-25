@@ -386,3 +386,13 @@ a {
 .mobile {
   @include mobile-only();
 }
+
+// Override github flavoured checkbox
+.task-list-item-checkbox {
+  margin: 0 0.8em 0.25em -1.6em;
+  vertical-align: middle;
+}
+
+.task-list-item {
+  list-style-type: none;
+}
