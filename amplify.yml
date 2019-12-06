@@ -1,8 +1,9 @@
-version: 0.1
+version: 1.0
 frontend:
   phases:
     preBuild:
       commands:
+        - rvm --default use $VERSION_RUBY_2_6
         - yum install -y urw-fonts
         - git clone https://github.com/opendocsg/opendoc-fonts.git ~/.fonts
         - fc-cache -f -v
