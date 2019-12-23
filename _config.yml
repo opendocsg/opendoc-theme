@@ -19,14 +19,24 @@ hide_toolbar:
   pdf: false
   github: false
 
-subtitle: this is a subtitle
-order:
-  - contribute.md
-  - import-files.md
-
 google_analytics: 'UA-113717369-5'
 styling_options:
   primary_brand_color: '#17335f'
   logo_path: /assets/images/opendoc-logo-full.svg
   logo_url: https://opendoc.sg
   feedback_url: null
+
+documents:
+  - folder: '/'
+    subtitle: this is a subtitle
+    pages:
+      - contribute.md
+      - import-files.md
+  - folder: 'Document_1'
+    title: Document 1
+    subtitle: hello
+    pages:
+      - contribute.md
+      - import-files.md
+      - hello 123123
+  

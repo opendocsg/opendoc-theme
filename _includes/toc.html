@@ -37,7 +37,8 @@ Output:
     Page ordering
 {% endcomment %}
 {% capture page_order %}
-{% include document-title.txt dir=include.path info="order" %}
+{%- comment -%} include-cache? {%- endcomment -%}
+{% include_cached document-title.txt dir=include.path info="order" %}
 {% endcapture %}
 {% assign page_order = page_order | strip | split: '/' %}
 {% if page_order.size > 0 %}

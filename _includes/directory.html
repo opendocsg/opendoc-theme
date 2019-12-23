@@ -1,23 +1,58 @@
 <section class="navigation">
 {% capture folder_directory %}
-{% assign folders = "" | split: ',' %}
-{% for page in site.html_pages %}
-{% unless page.exclude %}
-{% unless page.name == 'index.html' or page.name == 'index.md' %}
-{% comment %}
-    Get first folder only
-    e.g. /, /folder1/, 
-{% endcomment %}
-{% assign escaped_dir = page.dir | uri_escape | remove_first: '/' | split: '/' | first | prepend: '/' %}
-{% if escaped_dir != '/' %}
-{% assign escaped_dir = escaped_dir | append: '/' %}
+
+{% if site.documents %}
+    {% assign folders = "" | split: ',' %}
+    {% for document in site.documents %}
+        {% assign folders = folders | push: document.folder %}
+    {% endfor %}
+{% else %}
+    {%- comment -%} 
+        DEFAULT WAY OF LISTING FOLDERS IF NOT SORTED
+    {%- endcomment -%}
+    {% assign folders = "" | split: ',' %}
+    {% for page in site.html_pages %}
+    {% unless page.exclude %}
+    {% unless page.name == 'index.html' or page.name == 'index.md' %}
+    {% comment %}
+        Get first folder only
+        e.g. /, /folder1/, 
+    {% endcomment %}
+    {% assign escaped_dir = page.dir | uri_escape | remove_first: '/' | split: '/' | first | prepend: '/' %}
+    {% if escaped_dir != '/' %}
+    {% assign escaped_dir = escaped_dir | append: '/' %}
+    {% endif %}
+
+    {% assign folders = folders | push: escaped_dir %}
+    {% endunless %}
+    {% endunless %}
+    {% endfor %}
+    {% assign folders = folders | uniq | sort %}
+
+    {% comment %}
+        OLD WAY OF SORTING: DELETE ON MIGRATION
+        if document_order is listed, sort according to document_order
+    {% endcomment %}
+    {% if site.document_order %}
+        {% assign sorted_folders = '' | split: '' %}
+        {% for document in site.document_order %}
+            {% assign document_to_compare = document | strip | uri_escape | downcase %}
+            {% for folder in folders %}
+                {% assign folder_to_compare = folder | remove: '/' | downcase %}
+                {% if document_to_compare == folder_to_compare %}
+                    {% assign sorted_folders = sorted_folders | push: folder %}
+                {% endif %}
+            {% endfor %}
+        {% endfor %}
+    {% endif %}
 {% endif %}
 
-{% assign folders = folders | push: escaped_dir %}
-{% endunless %}
-{% endunless %}
-{% endfor %}
-{% assign folders = folders | uniq | sort %}
+
+{{ folders }}
+
+{%- comment -%}
+    HTML RENDERING BELOW
+{%- endcomment -%}
 
 {% comment %}
     Show table of directories only in root path
@@ -28,24 +63,9 @@
 <ul class="table-of-directories hidden">
 {% endif %}
 
-
-{% comment %}
-    if document_order is listed, sort according to document_order
-{% endcomment %}
-{% if site.document_order %}
-    {% assign sorted_folders = '' | split: '' %}
-    {% for document in site.document_order %}
-        {% assign document_to_compare = document | strip | uri_escape | downcase %}
-        {% for folder in folders %}
-            {% assign folder_to_compare = folder | remove: '/' | downcase %}
-            {% if document_to_compare == folder_to_compare %}
-                {% assign sorted_folders = sorted_folders | push: folder %}
-            {% endif %}
-        {% endfor %}
-    {% endfor %}
-{% else %}
-{% assign sorted_folders = folders %}
-{% endif %}
+{%- comment -%} 
+    All the folders from sorted_folders variable
+{%- endcomment -%}
 
 {% for folder in sorted_folders %}
 <li>
@@ -59,9 +79,19 @@
 </ul>
 {% endcapture %}
 
+
+{%- comment -%} 
+
+// END OF FOLDER DIRECTORY CAPTURE
+
+ {%- endcomment -%}
+
+
+
 {% comment %}
 If there is only one folder or documents all at root, dont show back button
 {% endcomment %}
+{{ folder_directory }}
 {% if sorted_folders.size > 1 %}
 {{ folder_directory | markdownify | strip }}
 <div class="back-to-documents">
