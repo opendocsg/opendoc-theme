@@ -14,10 +14,10 @@ fast_build: true
 offline: false
 preload_pages: true
 
-toolbar_display:
-  sidebar: true
-  pdf: true
-  github: true
+hide_toolbar:
+  sidebar: false
+  pdf: false
+  github: false
 
 subtitle: this is a subtitle
 order:

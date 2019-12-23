@@ -1,5 +1,6 @@
 <div class="toolbar-container no-print">
-    {%- if site.toolbar_display.sidebar -%}
+    {% assign hide_toolbar_sidebar = site.hide_toolbar.sidebar %}
+    {%- if hide_toolbar_sidebar != true -%}
         <label for="menu-toggle" class="toolbar-button" id="menu-toggle-btn">
             <input type="checkbox" id="menu-toggle" hidden>
             <img class="btn-icon" src="{{ '/assets/images/sidebar.svg' | relative_url }}">
@@ -9,14 +10,16 @@
             <div class="tooltip">Toggle Sidebar</div>
         </label>
     {%- endif -%}
-    {%- if site.toolbar_display.pdf -%}
+    {% assign hide_toolbar_pdf = site.hide_toolbar.pdf %}
+    {%- if hide_toolbar_pdf != true -%}
         <div class="toolbar-button print-btn">
             <img class="btn-icon" src="{{ '/assets/images/pdf.svg' | relative_url }}">
             <img class="btn-icon hover" src="{{ '/assets/images/pdf-hover.svg' | relative_url }}">
             <div class="tooltip">Save as PDF</div>
         </div>
     {%- endif -%}
-    {%- if site.toolbar_display.github -%}
+    {% assign hide_toolbar_github = site.hide_toolbar.github %}
+    {%- if hide_toolbar_github != true -%}
         <div class="toolbar-button edit-btn">
             <img class="btn-icon" src="{{ '/assets/images/github.svg' | relative_url }}">
             <img class="btn-icon hover" src="{{ '/assets/images/github-hover.svg' | relative_url }}">
@@ -47,13 +50,15 @@
             <img class="btn-icon" src="{{ '/assets/images/share.svg' | relative_url }}">
             <div class="tooltip">Share</div>
         </div>
-        {%- if site.toolbar_display.pdf -%}
+        {% assign hide_toolbar_pdf = site.hide_toolbar.pdf %}
+        {%- if hide_toolbar_pdf != true -%}
             <div class="action print-btn">
                 <img class="btn-icon" src="{{ '/assets/images/pdf.svg' | relative_url }}">
                 <div class="tooltip">Save as PDF</div>
             </div>
         {%- endif -%}
-        {%- if site.toolbar_display.github -%}
+        {% assign hide_toolbar_github = site.hide_toolbar.github %}
+        {%- if hide_toolbar_github != true -%}
             <div class="action edit-btn">
                 <img class="btn-icon" src="{{ '/assets/images/github.svg' | relative_url }}">
                 <div class="tooltip">View on Github</div>
