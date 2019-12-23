@@ -14,6 +14,11 @@ fast_build: true
 offline: false
 preload_pages: true
 
+hide_toolbar:
+  sidebar: false
+  pdf: false
+  github: false
+
 subtitle: this is a subtitle
 order:
   - contribute.md
