@@ -26,17 +26,22 @@ styling_options:
   logo_url: https://opendoc.sg
   feedback_url: null
 
-documents:
-  - folder: '/'
+folders:
+  - name: '/'
+    title: 'something'
     subtitle: this is a subtitle
     pages:
       - contribute.md
       - import-files.md
-  - folder: 'Document_1'
-    title: Document 1
+  - name: '2019_SGHC 120'
+    title: 'Shanker Maghalingam v Public Prosecutor'
     subtitle: hello
     pages:
       - contribute.md
       - import-files.md
       - hello 123123
-  
+  - name: 'Docu ment2'
+    title: 'Document two'
+    subtitle: 'something 2'
+  - name: 'Document 1'
+    title: 'jefiojweofjofjwoefj'
