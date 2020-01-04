@@ -5,26 +5,22 @@
 {%- endcomment -%}
 {%- assign page_info = null -%}
 {%- comment -%}
-    Look for config file
-    Compare only first folder
+Escape include.dir for better comparing
 {%- endcomment -%}
-{%- assign include_dir = include.dir | uri_escape | remove_first: '/' | split: '/' | first -%}
-{%- for page in site.html_pages -%}
-{%- assign page_dir = page.dir | uri_escape | remove_first: '/' | split: '/' | first -%}
-{%- if page_dir == include_dir and page.name == 'index.html' or page.name == 'index.md' -%}
-{%- assign page_info = page -%}
+{% assign escaped_dir = include.dir | remove_first: '/' | split: '/' | first | uri_escape | downcase %}
+{% if escaped_dir == nil or escaped_dir == '' %}
+    {% assign escaped_dir = '/' %}
+{% endif %}
+
+{%- for folder_config in site.folders -%}
+{%- assign escaped_folder_name = folder_config.name | uri_escape | strip | downcase -%}
+{%- if escaped_folder_name == escaped_dir -%}
+    {%- assign page_info = folder_config -%}
+{%-  break -%}
 {%- endif -%}
 {%- endfor -%}
-{%- assign document_info = '' | split: ',' -%}
 
-{%- if include.dir == '/' -%}
-{%- comment -%}
-    If root folder, take info from config
-{%- endcomment -%}
-{%- assign document_info = document_info | push: site.title -%}
-{%- assign document_info = document_info | push: site.subtitle -%}
-{%- assign document_info = document_info | push: site.order -%}
-{%- else -%}
+{%- assign document_info = '' | split: ',' -%}
 
 {%- comment -%}
     If no config file or title not set, use folder name
@@ -38,21 +34,18 @@
 {%- endif -%}
 {%- assign document_info = document_info | push: page_info.subtitle -%}
 {%- assign document_info = document_info | push: page_info.order -%}
-{%- endif -%}
 
 {%- comment -%}
     If info prop is set, return specific field
     else, return all in array [ title, subtitle, order ]
 {%- endcomment -%}
-{%- if include.info == 'title' -%}
-{{ document_info[0] }}
-{%- endif -%}
-{%- if include.info == 'subtitle' -%}
-{{ document_info[1] }}
-{%- endif -%}
-{%- if include.info == 'order' -%}
-{{ document_info[2] | join: '/' }}
-{%- endif -%}
-{%- if include.info == null -%}
-{{ document_info | jsonify }}
-{%- endif -%}
+{%- case include.info -%}
+    {%- when 'title' -%}
+    {{ document_info[0] }}
+    {%- when 'subtitle' -%}
+    {{ document_info[1] }}
+    {%- when 'order' -%}
+    {{ document_info[2] | join: '/' }}
+    {%- else -%}
+    {{ document_info | jsonify }}
+{%- endcase -%}

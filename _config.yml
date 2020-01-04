@@ -30,18 +30,21 @@ folders:
   - name: '/'
     title: 'something'
     subtitle: this is a subtitle
-    pages:
+    order:
       - contribute.md
       - import-files.md
   - name: '2019_SGHC 120'
     title: 'Shanker Maghalingam v Public Prosecutor'
     subtitle: hello
-    pages:
+    order:
       - contribute.md
       - import-files.md
-      - hello 123123
+      - report.md
   - name: 'Docu ment2'
     title: 'Document two'
     subtitle: 'something 2'
   - name: 'Document 1'
     title: 'jefiojweofjofjwoefj'
+    order:
+      - contribute.md
+      - introduction.md

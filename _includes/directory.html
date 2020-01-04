@@ -1,50 +1,56 @@
 {%- comment -%} 
 getting `folders` variable
-an array of folder name that are unescaped
-if folder set in config, then it follows order in config
+an array of folder names that are unescaped (i.e. with spaces and symbols)
+if `folders` settings set in config, then it follows order in config
 else it is sorted in alphabetical order
 {%- endcomment -%}
 
 {% assign folders = "" | split: ',' %}
 {% assign escaped_folders = "" | split: ',' %}
-{% if site.folders %}
+{%- comment -%} 
+checking if `folders` set in config.yml,
+if yes: assign folders variable to that
+{%- endcomment -%}
+{% if site.folders and site.folders.size > 0 %}
     {% for folder in site.folders %}
         {% assign folder_name = folder.name | strip %}
         {% assign folders = folders | push: folder_name %}
     {% endfor %}
+{%- comment -%} 
+if no: get all pages and extract folder names
+then deduplicate and sort
+{%- endcomment -%}
 {% else %}
-    {%- comment -%} 
-        DEFAULT WAY OF LISTING FOLDERS IF NOT SORTED
-    {%- endcomment -%}
     {% for page in site.html_pages %}
-    {% unless page.name == 'index.html' or page.name == 'index.md' %}
-    {% comment %}
-        page.path gives 
-        - folder name/hello.md
-        - hello.md
-        - assets/hello.md
-    {% endcomment %}
-    {% assign path_split = page.path | split: '/' %}
-    {% if path_split.size == 1 %}
-        {% assign folder = '/' %}
-    {% else %}
-        {% assign folder = path_split | first %}
-    {% endif %}
+        {% if page.name == 'index.html' or page.name == 'index.md' %}
+            {% continue %}
+        {% endif %}
+        {% comment %}
+            page.path gives 
+            - folder name/hello.md
+            - hello.md
+            - assets/hello.md
+        {% endcomment %}
+            {% assign path_split = page.path | split: '/' %}
+        {% if path_split.size == 1 %}
+            {% assign folder = '/' %}
+        {% else %}
+            {% assign folder = path_split | first %}
+        {% endif %}
         {% unless folder == 'assets' %}
             {% assign folders = folders | push: folder %}
         {% endunless %}
-    {% endunless %}
     {% endfor %}
     {% assign folders = folders | uniq | sort %}
 {% endif %}
 
 {%- comment -%} 
-    Render folders
+Assingn folders html to `folders_html` variable
+Loops through folders, escape them and set as href and id
+id is used to assess the corresponding toc    
 {%- endcomment -%}
 {% capture folders_html %}
-{% for i in (1..folders.size) %}
-    {% assign folder_index = i | minus: 1 %}
-    {% assign folder = folders[folder_index] %}
+{% for folder in folders %}
     {% assign escaped_folder_path = folder | uri_escape %}
     {% unless escaped_folder_path == '/' %}
         {% assign escaped_folder_path = escaped_folder_path | prepend: '/' %}
@@ -52,28 +58,34 @@ else it is sorted in alphabetical order
     {% assign escaped_folders = escaped_folders | push: escaped_folder_path %}
     <li>
     <a href="{{ escaped_folder_path | relative_url }}" id="dir_{{ escaped_folder_path | downcase }}" class="tod-container">
-    <div class="directory-item">
-    {{ site.folders[folder_index].title }}
-    </div></a>
+        <div class="directory-item">
+        {%- if site.folders[forloop.index0].title -%}
+            {{ site.folders[forloop.index0].title }}
+        {%- else -%}
+            {{ folder }}
+        {%- endif -%}
+        </div>
+    </a>
     </li>
 {% endfor %}
 {% endcapture %}
 
 {% comment %}
-    START OF FOLDER DIRECTORY
-    Show table of directories only in root path
+START OF FOLDER DIRECTORY
+Show table of directories only in root path
 {% endcomment %}
 <section class="navigation">
 <ul class="table-of-directories {%- if include.currdir == blank and include.currdir != '/' %} hidden{%- endif -%}">
-{{ folders_html }}
+{{ folders_html | strip_newlines }}
 </ul>
 {%- comment -%} 
-    END OF FOLDER DIRECTORY
+END OF FOLDER DIRECTORY
 {%- endcomment -%}
 
 
 {% comment %}
-If there is only one folder or documents all at root, dont show back button
+BACK TO DOCUMENTS BUTTON:
+If there is only one folder or documents all at root, dont render back button
 {% endcomment %}
 {% if folders.size > 1 %}
 <div class="back-to-documents">
@@ -83,6 +95,7 @@ If there is only one folder or documents all at root, dont show back button
 
 
 {%- comment -%} 
+INDIVIDUAL TOCs
 Escape current file directory parent folder
 {%- endcomment -%}
 {% assign escaped_currdir = include.currdir | remove_first: '/' | split: '/' | first | uri_escape | prepend: '/' %}
@@ -90,21 +103,25 @@ Escape current file directory parent folder
     {% assign escaped_currdir = escaped_currdir | append: '/' %}
 {% endif %}
 
-{% for i in (1..folders.size) %}
-    {% assign folder_index = i | minus: 1 %}
-    {% assign escaped_folder = escaped_folders[folder_index] %}
-    {% assign folder = folders[folder_index] %}
-    {% comment %}
-        If there is only one folder, show expanded content list
-    {% endcomment %}
+{% for folder in folders %}
+    {% assign escaped_folder = escaped_folders[forloop.index0] %}
+    {%- comment -%} 
+    Assign toc_id based on escaped folder name
+    {%- endcomment -%}
     {% assign toc_id = 'toc_' | append: escaped_folder | downcase %}
+    {% comment %}
+    If there is only one folder, show expanded content list
+    {% endcomment %}
     {% if escaped_folders.size == 1 %}
     <section class="contents lonely" id="{{ toc_id }}">
     {% else %}
+    {%- comment -%} 
+    else render normally
+    {%- endcomment -%}
     <section class="contents" id="{{ toc_id }}" 
     {%- if escaped_currdir == escaped_folder and include.currdir != '/' %} hidden {%- endif -%}>
-    {% endif %}    
-    {% include_cached toc.html path=folder class="table-of-contents" h_min=1 h_max=2 item_class="nav-branch" anchor_class="nav-link" %}
+    {% endif %}
+    {% include_cached toc.html folder_index=forloop.index0 folder_name=folder class="table-of-contents" h_min=1 h_max=2 item_class="nav-branch" anchor_class="nav-link" %}
     </section>
 {% endfor %}
 </section>

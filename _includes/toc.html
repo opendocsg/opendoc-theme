@@ -1,62 +1,74 @@
 {% comment %}
 Adapted from: https://github.com/allejo/jekyll-toc
-Usage:
-    {% include_cached toc.html path=dir class="inline_toc" h_min=2 h_max=3 %}
-
+Required Parameters:
+    * folder_index (int)    :   ''   - the path of the files for the toc to be generated
+    * folder_name  (int)    :   ''   - the path of the files for the toc to be generated
 Optional Parameters:
-    * path         (string) :   ''   - the path of the files for the toc to be generated
     * h_min        (int)    :   1    - the minimum TOC header level to use; any header lower than this value will be ignored
     * h_max        (int)    :   6    - the maximum TOC header level to use; any header greater than this value will be ignored
+    * class        (string) :   ''   - class to be applied to root toc
     * item_class   (string) :   ''   - add custom class(es) for each list item; has support for '%level%' placeholder, which is the current heading level
     * anchor_class (string) :   ''   - add custom class(es) for each anchor element
-
-Output:
-    An ordered or unordered list representing the table of contents of a markdown block. This snippet will only
-    generate the table of contents and will NOT output the markdown given to it
 {% endcomment %}
 
-{% assign unsorted_pages = "" | split: ',' %}
-{% assign sorted_pages = site.html_pages | sort: 'name' %}
-{% for site_page in sorted_pages %}
-    {% unless site_page.exclude %}
-        {% if include.path == null %}
-            {% assign unsorted_pages = unsorted_pages | push: site_page %}
+
+{%- comment -%} 
+Get every page in the site and traverse them
+{%- endcomment -%}
+{% assign folder_pages = "" | split: ',' %}
+{% assign site_pages = site.html_pages %}
+{% for site_page in site_pages %}
+    {% if site_page.name == 'index.md' or site_page.name == 'index.html' %}
+        {% continue %}
+    {% endif %}
+    {%- comment -%} 
+    If folder_name is not passed in, assign all pages to this TOC
+    {%- endcomment -%}
+    {% if include.folder_name == null %}
+        {% assign folder_pages = folder_pages | push: site_page %}
+    {%- comment -%} 
+    else, find all pages beloing to this folder name
+    {%- endcomment -%}
+    {% else %}
+        {% assign path_split = site_page.path | split: '/' %}
+        {% if path_split.size == 1 %}
+            {% assign site_page_folder = '/' %}
         {% else %}
-            {% assign site_page_folder = site_page.dir | uri_escape | remove_first: '/' | split: '/' | first | prepend: '/' %}
-            {% if site_page_folder != '/' %}
-            {% assign site_page_folder = site_page_folder | append: '/' %}
-            {% endif %}
-            {% if site_page_folder == include.path %}
-                {% assign unsorted_pages = unsorted_pages | push: site_page %}
-            {% endif %}        
+            {% assign site_page_folder = path_split | first %}
+        {% endif %}
+        {%- comment -%} 
+        if site_page_folder corresponds to folder_name passed in
+        and path_split.size is love 
+        {%- endcomment -%}
+        {% if site_page_folder == include.folder_name and path_split.size < 3 %}
+            {% assign folder_pages = folder_pages | push: site_page %}
         {% endif %}        
-    {% endunless %}
+    {% endif %}        
 {% endfor %}
 
-{% comment %}
-    Page ordering
-{% endcomment %}
-{% capture page_order %}
-{%- comment -%} include-cache? {%- endcomment -%}
-{% include_cached document-title.txt dir=include.path info="order" %}
-{% endcapture %}
-{% assign page_order = page_order | strip | split: '/' %}
-{% if page_order.size > 0 %}
-    {% assign pages = '' | split: ',' %}
+{%- comment -%} 
+Then, if order is present, match order by filename or title
+{%- endcomment -%}
+{% assign pages = "" | split: ',' %}
+{% assign page_order = site.folders[include.folder_index].order %}
+{% if page_order and page_order.size > 0 %}
     {% for order in page_order %}
-        {% for unsorted_page in unsorted_pages %}
-            {% if unsorted_page.title == order or unsorted_page.name == order %}
-                {% assign pages = pages | push: unsorted_page %}
+        {% for folder_page in folder_pages %}
+            {% if folder_page.name == order or folder_page.title == order %}
+                {% assign pages = pages | push: folder_page %}
+                {% break %}
             {% endif %}
         {% endfor %}
     {% endfor %}
 {% else %}
-{% assign pages = unsorted_pages | sort: 'name' %}
+{%- comment -%} 
+Else, sort alphabetically
+{%- endcomment -%}
+    {% assign pages = folder_pages | sort: 'title' %}
 {% endif %}
 
 {% capture tocWorkspace %}
-    {% capture my_toc %}{% endcapture %}
-    {% assign orderedList = include.ordered | default: false %}
+    {% capture my_toc %}{% endcapture %} 
     {% assign minHeader = include.h_min | default: 1 %}
     {% assign maxHeader = include.h_max | default: 6 %}
     {% assign firstHeader = true %}
@@ -103,7 +115,7 @@ Output:
                 {% capture listItemClass %}{:.{{ include.item_class | replace: '%level%', headerLevel }}}{% endcapture %}
             {% endunless %}
 
-            {% capture my_toc %}{{ my_toc }} 
+            {% capture my_toc %}{{ my_toc }}
 {{ space }} -  {{ listItemClass }}<a href="{% if page.url %}{{ page.url | relative_url }}{% endif %}{% if headerLevel > minHeader %}#{{ html_id }}{% endif %}" class="{% if include.anchor_class %}{{ include.anchor_class }}{% endif %}"><span class="directory-item"> {{ header }} </span></a>{% endcapture %}
         {% endfor %}
     {% endfor %}
@@ -111,4 +123,5 @@ Output:
 {% capture my_toc %}{:.{{ include.class }}}
 {{ my_toc | lstrip }}{% endcapture %}
 {% endif %}
-{% endcapture %}{% assign tocWorkspace = '' %}{{ my_toc | markdownify | strip }}
+{% endcapture %}
+{% assign tocWorkspace = '' %}{{ my_toc | markdownify | strip | strip_newlines }}
