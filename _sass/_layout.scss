@@ -365,15 +365,15 @@ body {
   }
 
   @include desktop-screen {
-    padding-left: $site-nav-width;
-    padding-right: $body-sidebar-right-padding;
+    padding-right: calc(#{$body-padding} + #{$body-sidebar-right-padding});
     font-size: calc(#{$base-font-size} - 3px);
+    text-align: right;
     a img {
       height: 18px;
     }
-  }
-  body.menu-toggled & {
-    padding-left: 0;
+    body.menu-toggled & {
+      padding-right: calc(#{$body-full-view-padding} + #{$body-sidebar-right-padding});
+    }
   }
 }
 
