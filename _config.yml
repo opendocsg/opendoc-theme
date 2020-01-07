@@ -10,7 +10,7 @@ repository: opendocsg/opendoc-theme
 server_PROD: https://search.opendoc.sg
 server_DEV: https://search-staging.opendoc.sg
 
-fast_build: true
+fast_build: false
 offline: false
 preload_pages: true
 

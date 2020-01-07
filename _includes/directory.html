@@ -52,12 +52,13 @@ id is used to assess the corresponding toc
 {% capture folders_html %}
 {% for folder in folders %}
     {% assign escaped_folder_path = folder | uri_escape %}
-    {% unless escaped_folder_path == '/' %}
-        {% assign escaped_folder_path = escaped_folder_path | prepend: '/' %}
-    {% endunless %}
     {% assign escaped_folders = escaped_folders | push: escaped_folder_path %}
+    {% assign folder_href = escaped_folder_path  %}
+    {% unless escaped_folder_path == '/' %}
+        {% assign folder_href = escaped_folder_path | prepend: '/' %}
+    {% endunless %}
     <li>
-    <a href="{{ escaped_folder_path | relative_url }}" id="dir_{{ escaped_folder_path | downcase }}" class="tod-container">
+    <a href="{{ folder_href | relative_url }}" id="dir_{{ escaped_folder_path | downcase }}" class="tod-container">
         <div class="directory-item">
         {%- if site.folders[forloop.index0].title -%}
             {{ site.folders[forloop.index0].title }}
@@ -75,7 +76,8 @@ START OF FOLDER DIRECTORY
 Show table of directories only in root path
 {% endcomment %}
 <section class="navigation">
-<ul class="table-of-directories {%- if include.currdir == blank and include.currdir != '/' %} hidden{%- endif -%}">
+{% if folders.size > 1 %}
+<ul class="table-of-directories {%- if include.currdir == blank or include.currdir != '/' %} hidden{%- endif -%}">
 {{ folders_html | strip_newlines }}
 </ul>
 {%- comment -%} 
@@ -87,7 +89,6 @@ END OF FOLDER DIRECTORY
 BACK TO DOCUMENTS BUTTON:
 If there is only one folder or documents all at root, dont render back button
 {% endcomment %}
-{% if folders.size > 1 %}
 <div class="back-to-documents">
     <p>Back to Documents <img class="btn-icon" src="{{ '/assets/images/chevron-up.svg' | relative_url }}"></p>
 </div>
@@ -98,9 +99,9 @@ If there is only one folder or documents all at root, dont render back button
 INDIVIDUAL TOCs
 Escape current file directory parent folder
 {%- endcomment -%}
-{% assign escaped_currdir = include.currdir | remove_first: '/' | split: '/' | first | uri_escape | prepend: '/' %}
-{% if escaped_currdir != '/' %}
-    {% assign escaped_currdir = escaped_currdir | append: '/' %}
+{% assign escaped_currdir = include.currdir | remove_first: '/' | split: '/' | first | uri_escape %}
+{% if escaped_currdir == nil or escaped_currdir == '' %}
+    {% assign escaped_currdir = '/' %}
 {% endif %}
 
 {% for folder in folders %}
@@ -118,8 +119,7 @@ Escape current file directory parent folder
     {%- comment -%} 
     else render normally
     {%- endcomment -%}
-    <section class="contents" id="{{ toc_id }}" 
-    {%- if escaped_currdir == escaped_folder and include.currdir != '/' %} hidden {%- endif -%}>
+    <section id="{{ toc_id }}" class="contents" {%- unless escaped_currdir == escaped_folder and include.currdir != '/' %} hidden{%- endunless -%}>
     {% endif %}
     {% include_cached toc.html folder_index=forloop.index0 folder_name=folder class="table-of-contents" h_min=1 h_max=2 item_class="nav-branch" anchor_class="nav-link" %}
     </section>
