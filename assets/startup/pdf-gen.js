@@ -9,29 +9,32 @@ const path = require('path')
 const URL = require('url').URL;
 const jsdom = require('jsdom')
 const jsyaml = require('js-yaml')
-const sitePath = __dirname + '/../..'
+const SITE_PATH = __dirname + '/../..'
 
-const isProd = '{{ jekyll.environment }}' === 'production'
-const generatingPdfLocally = '{{ site.offline }}' === 'true' || false
-const S3StorageUrl = new URL('https://opendoc-theme-pdf.s3-ap-southeast-1.amazonaws.com')
+const IS_PROD = '{{ jekyll.environment }}' === 'production'
+const GENERATE_PDF_LOCALLY = '{{ site.offline }}' === 'true' || false
+const S3_STORAGE_URL = new URL('https://opendoc-theme-pdf.s3-ap-southeast-1.amazonaws.com')
 
 // For dealing with imagess when baseurl is set, remove leading slashes, if any, for standardization
-const baseUrl = '{{ site.baseurl }}'.replace('/', '')
-const localPdfFolder = path.join(sitePath, 'assets', 'pdfs') // local folder for pdfs
+const BASEURL = '{{ site.baseurl }}'.replace('/', '')
+const LOCAL_PDF_DOLER = path.join(SITE_PATH, 'assets', 'pdfs') // local folder for pdfs
  // S3 folder; replace slashes to avoid creating sub-folders
-const S3PdfFolder = '{{ site.repository }}'.replace(/\//g, '-') + (isProd ? '' : '-staging')
+const S3_PDF_FOLDER = '{{ site.repository }}'.replace(/\//g, '-') + (IS_PROD ? '' : '-staging')
 
-const bucketName = S3StorageUrl.hostname.split('.')[0]
+const BUCKET_NAME = S3_STORAGE_URL.hostname.split('.')[0]
 
 // CSS to be applied to the PDFs, this will be inserted in <head>
-const pathToCss = path.join(sitePath, 'assets', 'styles', 'main.css')
+const PATH_TO_CSS = path.join(SITE_PATH, 'assets', 'styles', 'main.css')
 
 // Hash is stored as S3 metadata and served as custom header whenever the pdf is requested
-const serializedHtmlHashHeader = 'x-amz-meta-html-hash'
+const SERIALIZED_HTML_HASH_HEADER = 'x-amz-meta-html-hash'
+
+// Config.yml file path
+const CONFIG_YAML_PATH = path.join(SITE_PATH, '..', '_config.yml')
 
 let pdf
 let pdfGenConcurrency = 1
-if (generatingPdfLocally) {
+if (GENERATE_PDF_LOCALLY) {
     pdf = require('html-pdf')
     console.log('Generating PDFs and storing locally instead.')
 } else {
@@ -44,14 +47,14 @@ if (generatingPdfLocally) {
         parseInt(process.env.PDF_GEN_CONCURRENCY) :
         50 // Tuned for Netlify
     console.log(`Generating PDFs on AWS Lambda with concurrency of ${pdfGenConcurrency}.`)
-    console.log(`PDFs will be placed in bucket: ${bucketName} in folder ${S3PdfFolder}.`)
+    console.log(`PDFs will be placed in bucket: ${BUCKET_NAME} in folder ${S3_PDF_FOLDER}.`)
 }
 
 // These options are only applied when PDFs are built locally
 const localPdfOptions = {
     height: '594mm',        // allowed units: mm, cm, in, px
     width: '420mm',
-    base: 'file://' + sitePath + '/',
+    base: 'file://' + SITE_PATH + '/',
     border: {
         right: '100px', // default is 0, units: mm, cm, in, px
         left: '100px',
@@ -80,9 +83,9 @@ const TIMER = 'Time to create PDFs'
 const main = async () => {
     // creating exports of individual documents
     console.time(TIMER)
-    const docFolders = getDocumentFolders(sitePath, printIgnoreFolders)
-    await exportPdfTopLevelDocs(sitePath)
-    await exportPdfDocFolders(sitePath, docFolders)
+    const docFolders = getDocumentFolders(SITE_PATH, printIgnoreFolders)
+    await exportPdfTopLevelDocs(SITE_PATH)
+    await exportPdfDocFolders(SITE_PATH, docFolders)
     console.log(`PDFs created with success:${numPdfsSuccess} unchanged:${numPdfsUnchanged} error:${numPdfsError} total:${numTotalPdfs}`)
     console.timeEnd(TIMER)
 }
@@ -94,10 +97,9 @@ const exportPdfTopLevelDocs = async (sitePath) => {
     // Remove folders without HTML files (don't want empty pdfs)
     if (htmlFilePaths.length === 0) return
     numTotalPdfs++
-    const configFilepath = path.join(sitePath, '..', '_config.yml')
-    if (configFileHasValidOrdering(configFilepath)) {
-        const configYml = yamlToJs(configFilepath)
-        htmlFilePaths = reorderHtmlFilePaths(htmlFilePaths, configYml.order)
+    const orderForFolder = getOrderFromConfig('/')
+    if (orderForFolder && orderForFolder.length) {
+        htmlFilePaths = reorderHtmlFilePaths(htmlFilePaths, orderForFolder)
     }
     await createPdf(htmlFilePaths, sitePath, 'export')
 }
@@ -114,11 +116,10 @@ const exportPdfDocFolders = (sitePath, docFolders) => {
         // Remove folders without HTML files (don't want empty pdfs)
         if (htmlFilePaths.length === 0) continue
         numTotalPdfs++
-        const indexFilepath = path.join(sitePath, '..', folder, 'index.md')
-        if (indexFileHasValidOrdering(indexFilepath)) {
-            const configMd = markdownToJs(indexFilepath)
-            const order = configMd.order
-            htmlFilePaths = reorderHtmlFilePaths(htmlFilePaths, order)
+        const orderForFolder = getOrderFromConfig(folder)
+
+        if (orderForFolder && orderForFolder.length) {
+            htmlFilePaths = reorderHtmlFilePaths(htmlFilePaths, orderForFolder)
         }
         actions.push((() => createPdf(htmlFilePaths, folderPath, folder)))
     }
@@ -132,9 +133,9 @@ const createPdf = (htmlFilePaths, outputFolderPath, documentName) => {
     const exportHtmlFile = fs.readFileSync(__dirname + '/docprint.html')
     let cssFile = ''
     try {
-        cssFile = fs.readFileSync(pathToCss)
+        cssFile = fs.readFileSync(PATH_TO_CSS)
     } catch(err) {
-        console.log('Failed to read CSS file at ' + pathToCss +', CSS will not be applied')
+        console.log('Failed to read CSS file at ' + PATH_TO_CSS +', CSS will not be applied')
     }
     const exportDom = new jsdom.JSDOM(exportHtmlFile)
     const exportDomBody = exportDom.window.document.body
@@ -188,11 +189,11 @@ const createPdf = (htmlFilePaths, outputFolderPath, documentName) => {
     const serializedHtmlHash = crypto.createHash('md5').update(exportDom.serialize()).digest('base64')
     exportDom.window.document.head.innerHTML += '<style>' + cssFile + '</style>'
     console.log('createpdf hash for:' + outputFolderPath + ': ' + serializedHtmlHash)
-    if (generatingPdfLocally) {
+    if (GENERATE_PDF_LOCALLY) {
         exportDomBody.className += ' print-content-large'
         // Generate and store locally
         return new Promise((resolve, reject) => {
-            const url = path.join(localPdfFolder, documentName + '.pdf')
+            const url = path.join(LOCAL_PDF_DOLER, documentName + '.pdf')
             pdf.create(exportDom.serialize(), localPdfOptions).toFile(url, (err, res) => {
                 if (err) {
                     logErrorPdf('Creating PDFs locally', err)
@@ -210,7 +211,7 @@ const createPdf = (htmlFilePaths, outputFolderPath, documentName) => {
         const pdfName = `${documentName}.pdf`
         return new Promise(function (resolve, reject) {
             // Promise resolves if PDF is present and hash matches. Else reject.
-            const pdfS3Url = S3StorageUrl.toString() + S3PdfFolder + '/' + pdfName
+            const pdfS3Url = S3_STORAGE_URL.toString() + S3_PDF_FOLDER + '/' + pdfName
             const options = {
                 method: 'HEAD'
             }
@@ -218,10 +219,10 @@ const createPdf = (htmlFilePaths, outputFolderPath, documentName) => {
                 if (res.statusCode === 404) {
                     return reject('PDF not present')
                 }
-                if (!(serializedHtmlHashHeader in res.headers)) {
+                if (!(SERIALIZED_HTML_HASH_HEADER in res.headers)) {
                     return reject('HTML hash header not present')
                 }
-                if (res.headers[serializedHtmlHashHeader] !== serializedHtmlHash) {
+                if (res.headers[SERIALIZED_HTML_HASH_HEADER] !== serializedHtmlHash) {
                     return reject('PDF hash does not match')
                 }
                 logUnchangedPdf(pdfName, pdfS3Url)
@@ -245,9 +246,9 @@ const createPdf = (htmlFilePaths, outputFolderPath, documentName) => {
 
                 const pdfCreationBody = {
                     'serializedHTML': exportDom.serialize(),
-                    'serializedHTMLName': S3PdfFolder + '/' + pdfName,
+                    'serializedHTMLName': S3_PDF_FOLDER + '/' + pdfName,
                     'serializedHTMLHash': serializedHtmlHash,
-                    'bucketName': bucketName
+                    'bucketName': BUCKET_NAME
                 }
                 return new Promise(function (resolve, reject) {
                     const pdfCreationRequest = https.request(process.env.PDF_LAMBDA_SERVER, options, function (res) {
@@ -313,8 +314,8 @@ const inlineImages = (dom, outputFolderPath) => {
             let imgPath
             if (originalImagePath.startsWith('/')) {
                 // If baseurl is set, remove baseurl for images to be found
-                if (baseUrl.length > 0) {
-                    imgPath = path.join(__dirname, '..', '..', originalImagePath.replace('/' + baseUrl, ''))
+                if (BASEURL.length > 0) {
+                    imgPath = path.join(__dirname, '..', '..', originalImagePath.replace('/' + BASEURL, ''))
                 } else {
                     imgPath = path.join(__dirname, '..', '..', originalImagePath)
                 }
@@ -344,25 +345,22 @@ const getDocumentFolders = (sitePath, printIgnoreFolders) => {
     })
 }
 
-// Returns true if config file contains section_order field
-const configFileHasValidOrdering = (configFilepath) => {
+// Returns true if config file has order for particular folder
+const getOrderFromConfig = (folderName) => {
     try {
-        const configYml = yamlToJs(configFilepath)
-        return 'order' in configYml
+        const configYml = yamlToJs(CONFIG_YAML_PATH)
+        const folders = configYml.folders
+        for (folder of folders) {
+            if (folder.name.toLowerCase() === folderName.toLowerCase()) {
+                return folder.order
+            }
+        }
+        return null
     } catch (error) {
-        return false
+        return null
     }
 }
 
-// Returns true if index.md exists and contains order field
-const indexFileHasValidOrdering = (indexFilepath) => {
-    try {
-        const configMd = markdownToJs(indexFilepath)
-        return 'order' in configMd
-    } catch (error) {
-        return false
-    }
-}
 
 // Mutates the htmlFilepath array to match order provided in order
 const reorderHtmlFilePaths = (htmlFilePaths, order) => {

@@ -7,10 +7,10 @@
 {%- comment -%}
 Escape include.dir for better comparing
 {%- endcomment -%}
-{% assign escaped_dir = include.dir | remove_first: '/' | split: '/' | first | uri_escape | downcase %}
-{% if escaped_dir == nil or escaped_dir == '' %}
-    {% assign escaped_dir = '/' %}
-{% endif %}
+{%- assign escaped_dir = include.dir | remove_first: '/' | split: '/' | first | uri_escape | downcase -%}
+{%- if escaped_dir == nil or escaped_dir == '' -%}
+    {%- assign escaped_dir = '/' -%}
+{%- endif -%}
 
 {%- for folder_config in site.folders -%}
 {%- assign escaped_folder_name = folder_config.name | uri_escape | strip | downcase -%}
@@ -41,11 +41,11 @@ Escape include.dir for better comparing
 {%- endcomment -%}
 {%- case include.info -%}
     {%- when 'title' -%}
-    {{ document_info[0] }}
+    {{ document_info[0] | strip }}
     {%- when 'subtitle' -%}
-    {{ document_info[1] }}
+    {{ document_info[1] | strip }}
     {%- when 'order' -%}
-    {{ document_info[2] | join: '/' }}
+    {{ document_info[2] | join: '/' | strip }}
     {%- else -%}
     {{ document_info | jsonify }}
 {%- endcase -%}
