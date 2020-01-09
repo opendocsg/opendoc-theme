@@ -35,5 +35,7 @@ else
       fi
     fi
 fi
+echo "key is $PDF_LAMBDA_KEY"
+echo "server is $PDF_LAMBDA_SERVER"
 node _site/assets/startup/pdf-gen.js
 echo 'End script'
