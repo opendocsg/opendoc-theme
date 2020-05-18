@@ -37,7 +37,7 @@ frontend:
         - key: 'X-Content-Type-Options'
           value: 'nosniff'
         - key: 'Content-Security-Policy'
-          value: "default-src 'self'; img-src *; frame-src *; font-src *; media-src *; style-src * 'unsafe-inline'; connect-src 'self' https://*.opendoc.sg; script-src 'self' 'sha256-cZeHu5WczV7gma7unmZ5l6WP54Plm4jzl1MUr4q2lrY='"
+          value: "default-src 'self'; img-src *; frame-src *; font-src *; media-src *; style-src * 'unsafe-inline'; connect-src 'self' https://*.opendoc.sg; script-src 'self' https://*.google-analytics.com"
         - key: 'Referrer-Policy'
           value: 'no-referrer'
         - key: 'Feature-Policy'

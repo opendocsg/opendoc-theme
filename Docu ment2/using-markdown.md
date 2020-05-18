@@ -17,10 +17,8 @@ Headers come in different types, from the largest h1 size to the moderate h4 siz
 #### This is the moderate h4 header!
 ```
 <div class="examples-box">
-    <iframe width="100%" height="0" src="./iframes/creating-headers-iframe.html" frameborder="0" scrolling="auto" auto-resize></iframe>
+	<img src="./images/headers.png" width="500">
 </div>
-
-<script>document.querySelectorAll('iframe[auto-resize]').forEach(function(el){el.onload=resizeIframe.bind(this,el)})</script>
 
 <a href="https://opendocsg.github.io/editor/#U1YIycgsVgCikoxUhZzEovTU4hKFDEOFjNTElNQiRS5lZRQVZalFlRBlChlGSIqUMc1RyDBGVoCqIjcfKJ5YAlRkAlMEAA==" target="_blank"><button name="creating-headers-button">Try it out!</button></a >
 
