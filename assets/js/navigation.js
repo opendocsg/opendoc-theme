@@ -128,6 +128,7 @@
             } else {
                 window.location = '#'
             }
+
             // This does not trigger hashchange for IE but is needed to replace the url
             history.pushState(null, null, anchor.href)
         }
@@ -137,6 +138,7 @@
     // =============================================================================
     function onHashChange(firstLoad) {
         var path = window.location.pathname
+
         var page = pageIndex[path]
         // Only reflow the main content if necessary
         if (!page) {
@@ -147,6 +149,12 @@
         if (firstLoad) {
             return
         }
+
+        // Send GA page view
+        if (window.ga) {
+          window.ga('send', 'pageview', window.location.pathname);
+        }
+
         loadPageContent(page, 2).then(function (pageContent) {
             /* 
             *  Search filter disabled, uncomment to enable
