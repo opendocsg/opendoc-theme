@@ -28,6 +28,12 @@ Escape include.dir for better comparing
 {%- endcomment -%}
 {%- if page_info == null or page_info.title == null -%}
 {%- assign folder_name = include.dir | url_decode | remove_first: '/' | split: '/' | first | capitalize -%}
+  {%- comment -%}
+      Show site title on mobile landing page
+  {%- endcomment -%}
+  {%- if folder_name == null or folder_name == '' -%}
+  {%- assign folder_name = site.title -%}
+  {%- endif -%}
 {%- assign document_info = document_info | push: folder_name -%}
 {%- else -%}
 {%- assign document_info = document_info | push: page_info.title -%}
