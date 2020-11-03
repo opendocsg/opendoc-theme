@@ -66,7 +66,7 @@
             var replacedRepoName = '{{ site.repository }}'.replace(/\//g, '-') + (isProd ? '' : '-staging')
             var pdfUrl = '{{ site.offline }}' === 'true' ?
                 '{{ "/assets/pdfs" | relative_url }}' :
-                'https://opendoc-theme-pdf.s3-ap-southeast-1.amazonaws.com/' + replacedRepoName
+                'https://pdf.opendoc.gov.sg/' + replacedRepoName
             var page = pageIndex[window.location.pathname]
             // documentTitle refers to the name of the document folder
             // If page.dir is slash, that indicates the root directory
