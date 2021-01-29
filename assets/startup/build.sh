@@ -4,11 +4,11 @@
 
 echo 'Started script to generate PDFs'
 echo 'Installing node dependencies'
-npm i glob jsdom js-yaml p-all
+npm i glob@7.1.6 jsdom@16.4.0 js-yaml@4.0.0 p-all@3.0.0
 if [ "{{ site.offline }}" == "true" ]; then
     node _site/assets/startup/prebuild-lunr-index.js
     echo 'Generating lunr index complete'
-    npm i html-pdf
+    npm i html-pdf@2.2.0
 else
     if ! [ -x "$(command -v aws)" ]; 
     then
