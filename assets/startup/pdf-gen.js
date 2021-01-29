@@ -387,11 +387,11 @@ const removeTagsFromDom = (dom, tagname) => {
 // converts .md to JS Object
 const markdownToJs = (filepath) => {
     const configString = fs.readFileSync(filepath).toString().replace(/---/g, '')
-    return jsyaml.safeLoad(configString)
+    return jsyaml.load(configString)
 }
 
 const yamlToJs = (filepath) => {
-    return jsyaml.safeLoad(fs.readFileSync(filepath))
+    return jsyaml.load(fs.readFileSync(filepath))
 }
 
 main()
